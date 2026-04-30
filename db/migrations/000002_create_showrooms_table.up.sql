@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS showrooms (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    showroom_logo TEXT,
+    showroom_geolocation JSON,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMPTZ
+);

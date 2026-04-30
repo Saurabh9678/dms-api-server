@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS moderators (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE REFERENCES users(id),
+    access_level VARCHAR NOT NULL,
+    remarks TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMPTZ
+);
