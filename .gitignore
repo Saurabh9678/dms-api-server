@@ -14,6 +14,13 @@ build/
 
 # Go workspace/cache
 .gomodcache/
+.gopath/
+
+# graphify
+.venv/
+graphify-out/cache/
+graphify-out/manifest.json
+graphify-out/cost.json
 
 # Coverage
 coverage.out

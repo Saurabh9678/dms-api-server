@@ -1,0 +1,39 @@
+package bootstrap
+
+import (
+	"database/sql"
+	"log/slog"
+
+	"github.com/gin-gonic/gin"
+	"infiour.local/dms-api-server/internal/modules/auth"
+	"infiour.local/dms-api-server/pkg/config"
+	"infiour.local/dms-api-server/pkg/errors"
+	"infiour.local/dms-api-server/pkg/middleware"
+	"infiour.local/dms-api-server/pkg/response"
+)
+
+func newRouter(cfg *config.Config, log *slog.Logger, deps *Dependencies, sqlDB *sql.DB) *gin.Engine {
+	if cfg.Env == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	engine := gin.New()
+	engine.Use(
+		middleware.RequestID(),
+		middleware.RequestLog(log),
+		middleware.Recovery(log),
+	)
+
+	engine.GET("/health", func(c *gin.Context) {
+		if err := sqlDB.PingContext(c.Request.Context()); err != nil {
+			response.Error(c, 500, errors.CodeInternal, "database unavailable")
+			return
+		}
+		response.OK(c, "ok", map[string]any{"status": "ok"})
+	})
+
+	api := engine.Group("/api/v1")
+	auth.RegisterRoutes(api, deps.AuthHandler)
+
+	return engine
+}

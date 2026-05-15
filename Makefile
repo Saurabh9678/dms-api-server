@@ -4,7 +4,7 @@ BIN_PATH := ./bin/$(APP_NAME)
 MIGRATIONS_DIR := ./migrations
 DB_URL ?= postgres://postgres:postgres@localhost:5432/dms?sslmode=disable
 
-.PHONY: help run build test tidy fmt clean migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
+.PHONY: help run build test tidy fmt clean graphify-update migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
 
 help:
 	@echo "Available targets:"
@@ -14,6 +14,7 @@ help:
 	@echo "  make tidy   - Tidy module dependencies"
 	@echo "  make fmt    - Format all Go files"
 	@echo "  make clean  - Remove build artifacts"
+	@echo "  make graphify-update - Refresh AST knowledge graph (no LLM cost)"
 	@echo "  make migrate-create NAME=<name>      - Create new SQL migration files"
 	@echo "  make migrate-up                       - Apply pending migrations"
 	@echo "  make migrate-down                     - Roll back one migration"
@@ -39,6 +40,9 @@ fmt:
 
 clean:
 	rm -rf ./bin
+
+graphify-update:
+	.venv/bin/graphify update .
 
 migrate-create:
 ifndef NAME

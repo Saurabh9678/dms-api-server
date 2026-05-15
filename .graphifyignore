@@ -1,0 +1,43 @@
+# Python venv (graphify CLI runtime)
+.venv/
+
+# Go module cache / local GOPATH artifacts in repo
+.gopath/
+.gomodcache/
+
+# Graphify outputs (never re-scan generated artifacts)
+graphify-out/
+
+# Lockfiles (no semantic value, large)
+go.sum
+
+# Build & test artifacts
+bin/
+dist/
+build/
+*.exe
+*.test
+*.out
+coverage.out
+*.coverprofile
+
+# Secrets
+.env
+.env.*
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Assistant / graphify meta (don't index install instructions)
+.cursor/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+
+# Migration rollbacks (schema is captured in .up.sql)
+**/*.down.sql
+
+# Git
+.git/
