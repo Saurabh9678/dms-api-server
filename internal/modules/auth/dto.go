@@ -3,23 +3,22 @@ package auth
 type RegisterRequest struct {
 	CountryCode string `json:"countryCode" binding:"required"`
 	PhoneNumber string `json:"phoneNumber" binding:"required"`
-	Platform    string `json:"platform" binding:"required,oneof=web ios_mobile android_mobile desktop"`
-	DeviceID    string `json:"deviceId"`
+	Platform    string `json:"-"`
+	DeviceID    string `json:"-"`
 }
 
 type LoginRequest struct {
 	CountryCode string `json:"countryCode" binding:"required"`
 	PhoneNumber string `json:"phoneNumber" binding:"required"`
-	Platform    string `json:"platform" binding:"required,oneof=web ios_mobile android_mobile desktop"`
-	DeviceID    string `json:"deviceId"`
+	Platform    string `json:"-"`
+	DeviceID    string `json:"-"`
 }
 
 type VerifyOTPRequest struct {
-	CountryCode string `json:"countryCode" binding:"required"`
-	PhoneNumber string `json:"phoneNumber" binding:"required"`
-	OTPCode     string `json:"otpCode" binding:"required,len=6,numeric"`
-	Platform    string `json:"platform" binding:"required,oneof=web ios_mobile android_mobile desktop"`
-	DeviceID    string `json:"deviceId"`
+	RequestID string `json:"requestId" binding:"required,len=8,alphanum"`
+	OTPCode   string `json:"otpCode" binding:"required,len=6,numeric"`
+	Platform  string `json:"-"`
+	DeviceID  string `json:"-"`
 }
 
 type RefreshTokenRequest struct {
@@ -27,11 +26,13 @@ type RefreshTokenRequest struct {
 }
 
 type LogoutRequest struct {
-	RefreshToken string `json:"refreshToken" binding:"required"`
+	AccessToken string `json:"-"`
+	Platform    string `json:"-"`
 }
 
 type TriggerOTPResponse struct {
-	Message string `json:"message"`
+	Message   string `json:"message"`
+	RequestID string `json:"requestId"`
 }
 
 type TokenResponse struct {

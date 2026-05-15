@@ -9,7 +9,7 @@
       "source_file": "cmd/server/main.go",
       "source_location": "L1",
       "id": "cmd_server_main_go",
-      "community": 4,
+      "community": 2,
       "norm_label": "main.go"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "cmd/server/main.go",
       "source_location": "L5",
       "id": "server_main_main",
-      "community": 4,
+      "community": 2,
       "norm_label": "main()"
     },
     {
@@ -184,13 +184,13 @@
       "norm_label": ".create()"
     },
     {
-      "label": ".FindLatestActiveByUserAndPlatform()",
+      "label": ".FindLatestActiveByRequestIDAndPlatform()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L54",
-      "id": "auth_fakeotprepo_findlatestactivebyuserandplatform",
+      "id": "auth_fakeotprepo_findlatestactivebyrequestidandplatform",
       "community": 3,
-      "norm_label": ".findlatestactivebyuserandplatform()"
+      "norm_label": ".findlatestactivebyrequestidandplatform()"
     },
     {
       "label": ".IncrementAttempt()",
@@ -214,7 +214,7 @@
       "label": "fakeSessionRepo",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L76",
+      "source_location": "L78",
       "id": "auth_fakesessionrepo",
       "community": 3,
       "norm_label": "fakesessionrepo"
@@ -223,7 +223,7 @@
       "label": ".Create()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L82",
+      "source_location": "L86",
       "id": "auth_fakesessionrepo_create",
       "community": 3,
       "norm_label": ".create()"
@@ -232,7 +232,7 @@
       "label": ".FindByRefreshTokenHash()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L89",
+      "source_location": "L93",
       "id": "auth_fakesessionrepo_findbyrefreshtokenhash",
       "community": 3,
       "norm_label": ".findbyrefreshtokenhash()"
@@ -241,7 +241,7 @@
       "label": ".RotateRefreshToken()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L97",
+      "source_location": "L101",
       "id": "auth_fakesessionrepo_rotaterefreshtoken",
       "community": 3,
       "norm_label": ".rotaterefreshtoken()"
@@ -250,16 +250,25 @@
       "label": ".Revoke()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L112",
+      "source_location": "L116",
       "id": "auth_fakesessionrepo_revoke",
       "community": 3,
       "norm_label": ".revoke()"
     },
     {
+      "label": ".RevokeAllByUserIDAndPlatform()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L128",
+      "id": "auth_fakesessionrepo_revokeallbyuseridandplatform",
+      "community": 3,
+      "norm_label": ".revokeallbyuseridandplatform()"
+    },
+    {
       "label": "fakeOTPProvider",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L124",
+      "source_location": "L139",
       "id": "auth_fakeotpprovider",
       "community": 3,
       "norm_label": "fakeotpprovider"
@@ -268,7 +277,7 @@
       "label": ".Send()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L131",
+      "source_location": "L146",
       "id": "auth_fakeotpprovider_send",
       "community": 3,
       "norm_label": ".send()"
@@ -277,7 +286,7 @@
       "label": "fakeTokenProvider",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L137",
+      "source_location": "L152",
       "id": "auth_faketokenprovider",
       "community": 3,
       "norm_label": "faketokenprovider"
@@ -286,7 +295,7 @@
       "label": ".Issue()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L141",
+      "source_location": "L156",
       "id": "auth_faketokenprovider_issue",
       "community": 3,
       "norm_label": ".issue()"
@@ -295,7 +304,7 @@
       "label": ".Rotate()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L151",
+      "source_location": "L166",
       "id": "auth_faketokenprovider_rotate",
       "community": 3,
       "norm_label": ".rotate()"
@@ -304,16 +313,25 @@
       "label": ".HashRefreshToken()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L161",
+      "source_location": "L176",
       "id": "auth_faketokenprovider_hashrefreshtoken",
       "community": 3,
       "norm_label": ".hashrefreshtoken()"
     },
     {
+      "label": ".ParseAccessToken()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L186",
+      "id": "auth_faketokenprovider_parseaccesstoken",
+      "community": 3,
+      "norm_label": ".parseaccesstoken()"
+    },
+    {
       "label": "TestRegisterTriggersOTP()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L171",
+      "source_location": "L193",
       "id": "auth_service_test_testregistertriggersotp",
       "community": 3,
       "norm_label": "testregistertriggersotp()"
@@ -322,7 +340,7 @@
       "label": "TestVerifyOTPRejectsInvalidCode()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L203",
+      "source_location": "L228",
       "id": "auth_service_test_testverifyotprejectsinvalidcode",
       "community": 3,
       "norm_label": "testverifyotprejectsinvalidcode()"
@@ -331,10 +349,28 @@
       "label": "TestRefreshAndLogout()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
-      "source_location": "L231",
+      "source_location": "L255",
       "id": "auth_service_test_testrefreshandlogout",
       "community": 3,
       "norm_label": "testrefreshandlogout()"
+    },
+    {
+      "label": "TestLogoutRejectsInvalidAccessToken()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L304",
+      "id": "auth_service_test_testlogoutrejectsinvalidaccesstoken",
+      "community": 3,
+      "norm_label": "testlogoutrejectsinvalidaccesstoken()"
+    },
+    {
+      "label": "TestVerifyOTPRevokesExistingSessionsForSamePlatform()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L316",
+      "id": "auth_service_test_testverifyotprevokesexistingsessionsforsameplatform",
+      "community": 3,
+      "norm_label": "testverifyotprevokesexistingsessionsforsameplatform()"
     },
     {
       "label": "contract_test.go",
@@ -421,7 +457,7 @@
       "label": "fakeHandlerAuthService",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "auth_fakehandlerauthservice",
       "community": 10,
       "norm_label": "fakehandlerauthservice"
@@ -430,7 +466,7 @@
       "label": ".Register()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "auth_fakehandlerauthservice_register",
       "community": 10,
       "norm_label": ".register()"
@@ -439,7 +475,7 @@
       "label": ".Login()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "auth_fakehandlerauthservice_login",
       "community": 10,
       "norm_label": ".login()"
@@ -448,7 +484,7 @@
       "label": ".VerifyOTP()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "auth_fakehandlerauthservice_verifyotp",
       "community": 10,
       "norm_label": ".verifyotp()"
@@ -457,7 +493,7 @@
       "label": ".RefreshToken()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L33",
+      "source_location": "L34",
       "id": "auth_fakehandlerauthservice_refreshtoken",
       "community": 10,
       "norm_label": ".refreshtoken()"
@@ -466,7 +502,7 @@
       "label": ".Logout()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L42",
+      "source_location": "L43",
       "id": "auth_fakehandlerauthservice_logout",
       "community": 10,
       "norm_label": ".logout()"
@@ -475,7 +511,7 @@
       "label": "TestLoginBadRequest()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L46",
+      "source_location": "L47",
       "id": "auth_handler_test_testloginbadrequest",
       "community": 10,
       "norm_label": "testloginbadrequest()"
@@ -484,10 +520,37 @@
       "label": "TestVerifyOTPSuccess()",
       "file_type": "code",
       "source_file": "tests/unit/auth/handler_test.go",
-      "source_location": "L62",
+      "source_location": "L71",
       "id": "auth_handler_test_testverifyotpsuccess",
       "community": 10,
       "norm_label": "testverifyotpsuccess()"
+    },
+    {
+      "label": "TestLogoutRequiresAuthorizationHeader()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L92",
+      "id": "auth_handler_test_testlogoutrequiresauthorizationheader",
+      "community": 10,
+      "norm_label": "testlogoutrequiresauthorizationheader()"
+    },
+    {
+      "label": "TestLogoutSuccessWithAuthorizationHeader()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L111",
+      "id": "auth_handler_test_testlogoutsuccesswithauthorizationheader",
+      "community": 10,
+      "norm_label": "testlogoutsuccesswithauthorizationheader()"
+    },
+    {
+      "label": "TestLogoutRequiresPlatformHeader()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L132",
+      "id": "auth_handler_test_testlogoutrequiresplatformheader",
+      "community": 10,
+      "norm_label": "testlogoutrequiresplatformheader()"
     },
     {
       "label": "doc.go",
@@ -558,61 +621,70 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L1",
       "id": "internal_infra_token_jwt_go",
-      "community": 33,
+      "community": 109,
       "norm_label": "jwt.go"
     },
     {
       "label": "JWTProvider",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "token_jwtprovider",
-      "community": 33,
+      "community": 109,
       "norm_label": "jwtprovider"
     },
     {
       "label": "NewJWTProvider()",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "token_jwt_newjwtprovider",
-      "community": 33,
+      "community": 109,
       "norm_label": "newjwtprovider()"
     },
     {
       "label": ".Issue()",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L37",
+      "source_location": "L38",
       "id": "token_jwtprovider_issue",
-      "community": 33,
+      "community": 109,
       "norm_label": ".issue()"
     },
     {
       "label": ".Rotate()",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L41",
+      "source_location": "L42",
       "id": "token_jwtprovider_rotate",
-      "community": 33,
+      "community": 109,
       "norm_label": ".rotate()"
     },
     {
       "label": ".HashRefreshToken()",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L45",
+      "source_location": "L46",
       "id": "token_jwtprovider_hashrefreshtoken",
-      "community": 33,
+      "community": 109,
       "norm_label": ".hashrefreshtoken()"
+    },
+    {
+      "label": ".ParseAccessToken()",
+      "file_type": "code",
+      "source_file": "internal/infra/token/jwt.go",
+      "source_location": "L51",
+      "id": "token_jwtprovider_parseaccesstoken",
+      "community": 109,
+      "norm_label": ".parseaccesstoken()"
     },
     {
       "label": ".issueForUser()",
       "file_type": "code",
       "source_file": "internal/infra/token/jwt.go",
-      "source_location": "L50",
+      "source_location": "L81",
       "id": "token_jwtprovider_issueforuser",
-      "community": 33,
+      "community": 109,
       "norm_label": ".issueforuser()"
     },
     {
@@ -756,7 +828,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L1",
       "id": "internal_bootstrap_router_go",
-      "community": 29,
+      "community": 1,
       "norm_label": "router.go"
     },
     {
@@ -765,7 +837,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L15",
       "id": "bootstrap_router_newrouter",
-      "community": 29,
+      "community": 1,
       "norm_label": "newrouter()"
     },
     {
@@ -1251,23 +1323,32 @@
       "source_file": "internal/modules/auth/handler.go",
       "source_location": "L1",
       "id": "internal_modules_auth_handler_go",
-      "community": 10,
+      "community": 29,
       "norm_label": "handler.go"
     },
     {
       "label": "Handler",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "auth_handler",
       "community": 29,
       "norm_label": "handler"
     },
     {
+      "label": "authHeaders",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L16",
+      "id": "auth_authheaders",
+      "community": 29,
+      "norm_label": "authheaders"
+    },
+    {
       "label": "NewHandler()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L15",
+      "source_location": "L21",
       "id": "auth_handler_newhandler",
       "community": 10,
       "norm_label": "newhandler()"
@@ -1276,7 +1357,7 @@
       "label": ".Register()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L19",
+      "source_location": "L25",
       "id": "auth_handler_register",
       "community": 29,
       "norm_label": ".register()"
@@ -1285,7 +1366,7 @@
       "label": ".Login()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L33",
+      "source_location": "L45",
       "id": "auth_handler_login",
       "community": 29,
       "norm_label": ".login()"
@@ -1294,7 +1375,7 @@
       "label": ".VerifyOTP()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L47",
+      "source_location": "L65",
       "id": "auth_handler_verifyotp",
       "community": 29,
       "norm_label": ".verifyotp()"
@@ -1303,7 +1384,7 @@
       "label": ".RefreshToken()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L61",
+      "source_location": "L85",
       "id": "auth_handler_refreshtoken",
       "community": 29,
       "norm_label": ".refreshtoken()"
@@ -1312,10 +1393,28 @@
       "label": ".Logout()",
       "file_type": "code",
       "source_file": "internal/modules/auth/handler.go",
-      "source_location": "L75",
+      "source_location": "L99",
       "id": "auth_handler_logout",
       "community": 29,
       "norm_label": ".logout()"
+    },
+    {
+      "label": "bindAuthHeaders()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L117",
+      "id": "auth_handler_bindauthheaders",
+      "community": 29,
+      "norm_label": "bindauthheaders()"
+    },
+    {
+      "label": "extractBearerToken()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L126",
+      "id": "auth_handler_extractbearertoken",
+      "community": 29,
+      "norm_label": "extractbearertoken()"
     },
     {
       "label": "service.go",
@@ -1323,7 +1422,7 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L1",
       "id": "internal_modules_auth_service_go",
-      "community": 1,
+      "community": 30,
       "norm_label": "service.go"
     },
     {
@@ -1332,7 +1431,7 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L19",
       "id": "auth_service",
-      "community": 1,
+      "community": 30,
       "norm_label": "service"
     },
     {
@@ -1341,7 +1440,7 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L27",
       "id": "auth_userrepo",
-      "community": 1,
+      "community": 30,
       "norm_label": "userrepo"
     },
     {
@@ -1350,7 +1449,7 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L32",
       "id": "auth_otprepo",
-      "community": 1,
+      "community": 30,
       "norm_label": "otprepo"
     },
     {
@@ -1359,14 +1458,14 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L39",
       "id": "auth_sessionrepo",
-      "community": 1,
+      "community": 30,
       "norm_label": "sessionrepo"
     },
     {
       "label": "NewService()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L57",
+      "source_location": "L63",
       "id": "auth_service_newservice",
       "community": 3,
       "norm_label": "newservice()"
@@ -1375,64 +1474,73 @@
       "label": ".Register()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L84",
+      "source_location": "L90",
       "id": "auth_service_register",
-      "community": 1,
+      "community": 30,
       "norm_label": ".register()"
     },
     {
       "label": ".Login()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L88",
+      "source_location": "L94",
       "id": "auth_service_login",
-      "community": 1,
+      "community": 30,
       "norm_label": ".login()"
     },
     {
       "label": ".triggerOTP()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L92",
+      "source_location": "L98",
       "id": "auth_service_triggerotp",
-      "community": 1,
+      "community": 30,
       "norm_label": ".triggerotp()"
     },
     {
       "label": ".VerifyOTP()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L136",
+      "source_location": "L154",
       "id": "auth_service_verifyotp",
-      "community": 1,
+      "community": 30,
       "norm_label": ".verifyotp()"
     },
     {
       "label": ".RefreshToken()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L192",
+      "source_location": "L208",
       "id": "auth_service_refreshtoken",
-      "community": 1,
+      "community": 30,
       "norm_label": ".refreshtoken()"
     },
     {
       "label": ".Logout()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L226",
+      "source_location": "L242",
       "id": "auth_service_logout",
-      "community": 1,
+      "community": 30,
       "norm_label": ".logout()"
     },
     {
       "label": "generateOTPCode()",
       "file_type": "code",
       "source_file": "internal/modules/auth/service.go",
-      "source_location": "L243",
+      "source_location": "L257",
       "id": "auth_service_generateotpcode",
-      "community": 1,
+      "community": 30,
       "norm_label": "generateotpcode()"
+    },
+    {
+      "label": "generateRequestID()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/service.go",
+      "source_location": "L266",
+      "id": "auth_service_generaterequestid",
+      "community": 30,
+      "norm_label": "generaterequestid()"
     },
     {
       "label": "model.go",
@@ -1440,7 +1548,7 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L1",
       "id": "internal_modules_auth_model_go",
-      "community": 1,
+      "community": 30,
       "norm_label": "model.go"
     },
     {
@@ -1449,7 +1557,7 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L9",
       "id": "auth_otpplatform",
-      "community": 1,
+      "community": 30,
       "norm_label": "otpplatform"
     },
     {
@@ -1458,7 +1566,7 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L18",
       "id": "auth_otpfor",
-      "community": 1,
+      "community": 30,
       "norm_label": "otpfor"
     },
     {
@@ -1467,34 +1575,34 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L25",
       "id": "auth_userotp",
-      "community": 1,
+      "community": 30,
       "norm_label": "userotp"
     },
     {
       "label": ".TableName()",
       "file_type": "code",
       "source_file": "internal/modules/auth/model.go",
-      "source_location": "L41",
+      "source_location": "L42",
       "id": "auth_userotp_tablename",
-      "community": 1,
+      "community": 30,
       "norm_label": ".tablename()"
     },
     {
       "label": "UserSession",
       "file_type": "code",
       "source_file": "internal/modules/auth/model.go",
-      "source_location": "L45",
+      "source_location": "L46",
       "id": "auth_usersession",
-      "community": 1,
+      "community": 30,
       "norm_label": "usersession"
     },
     {
       "label": ".TableName()",
       "file_type": "code",
       "source_file": "internal/modules/auth/model.go",
-      "source_location": "L61",
+      "source_location": "L62",
       "id": "auth_usersession_tablename",
-      "community": 1,
+      "community": 30,
       "norm_label": ".tablename()"
     },
     {
@@ -1561,19 +1669,19 @@
       "norm_label": ".create()"
     },
     {
-      "label": ".FindLatestActiveByUserAndPlatform()",
+      "label": ".FindLatestActiveByRequestIDAndPlatform()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
       "source_location": "L31",
-      "id": "auth_otprepository_findlatestactivebyuserandplatform",
+      "id": "auth_otprepository_findlatestactivebyrequestidandplatform",
       "community": 28,
-      "norm_label": ".findlatestactivebyuserandplatform()"
+      "norm_label": ".findlatestactivebyrequestidandplatform()"
     },
     {
       "label": ".IncrementAttempt()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L46",
+      "source_location": "L45",
       "id": "auth_otprepository_incrementattempt",
       "community": 28,
       "norm_label": ".incrementattempt()"
@@ -1582,7 +1690,7 @@
       "label": ".MarkUsed()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L52",
+      "source_location": "L51",
       "id": "auth_otprepository_markused",
       "community": 28,
       "norm_label": ".markused()"
@@ -1591,7 +1699,7 @@
       "label": "SessionRepository",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L61",
+      "source_location": "L60",
       "id": "auth_sessionrepository",
       "community": 28,
       "norm_label": "sessionrepository"
@@ -1600,7 +1708,7 @@
       "label": "NewSessionRepository()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L65",
+      "source_location": "L64",
       "id": "auth_repository_newsessionrepository",
       "community": 28,
       "norm_label": "newsessionrepository()"
@@ -1609,7 +1717,7 @@
       "label": ".WithTx()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L69",
+      "source_location": "L68",
       "id": "auth_sessionrepository_withtx",
       "community": 28,
       "norm_label": ".withtx()"
@@ -1618,7 +1726,7 @@
       "label": ".Create()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L73",
+      "source_location": "L72",
       "id": "auth_sessionrepository_create",
       "community": 28,
       "norm_label": ".create()"
@@ -1627,7 +1735,7 @@
       "label": ".FindByRefreshTokenHash()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L81",
+      "source_location": "L80",
       "id": "auth_sessionrepository_findbyrefreshtokenhash",
       "community": 28,
       "norm_label": ".findbyrefreshtokenhash()"
@@ -1636,7 +1744,7 @@
       "label": ".RotateRefreshToken()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L95",
+      "source_location": "L94",
       "id": "auth_sessionrepository_rotaterefreshtoken",
       "community": 28,
       "norm_label": ".rotaterefreshtoken()"
@@ -1645,10 +1753,19 @@
       "label": ".Revoke()",
       "file_type": "code",
       "source_file": "internal/modules/auth/repository.go",
-      "source_location": "L105",
+      "source_location": "L104",
       "id": "auth_sessionrepository_revoke",
       "community": 28,
       "norm_label": ".revoke()"
+    },
+    {
+      "label": ".RevokeAllByUserIDAndPlatform()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/repository.go",
+      "source_location": "L115",
+      "id": "auth_sessionrepository_revokeallbyuseridandplatform",
+      "community": 28,
+      "norm_label": ".revokeallbyuseridandplatform()"
     },
     {
       "label": "dto.go",
@@ -1690,7 +1807,7 @@
       "label": "RefreshTokenRequest",
       "file_type": "code",
       "source_file": "internal/modules/auth/dto.go",
-      "source_location": "L25",
+      "source_location": "L24",
       "id": "auth_refreshtokenrequest",
       "community": 8,
       "norm_label": "refreshtokenrequest"
@@ -1699,7 +1816,7 @@
       "label": "LogoutRequest",
       "file_type": "code",
       "source_file": "internal/modules/auth/dto.go",
-      "source_location": "L29",
+      "source_location": "L28",
       "id": "auth_logoutrequest",
       "community": 8,
       "norm_label": "logoutrequest"
@@ -1717,7 +1834,7 @@
       "label": "TokenResponse",
       "file_type": "code",
       "source_file": "internal/modules/auth/dto.go",
-      "source_location": "L37",
+      "source_location": "L38",
       "id": "auth_tokenresponse",
       "community": 8,
       "norm_label": "tokenresponse"
@@ -1735,7 +1852,7 @@
       "label": "init()",
       "file_type": "code",
       "source_file": "internal/modules/auth/errors.go",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "auth_errors_init",
       "community": 31,
       "norm_label": "init()"
@@ -1984,12 +2101,291 @@
       "norm_label": "dto.go"
     },
     {
+      "label": "auth.postman_collection.json",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L1",
+      "id": "docs_api_auth_postman_collection_json",
+      "community": 84,
+      "norm_label": "auth.postman_collection.json"
+    },
+    {
+      "label": "info",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L2",
+      "id": "api_auth_postman_collection_info",
+      "community": 84,
+      "norm_label": "info"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L3",
+      "id": "api_auth_postman_collection_info_name",
+      "community": 84,
+      "norm_label": "name"
+    },
+    {
+      "label": "_postman_id",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L4",
+      "id": "api_auth_postman_collection_info_postman_id",
+      "community": 84,
+      "norm_label": "_postman_id"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L5",
+      "id": "api_auth_postman_collection_info_description",
+      "community": 84,
+      "norm_label": "description"
+    },
+    {
+      "label": "schema",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L6",
+      "id": "api_auth_postman_collection_info_schema",
+      "community": 84,
+      "norm_label": "schema"
+    },
+    {
+      "label": "item",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L8",
+      "id": "api_auth_postman_collection_item",
+      "community": 84,
+      "norm_label": "item"
+    },
+    {
+      "label": "variable",
+      "file_type": "code",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L302",
+      "id": "api_auth_postman_collection_variable",
+      "community": 84,
+      "norm_label": "variable"
+    },
+    {
+      "label": "user.postman_collection.json",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L1",
+      "id": "docs_api_user_postman_collection_json",
+      "community": 85,
+      "norm_label": "user.postman_collection.json"
+    },
+    {
+      "label": "info",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L2",
+      "id": "api_user_postman_collection_info",
+      "community": 85,
+      "norm_label": "info"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L3",
+      "id": "api_user_postman_collection_info_name",
+      "community": 85,
+      "norm_label": "name"
+    },
+    {
+      "label": "_postman_id",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L4",
+      "id": "api_user_postman_collection_info_postman_id",
+      "community": 85,
+      "norm_label": "_postman_id"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L5",
+      "id": "api_user_postman_collection_info_description",
+      "community": 85,
+      "norm_label": "description"
+    },
+    {
+      "label": "schema",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L6",
+      "id": "api_user_postman_collection_info_schema",
+      "community": 85,
+      "norm_label": "schema"
+    },
+    {
+      "label": "item",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L8",
+      "id": "api_user_postman_collection_item",
+      "community": 85,
+      "norm_label": "item"
+    },
+    {
+      "label": "variable",
+      "file_type": "code",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L9",
+      "id": "api_user_postman_collection_variable",
+      "community": 85,
+      "norm_label": "variable"
+    },
+    {
+      "label": "vehicle.postman_collection.json",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L1",
+      "id": "docs_api_vehicle_postman_collection_json",
+      "community": 86,
+      "norm_label": "vehicle.postman_collection.json"
+    },
+    {
+      "label": "info",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L2",
+      "id": "api_vehicle_postman_collection_info",
+      "community": 86,
+      "norm_label": "info"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L3",
+      "id": "api_vehicle_postman_collection_info_name",
+      "community": 86,
+      "norm_label": "name"
+    },
+    {
+      "label": "_postman_id",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L4",
+      "id": "api_vehicle_postman_collection_info_postman_id",
+      "community": 86,
+      "norm_label": "_postman_id"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L5",
+      "id": "api_vehicle_postman_collection_info_description",
+      "community": 86,
+      "norm_label": "description"
+    },
+    {
+      "label": "schema",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L6",
+      "id": "api_vehicle_postman_collection_info_schema",
+      "community": 86,
+      "norm_label": "schema"
+    },
+    {
+      "label": "item",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L8",
+      "id": "api_vehicle_postman_collection_item",
+      "community": 86,
+      "norm_label": "item"
+    },
+    {
+      "label": "variable",
+      "file_type": "code",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L9",
+      "id": "api_vehicle_postman_collection_variable",
+      "community": 86,
+      "norm_label": "variable"
+    },
+    {
+      "label": "conventions.json",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L1",
+      "id": "docs_api_conventions_json",
+      "community": 87,
+      "norm_label": "conventions.json"
+    },
+    {
+      "label": "format",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L2",
+      "id": "api_conventions_format",
+      "community": 87,
+      "norm_label": "format"
+    },
+    {
+      "label": "documentation_policy",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L3",
+      "id": "api_conventions_documentation_policy",
+      "community": 87,
+      "norm_label": "documentation_policy"
+    },
+    {
+      "label": "required_file_pattern",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L4",
+      "id": "api_conventions_documentation_policy_required_file_pattern",
+      "community": 87,
+      "norm_label": "required_file_pattern"
+    },
+    {
+      "label": "required_on_change",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L5",
+      "id": "api_conventions_documentation_policy_required_on_change",
+      "community": 87,
+      "norm_label": "required_on_change"
+    },
+    {
+      "label": "required_fields_per_endpoint",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L10",
+      "id": "api_conventions_documentation_policy_required_fields_per_endpoint",
+      "community": 87,
+      "norm_label": "required_fields_per_endpoint"
+    },
+    {
+      "label": "notes",
+      "file_type": "code",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L20",
+      "id": "api_conventions_documentation_policy_notes",
+      "community": 87,
+      "norm_label": "notes"
+    },
+    {
       "label": "recovery.go",
       "file_type": "code",
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L1",
       "id": "pkg_middleware_recovery_go",
-      "community": 29,
+      "community": 1,
       "norm_label": "recovery.go"
     },
     {
@@ -1998,7 +2394,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L12",
       "id": "middleware_recovery_recovery",
-      "community": 29,
+      "community": 1,
       "norm_label": "recovery()"
     },
     {
@@ -2025,7 +2421,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 29,
+      "community": 1,
       "norm_label": "request_id.go"
     },
     {
@@ -2034,7 +2430,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 29,
+      "community": 1,
       "norm_label": "requestid()"
     },
     {
@@ -2043,7 +2439,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 29,
+      "community": 1,
       "norm_label": "newrequestid()"
     },
     {
@@ -2052,7 +2448,7 @@
       "source_file": "pkg/middleware/request_log.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_log_go",
-      "community": 29,
+      "community": 1,
       "norm_label": "request_log.go"
     },
     {
@@ -2061,7 +2457,7 @@
       "source_file": "pkg/middleware/request_log.go",
       "source_location": "L11",
       "id": "middleware_request_log_requestlog",
-      "community": 29,
+      "community": 1,
       "norm_label": "requestlog()"
     },
     {
@@ -2187,7 +2583,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L1",
       "id": "pkg_logger_logger_go",
-      "community": 29,
+      "community": 1,
       "norm_label": "logger.go"
     },
     {
@@ -2196,7 +2592,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L9",
       "id": "logger_contextkey",
-      "community": 29,
+      "community": 1,
       "norm_label": "contextkey"
     },
     {
@@ -2205,7 +2601,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L13",
       "id": "logger_logger_new",
-      "community": 29,
+      "community": 1,
       "norm_label": "new()"
     },
     {
@@ -2214,7 +2610,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L21",
       "id": "logger_logger_withcontext",
-      "community": 29,
+      "community": 1,
       "norm_label": "withcontext()"
     },
     {
@@ -2223,7 +2619,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L25",
       "id": "logger_logger_fromcontext",
-      "community": 29,
+      "community": 1,
       "norm_label": "fromcontext()"
     },
     {
@@ -2524,6 +2920,1185 @@
       "norm_label": "newapperror()"
     },
     {
+      "label": "knowledge-base.md",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L1",
+      "id": "docs_knowledge_base_md",
+      "community": 33,
+      "norm_label": "knowledge-base.md"
+    },
+    {
+      "label": "Knowledge Base",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L1",
+      "id": "docs_knowledge_base_knowledge_base",
+      "community": 33,
+      "norm_label": "knowledge base"
+    },
+    {
+      "label": "How To Use",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L5",
+      "id": "docs_knowledge_base_how_to_use",
+      "community": 33,
+      "norm_label": "how to use"
+    },
+    {
+      "label": "Architecture Decisions",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L11",
+      "id": "docs_knowledge_base_architecture_decisions",
+      "community": 33,
+      "norm_label": "architecture decisions"
+    },
+    {
+      "label": "Module Responsibilities",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L15",
+      "id": "docs_knowledge_base_module_responsibilities",
+      "community": 33,
+      "norm_label": "module responsibilities"
+    },
+    {
+      "label": "Provider Responsibilities",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L19",
+      "id": "docs_knowledge_base_provider_responsibilities",
+      "community": 33,
+      "norm_label": "provider responsibilities"
+    },
+    {
+      "label": "Dependency Rules",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L23",
+      "id": "docs_knowledge_base_dependency_rules",
+      "community": 33,
+      "norm_label": "dependency rules"
+    },
+    {
+      "label": "Conventions",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L27",
+      "id": "docs_knowledge_base_conventions",
+      "community": 33,
+      "norm_label": "conventions"
+    },
+    {
+      "label": "Migration Notes",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L34",
+      "id": "docs_knowledge_base_migration_notes",
+      "community": 33,
+      "norm_label": "migration notes"
+    },
+    {
+      "label": "Important Implementation Details",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L39",
+      "id": "docs_knowledge_base_important_implementation_details",
+      "community": 33,
+      "norm_label": "important implementation details"
+    },
+    {
+      "label": "Known Caveats",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L48",
+      "id": "docs_knowledge_base_known_caveats",
+      "community": 33,
+      "norm_label": "known caveats"
+    },
+    {
+      "label": "Important Workflows",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L52",
+      "id": "docs_knowledge_base_important_workflows",
+      "community": 33,
+      "norm_label": "important workflows"
+    },
+    {
+      "label": "migration-rules.md",
+      "file_type": "document",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L1",
+      "id": "docs_database_migration_rules_md",
+      "community": 99,
+      "norm_label": "migration-rules.md"
+    },
+    {
+      "label": "Migration Rules",
+      "file_type": "document",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L1",
+      "id": "database_migration_rules_migration_rules",
+      "community": 99,
+      "norm_label": "migration rules"
+    },
+    {
+      "label": "Governance",
+      "file_type": "document",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L3",
+      "id": "database_migration_rules_governance",
+      "community": 99,
+      "norm_label": "governance"
+    },
+    {
+      "label": "Required Checks",
+      "file_type": "document",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L9",
+      "id": "database_migration_rules_required_checks",
+      "community": 99,
+      "norm_label": "required checks"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L15",
+      "id": "database_migration_rules_update_checklist",
+      "community": 99,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "transaction-guidelines.md",
+      "file_type": "document",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L1",
+      "id": "docs_database_transaction_guidelines_md",
+      "community": 101,
+      "norm_label": "transaction-guidelines.md"
+    },
+    {
+      "label": "Transaction Guidelines",
+      "file_type": "document",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L1",
+      "id": "database_transaction_guidelines_transaction_guidelines",
+      "community": 101,
+      "norm_label": "transaction guidelines"
+    },
+    {
+      "label": "Principles",
+      "file_type": "document",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L3",
+      "id": "database_transaction_guidelines_principles",
+      "community": 101,
+      "norm_label": "principles"
+    },
+    {
+      "label": "Failure Handling",
+      "file_type": "document",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L9",
+      "id": "database_transaction_guidelines_failure_handling",
+      "community": 101,
+      "norm_label": "failure handling"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L14",
+      "id": "database_transaction_guidelines_update_checklist",
+      "community": 101,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "local-postgres.md",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L1",
+      "id": "docs_database_local_postgres_md",
+      "community": 90,
+      "norm_label": "local-postgres.md"
+    },
+    {
+      "label": "Local Postgres (Docker)",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L1",
+      "id": "database_local_postgres_local_postgres_docker",
+      "community": 90,
+      "norm_label": "local postgres (docker)"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L3",
+      "id": "database_local_postgres_purpose",
+      "community": 90,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Default Local Configuration",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L7",
+      "id": "database_local_postgres_default_local_configuration",
+      "community": 90,
+      "norm_label": "default local configuration"
+    },
+    {
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L17",
+      "id": "database_local_postgres_commands",
+      "community": 90,
+      "norm_label": "commands"
+    },
+    {
+      "label": "Environment",
+      "file_type": "document",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L23",
+      "id": "database_local_postgres_environment",
+      "community": 90,
+      "norm_label": "environment"
+    },
+    {
+      "label": "schema-overview.md",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L1",
+      "id": "docs_database_schema_overview_md",
+      "community": 100,
+      "norm_label": "schema-overview.md"
+    },
+    {
+      "label": "Schema Overview",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L1",
+      "id": "database_schema_overview_schema_overview",
+      "community": 100,
+      "norm_label": "schema overview"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L3",
+      "id": "database_schema_overview_purpose",
+      "community": 100,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Module Ownership",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L7",
+      "id": "database_schema_overview_module_ownership",
+      "community": 100,
+      "norm_label": "module ownership"
+    },
+    {
+      "label": "Auth Schema Notes",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L15",
+      "id": "database_schema_overview_auth_schema_notes",
+      "community": 100,
+      "norm_label": "auth schema notes"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L19",
+      "id": "database_schema_overview_update_checklist",
+      "community": 100,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "storage.md",
+      "file_type": "document",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L1",
+      "id": "docs_providers_storage_md",
+      "community": 104,
+      "norm_label": "storage.md"
+    },
+    {
+      "label": "Storage Provider",
+      "file_type": "document",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L1",
+      "id": "providers_storage_storage_provider",
+      "community": 104,
+      "norm_label": "storage provider"
+    },
+    {
+      "label": "Interface Ownership",
+      "file_type": "document",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L3",
+      "id": "providers_storage_interface_ownership",
+      "community": 104,
+      "norm_label": "interface ownership"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L8",
+      "id": "providers_storage_responsibility",
+      "community": 104,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L12",
+      "id": "providers_storage_update_checklist",
+      "community": 104,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "email.md",
+      "file_type": "document",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L1",
+      "id": "docs_providers_email_md",
+      "community": 102,
+      "norm_label": "email.md"
+    },
+    {
+      "label": "Email Provider",
+      "file_type": "document",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L1",
+      "id": "providers_email_email_provider",
+      "community": 102,
+      "norm_label": "email provider"
+    },
+    {
+      "label": "Interface Ownership",
+      "file_type": "document",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L3",
+      "id": "providers_email_interface_ownership",
+      "community": 102,
+      "norm_label": "interface ownership"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L8",
+      "id": "providers_email_responsibility",
+      "community": 102,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L12",
+      "id": "providers_email_update_checklist",
+      "community": 102,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "payment.md",
+      "file_type": "document",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L1",
+      "id": "docs_providers_payment_md",
+      "community": 103,
+      "norm_label": "payment.md"
+    },
+    {
+      "label": "Payment Provider",
+      "file_type": "document",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L1",
+      "id": "providers_payment_payment_provider",
+      "community": 103,
+      "norm_label": "payment provider"
+    },
+    {
+      "label": "Interface Ownership",
+      "file_type": "document",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L3",
+      "id": "providers_payment_interface_ownership",
+      "community": 103,
+      "norm_label": "interface ownership"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L8",
+      "id": "providers_payment_responsibility",
+      "community": 103,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L12",
+      "id": "providers_payment_update_checklist",
+      "community": 103,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "otp.md",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L1",
+      "id": "docs_providers_otp_md",
+      "community": 96,
+      "norm_label": "otp.md"
+    },
+    {
+      "label": "OTP Provider",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L1",
+      "id": "providers_otp_otp_provider",
+      "community": 96,
+      "norm_label": "otp provider"
+    },
+    {
+      "label": "Interface Ownership",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L3",
+      "id": "providers_otp_interface_ownership",
+      "community": 96,
+      "norm_label": "interface ownership"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L8",
+      "id": "providers_otp_responsibility",
+      "community": 96,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Implementations",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L12",
+      "id": "providers_otp_implementations",
+      "community": 96,
+      "norm_label": "implementations"
+    },
+    {
+      "label": "Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L16",
+      "id": "providers_otp_update_checklist",
+      "community": 96,
+      "norm_label": "update checklist"
+    },
+    {
+      "label": "debugging-workflow.md",
+      "file_type": "document",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L1",
+      "id": "docs_workflows_debugging_workflow_md",
+      "community": 105,
+      "norm_label": "debugging-workflow.md"
+    },
+    {
+      "label": "Debugging Workflow",
+      "file_type": "document",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L1",
+      "id": "workflows_debugging_workflow_debugging_workflow",
+      "community": 105,
+      "norm_label": "debugging workflow"
+    },
+    {
+      "label": "Process",
+      "file_type": "document",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L3",
+      "id": "workflows_debugging_workflow_process",
+      "community": 105,
+      "norm_label": "process"
+    },
+    {
+      "label": "Clarification Rule",
+      "file_type": "document",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L11",
+      "id": "workflows_debugging_workflow_clarification_rule",
+      "community": 105,
+      "norm_label": "clarification rule"
+    },
+    {
+      "label": "Validation",
+      "file_type": "document",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L15",
+      "id": "workflows_debugging_workflow_validation",
+      "community": 105,
+      "norm_label": "validation"
+    },
+    {
+      "label": "testing-workflow.md",
+      "file_type": "document",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L1",
+      "id": "docs_workflows_testing_workflow_md",
+      "community": 108,
+      "norm_label": "testing-workflow.md"
+    },
+    {
+      "label": "Testing Workflow",
+      "file_type": "document",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L1",
+      "id": "workflows_testing_workflow_testing_workflow",
+      "community": 108,
+      "norm_label": "testing workflow"
+    },
+    {
+      "label": "Scope",
+      "file_type": "document",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L3",
+      "id": "workflows_testing_workflow_scope",
+      "community": 108,
+      "norm_label": "scope"
+    },
+    {
+      "label": "Required Execution",
+      "file_type": "document",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L7",
+      "id": "workflows_testing_workflow_required_execution",
+      "community": 108,
+      "norm_label": "required execution"
+    },
+    {
+      "label": "Outcome Rules",
+      "file_type": "document",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L16",
+      "id": "workflows_testing_workflow_outcome_rules",
+      "community": 108,
+      "norm_label": "outcome rules"
+    },
+    {
+      "label": "implementation-workflow.md",
+      "file_type": "document",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L1",
+      "id": "docs_workflows_implementation_workflow_md",
+      "community": 106,
+      "norm_label": "implementation-workflow.md"
+    },
+    {
+      "label": "Implementation Workflow",
+      "file_type": "document",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L1",
+      "id": "workflows_implementation_workflow_implementation_workflow",
+      "community": 106,
+      "norm_label": "implementation workflow"
+    },
+    {
+      "label": "Pre-Implementation",
+      "file_type": "document",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L3",
+      "id": "workflows_implementation_workflow_pre_implementation",
+      "community": 106,
+      "norm_label": "pre-implementation"
+    },
+    {
+      "label": "Implementation",
+      "file_type": "document",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L10",
+      "id": "workflows_implementation_workflow_implementation",
+      "community": 106,
+      "norm_label": "implementation"
+    },
+    {
+      "label": "Post-Implementation",
+      "file_type": "document",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L16",
+      "id": "workflows_implementation_workflow_post_implementation",
+      "community": 106,
+      "norm_label": "post-implementation"
+    },
+    {
+      "label": "release-workflow.md",
+      "file_type": "document",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L1",
+      "id": "docs_workflows_release_workflow_md",
+      "community": 107,
+      "norm_label": "release-workflow.md"
+    },
+    {
+      "label": "Release Workflow",
+      "file_type": "document",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L1",
+      "id": "workflows_release_workflow_release_workflow",
+      "community": 107,
+      "norm_label": "release workflow"
+    },
+    {
+      "label": "Pre-Release Checks",
+      "file_type": "document",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L3",
+      "id": "workflows_release_workflow_pre_release_checks",
+      "community": 107,
+      "norm_label": "pre-release checks"
+    },
+    {
+      "label": "Required Validation Commands",
+      "file_type": "document",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L9",
+      "id": "workflows_release_workflow_required_validation_commands",
+      "community": 107,
+      "norm_label": "required validation commands"
+    },
+    {
+      "label": "Release Notes Checklist",
+      "file_type": "document",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L17",
+      "id": "workflows_release_workflow_release_notes_checklist",
+      "community": 107,
+      "norm_label": "release notes checklist"
+    },
+    {
+      "label": "dependency-flow.md",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L1",
+      "id": "docs_architecture_dependency_flow_md",
+      "community": 88,
+      "norm_label": "dependency-flow.md"
+    },
+    {
+      "label": "Dependency Flow",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L1",
+      "id": "architecture_dependency_flow_dependency_flow",
+      "community": 88,
+      "norm_label": "dependency flow"
+    },
+    {
+      "label": "Allowed Direction",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L3",
+      "id": "architecture_dependency_flow_allowed_direction",
+      "community": 88,
+      "norm_label": "allowed direction"
+    },
+    {
+      "label": "Restricted Direction",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L9",
+      "id": "architecture_dependency_flow_restricted_direction",
+      "community": 88,
+      "norm_label": "restricted direction"
+    },
+    {
+      "label": "Cross-Module Dependencies",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L15",
+      "id": "architecture_dependency_flow_cross_module_dependencies",
+      "community": 88,
+      "norm_label": "cross-module dependencies"
+    },
+    {
+      "label": "Update Rules",
+      "file_type": "document",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L19",
+      "id": "architecture_dependency_flow_update_rules",
+      "community": 88,
+      "norm_label": "update rules"
+    },
+    {
+      "label": "overview.md",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L1",
+      "id": "docs_architecture_overview_md",
+      "community": 89,
+      "norm_label": "overview.md"
+    },
+    {
+      "label": "Architecture Overview",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L1",
+      "id": "architecture_overview_architecture_overview",
+      "community": 89,
+      "norm_label": "architecture overview"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L3",
+      "id": "architecture_overview_purpose",
+      "community": 89,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Layers",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L7",
+      "id": "architecture_overview_layers",
+      "community": 89,
+      "norm_label": "layers"
+    },
+    {
+      "label": "Current Composition Notes",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L14",
+      "id": "architecture_overview_current_composition_notes",
+      "community": 89,
+      "norm_label": "current composition notes"
+    },
+    {
+      "label": "Update Rules",
+      "file_type": "document",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L18",
+      "id": "architecture_overview_update_rules",
+      "community": 89,
+      "norm_label": "update rules"
+    },
+    {
+      "label": "conventions.md",
+      "file_type": "document",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L1",
+      "id": "docs_architecture_conventions_md",
+      "community": 97,
+      "norm_label": "conventions.md"
+    },
+    {
+      "label": "Architecture Conventions",
+      "file_type": "document",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L1",
+      "id": "architecture_conventions_architecture_conventions",
+      "community": 97,
+      "norm_label": "architecture conventions"
+    },
+    {
+      "label": "Core Principles",
+      "file_type": "document",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L3",
+      "id": "architecture_conventions_core_principles",
+      "community": 97,
+      "norm_label": "core principles"
+    },
+    {
+      "label": "Forbidden Patterns",
+      "file_type": "document",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L11",
+      "id": "architecture_conventions_forbidden_patterns",
+      "community": 97,
+      "norm_label": "forbidden patterns"
+    },
+    {
+      "label": "Change Scope Conventions",
+      "file_type": "document",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L19",
+      "id": "architecture_conventions_change_scope_conventions",
+      "community": 97,
+      "norm_label": "change scope conventions"
+    },
+    {
+      "label": "folder-structure.md",
+      "file_type": "document",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L1",
+      "id": "docs_architecture_folder_structure_md",
+      "community": 98,
+      "norm_label": "folder-structure.md"
+    },
+    {
+      "label": "Folder Structure",
+      "file_type": "document",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L1",
+      "id": "architecture_folder_structure_folder_structure",
+      "community": 98,
+      "norm_label": "folder structure"
+    },
+    {
+      "label": "Objective",
+      "file_type": "document",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L3",
+      "id": "architecture_folder_structure_objective",
+      "community": 98,
+      "norm_label": "objective"
+    },
+    {
+      "label": "Top-Level Placement Guide",
+      "file_type": "document",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L7",
+      "id": "architecture_folder_structure_top_level_placement_guide",
+      "community": 98,
+      "norm_label": "top-level placement guide"
+    },
+    {
+      "label": "Placement Rules",
+      "file_type": "document",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L16",
+      "id": "architecture_folder_structure_placement_rules",
+      "community": 98,
+      "norm_label": "placement rules"
+    },
+    {
+      "label": "customer.md",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L1",
+      "id": "docs_modules_customer_md",
+      "community": 92,
+      "norm_label": "customer.md"
+    },
+    {
+      "label": "Customer Module",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L1",
+      "id": "modules_customer_customer_module",
+      "community": 92,
+      "norm_label": "customer module"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L3",
+      "id": "modules_customer_responsibility",
+      "community": 92,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Key Components",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L7",
+      "id": "modules_customer_key_components",
+      "community": 92,
+      "norm_label": "key components"
+    },
+    {
+      "label": "Boundaries",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L11",
+      "id": "modules_customer_boundaries",
+      "community": 92,
+      "norm_label": "boundaries"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L16",
+      "id": "modules_customer_documentation_update_checklist",
+      "community": 92,
+      "norm_label": "documentation update checklist"
+    },
+    {
+      "label": "showroom.md",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L1",
+      "id": "docs_modules_showroom_md",
+      "community": 93,
+      "norm_label": "showroom.md"
+    },
+    {
+      "label": "Showroom Module",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L1",
+      "id": "modules_showroom_showroom_module",
+      "community": 93,
+      "norm_label": "showroom module"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L3",
+      "id": "modules_showroom_responsibility",
+      "community": 93,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Key Components",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L7",
+      "id": "modules_showroom_key_components",
+      "community": 93,
+      "norm_label": "key components"
+    },
+    {
+      "label": "Boundaries",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L11",
+      "id": "modules_showroom_boundaries",
+      "community": 93,
+      "norm_label": "boundaries"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L16",
+      "id": "modules_showroom_documentation_update_checklist",
+      "community": 93,
+      "norm_label": "documentation update checklist"
+    },
+    {
+      "label": "auth.md",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L1",
+      "id": "docs_modules_auth_md",
+      "community": 91,
+      "norm_label": "auth.md"
+    },
+    {
+      "label": "Auth Module",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L1",
+      "id": "modules_auth_auth_module",
+      "community": 91,
+      "norm_label": "auth module"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L3",
+      "id": "modules_auth_responsibility",
+      "community": 91,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Key Components",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L8",
+      "id": "modules_auth_key_components",
+      "community": 91,
+      "norm_label": "key components"
+    },
+    {
+      "label": "Boundaries",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L18",
+      "id": "modules_auth_boundaries",
+      "community": 91,
+      "norm_label": "boundaries"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L23",
+      "id": "modules_auth_documentation_update_checklist",
+      "community": 91,
+      "norm_label": "documentation update checklist"
+    },
+    {
+      "label": "user.md",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L1",
+      "id": "docs_modules_user_md",
+      "community": 94,
+      "norm_label": "user.md"
+    },
+    {
+      "label": "User Module",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L1",
+      "id": "modules_user_user_module",
+      "community": 94,
+      "norm_label": "user module"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L3",
+      "id": "modules_user_responsibility",
+      "community": 94,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Key Components",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L7",
+      "id": "modules_user_key_components",
+      "community": 94,
+      "norm_label": "key components"
+    },
+    {
+      "label": "Boundaries",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L12",
+      "id": "modules_user_boundaries",
+      "community": 94,
+      "norm_label": "boundaries"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L17",
+      "id": "modules_user_documentation_update_checklist",
+      "community": 94,
+      "norm_label": "documentation update checklist"
+    },
+    {
+      "label": "vehicle.md",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L1",
+      "id": "docs_modules_vehicle_md",
+      "community": 95,
+      "norm_label": "vehicle.md"
+    },
+    {
+      "label": "Vehicle Module",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L1",
+      "id": "modules_vehicle_vehicle_module",
+      "community": 95,
+      "norm_label": "vehicle module"
+    },
+    {
+      "label": "Responsibility",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L3",
+      "id": "modules_vehicle_responsibility",
+      "community": 95,
+      "norm_label": "responsibility"
+    },
+    {
+      "label": "Key Components",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L7",
+      "id": "modules_vehicle_key_components",
+      "community": 95,
+      "norm_label": "key components"
+    },
+    {
+      "label": "Boundaries",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L11",
+      "id": "modules_vehicle_boundaries",
+      "community": 95,
+      "norm_label": "boundaries"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L16",
+      "id": "modules_vehicle_documentation_update_checklist",
+      "community": 95,
+      "norm_label": "documentation update checklist"
+    },
+    {
+      "label": ".RevokeAllByUserID()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L127",
+      "community": 3,
+      "norm_label": ".revokeallbyuserid()",
+      "id": "auth_fakesessionrepo_revokeallbyuserid"
+    },
+    {
+      "label": ".RevokeAllByUserID()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/repository.go",
+      "source_location": "L115",
+      "community": 28,
+      "norm_label": ".revokeallbyuserid()",
+      "id": "auth_sessionrepository_revokeallbyuserid"
+    },
+    {
+      "label": ".FindLatestActiveByUserAndPlatform()",
+      "file_type": "code",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L54",
+      "community": 3,
+      "norm_label": ".findlatestactivebyuserandplatform()",
+      "id": "auth_fakeotprepo_findlatestactivebyuserandplatform"
+    },
+    {
+      "label": ".FindLatestActiveByUserAndPlatform()",
+      "file_type": "code",
+      "source_file": "internal/modules/auth/repository.go",
+      "source_location": "L31",
+      "community": 28,
+      "norm_label": ".findlatestactivebyuserandplatform()",
+      "id": "auth_otprepository_findlatestactivebyuserandplatform"
+    },
+    {
       "label": "auth_routes_smoke_test.go",
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
@@ -2753,7 +4328,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler.go",
       "source_location": "L1",
-      "community": 10,
+      "community": 29,
       "norm_label": "handler.go",
       "id": "internal_auth_handler_go"
     },
@@ -2762,7 +4337,7 @@
       "file_type": "code",
       "source_file": "internal/auth/service.go",
       "source_location": "L1",
-      "community": 1,
+      "community": 30,
       "norm_label": "service.go",
       "id": "internal_auth_service_go"
     },
@@ -2825,7 +4400,7 @@
       "file_type": "code",
       "source_file": "internal/auth/model.go",
       "source_location": "L1",
-      "community": 1,
+      "community": 30,
       "norm_label": "model.go",
       "id": "internal_auth_model_go"
     },
@@ -3743,7 +5318,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/model.go",
       "source_location": "L1",
-      "community": 30,
+      "community": 6,
       "norm_label": "model.go",
       "id": "internal_repository_user_otp_model_go"
     },
@@ -3752,7 +5327,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/model.go",
       "source_location": "L9",
-      "community": 30,
+      "community": 6,
       "norm_label": "userotp",
       "id": "user_otp_userotp"
     },
@@ -3761,7 +5336,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/model.go",
       "source_location": "L25",
-      "community": 30,
+      "community": 6,
       "norm_label": "platformtype",
       "id": "user_otp_platformtype"
     },
@@ -3770,7 +5345,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/model.go",
       "source_location": "L34",
-      "community": 30,
+      "community": 6,
       "norm_label": "otpfortype",
       "id": "user_otp_otpfortype"
     },
@@ -3779,7 +5354,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/model.go",
       "source_location": "L41",
-      "community": 30,
+      "community": 6,
       "norm_label": ".tablename()",
       "id": "user_otp_userotp_tablename"
     },
@@ -3788,7 +5363,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L1",
-      "community": 30,
+      "community": 6,
       "norm_label": "repository.go",
       "id": "internal_repository_user_otp_repository_go"
     },
@@ -3797,7 +5372,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L12",
-      "community": 30,
+      "community": 6,
       "norm_label": "repository",
       "id": "user_otp_repository"
     },
@@ -3806,7 +5381,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L16",
-      "community": 30,
+      "community": 6,
       "norm_label": "newrepository()",
       "id": "user_otp_repository_newrepository"
     },
@@ -3815,7 +5390,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L20",
-      "community": 30,
+      "community": 6,
       "norm_label": ".create()",
       "id": "user_otp_repository_create"
     },
@@ -3824,7 +5399,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L40",
-      "community": 30,
+      "community": 6,
       "norm_label": ".findlatestactivebyuserandplatform()",
       "id": "user_otp_repository_findlatestactivebyuserandplatform"
     },
@@ -3833,7 +5408,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L55",
-      "community": 30,
+      "community": 6,
       "norm_label": ".incrementattempt()",
       "id": "user_otp_repository_incrementattempt"
     },
@@ -3842,7 +5417,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L61",
-      "community": 30,
+      "community": 6,
       "norm_label": ".markused()",
       "id": "user_otp_repository_markused"
     },
@@ -3851,7 +5426,7 @@
       "file_type": "code",
       "source_file": "internal/repository/user_otp/repository.go",
       "source_location": "L70",
-      "community": 30,
+      "community": 6,
       "norm_label": "todomain()",
       "id": "user_otp_repository_todomain"
     },
@@ -4481,7 +6056,7 @@
       "file_type": "code",
       "source_file": "internal/application/auth/service.go",
       "source_location": "L1",
-      "community": 1,
+      "community": 30,
       "norm_label": "service.go",
       "id": "internal_application_auth_service_go"
     },
@@ -4490,7 +6065,7 @@
       "file_type": "code",
       "source_file": "internal/application/auth/service.go",
       "source_location": "L15",
-      "community": 1,
+      "community": 30,
       "norm_label": "config",
       "id": "auth_config"
     },
@@ -4544,7 +6119,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L1",
-      "community": 30,
+      "community": 6,
       "norm_label": "entity.go",
       "id": "internal_domain_user_entity_go"
     },
@@ -4553,7 +6128,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L5",
-      "community": 30,
+      "community": 6,
       "norm_label": "userentity",
       "id": "user_userentity"
     },
@@ -4562,7 +6137,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L16",
-      "community": 30,
+      "community": 6,
       "norm_label": "userroleentity",
       "id": "user_userroleentity"
     },
@@ -4571,7 +6146,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L24",
-      "community": 30,
+      "community": 6,
       "norm_label": "usershowroomentity",
       "id": "user_usershowroomentity"
     },
@@ -4580,7 +6155,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L34",
-      "community": 1,
+      "community": 6,
       "norm_label": "otpplatform",
       "id": "user_otpplatform"
     },
@@ -4589,7 +6164,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L43",
-      "community": 30,
+      "community": 6,
       "norm_label": "otpfor",
       "id": "user_otpfor"
     },
@@ -4598,7 +6173,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L50",
-      "community": 30,
+      "community": 6,
       "norm_label": "userotpentity",
       "id": "user_userotpentity"
     },
@@ -4607,7 +6182,7 @@
       "file_type": "code",
       "source_file": "internal/domain/user/entity.go",
       "source_location": "L65",
-      "community": 30,
+      "community": 6,
       "norm_label": "usersessionentity",
       "id": "user_usersessionentity"
     },
@@ -4696,9 +6271,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_smoke_auth_auth_routes_smoke_test_go",
-      "target": "auth_smokeauthservice",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice"
     },
     {
       "relation": "contains",
@@ -4706,9 +6281,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_smoke_auth_auth_routes_smoke_test_go",
-      "target": "auth_auth_routes_smoke_test_testauthloginrouteshape",
-      "confidence_score": 1.0
+      "target": "auth_auth_routes_smoke_test_testauthloginrouteshape"
     },
     {
       "relation": "method",
@@ -4716,9 +6291,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_smokeauthservice",
-      "target": "auth_smokeauthservice_register",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice_register"
     },
     {
       "relation": "method",
@@ -4726,9 +6301,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_smokeauthservice",
-      "target": "auth_smokeauthservice_login",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice_login"
     },
     {
       "relation": "method",
@@ -4736,9 +6311,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_smokeauthservice",
-      "target": "auth_smokeauthservice_verifyotp",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice_verifyotp"
     },
     {
       "relation": "method",
@@ -4746,9 +6321,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_smokeauthservice",
-      "target": "auth_smokeauthservice_refreshtoken",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice_refreshtoken"
     },
     {
       "relation": "method",
@@ -4756,9 +6331,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_smokeauthservice",
-      "target": "auth_smokeauthservice_logout",
-      "confidence_score": 1.0
+      "target": "auth_smokeauthservice_logout"
     },
     {
       "relation": "calls",
@@ -4788,9 +6363,9 @@
       "source_file": "tests/smoke/health/health_smoke_test.go",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_smoke_health_health_smoke_test_go",
-      "target": "health_health_smoke_test_testhealthrouteshape",
-      "confidence_score": 1.0
+      "target": "health_health_smoke_test_testhealthrouteshape"
     },
     {
       "relation": "calls",
@@ -4809,9 +6384,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_fakeuserrepo",
-      "confidence_score": 1.0
+      "target": "auth_fakeuserrepo"
     },
     {
       "relation": "contains",
@@ -4819,9 +6394,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_fakeotprepo",
-      "confidence_score": 1.0
+      "target": "auth_fakeotprepo"
     },
     {
       "relation": "contains",
@@ -4829,9 +6404,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_fakesessionrepo",
-      "confidence_score": 1.0
+      "target": "auth_fakesessionrepo"
     },
     {
       "relation": "contains",
@@ -4839,9 +6414,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_fakeotpprovider",
-      "confidence_score": 1.0
+      "target": "auth_fakeotpprovider"
     },
     {
       "relation": "contains",
@@ -4849,9 +6424,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_faketokenprovider",
-      "confidence_score": 1.0
+      "target": "auth_faketokenprovider"
     },
     {
       "relation": "contains",
@@ -4859,9 +6434,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testregistertriggersotp",
-      "confidence_score": 1.0
+      "target": "auth_service_test_testregistertriggersotp"
     },
     {
       "relation": "contains",
@@ -4869,9 +6444,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L203",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testverifyotprejectsinvalidcode",
-      "confidence_score": 1.0
+      "target": "auth_service_test_testverifyotprejectsinvalidcode"
     },
     {
       "relation": "contains",
@@ -4879,8 +6454,28 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L231",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testrefreshandlogout",
+      "target": "auth_service_test_testrefreshandlogout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L299",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_unit_auth_service_test_go",
+      "target": "auth_service_test_testlogoutrejectsinvalidaccesstoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L316",
+      "weight": 1.0,
+      "source": "tests_unit_auth_service_test_go",
+      "target": "auth_service_test_testverifyotprevokesexistingsessionsforsameplatform",
       "confidence_score": 1.0
     },
     {
@@ -4926,12 +6521,12 @@
     {
       "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "internal/auth/service_test.go",
-      "source_location": "L53",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L54",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "auth_fakeotprepo",
-      "target": "auth_fakeotprepo_findlatestactivebyuserandplatform"
+      "target": "auth_fakeotprepo_findlatestactivebyrequestidandplatform"
     },
     {
       "relation": "method",
@@ -4952,6 +6547,16 @@
       "confidence_score": 1.0,
       "source": "auth_fakeotprepo",
       "target": "auth_fakeotprepo_markused"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/auth/service_test.go",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_fakeotprepo",
+      "target": "auth_fakeotprepo_findlatestactivebyuserandplatform"
     },
     {
       "relation": "contains",
@@ -5002,6 +6607,26 @@
       "confidence_score": 1.0,
       "source": "auth_fakesessionrepo",
       "target": "auth_fakesessionrepo_revoke"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "auth_fakesessionrepo",
+      "target": "auth_fakesessionrepo_revokeallbyuseridandplatform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L127",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_fakesessionrepo",
+      "target": "auth_fakesessionrepo_revokeallbyuserid"
     },
     {
       "relation": "contains",
@@ -5062,6 +6687,16 @@
       "confidence_score": 1.0,
       "source": "auth_faketokenprovider",
       "target": "auth_faketokenprovider_hashrefreshtoken"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L184",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_faketokenprovider",
+      "target": "auth_faketokenprovider_parseaccesstoken"
     },
     {
       "relation": "contains",
@@ -5137,14 +6772,36 @@
       "target": "auth_service_test_testrefreshandlogout"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "auth_service_test_testlogoutrejectsinvalidaccesstoken",
+      "target": "auth_service_newservice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/unit/auth/service_test.go",
+      "source_location": "L333",
+      "weight": 1.0,
+      "source": "auth_service_test_testverifyotprevokesexistingsessionsforsameplatform",
+      "target": "auth_service_newservice"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_contract_test_go",
-      "target": "auth_contractservice",
-      "confidence_score": 1.0
+      "target": "auth_contractservice"
     },
     {
       "relation": "contains",
@@ -5152,9 +6809,9 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_contract_test_go",
-      "target": "auth_contract_test_testauthroutecontracts",
-      "confidence_score": 1.0
+      "target": "auth_contract_test_testauthroutecontracts"
     },
     {
       "relation": "method",
@@ -5254,9 +6911,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_handler_test_go",
-      "target": "auth_fakehandlerauthservice",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice"
     },
     {
       "relation": "contains",
@@ -5264,9 +6921,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_handler_test_go",
-      "target": "auth_handler_test_testloginbadrequest",
-      "confidence_score": 1.0
+      "target": "auth_handler_test_testloginbadrequest"
     },
     {
       "relation": "contains",
@@ -5274,8 +6931,38 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_handler_test_go",
-      "target": "auth_handler_test_testverifyotpsuccess",
+      "target": "auth_handler_test_testverifyotpsuccess"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_unit_auth_handler_test_go",
+      "target": "auth_handler_test_testlogoutrequiresauthorizationheader"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L111",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_unit_auth_handler_test_go",
+      "target": "auth_handler_test_testlogoutsuccesswithauthorizationheader"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "tests_unit_auth_handler_test_go",
+      "target": "auth_handler_test_testlogoutrequiresplatformheader",
       "confidence_score": 1.0
     },
     {
@@ -5284,9 +6971,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_fakehandlerauthservice",
-      "target": "auth_fakehandlerauthservice_register",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice_register"
     },
     {
       "relation": "method",
@@ -5294,9 +6981,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_fakehandlerauthservice",
-      "target": "auth_fakehandlerauthservice_login",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice_login"
     },
     {
       "relation": "method",
@@ -5304,9 +6991,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_fakehandlerauthservice",
-      "target": "auth_fakehandlerauthservice_verifyotp",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice_verifyotp"
     },
     {
       "relation": "method",
@@ -5314,9 +7001,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_fakehandlerauthservice",
-      "target": "auth_fakehandlerauthservice_refreshtoken",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice_refreshtoken"
     },
     {
       "relation": "method",
@@ -5324,9 +7011,9 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_fakehandlerauthservice",
-      "target": "auth_fakehandlerauthservice_logout",
-      "confidence_score": 1.0
+      "target": "auth_fakehandlerauthservice_logout"
     },
     {
       "relation": "calls",
@@ -5371,14 +7058,47 @@
       "target": "auth_handler_test_testverifyotpsuccess"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "auth_handler_test_testlogoutrequiresauthorizationheader",
+      "target": "auth_handler_newhandler"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "auth_handler_test_testlogoutsuccesswithauthorizationheader",
+      "target": "auth_handler_newhandler"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/unit/auth/handler_test.go",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "auth_handler_test_testlogoutrequiresplatformheader",
+      "target": "auth_handler_newhandler"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/integration/postgres/postgres_integration_test.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_integration_postgres_postgres_integration_test_go",
-      "target": "postgres_postgres_integration_test_testpostgresconnectionfromenv",
-      "confidence_score": 1.0
+      "target": "postgres_postgres_integration_test_testpostgresconnectionfromenv"
     },
     {
       "relation": "calls",
@@ -5451,6 +7171,16 @@
       "confidence_score": 1.0,
       "source": "token_jwtprovider",
       "target": "token_jwtprovider_hashrefreshtoken"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/infra/token/jwt.go",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "token_jwtprovider",
+      "target": "token_jwtprovider_parseaccesstoken"
     },
     {
       "relation": "method",
@@ -5788,9 +7518,9 @@
       "source_file": "internal/providers/token/provider.go",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_token_provider_go",
-      "target": "token_provider",
-      "confidence_score": 1.0
+      "target": "token_provider"
     },
     {
       "relation": "contains",
@@ -5798,9 +7528,9 @@
       "source_file": "internal/providers/token/types.go",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_token_types_go",
-      "target": "token_tokenpair",
-      "confidence_score": 1.0
+      "target": "token_tokenpair"
     },
     {
       "relation": "contains",
@@ -5808,9 +7538,9 @@
       "source_file": "internal/providers/otp/provider.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_otp_provider_go",
-      "target": "otp_provider",
-      "confidence_score": 1.0
+      "target": "otp_provider"
     },
     {
       "relation": "contains",
@@ -5818,9 +7548,9 @@
       "source_file": "internal/providers/otp/types.go",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_otp_types_go",
-      "target": "otp_sendrequest",
-      "confidence_score": 1.0
+      "target": "otp_sendrequest"
     },
     {
       "relation": "contains",
@@ -5828,9 +7558,9 @@
       "source_file": "internal/providers/payment/provider.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_payment_provider_go",
-      "target": "payment_provider",
-      "confidence_score": 1.0
+      "target": "payment_provider"
     },
     {
       "relation": "contains",
@@ -5838,9 +7568,9 @@
       "source_file": "internal/providers/storage/provider.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_storage_provider_go",
-      "target": "storage_provider",
-      "confidence_score": 1.0
+      "target": "storage_provider"
     },
     {
       "relation": "contains",
@@ -5848,9 +7578,9 @@
       "source_file": "internal/providers/queue/provider.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_queue_provider_go",
-      "target": "queue_provider",
-      "confidence_score": 1.0
+      "target": "queue_provider"
     },
     {
       "relation": "contains",
@@ -5858,9 +7588,9 @@
       "source_file": "internal/providers/email/provider.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_email_provider_go",
-      "target": "email_provider",
-      "confidence_score": 1.0
+      "target": "email_provider"
     },
     {
       "relation": "contains",
@@ -5868,9 +7598,9 @@
       "source_file": "internal/modules/vehicle/image_model.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_image_model_go",
-      "target": "vehicle_vehicleimage",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicleimage"
     },
     {
       "relation": "contains",
@@ -5878,9 +7608,9 @@
       "source_file": "internal/modules/vehicle/image_model.go",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_image_model_go",
-      "target": "vehicle_vehicleimagelabel",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicleimagelabel"
     },
     {
       "relation": "method",
@@ -5918,9 +7648,9 @@
       "source_file": "internal/modules/vehicle/document_model.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_document_model_go",
-      "target": "vehicle_vehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicledocument"
     },
     {
       "relation": "contains",
@@ -5928,9 +7658,9 @@
       "source_file": "internal/modules/vehicle/document_model.go",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_document_model_go",
-      "target": "vehicle_vehicledocumenttype",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicledocumenttype"
     },
     {
       "relation": "method",
@@ -5968,9 +7698,9 @@
       "source_file": "internal/modules/vehicle/expense_model.go",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_expense_model_go",
-      "target": "vehicle_vehicleexpenses",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicleexpenses"
     },
     {
       "relation": "contains",
@@ -5978,9 +7708,9 @@
       "source_file": "internal/modules/vehicle/expense_model.go",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_expense_model_go",
-      "target": "vehicle_vehicleexpensestype",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicleexpensestype"
     },
     {
       "relation": "method",
@@ -6018,9 +7748,9 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_status_model_go",
-      "target": "vehicle_vehiclestatus",
-      "confidence_score": 1.0
+      "target": "vehicle_vehiclestatus"
     },
     {
       "relation": "contains",
@@ -6028,9 +7758,9 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_status_model_go",
-      "target": "vehicle_vehiclestatustype",
-      "confidence_score": 1.0
+      "target": "vehicle_vehiclestatustype"
     },
     {
       "relation": "method",
@@ -6068,9 +7798,9 @@
       "source_file": "internal/modules/vehicle/pricing_model.go",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_pricing_model_go",
-      "target": "vehicle_vehiclepricing",
-      "confidence_score": 1.0
+      "target": "vehicle_vehiclepricing"
     },
     {
       "relation": "contains",
@@ -6078,9 +7808,9 @@
       "source_file": "internal/modules/vehicle/pricing_model.go",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_pricing_model_go",
-      "target": "vehicle_currency",
-      "confidence_score": 1.0
+      "target": "vehicle_currency"
     },
     {
       "relation": "method",
@@ -6118,9 +7848,9 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_model_go",
-      "target": "vehicle_vehicle",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicle"
     },
     {
       "relation": "contains",
@@ -6128,9 +7858,9 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_model_go",
-      "target": "vehicle_vehicletype",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicletype"
     },
     {
       "relation": "contains",
@@ -6138,9 +7868,9 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_model_go",
-      "target": "vehicle_fueltype",
-      "confidence_score": 1.0
+      "target": "vehicle_fueltype"
     },
     {
       "relation": "contains",
@@ -6148,9 +7878,9 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_model_go",
-      "target": "vehicle_transmissiontype",
-      "confidence_score": 1.0
+      "target": "vehicle_transmissiontype"
     },
     {
       "relation": "method",
@@ -6208,9 +7938,9 @@
       "source_file": "internal/modules/vehicle/showroom_model.go",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_showroom_model_go",
-      "target": "vehicle_vehicleshowroom",
-      "confidence_score": 1.0
+      "target": "vehicle_vehicleshowroom"
     },
     {
       "relation": "method",
@@ -6238,9 +7968,9 @@
       "source_file": "internal/modules/showroom/model.go",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_showroom_model_go",
-      "target": "showroom_showroom",
-      "confidence_score": 1.0
+      "target": "showroom_showroom"
     },
     {
       "relation": "method",
@@ -6278,9 +8008,9 @@
       "source_file": "internal/modules/auth/handler.go",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_handler_go",
-      "target": "auth_handler",
-      "confidence_score": 1.0
+      "target": "auth_handler"
     },
     {
       "relation": "contains",
@@ -6288,9 +8018,39 @@
       "source_file": "internal/modules/auth/handler.go",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_handler_go",
-      "target": "auth_handler_newhandler",
-      "confidence_score": 1.0
+      "target": "auth_authheaders"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "internal_modules_auth_handler_go",
+      "target": "auth_handler_newhandler"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L111",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "internal_modules_auth_handler_go",
+      "target": "auth_handler_bindauthheaders"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L122",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "internal_modules_auth_handler_go",
+      "target": "auth_handler_extractbearertoken"
     },
     {
       "relation": "method",
@@ -6376,6 +8136,17 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_handler_register",
+      "target": "auth_handler_bindauthheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "internal/auth/handler.go",
@@ -6398,6 +8169,17 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_handler_login",
+      "target": "auth_handler_bindauthheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "internal/auth/handler.go",
@@ -6416,6 +8198,17 @@
       "weight": 1.0,
       "source": "auth_handler_login",
       "target": "response_envelope_ok"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_handler_verifyotp",
+      "target": "auth_handler_bindauthheaders"
     },
     {
       "relation": "calls",
@@ -6464,6 +8257,28 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L100",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_handler_logout",
+      "target": "auth_handler_extractbearertoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/handler.go",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "auth_handler_logout",
+      "target": "auth_handler_bindauthheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "internal/auth/handler.go",
@@ -6489,9 +8304,9 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_service",
-      "confidence_score": 1.0
+      "target": "auth_service"
     },
     {
       "relation": "contains",
@@ -6499,9 +8314,9 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_userrepo",
-      "confidence_score": 1.0
+      "target": "auth_userrepo"
     },
     {
       "relation": "contains",
@@ -6509,9 +8324,9 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_otprepo",
-      "confidence_score": 1.0
+      "target": "auth_otprepo"
     },
     {
       "relation": "contains",
@@ -6519,9 +8334,9 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_sessionrepo",
-      "confidence_score": 1.0
+      "target": "auth_sessionrepo"
     },
     {
       "relation": "contains",
@@ -6529,9 +8344,9 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_service_newservice",
-      "confidence_score": 1.0
+      "target": "auth_service_newservice"
     },
     {
       "relation": "contains",
@@ -6539,9 +8354,19 @@
       "source_file": "internal/modules/auth/service.go",
       "source_location": "L243",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_service_go",
-      "target": "auth_service_generateotpcode",
-      "confidence_score": 1.0
+      "target": "auth_service_generateotpcode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/service.go",
+      "source_location": "L264",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "internal_modules_auth_service_go",
+      "target": "auth_service_generaterequestid"
     },
     {
       "relation": "method",
@@ -6709,6 +8534,17 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/service.go",
+      "source_location": "L120",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_service_triggerotp",
+      "target": "auth_service_generaterequestid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "internal/auth/service.go",
@@ -6751,6 +8587,17 @@
       "target": "user_otpplatform"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "internal/modules/auth/service.go",
+      "source_location": "L250",
+      "weight": 1.0,
+      "source": "auth_service_logout",
+      "target": "auth_otpplatform"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "internal/auth/service.go",
@@ -6776,9 +8623,9 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_model_go",
-      "target": "auth_otpplatform",
-      "confidence_score": 1.0
+      "target": "auth_otpplatform"
     },
     {
       "relation": "contains",
@@ -6786,9 +8633,9 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_model_go",
-      "target": "auth_otpfor",
-      "confidence_score": 1.0
+      "target": "auth_otpfor"
     },
     {
       "relation": "contains",
@@ -6796,9 +8643,9 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_model_go",
-      "target": "auth_userotp",
-      "confidence_score": 1.0
+      "target": "auth_userotp"
     },
     {
       "relation": "contains",
@@ -6806,9 +8653,9 @@
       "source_file": "internal/modules/auth/model.go",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_model_go",
-      "target": "auth_usersession",
-      "confidence_score": 1.0
+      "target": "auth_usersession"
     },
     {
       "relation": "contains",
@@ -6876,9 +8723,9 @@
       "source_file": "internal/modules/auth/routes.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_routes_go",
-      "target": "auth_routes_registerroutes",
-      "confidence_score": 1.0
+      "target": "auth_routes_registerroutes"
     },
     {
       "relation": "calls",
@@ -6907,9 +8754,9 @@
       "source_file": "internal/modules/auth/repository.go",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_repository_go",
-      "target": "auth_otprepository",
-      "confidence_score": 1.0
+      "target": "auth_otprepository"
     },
     {
       "relation": "contains",
@@ -6917,9 +8764,9 @@
       "source_file": "internal/modules/auth/repository.go",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_repository_go",
-      "target": "auth_repository_newotprepository",
-      "confidence_score": 1.0
+      "target": "auth_repository_newotprepository"
     },
     {
       "relation": "contains",
@@ -6927,9 +8774,9 @@
       "source_file": "internal/modules/auth/repository.go",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_repository_go",
-      "target": "auth_sessionrepository",
-      "confidence_score": 1.0
+      "target": "auth_sessionrepository"
     },
     {
       "relation": "contains",
@@ -6937,9 +8784,9 @@
       "source_file": "internal/modules/auth/repository.go",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_repository_go",
-      "target": "auth_repository_newsessionrepository",
-      "confidence_score": 1.0
+      "target": "auth_repository_newsessionrepository"
     },
     {
       "relation": "method",
@@ -6964,12 +8811,12 @@
     {
       "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "internal/auth/repository.go",
+      "source_file": "internal/modules/auth/repository.go",
       "source_location": "L31",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "auth_otprepository",
-      "target": "auth_otprepository_findlatestactivebyuserandplatform"
+      "target": "auth_otprepository_findlatestactivebyrequestidandplatform"
     },
     {
       "relation": "method",
@@ -6990,6 +8837,16 @@
       "confidence_score": 1.0,
       "source": "auth_otprepository",
       "target": "auth_otprepository_markused"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/auth/repository.go",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_otprepository",
+      "target": "auth_otprepository_findlatestactivebyuserandplatform"
     },
     {
       "relation": "contains",
@@ -7073,6 +8930,26 @@
       "target": "auth_sessionrepository_revoke"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/repository.go",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "auth_sessionrepository",
+      "target": "auth_sessionrepository_revokeallbyuseridandplatform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/auth/repository.go",
+      "source_location": "L115",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "auth_sessionrepository",
+      "target": "auth_sessionrepository_revokeallbyuserid"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "internal/auth/repository.go",
@@ -7098,9 +8975,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_registerrequest",
-      "confidence_score": 1.0
+      "target": "auth_registerrequest"
     },
     {
       "relation": "contains",
@@ -7108,9 +8985,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_loginrequest",
-      "confidence_score": 1.0
+      "target": "auth_loginrequest"
     },
     {
       "relation": "contains",
@@ -7118,9 +8995,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_verifyotprequest",
-      "confidence_score": 1.0
+      "target": "auth_verifyotprequest"
     },
     {
       "relation": "contains",
@@ -7128,9 +9005,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_refreshtokenrequest",
-      "confidence_score": 1.0
+      "target": "auth_refreshtokenrequest"
     },
     {
       "relation": "contains",
@@ -7138,9 +9015,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_logoutrequest",
-      "confidence_score": 1.0
+      "target": "auth_logoutrequest"
     },
     {
       "relation": "contains",
@@ -7148,9 +9025,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_triggerotpresponse",
-      "confidence_score": 1.0
+      "target": "auth_triggerotpresponse"
     },
     {
       "relation": "contains",
@@ -7158,9 +9035,9 @@
       "source_file": "internal/modules/auth/dto.go",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_dto_go",
-      "target": "auth_tokenresponse",
-      "confidence_score": 1.0
+      "target": "auth_tokenresponse"
     },
     {
       "relation": "contains",
@@ -7308,9 +9185,9 @@
       "source_file": "internal/modules/auth/errors.go",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_auth_errors_go",
-      "target": "auth_errors_init",
-      "confidence_score": 1.0
+      "target": "auth_errors_init"
     },
     {
       "relation": "calls",
@@ -7350,9 +9227,9 @@
       "source_file": "internal/modules/user/role_model.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_role_model_go",
-      "target": "user_userrole",
-      "confidence_score": 1.0
+      "target": "user_userrole"
     },
     {
       "relation": "contains",
@@ -7360,9 +9237,9 @@
       "source_file": "internal/modules/user/role_model.go",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_role_model_go",
-      "target": "user_userroletype",
-      "confidence_score": 1.0
+      "target": "user_userroletype"
     },
     {
       "relation": "method",
@@ -7400,9 +9277,9 @@
       "source_file": "internal/modules/user/model.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_model_go",
-      "target": "user_user",
-      "confidence_score": 1.0
+      "target": "user_user"
     },
     {
       "relation": "method",
@@ -7430,9 +9307,9 @@
       "source_file": "internal/modules/user/showroom_model.go",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_showroom_model_go",
-      "target": "user_usershowroom",
-      "confidence_score": 1.0
+      "target": "user_usershowroom"
     },
     {
       "relation": "method",
@@ -7460,9 +9337,9 @@
       "source_file": "internal/modules/user/repository.go",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_repository_go",
-      "target": "user_repository",
-      "confidence_score": 1.0
+      "target": "user_repository"
     },
     {
       "relation": "contains",
@@ -7470,9 +9347,9 @@
       "source_file": "internal/modules/user/repository.go",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_repository_go",
-      "target": "user_repository_newrepository",
-      "confidence_score": 1.0
+      "target": "user_repository_newrepository"
     },
     {
       "relation": "method",
@@ -7530,9 +9407,9 @@
       "source_file": "internal/modules/user/errors.go",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_user_errors_go",
-      "target": "user_errors_init",
-      "confidence_score": 1.0
+      "target": "user_errors_init"
     },
     {
       "relation": "calls",
@@ -7572,9 +9449,9 @@
       "source_file": "internal/modules/customer/model.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_customer_model_go",
-      "target": "customer_customer",
-      "confidence_score": 1.0
+      "target": "customer_customer"
     },
     {
       "relation": "method",
@@ -7612,9 +9489,9 @@
       "source_file": "internal/modules/customer/sale_model.go",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_customer_sale_model_go",
-      "target": "customer_customervehiclesale",
-      "confidence_score": 1.0
+      "target": "customer_customervehiclesale"
     },
     {
       "relation": "contains",
@@ -7622,9 +9499,9 @@
       "source_file": "internal/modules/customer/sale_model.go",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_customer_sale_model_go",
-      "target": "customer_paymentmode",
-      "confidence_score": 1.0
+      "target": "customer_paymentmode"
     },
     {
       "relation": "method",
@@ -7655,6 +9532,276 @@
       "confidence_score": 1.0,
       "source": "internal_customer_sale_model_go",
       "target": "customer_paymentmode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_auth_postman_collection_json",
+      "target": "api_auth_postman_collection_info"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_auth_postman_collection_json",
+      "target": "api_auth_postman_collection_item"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L238",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_auth_postman_collection_json",
+      "target": "api_auth_postman_collection_variable"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_auth_postman_collection_info",
+      "target": "api_auth_postman_collection_info_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_auth_postman_collection_info",
+      "target": "api_auth_postman_collection_info_postman_id"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_auth_postman_collection_info",
+      "target": "api_auth_postman_collection_info_description"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/auth.postman_collection.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_auth_postman_collection_info",
+      "target": "api_auth_postman_collection_info_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_user_postman_collection_json",
+      "target": "api_user_postman_collection_info"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_user_postman_collection_json",
+      "target": "api_user_postman_collection_item"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_user_postman_collection_json",
+      "target": "api_user_postman_collection_variable"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_user_postman_collection_info",
+      "target": "api_user_postman_collection_info_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_user_postman_collection_info",
+      "target": "api_user_postman_collection_info_postman_id"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_user_postman_collection_info",
+      "target": "api_user_postman_collection_info_description"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/user.postman_collection.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_user_postman_collection_info",
+      "target": "api_user_postman_collection_info_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_vehicle_postman_collection_json",
+      "target": "api_vehicle_postman_collection_info"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_vehicle_postman_collection_json",
+      "target": "api_vehicle_postman_collection_item"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_vehicle_postman_collection_json",
+      "target": "api_vehicle_postman_collection_variable"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_vehicle_postman_collection_info",
+      "target": "api_vehicle_postman_collection_info_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_vehicle_postman_collection_info",
+      "target": "api_vehicle_postman_collection_info_postman_id"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_vehicle_postman_collection_info",
+      "target": "api_vehicle_postman_collection_info_description"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/vehicle.postman_collection.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_vehicle_postman_collection_info",
+      "target": "api_vehicle_postman_collection_info_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_conventions_json",
+      "target": "api_conventions_format"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_api_conventions_json",
+      "target": "api_conventions_documentation_policy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_conventions_documentation_policy",
+      "target": "api_conventions_documentation_policy_required_file_pattern"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_conventions_documentation_policy",
+      "target": "api_conventions_documentation_policy_required_on_change"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_conventions_documentation_policy",
+      "target": "api_conventions_documentation_policy_required_fields_per_endpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/api/conventions.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_conventions_documentation_policy",
+      "target": "api_conventions_documentation_policy_notes"
     },
     {
       "relation": "contains",
@@ -8259,6 +10406,1056 @@
       "confidence_score": 1.0,
       "source": "errors_apperror",
       "target": "errors_apperror_unwrap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_md",
+      "target": "docs_knowledge_base_knowledge_base"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_how_to_use"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_architecture_decisions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_module_responsibilities"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_provider_responsibilities"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_dependency_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_conventions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_migration_notes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_important_implementation_details"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_known_caveats"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_important_workflows"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_database_migration_rules_md",
+      "target": "database_migration_rules_migration_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_migration_rules_migration_rules",
+      "target": "database_migration_rules_governance"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_migration_rules_migration_rules",
+      "target": "database_migration_rules_required_checks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/migration-rules.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_migration_rules_migration_rules",
+      "target": "database_migration_rules_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_database_transaction_guidelines_md",
+      "target": "database_transaction_guidelines_transaction_guidelines"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_transaction_guidelines_transaction_guidelines",
+      "target": "database_transaction_guidelines_principles"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_transaction_guidelines_transaction_guidelines",
+      "target": "database_transaction_guidelines_failure_handling"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/transaction-guidelines.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_transaction_guidelines_transaction_guidelines",
+      "target": "database_transaction_guidelines_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_database_local_postgres_md",
+      "target": "database_local_postgres_local_postgres_docker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_local_postgres_local_postgres_docker",
+      "target": "database_local_postgres_purpose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_local_postgres_local_postgres_docker",
+      "target": "database_local_postgres_default_local_configuration"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_local_postgres_local_postgres_docker",
+      "target": "database_local_postgres_commands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/local-postgres.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_local_postgres_local_postgres_docker",
+      "target": "database_local_postgres_environment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_database_schema_overview_md",
+      "target": "database_schema_overview_schema_overview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_schema_overview_schema_overview",
+      "target": "database_schema_overview_purpose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_schema_overview_schema_overview",
+      "target": "database_schema_overview_module_ownership"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_schema_overview_schema_overview",
+      "target": "database_schema_overview_auth_schema_notes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "database_schema_overview_schema_overview",
+      "target": "database_schema_overview_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_providers_storage_md",
+      "target": "providers_storage_storage_provider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_storage_storage_provider",
+      "target": "providers_storage_interface_ownership"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_storage_storage_provider",
+      "target": "providers_storage_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/storage.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_storage_storage_provider",
+      "target": "providers_storage_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_providers_email_md",
+      "target": "providers_email_email_provider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_email_email_provider",
+      "target": "providers_email_interface_ownership"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_email_email_provider",
+      "target": "providers_email_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/email.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_email_email_provider",
+      "target": "providers_email_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_providers_payment_md",
+      "target": "providers_payment_payment_provider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_payment_payment_provider",
+      "target": "providers_payment_interface_ownership"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_payment_payment_provider",
+      "target": "providers_payment_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/payment.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_payment_payment_provider",
+      "target": "providers_payment_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_providers_otp_md",
+      "target": "providers_otp_otp_provider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_otp_otp_provider",
+      "target": "providers_otp_interface_ownership"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_otp_otp_provider",
+      "target": "providers_otp_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_otp_otp_provider",
+      "target": "providers_otp_implementations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/providers/otp.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "providers_otp_otp_provider",
+      "target": "providers_otp_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_workflows_debugging_workflow_md",
+      "target": "workflows_debugging_workflow_debugging_workflow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_debugging_workflow_debugging_workflow",
+      "target": "workflows_debugging_workflow_process"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_debugging_workflow_debugging_workflow",
+      "target": "workflows_debugging_workflow_clarification_rule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/debugging-workflow.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_debugging_workflow_debugging_workflow",
+      "target": "workflows_debugging_workflow_validation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_workflows_testing_workflow_md",
+      "target": "workflows_testing_workflow_testing_workflow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_testing_workflow_testing_workflow",
+      "target": "workflows_testing_workflow_scope"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_testing_workflow_testing_workflow",
+      "target": "workflows_testing_workflow_required_execution"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/testing-workflow.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_testing_workflow_testing_workflow",
+      "target": "workflows_testing_workflow_outcome_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_workflows_implementation_workflow_md",
+      "target": "workflows_implementation_workflow_implementation_workflow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_implementation_workflow_implementation_workflow",
+      "target": "workflows_implementation_workflow_pre_implementation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_implementation_workflow_implementation_workflow",
+      "target": "workflows_implementation_workflow_implementation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/implementation-workflow.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_implementation_workflow_implementation_workflow",
+      "target": "workflows_implementation_workflow_post_implementation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_workflows_release_workflow_md",
+      "target": "workflows_release_workflow_release_workflow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_release_workflow_release_workflow",
+      "target": "workflows_release_workflow_pre_release_checks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_release_workflow_release_workflow",
+      "target": "workflows_release_workflow_required_validation_commands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/workflows/release-workflow.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "workflows_release_workflow_release_workflow",
+      "target": "workflows_release_workflow_release_notes_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_dependency_flow_md",
+      "target": "architecture_dependency_flow_dependency_flow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_dependency_flow_dependency_flow",
+      "target": "architecture_dependency_flow_allowed_direction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_dependency_flow_dependency_flow",
+      "target": "architecture_dependency_flow_restricted_direction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_dependency_flow_dependency_flow",
+      "target": "architecture_dependency_flow_cross_module_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/dependency-flow.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_dependency_flow_dependency_flow",
+      "target": "architecture_dependency_flow_update_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_overview_md",
+      "target": "architecture_overview_architecture_overview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_overview_architecture_overview",
+      "target": "architecture_overview_purpose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_overview_architecture_overview",
+      "target": "architecture_overview_layers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_overview_architecture_overview",
+      "target": "architecture_overview_current_composition_notes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/overview.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_overview_architecture_overview",
+      "target": "architecture_overview_update_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_conventions_md",
+      "target": "architecture_conventions_architecture_conventions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_conventions_architecture_conventions",
+      "target": "architecture_conventions_core_principles"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_conventions_architecture_conventions",
+      "target": "architecture_conventions_forbidden_patterns"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/conventions.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_conventions_architecture_conventions",
+      "target": "architecture_conventions_change_scope_conventions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_folder_structure_md",
+      "target": "architecture_folder_structure_folder_structure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_folder_structure_folder_structure",
+      "target": "architecture_folder_structure_objective"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_folder_structure_folder_structure",
+      "target": "architecture_folder_structure_top_level_placement_guide"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/architecture/folder-structure.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "architecture_folder_structure_folder_structure",
+      "target": "architecture_folder_structure_placement_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_modules_customer_md",
+      "target": "modules_customer_customer_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_customer_customer_module",
+      "target": "modules_customer_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_customer_customer_module",
+      "target": "modules_customer_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_customer_customer_module",
+      "target": "modules_customer_boundaries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/customer.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_customer_customer_module",
+      "target": "modules_customer_documentation_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_modules_showroom_md",
+      "target": "modules_showroom_showroom_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_showroom_showroom_module",
+      "target": "modules_showroom_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_showroom_showroom_module",
+      "target": "modules_showroom_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_showroom_showroom_module",
+      "target": "modules_showroom_boundaries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/showroom.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_showroom_showroom_module",
+      "target": "modules_showroom_documentation_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_modules_auth_md",
+      "target": "modules_auth_auth_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_auth_auth_module",
+      "target": "modules_auth_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_auth_auth_module",
+      "target": "modules_auth_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_auth_auth_module",
+      "target": "modules_auth_boundaries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_auth_auth_module",
+      "target": "modules_auth_documentation_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_modules_user_md",
+      "target": "modules_user_user_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_user_user_module",
+      "target": "modules_user_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_user_user_module",
+      "target": "modules_user_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_user_user_module",
+      "target": "modules_user_boundaries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/user.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_user_user_module",
+      "target": "modules_user_documentation_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_modules_vehicle_md",
+      "target": "modules_vehicle_vehicle_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_vehicle_vehicle_module",
+      "target": "modules_vehicle_responsibility"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_vehicle_vehicle_module",
+      "target": "modules_vehicle_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_vehicle_vehicle_module",
+      "target": "modules_vehicle_boundaries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/vehicle.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "modules_vehicle_vehicle_module",
+      "target": "modules_vehicle_documentation_update_checklist"
     },
     {
       "relation": "contains",
@@ -10289,5 +13486,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "32734877ba03381da6c108dbffbd3374599d3c66"
+  "built_at_commit": "613a82fdac4346d6d2d2c76e9b0e087ba1330071"
 }

@@ -1,41 +1,207 @@
 {
   "info": {
-    "name": "DMS API - Auth",
-    "_postman_id": "dms-api-auth-collection",
-    "description": "Auth endpoints for register/login OTP flow and token lifecycle.",
+    "name": "DMS API",
+    "_postman_id": "dms-api-collection",
+    "description": "DMS API collection. Auth endpoints are grouped under the auth folder.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Register",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\",\n  \"platform\": \"web\",\n  \"deviceId\": \"browser-1\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/auth/register",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "auth",
-            "register"
+      "name": "auth",
+      "item": [
+        {
+          "name": "Register",
+          "id": "auth-register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Auth: Public. Triggers OTP for user registration/login bootstrap."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Platform",
+                    "value": "web"
+                  },
+                  {
+                    "key": "X-Device-Id",
+                    "value": "browser-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"message\": \"If the account is valid, an OTP has been sent\",\n    \"requestId\": \"Ab12Cd34\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
           ]
         },
-        "description": "Auth: Public. Triggers OTP for user registration/login bootstrap."
-      },
-      "response": [
         {
-          "name": "Success",
-          "originalRequest": {
+          "name": "Login",
+          "id": "auth-login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Auth: Public. Triggers OTP for existing user login."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"message\": \"If the account is valid, an OTP has been sent\",\n    \"requestId\": \"Zx90Qw12\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify OTP",
+          "id": "auth-verify-otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"Ab12Cd34\",\n  \"otpCode\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "verify-otp"
+              ]
+            },
+            "description": "Auth: Public. Verifies OTP and returns token pair."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP verified successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "id": "auth-refresh-token",
+          "request": {
             "method": "POST",
             "header": [
               {
@@ -45,192 +211,90 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\",\n  \"platform\": \"web\",\n  \"deviceId\": \"browser-1\"\n}"
+              "raw": "{\n  \"refreshToken\": \"...\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/auth/register",
+              "raw": "{{base_url}}/api/v1/auth/refresh-token",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
-                "register"
+                "refresh-token"
               ]
-            }
+            },
+            "description": "Auth: Public (refresh token based). Rotates token pair."
           },
-          "status": "OK",
-          "code": 200,
-          "body": "{\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"message\": \"OTP sent\"\n  }\n}"
-        },
-        {
-          "name": "Invalid Request",
-          "status": "Bad Request",
-          "code": 400,
-          "body": "{\n  \"message\": \"invalid request\"\n}"
-        }
-      ]
-    },
-    {
-      "name": "Login",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\",\n  \"platform\": \"web\",\n  \"deviceId\": \"browser-1\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/auth/login",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "auth",
-            "login"
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Token refreshed successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
           ]
         },
-        "description": "Auth: Public. Triggers OTP for existing user login."
-      },
-      "response": [
         {
-          "name": "Success",
-          "status": "OK",
-          "code": 200,
-          "body": "{\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"message\": \"OTP sent\"\n  }\n}"
-        },
-        {
-          "name": "Invalid Request",
-          "status": "Bad Request",
-          "code": 400,
-          "body": "{\n  \"message\": \"invalid request\"\n}"
-        }
-      ]
-    },
-    {
-      "name": "Verify OTP",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\",\n  \"otpCode\": \"123456\",\n  \"platform\": \"web\",\n  \"deviceId\": \"browser-1\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/auth/verify-otp",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "auth",
-            "verify-otp"
+          "name": "Logout",
+          "id": "auth-logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Auth: Access token and X-Platform header required. Revokes active sessions for the authenticated user only on the requested platform."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Logged out successfully\"\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Access Token",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"Invalid access token\"\n  }\n}"
+            }
           ]
-        },
-        "description": "Auth: Public. Verifies OTP and returns token pair."
-      },
-      "response": [
-        {
-          "name": "Success",
-          "status": "OK",
-          "code": 200,
-          "body": "{\n  \"message\": \"OTP verified successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\"\n  }\n}"
-        },
-        {
-          "name": "Invalid Request",
-          "status": "Bad Request",
-          "code": 400,
-          "body": "{\n  \"message\": \"invalid request\"\n}"
-        }
-      ]
-    },
-    {
-      "name": "Refresh Token",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"refreshToken\": \"...\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/auth/refresh-token",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "auth",
-            "refresh-token"
-          ]
-        },
-        "description": "Auth: Public (refresh token based). Rotates token pair."
-      },
-      "response": [
-        {
-          "name": "Success",
-          "status": "OK",
-          "code": 200,
-          "body": "{\n  \"message\": \"Token refreshed successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\"\n  }\n}"
-        },
-        {
-          "name": "Invalid Request",
-          "status": "Bad Request",
-          "code": 400,
-          "body": "{\n  \"message\": \"invalid request\"\n}"
-        }
-      ]
-    },
-    {
-      "name": "Logout",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"refreshToken\": \"...\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/auth/logout",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "auth",
-            "logout"
-          ]
-        },
-        "description": "Auth: Public (refresh token based). Revokes current session."
-      },
-      "response": [
-        {
-          "name": "Success",
-          "status": "OK",
-          "code": 200,
-          "body": "{\n  \"message\": \"Logged out successfully\",\n  \"data\": null\n}"
-        },
-        {
-          "name": "Invalid Request",
-          "status": "Bad Request",
-          "code": 400,
-          "body": "{\n  \"message\": \"invalid request\"\n}"
         }
       ]
     }
@@ -239,6 +303,10 @@
     {
       "key": "base_url",
       "value": "http://localhost:8080"
+    },
+    {
+      "key": "access_token",
+      "value": ""
     }
   ]
 }

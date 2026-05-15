@@ -5,6 +5,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -51,11 +52,19 @@ func TestLoginBadRequest(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"+91"}`))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
 	resp := httptest.NewRecorder()
 	engine.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
 		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"success":false`) {
+		t.Fatalf("expected error response envelope, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_REQUEST"`) {
+		t.Fatalf("expected INVALID_REQUEST code, got %s", resp.Body.String())
 	}
 }
 
@@ -65,12 +74,77 @@ func TestVerifyOTPSuccess(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/verify-otp", h.VerifyOTP)
 
-	req := httptest.NewRequest(http.MethodPost, "/verify-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999","otpCode":"123456","platform":"web","deviceId":"d-1"}`))
+	req := httptest.NewRequest(http.MethodPost, "/verify-otp", bytes.NewBufferString(`{"requestId":"Ab12Cd34","otpCode":"123456"}`))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
 	resp := httptest.NewRecorder()
 	engine.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
 		t.Fatalf("expected 200, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"success":true`) {
+		t.Fatalf("expected success response envelope, got %s", resp.Body.String())
+	}
+}
+
+func TestLogoutRequiresAuthorizationHeader(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/logout", h.Logout)
+
+	req := httptest.NewRequest(http.MethodPost, "/logout", bytes.NewBufferString(``))
+	req.Header.Set("Content-Type", "application/json")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_REQUEST"`) {
+		t.Fatalf("expected INVALID_REQUEST code, got %s", resp.Body.String())
+	}
+}
+
+func TestLogoutSuccessWithAuthorizationHeader(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/logout", h.Logout)
+
+	req := httptest.NewRequest(http.MethodPost, "/logout", bytes.NewBufferString(``))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer access-token")
+	req.Header.Set("X-Platform", "web")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"success":true`) {
+		t.Fatalf("expected success response envelope, got %s", resp.Body.String())
+	}
+}
+
+func TestLogoutRequiresPlatformHeader(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/logout", h.Logout)
+
+	req := httptest.NewRequest(http.MethodPost, "/logout", bytes.NewBufferString(``))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer access-token")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_REQUEST"`) {
+		t.Fatalf("expected INVALID_REQUEST code, got %s", resp.Body.String())
 	}
 }

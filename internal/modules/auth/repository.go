@@ -28,11 +28,10 @@ func (r *OTPRepository) Create(ctx context.Context, entity *UserOTP) (*UserOTP, 
 	return &model, nil
 }
 
-func (r *OTPRepository) FindLatestActiveByUserAndPlatform(ctx context.Context, userID uint64, platform OTPPlatform, otpFor OTPFor) (*UserOTP, error) {
+func (r *OTPRepository) FindLatestActiveByRequestIDAndPlatform(ctx context.Context, requestID string, platform OTPPlatform, otpFor OTPFor) (*UserOTP, error) {
 	var model UserOTP
 	err := r.db.WithContext(ctx).
-		Where("user_id = ? AND platform = ? AND otp_for = ?", userID, string(platform), string(otpFor)).
-		Order("created_at DESC").
+		Where("request_id = ? AND platform = ? AND otp_for = ?", requestID, string(platform), string(otpFor)).
 		First(&model).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, ErrInvalidOTP
@@ -105,6 +104,17 @@ func (r *SessionRepository) RotateRefreshToken(ctx context.Context, sessionID ui
 func (r *SessionRepository) Revoke(ctx context.Context, sessionID uint64, reason string, compromised bool, revokedAt time.Time) error {
 	return r.db.WithContext(ctx).Model(&UserSession{}).
 		Where("id = ?", sessionID).
+		Updates(map[string]any{
+			"revoked":        true,
+			"compromised":    compromised,
+			"revoked_reason": reason,
+			"last_used_at":   revokedAt,
+		}).Error
+}
+
+func (r *SessionRepository) RevokeAllByUserIDAndPlatform(ctx context.Context, userID uint64, platform OTPPlatform, reason string, compromised bool, revokedAt time.Time) error {
+	return r.db.WithContext(ctx).Model(&UserSession{}).
+		Where("user_id = ? AND platform = ? AND revoked = false", userID, string(platform)).
 		Updates(map[string]any{
 			"revoked":        true,
 			"compromised":    compromised,

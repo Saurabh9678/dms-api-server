@@ -31,7 +31,7 @@ type userRepo interface {
 
 type otpRepo interface {
 	Create(ctx context.Context, entity *UserOTP) (*UserOTP, error)
-	FindLatestActiveByUserAndPlatform(ctx context.Context, userID uint64, platform OTPPlatform, otpFor OTPFor) (*UserOTP, error)
+	FindLatestActiveByRequestIDAndPlatform(ctx context.Context, requestID string, platform OTPPlatform, otpFor OTPFor) (*UserOTP, error)
 	IncrementAttempt(ctx context.Context, otpID uint64) error
 	MarkUsed(ctx context.Context, otpID uint64, verifiedAt time.Time) error
 }
@@ -41,6 +41,7 @@ type sessionRepo interface {
 	FindByRefreshTokenHash(ctx context.Context, refreshTokenHash string) (*UserSession, error)
 	RotateRefreshToken(ctx context.Context, sessionID uint64, refreshTokenHash string, expiresAt time.Time, lastUsedAt time.Time) error
 	Revoke(ctx context.Context, sessionID uint64, reason string, compromised bool, revokedAt time.Time) error
+	RevokeAllByUserIDAndPlatform(ctx context.Context, userID uint64, platform OTPPlatform, reason string, compromised bool, revokedAt time.Time) error
 }
 
 type service struct {
@@ -53,6 +54,11 @@ type service struct {
 	db            *gorm.DB
 	nowFn         func() time.Time
 }
+
+const (
+	requestIDLength          = 8
+	requestIDGenerateRetries = 5
+)
 
 func NewService(
 	users userRepo,
@@ -110,15 +116,26 @@ func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumbe
 
 	code := generateOTPCode()
 	now := s.nowFn()
-	_, err = s.otps.Create(ctx, &UserOTP{
-		UserID:    foundUser.ID,
-		OTPCode:   code,
-		Platform:  platform,
-		OTPFor:    OTPForMobile,
-		DeviceID:  strings.TrimSpace(deviceID),
-		ExpiresAt: now.Add(s.config.OTPTTL),
-		CreatedAt: now,
-	})
+	requestID := ""
+	for attempt := 0; attempt < requestIDGenerateRetries; attempt++ {
+		requestID = generateRequestID(requestIDLength)
+		_, err = s.otps.Create(ctx, &UserOTP{
+			UserID:    foundUser.ID,
+			RequestID: requestID,
+			OTPCode:   code,
+			Platform:  platform,
+			OTPFor:    OTPForMobile,
+			DeviceID:  strings.TrimSpace(deviceID),
+			ExpiresAt: now.Add(s.config.OTPTTL),
+			CreatedAt: now,
+		})
+		if err == nil {
+			break
+		}
+		if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			return nil, err
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -129,18 +146,14 @@ func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumbe
 	}
 
 	return &TriggerOTPResponse{
-		Message: "If the account is valid, an OTP has been sent",
+		Message:   "If the account is valid, an OTP has been sent",
+		RequestID: requestID,
 	}, nil
 }
 
 func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*TokenResponse, error) {
-	foundUser, err := s.users.FindByPhone(ctx, strings.TrimSpace(req.CountryCode), strings.TrimSpace(req.PhoneNumber))
-	if err != nil {
-		return nil, err
-	}
-
 	platform := OTPPlatform(req.Platform)
-	otpRecord, err := s.otps.FindLatestActiveByUserAndPlatform(ctx, foundUser.ID, platform, OTPForMobile)
+	otpRecord, err := s.otps.FindLatestActiveByRequestIDAndPlatform(ctx, strings.TrimSpace(req.RequestID), platform, OTPForMobile)
 	if err != nil {
 		return nil, err
 	}
@@ -163,13 +176,16 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*TokenRe
 		return nil, err
 	}
 
-	pair, err := s.tokenProvider.Issue(foundUser.ID)
+	pair, err := s.tokenProvider.Issue(otpRecord.UserID)
 	if err != nil {
 		return nil, err
 	}
 	refreshExpiry := now.Add(time.Duration(pair.RefreshTokenTTL) * time.Second)
+	if err := s.sessions.RevokeAllByUserIDAndPlatform(ctx, otpRecord.UserID, platform, "new session issued for platform", false, now); err != nil {
+		return nil, err
+	}
 	_, err = s.sessions.Create(ctx, &UserSession{
-		UserID:           foundUser.ID,
+		UserID:           otpRecord.UserID,
 		Platform:         platform,
 		DeviceID:         strings.TrimSpace(req.DeviceID),
 		RefreshTokenHash: pair.RefreshTokenHash,
@@ -224,20 +240,18 @@ func (s *service) RefreshToken(ctx context.Context, req RefreshTokenRequest) (*T
 }
 
 func (s *service) Logout(ctx context.Context, req LogoutRequest) error {
-	plain := strings.TrimSpace(req.RefreshToken)
-	hashed := s.tokenProvider.HashRefreshToken(plain)
-
-	session, err := s.sessions.FindByRefreshTokenHash(ctx, hashed)
+	userID, err := s.tokenProvider.ParseAccessToken(strings.TrimSpace(req.AccessToken))
 	if err != nil {
-		if errors.Is(err, ErrInvalidRefreshToken) {
-			return nil
-		}
-		return err
+		return ErrInvalidAccessToken
 	}
-	if session.Revoked {
-		return nil
-	}
-	return s.sessions.Revoke(ctx, session.ID, "user logout", false, s.nowFn())
+	return s.sessions.RevokeAllByUserIDAndPlatform(
+		ctx,
+		userID,
+		OTPPlatform(strings.TrimSpace(req.Platform)),
+		"user logout",
+		false,
+		s.nowFn(),
+	)
 }
 
 func generateOTPCode() string {
@@ -247,4 +261,24 @@ func generateOTPCode() string {
 		return "000000"
 	}
 	return fmt.Sprintf("%06d", value.Int64())
+}
+
+func generateRequestID(length int) string {
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+	if length <= 0 {
+		return ""
+	}
+
+	result := make([]byte, length)
+	max := big.NewInt(int64(len(chars)))
+	for i := 0; i < length; i++ {
+		value, err := rand.Int(rand.Reader, max)
+		if err != nil {
+			return strings.Repeat("A", length)
+		}
+		result[i] = chars[value.Int64()]
+	}
+
+	return string(result)
 }

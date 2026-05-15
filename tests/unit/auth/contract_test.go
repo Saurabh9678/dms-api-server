@@ -43,19 +43,31 @@ func TestAuthRouteContracts(t *testing.T) {
 		name       string
 		path       string
 		body       string
+		platform   string
+		deviceID   string
+		authHeader string
 		statusCode int
 	}{
-		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"+91","phoneNumber":"9999999999","platform":"web","deviceId":"d-1"}`, statusCode: http.StatusOK},
-		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"+91","phoneNumber":"9999999999","platform":"web","deviceId":"d-1"}`, statusCode: http.StatusOK},
-		{name: "verify-otp", path: "/api/v1/auth/verify-otp", body: `{"countryCode":"+91","phoneNumber":"9999999999","otpCode":"123456","platform":"web","deviceId":"d-1"}`, statusCode: http.StatusOK},
+		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "verify-otp", path: "/api/v1/auth/verify-otp", body: `{"requestId":"Ab12Cd34","otpCode":"123456"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "refresh-token", path: "/api/v1/auth/refresh-token", body: `{"refreshToken":"r"}`, statusCode: http.StatusOK},
-		{name: "logout", path: "/api/v1/auth/logout", body: `{"refreshToken":"r2"}`, statusCode: http.StatusOK},
+		{name: "logout", path: "/api/v1/auth/logout", body: "", platform: "web", authHeader: "Bearer access-token", statusCode: http.StatusOK},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			req := httptest.NewRequest(http.MethodPost, tc.path, bytes.NewBufferString(tc.body))
 			req.Header.Set("Content-Type", "application/json")
+			if tc.platform != "" {
+				req.Header.Set("X-Platform", tc.platform)
+			}
+			if tc.deviceID != "" {
+				req.Header.Set("X-Device-Id", tc.deviceID)
+			}
+			if tc.authHeader != "" {
+				req.Header.Set("Authorization", tc.authHeader)
+			}
 			resp := httptest.NewRecorder()
 			engine.ServeHTTP(resp, req)
 

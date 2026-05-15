@@ -39,8 +39,10 @@ func TestAuthLoginRouteShape(t *testing.T) {
 	api := engine.Group("/api/v1")
 	auth.RegisterRoutes(api, auth.NewHandler(&smokeAuthService{}))
 
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999","platform":"web","deviceId":"d-1"}`))
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
 	resp := httptest.NewRecorder()
 	engine.ServeHTTP(resp, req)
 

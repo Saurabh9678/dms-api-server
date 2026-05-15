@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	ErrInvalidAccessToken  = stderrors.New("invalid access token")
 	ErrInvalidOTP          = stderrors.New("invalid otp")
 	ErrOTPExpired          = stderrors.New("otp expired")
 	ErrOTPAlreadyUsed      = stderrors.New("otp already used")
@@ -19,6 +20,8 @@ var (
 func init() {
 	apperrors.RegisterMapper(func(err error) (*apperrors.AppError, bool) {
 		switch {
+		case stderrors.Is(err, ErrInvalidAccessToken):
+			return apperrors.NewAppError(apperrors.CodeInvalidAccessToken, "Invalid access token", http.StatusUnauthorized, err), true
 		case stderrors.Is(err, ErrInvalidOTP):
 			return apperrors.NewAppError(apperrors.CodeInvalidOTP, "Invalid OTP", http.StatusUnauthorized, err), true
 		case stderrors.Is(err, ErrOTPExpired):

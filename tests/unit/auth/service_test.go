@@ -38,21 +38,21 @@ func (f *fakeUserRepo) Create(_ context.Context, entity *user.User) (*user.User,
 }
 
 type fakeOTPRepo struct {
-	lastCreated    *auth.UserOTP
-	activeByUserID map[uint64]*auth.UserOTP
-	incrementedID  uint64
+	lastCreated       *auth.UserOTP
+	activeByRequestID map[string]*auth.UserOTP
+	incrementedID     uint64
 }
 
 func (f *fakeOTPRepo) Create(_ context.Context, entity *auth.UserOTP) (*auth.UserOTP, error) {
 	copy := *entity
 	copy.ID = 100
 	f.lastCreated = &copy
-	f.activeByUserID[copy.UserID] = &copy
+	f.activeByRequestID[copy.RequestID] = &copy
 	return &copy, nil
 }
 
-func (f *fakeOTPRepo) FindLatestActiveByUserAndPlatform(_ context.Context, userID uint64, _ auth.OTPPlatform, _ auth.OTPFor) (*auth.UserOTP, error) {
-	otp, ok := f.activeByUserID[userID]
+func (f *fakeOTPRepo) FindLatestActiveByRequestIDAndPlatform(_ context.Context, requestID string, _ auth.OTPPlatform, _ auth.OTPFor) (*auth.UserOTP, error) {
+	otp, ok := f.activeByRequestID[requestID]
 	if !ok {
 		return nil, auth.ErrInvalidOTP
 	}
@@ -65,10 +65,12 @@ func (f *fakeOTPRepo) IncrementAttempt(_ context.Context, otpID uint64) error {
 }
 
 func (f *fakeOTPRepo) MarkUsed(_ context.Context, otpID uint64, verifiedAt time.Time) error {
-	item := f.activeByUserID[1]
-	if item != nil {
-		item.IsUsed = true
-		item.VerifiedAt = &verifiedAt
+	for _, item := range f.activeByRequestID {
+		if item.ID == otpID {
+			item.IsUsed = true
+			item.VerifiedAt = &verifiedAt
+			return nil
+		}
 	}
 	return nil
 }
@@ -77,6 +79,8 @@ type fakeSessionRepo struct {
 	sessionByHash map[string]*auth.UserSession
 	rotatedID     uint64
 	revokedID     uint64
+	revokedUserID uint64
+	revokedOnPlat auth.OTPPlatform
 }
 
 func (f *fakeSessionRepo) Create(_ context.Context, entity *auth.UserSession) (*auth.UserSession, error) {
@@ -116,6 +120,17 @@ func (f *fakeSessionRepo) Revoke(_ context.Context, sessionID uint64, _ string, 
 			session.Revoked = true
 			session.LastUsedAt = revokedAt
 			return nil
+		}
+	}
+	return nil
+}
+
+func (f *fakeSessionRepo) RevokeAllByUserIDAndPlatform(_ context.Context, userID uint64, platform auth.OTPPlatform, _ string, _ bool, _ time.Time) error {
+	f.revokedUserID = userID
+	f.revokedOnPlat = platform
+	for _, session := range f.sessionByHash {
+		if session.UserID == userID && session.Platform == platform {
+			session.Revoked = true
 		}
 	}
 	return nil
@@ -168,9 +183,16 @@ func (f *fakeTokenProvider) HashRefreshToken(token string) string {
 	return "unknown"
 }
 
+func (f *fakeTokenProvider) ParseAccessToken(token string) (uint64, error) {
+	if token == "access-token" || token == "new-access-token" {
+		return 1, nil
+	}
+	return 0, auth.ErrInvalidAccessToken
+}
+
 func TestRegisterTriggersOTP(t *testing.T) {
 	userRepo := &fakeUserRepo{records: map[string]*user.User{}}
-	otpRepo := &fakeOTPRepo{activeByUserID: map[uint64]*auth.UserOTP{}}
+	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
 	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
 	sender := &fakeOTPProvider{}
 	tokens := &fakeTokenProvider{}
@@ -198,6 +220,9 @@ func TestRegisterTriggersOTP(t *testing.T) {
 	if otpRepo.lastCreated == nil {
 		t.Fatalf("expected otp to be created")
 	}
+	if len(resp.RequestID) != 8 {
+		t.Fatalf("expected request id with length 8, got %q", resp.RequestID)
+	}
 }
 
 func TestVerifyOTPRejectsInvalidCode(t *testing.T) {
@@ -207,18 +232,17 @@ func TestVerifyOTPRejectsInvalidCode(t *testing.T) {
 		},
 	}
 	otpRepo := &fakeOTPRepo{
-		activeByUserID: map[uint64]*auth.UserOTP{
-			1: {ID: 7, UserID: 1, OTPCode: "123456", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Ab12Cd34": {ID: 7, UserID: 1, RequestID: "Ab12Cd34", OTPCode: "123456", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
 		},
 	}
 	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
 
 	service := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
 	_, err := service.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
-		CountryCode: "+91",
-		PhoneNumber: "9999999999",
-		OTPCode:     "000000",
-		Platform:    "web",
+		RequestID: "Ab12Cd34",
+		OTPCode:   "000000",
+		Platform:  "web",
 	})
 	if !errors.Is(err, auth.ErrInvalidOTP) {
 		t.Fatalf("expected ErrInvalidOTP, got %v", err)
@@ -235,19 +259,18 @@ func TestRefreshAndLogout(t *testing.T) {
 		},
 	}
 	otpRepo := &fakeOTPRepo{
-		activeByUserID: map[uint64]*auth.UserOTP{
-			1: {ID: 10, UserID: 1, OTPCode: "123456", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Zx90Qw12": {ID: 10, UserID: 1, RequestID: "Zx90Qw12", OTPCode: "123456", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
 		},
 	}
 	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
 	service := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
 
 	verifyResp, err := service.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
-		CountryCode: "+91",
-		PhoneNumber: "9999999999",
-		OTPCode:     "123456",
-		Platform:    "web",
-		DeviceID:    "device-1",
+		RequestID: "Zx90Qw12",
+		OTPCode:   "123456",
+		Platform:  "web",
+		DeviceID:  "device-1",
 	})
 	if err != nil {
 		t.Fatalf("verify otp should succeed, got %v", err)
@@ -267,10 +290,68 @@ func TestRefreshAndLogout(t *testing.T) {
 		t.Fatalf("expected rotate to be called")
 	}
 
-	if err := service.Logout(context.Background(), auth.LogoutRequest{RefreshToken: "new-refresh-token"}); err != nil {
+	if err := service.Logout(context.Background(), auth.LogoutRequest{AccessToken: "new-access-token", Platform: "web"}); err != nil {
 		t.Fatalf("logout should succeed, got %v", err)
 	}
-	if sessionRepo.revokedID == 0 {
-		t.Fatalf("expected revoke to be called")
+	if sessionRepo.revokedUserID == 0 {
+		t.Fatalf("expected revoke by user id to be called")
+	}
+	if sessionRepo.revokedOnPlat != auth.OTPPlatformWeb {
+		t.Fatalf("expected revoke on web platform, got %s", sessionRepo.revokedOnPlat)
+	}
+}
+
+func TestLogoutRejectsInvalidAccessToken(t *testing.T) {
+	userRepo := &fakeUserRepo{records: map[string]*user.User{}}
+	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
+	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
+	service := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
+
+	err := service.Logout(context.Background(), auth.LogoutRequest{AccessToken: "bad-token", Platform: "web"})
+	if !errors.Is(err, auth.ErrInvalidAccessToken) {
+		t.Fatalf("expected ErrInvalidAccessToken, got %v", err)
+	}
+}
+
+func TestVerifyOTPRevokesExistingSessionsForSamePlatform(t *testing.T) {
+	userRepo := &fakeUserRepo{
+		records: map[string]*user.User{
+			"+91|9999999999": {ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"},
+		},
+	}
+	otpRepo := &fakeOTPRepo{
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Mn34Rt78": {ID: 55, UserID: 1, RequestID: "Mn34Rt78", OTPCode: "123456", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		},
+	}
+	sessionRepo := &fakeSessionRepo{
+		sessionByHash: map[string]*auth.UserSession{
+			"old-web": {ID: 22, UserID: 1, Platform: auth.OTPPlatformWeb, RefreshTokenHash: "old-web"},
+			"old-ios": {ID: 23, UserID: 1, Platform: auth.OTPPlatformIOSMobile, RefreshTokenHash: "old-ios"},
+		},
+	}
+	service := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
+
+	_, err := service.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
+		RequestID: "Mn34Rt78",
+		OTPCode:   "123456",
+		Platform:  "web",
+		DeviceID:  "device-1",
+	})
+	if err != nil {
+		t.Fatalf("verify otp should succeed, got %v", err)
+	}
+
+	if sessionRepo.revokedUserID != 1 {
+		t.Fatalf("expected revoke call for user 1, got %d", sessionRepo.revokedUserID)
+	}
+	if sessionRepo.revokedOnPlat != auth.OTPPlatformWeb {
+		t.Fatalf("expected revoke call for web platform, got %s", sessionRepo.revokedOnPlat)
+	}
+	if !sessionRepo.sessionByHash["old-web"].Revoked {
+		t.Fatalf("expected old web session to be revoked")
+	}
+	if sessionRepo.sessionByHash["old-ios"].Revoked {
+		t.Fatalf("expected ios session to remain active")
 	}
 }

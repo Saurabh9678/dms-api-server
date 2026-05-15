@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -45,6 +46,36 @@ func (p *JWTProvider) Rotate(userID uint64) (*tokenprovider.TokenPair, error) {
 func (p *JWTProvider) HashRefreshToken(token string) string {
 	sum := sha256.Sum256([]byte(token))
 	return hex.EncodeToString(sum[:])
+}
+
+func (p *JWTProvider) ParseAccessToken(token string) (uint64, error) {
+	if p.config.AccessTokenSecret == "" {
+		return 0, errors.New("access token secret is required")
+	}
+
+	parsedToken, err := jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, func(t *jwt.Token) (any, error) {
+		if t.Method == nil || !strings.EqualFold(t.Method.Alg(), jwt.SigningMethodHS256.Alg()) {
+			return nil, errors.New("invalid signing method")
+		}
+		return []byte(p.config.AccessTokenSecret), nil
+	})
+	if err != nil {
+		return 0, err
+	}
+	if !parsedToken.Valid {
+		return 0, errors.New("invalid access token")
+	}
+
+	claims, ok := parsedToken.Claims.(*jwt.RegisteredClaims)
+	if !ok {
+		return 0, errors.New("invalid access token claims")
+	}
+	userID, err := strconv.ParseUint(claims.Subject, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return userID, nil
 }
 
 func (p *JWTProvider) issueForUser(userID uint64) (*tokenprovider.TokenPair, error) {

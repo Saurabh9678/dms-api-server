@@ -10,3 +10,4 @@ alwaysApply: true
 - If multiple valid implementations exist, present options and ask for confirmation.
 - Do not silently decide unresolved trade-offs.
 - Clarification is mandatory before implementation when ambiguity exists.
+- For every task, share a plan and clear doubts first, then wait for explicit user go-ahead before writing code.

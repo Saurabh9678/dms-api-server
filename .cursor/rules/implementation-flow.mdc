@@ -7,6 +7,9 @@ alwaysApply: true
 
 ## Pre-task
 
+- Present a concrete implementation plan before writing code.
+- Resolve requirement ambiguities before implementation.
+- Wait for explicit user go-ahead before starting implementation.
 - Review relevant implementation and avoid duplicate logic.
 - Check `docs/knowledge-base.md` and related docs before writing code.
 - Identify impacted modules/providers/APIs and boundary impact.

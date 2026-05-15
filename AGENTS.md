@@ -15,6 +15,13 @@ The agent must complete all checks below before implementing:
 7. Prefer extending existing code over rewriting stable code.
 8. Plan minimal scoped changes that satisfy only the requirement.
 
+Mandatory execution gate:
+
+- For every new task, provide an implementation plan first.
+- Resolve all requirement/behavior ambiguities before coding.
+- Start implementation only after explicit user go-ahead.
+- If go-ahead is not explicit, stay in planning/clarification mode.
+
 Mandatory clarification rule:
 
 - When requirements are ambiguous, clarification is mandatory before implementation.

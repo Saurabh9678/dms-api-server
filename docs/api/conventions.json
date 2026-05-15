@@ -19,7 +19,8 @@
     ],
     "notes": [
       "Collections must be importable in Postman.",
-      "Keep request and example response bodies aligned with handler DTO contracts."
+      "Keep request and example response bodies aligned with handler DTO contracts.",
+      "Saved API test cases and documented success/invalid-format examples must exactly match runtime response envelopes returned by handlers."
     ]
   }
 }

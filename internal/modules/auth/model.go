@@ -25,6 +25,7 @@ const (
 type UserOTP struct {
 	ID           uint64      `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID       uint64      `gorm:"not null" json:"user_id"`
+	RequestID    string      `gorm:"type:varchar(8);uniqueIndex;not null" json:"request_id"`
 	OTPCode      string      `gorm:"type:varchar(6);not null" json:"otp_code"`
 	Platform     OTPPlatform `gorm:"type:platform_type;not null" json:"platform"`
 	OTPFor       OTPFor      `gorm:"type:otp_for_type;not null" json:"otp_for"`

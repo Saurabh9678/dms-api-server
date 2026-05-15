@@ -16,4 +16,5 @@ alwaysApply: true
   - error responses
   - example request
   - example response
+- Saved API test cases and documented success/invalid-format examples must exactly match the response envelope actually returned by handlers.
 - Do not merge API changes without synchronized API documentation.
