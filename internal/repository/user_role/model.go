@@ -3,16 +3,16 @@ package userrole
 import "infiour.local/dms-api-server/internal/repository"
 
 type UserRole struct {
-	ID        uint64 `gorm:"primaryKey;autoIncrement" json:"id"`
-	Type      UserRoleType `gorm:"type:varchar(255);not null" json:"type"`
+	ID   uint64       `gorm:"primaryKey;autoIncrement" json:"id"`
+	Type UserRoleType `gorm:"type:varchar(255);not null" json:"type"`
 	repository.SoftDeleteableModel
 }
 
 type UserRoleType string
 
 const (
-	UserRoleTypeOwner UserRoleType = "owner"
-	UserRoleTypeManager UserRoleType = "manager"
+	UserRoleTypeOwner    UserRoleType = "owner"
+	UserRoleTypeManager  UserRoleType = "manager"
 	UserRoleTypeEmployee UserRoleType = "employee"
 )
 

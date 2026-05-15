@@ -1,7 +1,7 @@
 APP_NAME := dms-api-server
 CMD_PATH := ./cmd/server
 BIN_PATH := ./bin/$(APP_NAME)
-MIGRATIONS_DIR := ./db/migrations
+MIGRATIONS_DIR := ./migrations
 DB_URL ?= postgres://postgres:postgres@localhost:5432/dms?sslmode=disable
 
 .PHONY: help run build test tidy fmt clean migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force

@@ -3,26 +3,17 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
+	"infiour.local/dms-api-server/internal/wire"
 )
 
 func main() {
-	router := gin.Default()
-
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "DMS API server is running",
-		})
-	})
-
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "ok",
-		})
-	})
+	engine, err := wire.BuildServer()
+	if err != nil {
+		log.Fatalf("failed to wire server: %v", err)
+	}
 
 	log.Println("Starting Gin server on :8080")
-	if err := router.Run(":8080"); err != nil {
+	if err := engine.Run(":8080"); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}
 }

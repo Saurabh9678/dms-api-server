@@ -7,9 +7,9 @@ import (
 )
 
 type BaseModel struct {
-	CreatedAt time.Time        `gorm:"type:timestamptz;not null; default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time        `gorm:"type:timestamptz;not null; default:CURRENT_TIMESTAMP" json:"updated_at"`
-	DeletedAt gorm.DeletedAt   `gorm:"type:timestamptz;index; default:null" json:"deleted_at,omitempty"`
+	CreatedAt time.Time      `gorm:"type:timestamptz;not null; default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time      `gorm:"type:timestamptz;not null; default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"type:timestamptz;index; default:null" json:"deleted_at,omitempty"`
 }
 
 type SoftDeleteableModel struct {
@@ -17,10 +17,9 @@ type SoftDeleteableModel struct {
 }
 
 type TimestampedModel struct {
-	CreatedAt time.Time  `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"created_at"` 
-	UpdatedAt time.Time  `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	CreatedAt time.Time `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
-
 
 func (b *BaseModel) BeforeCreate(tx *gorm.DB) error {
 	now := time.Now()
