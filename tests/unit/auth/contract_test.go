@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"infiour.local/dms-api-server/internal/modules/auth"
+	"infiour.local/dms-api-server/pkg/middleware"
 )
 
 type contractService struct{}
@@ -37,6 +38,7 @@ func TestAuthRouteContracts(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
 	api := engine.Group("/api/v1")
+	api.Use(middleware.RequireDeviceContext())
 	auth.RegisterRoutes(api, auth.NewHandler(&contractService{}))
 
 	cases := []struct {
@@ -51,8 +53,8 @@ func TestAuthRouteContracts(t *testing.T) {
 		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "verify-otp", path: "/api/v1/auth/verify-otp", body: `{"requestId":"Ab12Cd34","otpCode":"123456"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
-		{name: "refresh-token", path: "/api/v1/auth/refresh-token", body: `{"refreshToken":"r"}`, statusCode: http.StatusOK},
-		{name: "logout", path: "/api/v1/auth/logout", body: "", platform: "web", authHeader: "Bearer access-token", statusCode: http.StatusOK},
+		{name: "refresh-token", path: "/api/v1/auth/refresh-token", body: `{"refreshToken":"r"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "logout", path: "/api/v1/auth/logout", body: "", platform: "web", deviceID: "d-1", authHeader: "Bearer access-token", statusCode: http.StatusOK},
 	}
 
 	for _, tc := range cases {

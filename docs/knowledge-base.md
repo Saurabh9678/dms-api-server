@@ -29,7 +29,7 @@ This file is the living project memory for architecture, conventions, and implem
 - Track naming, folder placement, and implementation conventions.
 - Local development environment variables are documented in `.env.example`.
 - Database connection should be configured through `DB_URL`.
-- Auth OTP trigger/verify endpoints read platform/device context from headers (`X-Platform`, `X-Device-Id`) instead of JSON body.
+- Every `/api/v1/*` endpoint requires `X-Platform` and non-empty `X-Device-Id` headers.
 
 ## Migration Notes
 
@@ -44,6 +44,7 @@ This file is the living project memory for architecture, conventions, and implem
 - Auth register/login responses now include `requestId` in payload; verify-otp accepts `requestId` plus `otpCode`.
 - Auth logout now uses `Authorization: Bearer <accessToken>` with `X-Platform`, no request body, and revokes active sessions only for that platform.
 - OTP verify enforces single active session per user+platform by revoking existing active sessions on that platform before creating a new session.
+- Missing or invalid `/api/v1` device-context headers return `INVALID_DEVICE_CONTEXT` with message `invalid request`.
 
 ## Known Caveats
 

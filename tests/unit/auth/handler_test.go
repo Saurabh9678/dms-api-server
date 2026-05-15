@@ -118,6 +118,7 @@ func TestLogoutSuccessWithAuthorizationHeader(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer access-token")
 	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
 	resp := httptest.NewRecorder()
 	engine.ServeHTTP(resp, req)
 
@@ -144,7 +145,7 @@ func TestLogoutRequiresPlatformHeader(t *testing.T) {
 	if resp.Code != http.StatusBadRequest {
 		t.Fatalf("expected 400, got %d", resp.Code)
 	}
-	if !strings.Contains(resp.Body.String(), `"code":"INVALID_REQUEST"`) {
-		t.Fatalf("expected INVALID_REQUEST code, got %s", resp.Body.String())
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_DEVICE_CONTEXT"`) {
+		t.Fatalf("expected INVALID_DEVICE_CONTEXT code, got %s", resp.Body.String())
 	}
 }

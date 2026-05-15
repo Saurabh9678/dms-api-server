@@ -15,7 +15,7 @@ type Handler struct {
 
 type authHeaders struct {
 	Platform string `header:"X-Platform" binding:"required,oneof=web ios_mobile android_mobile desktop"`
-	DeviceID string `header:"X-Device-Id"`
+	DeviceID string `header:"X-Device-Id" binding:"required,min=1"`
 }
 
 func NewHandler(service Service) *Handler {
@@ -117,7 +117,7 @@ func (h *Handler) Logout(c *gin.Context) {
 func bindAuthHeaders(c *gin.Context) (*authHeaders, bool) {
 	var headers authHeaders
 	if err := c.ShouldBindHeader(&headers); err != nil {
-		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidDeviceContext, "invalid request")
 		return nil, false
 	}
 	return &headers, true

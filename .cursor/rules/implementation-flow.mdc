@@ -21,6 +21,7 @@ alwaysApply: true
 - Prefer extending existing code over rewrites.
 - Keep scope minimal and limited to requirement.
 - Avoid touching unrelated files.
+- For `/api/v1/*` routes, enforce `X-Platform` and `X-Device-Id` as required headers.
 
 ## Post-task
 

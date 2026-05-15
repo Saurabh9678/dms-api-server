@@ -1,16 +1,16 @@
 # Graph Report - dms-api-server  (2026-05-15)
 
 ## Corpus Check
-- 118 files · ~10,674 words
+- 119 files · ~11,006 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 692 nodes · 713 edges · 110 communities (77 shown, 33 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 81 edges (avg confidence: 0.8)
+- 696 nodes · 725 edges · 110 communities (78 shown, 32 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 90 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `613a82fd`
+- Built from commit: `c1b44e7c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -96,7 +96,7 @@
 - [[_COMMUNITY_Community 109|Community 109]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `NewHandler()` - 11 edges
+1. `NewHandler()` - 13 edges
 2. `Knowledge Base` - 11 edges
 3. `buildDependencies()` - 9 edges
 4. `Service` - 9 edges
@@ -104,8 +104,8 @@
 6. `SessionRepository` - 9 edges
 7. `OK()` - 9 edges
 8. `fakeSessionRepo` - 8 edges
-9. `OTPRepository` - 8 edges
-10. `FromError()` - 8 edges
+9. `newRouter()` - 8 edges
+10. `RegisterRoutes()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `main()` --calls--> `NewApp()`  [INFERRED]
@@ -119,7 +119,7 @@
 - `TestLogoutRequiresAuthorizationHeader()` --calls--> `NewHandler()`  [INFERRED]
   tests/unit/auth/handler_test.go → internal/modules/auth/handler.go
 
-## Communities (110 total, 33 thin omitted)
+## Communities (110 total, 32 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -146,8 +146,8 @@ Cohesion: 0.14
 Nodes (6): NewAuthHandler(), AuthHandler, AuthService, TestLoginBadRequest(), TestVerifyOTPSuccess(), fakeAuthService
 
 ### Community 6 - "Community 6"
-Cohesion: 0.07
-Nodes (16): OTPForType, PlatformType, Repository, toDomain(), UserOTP, OTPFor, OTPPlatform, Repository (+8 more)
+Cohesion: 0.12
+Nodes (11): OTPForType, PlatformType, Repository, toDomain(), UserOTP, OTPFor, UserEntity, UserOTPEntity (+3 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.22
@@ -159,7 +159,7 @@ Nodes (7): LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, To
 
 ### Community 10 - "Community 10"
 Cohesion: 0.05
-Nodes (15): TestAuthLoginRouteShape(), TestAuthRouteContracts(), contractService, fakeAuthService, fakeHandlerAuthService, NewHandler(), TestLoginBadRequest(), TestLogoutRequiresAuthorizationHeader() (+7 more)
+Nodes (18): TestAuthLoginInvalidPlatformHeader(), TestAuthLoginMissingDeviceContextHeaders(), TestAuthLoginRouteShape(), TestAuthRouteContracts(), contractService, fakeAuthService, fakeHandlerAuthService, NewHandler() (+10 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.33
@@ -174,8 +174,8 @@ Cohesion: 0.5
 Nodes (3): OTPRepository, SessionRepository, UserRepository
 
 ### Community 28 - "Community 28"
-Cohesion: 0.07
-Nodes (10): OTPRepository, NewOTPRepository(), NewSessionRepository(), SessionRepository, Dependencies, buildDependencies(), NewDummyProvider(), DummyProvider (+2 more)
+Cohesion: 0.06
+Nodes (12): OTPRepository, NewOTPRepository(), NewSessionRepository(), SessionRepository, Dependencies, buildDependencies(), NewDummyProvider(), DummyProvider (+4 more)
 
 ### Community 29 - "Community 29"
 Cohesion: 0.15
@@ -183,7 +183,7 @@ Nodes (13): authHeaders, Handler, bindAuthHeaders(), extractBearerToken(), TestH
 
 ### Community 30 - "Community 30"
 Cohesion: 0.13
-Nodes (11): Config, OTPFor, OTPPlatform, otpRepo, Service, generateOTPCode(), generateRequestID(), sessionRepo (+3 more)
+Nodes (12): Config, OTPFor, OTPPlatform, otpRepo, Service, generateOTPCode(), generateRequestID(), sessionRepo (+4 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.15
@@ -305,22 +305,26 @@ Nodes (4): Pre-Release Checks, Release Notes Checklist, Release Workflow, Requir
 Cohesion: 0.4
 Nodes (4): Outcome Rules, Required Execution, Scope, Testing Workflow
 
+### Community 109 - "Community 109"
+Cohesion: 0.2
+Nodes (4): Repository, toDomain(), SessionPlatformType, UserSession
+
 ## Knowledge Gaps
 - **155 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+150 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `buildDependencies()` connect `Community 28` to `Community 10`, `Community 3`, `Community 4`, `Community 109`?**
+- **Why does `buildDependencies()` connect `Community 28` to `Community 10`, `Community 3`, `Community 4`?**
   _High betweenness centrality (0.119) - this node is a cross-community bridge._
 - **Why does `NewApp()` connect `Community 4` to `Community 1`, `Community 2`, `Community 28`?**
   _High betweenness centrality (0.085) - this node is a cross-community bridge._
 - **Why does `NewService()` connect `Community 3` to `Community 28`, `Community 30`?**
-  _High betweenness centrality (0.084) - this node is a cross-community bridge._
-- **Are the 9 inferred relationships involving `NewHandler()` (e.g. with `TestAuthLoginRouteShape()` and `TestAuthRouteContracts()`) actually correct?**
-  _`NewHandler()` has 9 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.085) - this node is a cross-community bridge._
+- **Are the 11 inferred relationships involving `NewHandler()` (e.g. with `TestAuthLoginRouteShape()` and `TestAuthLoginMissingDeviceContextHeaders()`) actually correct?**
+  _`NewHandler()` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `buildDependencies()` (e.g. with `NewApp()` and `NewRepository()`) actually correct?**
   _`buildDependencies()` has 8 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `NewService()` (e.g. with `TestRegisterTriggersOTP()` and `TestVerifyOTPRejectsInvalidCode()`) actually correct?**

@@ -91,6 +91,12 @@
               "status": "Bad Request",
               "code": 400,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
             }
           ]
         },
@@ -143,6 +149,12 @@
               "status": "Bad Request",
               "code": 400,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
             }
           ]
         },
@@ -195,6 +207,12 @@
               "status": "Bad Request",
               "code": 400,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
             }
           ]
         },
@@ -207,6 +225,14 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
               }
             ],
             "body": {
@@ -259,6 +285,10 @@
               {
                 "key": "X-Platform",
                 "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
               }
             ],
             "url": {
@@ -273,7 +303,7 @@
                 "logout"
               ]
             },
-            "description": "Auth: Access token and X-Platform header required. Revokes active sessions for the authenticated user only on the requested platform."
+            "description": "Auth: Access token, X-Platform, and X-Device-Id headers required. Revokes active sessions for the authenticated user only on the requested platform."
           },
           "response": [
             {
@@ -287,6 +317,12 @@
               "status": "Bad Request",
               "code": 400,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
             },
             {
               "name": "Invalid Access Token",

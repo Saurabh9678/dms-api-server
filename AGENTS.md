@@ -163,7 +163,15 @@ Maintain directional boundaries:
 - Infra implementations satisfy interfaces; domain/module logic should not depend on infra concrete types
 - Module boundaries must remain explicit; cross-module coupling requires clear justification and docs updates
 
-## 11) Scope Discipline Rule
+## 11) API v1 Device Context Rule
+
+- Every `/api/v1/*` endpoint must require `X-Platform` and `X-Device-Id` headers.
+- `X-Platform` must be one of: `web`, `ios_mobile`, `android_mobile`, `desktop`.
+- `X-Device-Id` must be non-empty for all platforms, including web.
+- Missing/invalid device-context headers must return error code `INVALID_DEVICE_CONTEXT` with message `invalid request`.
+- Ensure new `/api/v1/*` routes inherit device-context enforcement automatically.
+
+## 12) Scope Discipline Rule
 
 - Do not refactor unrelated modules while implementing a task.
 - Do not move existing modules unless explicitly requested.

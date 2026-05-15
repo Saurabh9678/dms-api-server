@@ -5,10 +5,12 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"infiour.local/dms-api-server/internal/modules/auth"
+	"infiour.local/dms-api-server/pkg/middleware"
 )
 
 type smokeAuthService struct{}
@@ -37,6 +39,7 @@ func TestAuthLoginRouteShape(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
 	api := engine.Group("/api/v1")
+	api.Use(middleware.RequireDeviceContext())
 	auth.RegisterRoutes(api, auth.NewHandler(&smokeAuthService{}))
 
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
@@ -48,5 +51,47 @@ func TestAuthLoginRouteShape(t *testing.T) {
 
 	if resp.Code != http.StatusOK {
 		t.Fatalf("expected 200, got %d", resp.Code)
+	}
+}
+
+func TestAuthLoginMissingDeviceContextHeaders(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	api := engine.Group("/api/v1")
+	api.Use(middleware.RequireDeviceContext())
+	auth.RegisterRoutes(api, auth.NewHandler(&smokeAuthService{}))
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req.Header.Set("Content-Type", "application/json")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_DEVICE_CONTEXT"`) {
+		t.Fatalf("expected INVALID_DEVICE_CONTEXT code, got %s", resp.Body.String())
+	}
+}
+
+func TestAuthLoginInvalidPlatformHeader(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	api := engine.Group("/api/v1")
+	api.Use(middleware.RequireDeviceContext())
+	auth.RegisterRoutes(api, auth.NewHandler(&smokeAuthService{}))
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "watch")
+	req.Header.Set("X-Device-Id", "d-1")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_DEVICE_CONTEXT"`) {
+		t.Fatalf("expected INVALID_DEVICE_CONTEXT code, got %s", resp.Body.String())
 	}
 }
