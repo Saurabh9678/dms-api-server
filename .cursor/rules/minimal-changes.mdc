@@ -1,0 +1,12 @@
+---
+description: Enforce minimal scoped changes and prevent unnecessary refactors
+alwaysApply: true
+---
+
+# Minimal Change Discipline
+
+- Prefer the smallest safe implementation that satisfies the requirement.
+- Avoid unnecessary refactors and avoid touching unrelated files.
+- Do not rewrite stable code without explicit request.
+- Reuse or extend existing implementation before introducing new patterns.
+- If an existing implementation already satisfies the requirement, do not rewrite it.

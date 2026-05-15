@@ -1,0 +1,15 @@
+---
+description: Enforce test creation, execution, and build verification after changes
+alwaysApply: true
+---
+
+# Testing Discipline
+
+- Every behavior change requires test updates or new tests.
+- Do not finish a task without executing validation commands.
+- Required command sequence:
+  - `gofmt ./...`
+  - `go vet ./...`
+  - `go test ./...`
+  - `make build`
+- If tests are missing due to ambiguity, ask clarification and document gap.

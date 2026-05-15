@@ -1,0 +1,15 @@
+{
+  "info": {
+    "name": "DMS API - Vehicle",
+    "_postman_id": "dms-api-vehicle-collection",
+    "description": "Vehicle API collection scaffold. Add endpoint items as APIs are introduced.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

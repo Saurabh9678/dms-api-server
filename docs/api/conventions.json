@@ -1,0 +1,25 @@
+{
+  "format": "postman_collection_v2.1",
+  "documentation_policy": {
+    "required_file_pattern": "docs/api/<module>.postman_collection.json",
+    "required_on_change": [
+      "endpoint_created",
+      "endpoint_modified",
+      "endpoint_removed"
+    ],
+    "required_fields_per_endpoint": [
+      "endpoint_path",
+      "http_method",
+      "auth_requirements",
+      "request_payload",
+      "response_payload",
+      "error_responses",
+      "example_request",
+      "example_response"
+    ],
+    "notes": [
+      "Collections must be importable in Postman.",
+      "Keep request and example response bodies aligned with handler DTO contracts."
+    ]
+  }
+}

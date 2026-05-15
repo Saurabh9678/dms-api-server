@@ -1,0 +1,14 @@
+---
+description: Enforce modular boundaries, dependency direction, and placement
+alwaysApply: true
+---
+
+# Architecture Governance
+
+- Preserve modular architecture and existing folder ownership.
+- Place new code in the correct layer (`handler`, `service`, `repository`, `provider`, `infra`) based on responsibility.
+- Keep dependency direction explicit: transport -> service -> repository/provider interfaces -> infra implementations.
+- Do not place business logic in handlers.
+- Do not let module/domain logic import infra concrete implementations directly.
+- Avoid cross-module coupling unless explicitly required and documented.
+- Validate placement and dependency direction before coding.

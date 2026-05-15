@@ -1,0 +1,31 @@
+---
+description: Enforce mandatory pre-task and post-task implementation workflow
+alwaysApply: true
+---
+
+# Implementation Flow
+
+## Pre-task
+
+- Review relevant implementation and avoid duplicate logic.
+- Check `docs/knowledge-base.md` and related docs before writing code.
+- Identify impacted modules/providers/APIs and boundary impact.
+- Confirm dependency direction and correct folder placement.
+- If requirement is ambiguous, ask clarification before implementation.
+
+## During task
+
+- Prefer extending existing code over rewrites.
+- Keep scope minimal and limited to requirement.
+- Avoid touching unrelated files.
+
+## Post-task
+
+- Update tests and documentation for changed behavior.
+- If APIs changed, update `docs/api/<module>.postman_collection.json` in the same task.
+- Run required validation commands:
+  - `gofmt ./...`
+  - `go vet ./...`
+  - `go test ./...`
+  - `make build`
+  - `make graphify-update`

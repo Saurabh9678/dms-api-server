@@ -1,0 +1,17 @@
+---
+description: Enforce documentation updates for architectural and behavioral changes
+alwaysApply: true
+---
+
+# Documentation Discipline
+
+- Documentation updates are mandatory when behavior or structure changes.
+- Keep docs synchronized with implementation in the same task.
+- Update the correct documentation scope:
+  - Architecture changes -> `docs/architecture/`
+  - API changes -> `docs/api/*.postman_collection.json`
+  - Module changes -> `docs/modules/`
+  - Provider changes -> `docs/providers/`
+  - Database changes -> `docs/database/`
+  - Workflow/process changes -> `docs/workflows/`
+- Update `docs/knowledge-base.md` after implementation.

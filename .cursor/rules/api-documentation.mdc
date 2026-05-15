@@ -1,0 +1,19 @@
+---
+description: Require API documentation updates for every endpoint lifecycle change
+alwaysApply: true
+---
+
+# API Documentation Discipline
+
+- Any API endpoint created, modified, or removed must update `docs/api/<module>.postman_collection.json`.
+- API docs must be valid Postman Collection v2.1 JSON (importable in Postman).
+- Collection entries must include:
+  - endpoint path
+  - HTTP method
+  - auth requirements
+  - request payload
+  - response payload
+  - error responses
+  - example request
+  - example response
+- Do not merge API changes without synchronized API documentation.

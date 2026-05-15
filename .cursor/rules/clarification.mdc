@@ -1,0 +1,12 @@
+---
+description: Require clarification-first behavior for ambiguity and competing options
+alwaysApply: true
+---
+
+# Clarification-First Rule
+
+- If requirements are ambiguous, stop and ask clarifying questions.
+- Never assume architecture intent, naming, folder placement, or expected behavior.
+- If multiple valid implementations exist, present options and ask for confirmation.
+- Do not silently decide unresolved trade-offs.
+- Clarification is mandatory before implementation when ambiguity exists.
