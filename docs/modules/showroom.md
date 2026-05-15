@@ -16,3 +16,4 @@
 ## Documentation Update Checklist
 
 - Update this file whenever showroom responsibilities or contracts change.
+- For API or function behavior changes, add/update flow details: route entry, middleware, handler/service path, and response outcomes.

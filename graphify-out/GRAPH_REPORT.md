@@ -1,16 +1,16 @@
 # Graph Report - dms-api-server  (2026-05-15)
 
 ## Corpus Check
-- 119 files · ~11,006 words
+- 135 files · ~13,442 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 696 nodes · 725 edges · 110 communities (78 shown, 32 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 90 edges (avg confidence: 0.8)
+- 810 nodes · 823 edges · 132 communities (96 shown, 36 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 90 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c1b44e7c`
+- Built from commit: `15e6c180`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -94,6 +94,28 @@
 - [[_COMMUNITY_Community 107|Community 107]]
 - [[_COMMUNITY_Community 108|Community 108]]
 - [[_COMMUNITY_Community 109|Community 109]]
+- [[_COMMUNITY_Community 110|Community 110]]
+- [[_COMMUNITY_Community 111|Community 111]]
+- [[_COMMUNITY_Community 112|Community 112]]
+- [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 114|Community 114]]
+- [[_COMMUNITY_Community 115|Community 115]]
+- [[_COMMUNITY_Community 116|Community 116]]
+- [[_COMMUNITY_Community 117|Community 117]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 123|Community 123]]
+- [[_COMMUNITY_Community 124|Community 124]]
+- [[_COMMUNITY_Community 125|Community 125]]
+- [[_COMMUNITY_Community 126|Community 126]]
+- [[_COMMUNITY_Community 127|Community 127]]
+- [[_COMMUNITY_Community 128|Community 128]]
+- [[_COMMUNITY_Community 129|Community 129]]
+- [[_COMMUNITY_Community 130|Community 130]]
+- [[_COMMUNITY_Community 131|Community 131]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `NewHandler()` - 13 edges
@@ -110,24 +132,24 @@
 ## Surprising Connections (you probably didn't know these)
 - `main()` --calls--> `NewApp()`  [INFERRED]
   cmd/server/main.go → internal/bootstrap/app.go
+- `TestAuthLoginRouteShape()` --calls--> `NewHandler()`  [INFERRED]
+  tests/smoke/auth/auth_routes_smoke_test.go → internal/modules/auth/handler.go
+- `TestAuthLoginMissingDeviceContextHeaders()` --calls--> `NewHandler()`  [INFERRED]
+  tests/smoke/auth/auth_routes_smoke_test.go → internal/modules/auth/handler.go
+- `TestAuthLoginInvalidPlatformHeader()` --calls--> `NewHandler()`  [INFERRED]
+  tests/smoke/auth/auth_routes_smoke_test.go → internal/modules/auth/handler.go
 - `TestHealthRouteShape()` --calls--> `OK()`  [INFERRED]
   tests/smoke/health/health_smoke_test.go → pkg/response/envelope.go
-- `TestLogoutRejectsInvalidAccessToken()` --calls--> `NewService()`  [INFERRED]
-  tests/unit/auth/service_test.go → internal/modules/auth/service.go
-- `TestVerifyOTPRevokesExistingSessionsForSamePlatform()` --calls--> `NewService()`  [INFERRED]
-  tests/unit/auth/service_test.go → internal/modules/auth/service.go
-- `TestLogoutRequiresAuthorizationHeader()` --calls--> `NewHandler()`  [INFERRED]
-  tests/unit/auth/handler_test.go → internal/modules/auth/handler.go
 
-## Communities (110 total, 32 thin omitted)
+## Communities (132 total, 36 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
 Nodes (5): fakeOTPRepo, fakeOTPSender, fakeSessionRepo, fakeTokenService, fakeUserRepo
 
 ### Community 1 - "Community 1"
-Cohesion: 0.15
-Nodes (7): newRouter(), contextKey, WithContext(), Recovery(), newRequestID(), RequestID(), RequestLog()
+Cohesion: 0.29
+Nodes (3): contextKey, WithContext(), RequestLog()
 
 ### Community 2 - "Community 2"
 Cohesion: 0.08
@@ -158,8 +180,8 @@ Cohesion: 0.47
 Nodes (7): LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, TokenResponse, TriggerOTPResponse, VerifyOTPRequest
 
 ### Community 10 - "Community 10"
-Cohesion: 0.05
-Nodes (18): TestAuthLoginInvalidPlatformHeader(), TestAuthLoginMissingDeviceContextHeaders(), TestAuthLoginRouteShape(), TestAuthRouteContracts(), contractService, fakeAuthService, fakeHandlerAuthService, NewHandler() (+10 more)
+Cohesion: 0.17
+Nodes (6): TestAuthLoginInvalidPlatformHeader(), TestAuthLoginMissingDeviceContextHeaders(), TestAuthLoginRouteShape(), RegisterRoutes(), smokeAuthService, RequireDeviceContext()
 
 ### Community 12 - "Community 12"
 Cohesion: 0.33
@@ -234,8 +256,8 @@ Cohesion: 0.33
 Nodes (5): Commands, Default Local Configuration, Environment, Local Postgres (Docker), Purpose
 
 ### Community 91 - "Community 91"
-Cohesion: 0.33
-Nodes (5): Auth Module, Boundaries, Documentation Update Checklist, Key Components, Responsibility
+Cohesion: 0.15
+Nodes (12): Auth Module, Boundaries, Common Entry Flow (`/api/v1/auth/*`), Documentation Update Checklist, Endpoint Flow Details, Key Components, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout` (+4 more)
 
 ### Community 92 - "Community 92"
 Cohesion: 0.33
@@ -270,8 +292,8 @@ Cohesion: 0.4
 Nodes (4): Governance, Migration Rules, Required Checks, Update Checklist
 
 ### Community 100 - "Community 100"
-Cohesion: 0.33
-Nodes (5): Auth Schema Notes, Module Ownership, Purpose, Schema Overview, Update Checklist
+Cohesion: 0.29
+Nodes (6): Auth Schema Notes, Module Ownership, Purpose, Schema Overview, Table Documentation Index, Update Checklist
 
 ### Community 101 - "Community 101"
 Cohesion: 0.4
@@ -309,20 +331,92 @@ Nodes (4): Outcome Rules, Required Execution, Scope, Testing Workflow
 Cohesion: 0.2
 Nodes (4): Repository, toDomain(), SessionPlatformType, UserSession
 
+### Community 111 - "Community 111"
+Cohesion: 0.43
+Nodes (6): NewHandler(), TestLoginBadRequest(), TestLogoutRequiresAuthorizationHeader(), TestLogoutRequiresPlatformHeader(), TestLogoutSuccessWithAuthorizationHeader(), TestVerifyOTPSuccess()
+
+### Community 113 - "Community 113"
+Cohesion: 0.33
+Nodes (4): newRouter(), Recovery(), newRequestID(), RequestID()
+
+### Community 114 - "Community 114"
+Cohesion: 0.29
+Nodes (6): Columns, `customer_vehicle_sales` Table, Foreign Keys, Indexes, Keys And Constraints, Purpose
+
+### Community 115 - "Community 115"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `user_otps` Table
+
+### Community 116 - "Community 116"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys Referencing This Table, Keys And Constraints, Purpose, Seed Data, `user_roles` Table
+
+### Community 117 - "Community 117"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `user_sessions` Table
+
+### Community 118 - "Community 118"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `user_showroom_relations` Table
+
+### Community 119 - "Community 119"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_documents` Table
+
+### Community 120 - "Community 120"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_expenses` Table
+
+### Community 121 - "Community 121"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_images` Table
+
+### Community 122 - "Community 122"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_showroom_relations` Table
+
+### Community 123 - "Community 123"
+Cohesion: 0.29
+Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_statuses` Table
+
+### Community 126 - "Community 126"
+Cohesion: 0.33
+Nodes (5): Columns, `customers` Table, Foreign Keys Referencing This Table, Keys And Constraints, Purpose
+
+### Community 127 - "Community 127"
+Cohesion: 0.33
+Nodes (5): Columns, Foreign Keys, Keys And Constraints, `moderators` Table, Purpose
+
+### Community 128 - "Community 128"
+Cohesion: 0.33
+Nodes (5): Columns, Foreign Keys Referencing This Table, Keys And Constraints, Purpose, `showrooms` Table
+
+### Community 129 - "Community 129"
+Cohesion: 0.33
+Nodes (5): Columns, Foreign Keys Referencing This Table, Keys And Constraints, Purpose, `users` Table
+
+### Community 130 - "Community 130"
+Cohesion: 0.33
+Nodes (5): Columns, Foreign Keys, Keys And Constraints, Purpose, `vehicle_pricing` Table
+
+### Community 131 - "Community 131"
+Cohesion: 0.33
+Nodes (5): Columns, Foreign Keys Referencing This Table, Keys And Constraints, Purpose, `vehicles` Table
+
 ## Knowledge Gaps
-- **155 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+150 more)
+- **236 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+231 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `buildDependencies()` connect `Community 28` to `Community 10`, `Community 3`, `Community 4`?**
-  _High betweenness centrality (0.119) - this node is a cross-community bridge._
-- **Why does `NewApp()` connect `Community 4` to `Community 1`, `Community 2`, `Community 28`?**
-  _High betweenness centrality (0.085) - this node is a cross-community bridge._
+- **Why does `buildDependencies()` connect `Community 28` to `Community 3`, `Community 4`, `Community 111`?**
+  _High betweenness centrality (0.088) - this node is a cross-community bridge._
+- **Why does `NewApp()` connect `Community 4` to `Community 113`, `Community 2`, `Community 28`?**
+  _High betweenness centrality (0.063) - this node is a cross-community bridge._
 - **Why does `NewService()` connect `Community 3` to `Community 28`, `Community 30`?**
-  _High betweenness centrality (0.085) - this node is a cross-community bridge._
+  _High betweenness centrality (0.062) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `NewHandler()` (e.g. with `TestAuthLoginRouteShape()` and `TestAuthLoginMissingDeviceContextHeaders()`) actually correct?**
   _`NewHandler()` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `buildDependencies()` (e.g. with `NewApp()` and `NewRepository()`) actually correct?**
@@ -330,4 +424,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 6 inferred relationships involving `NewService()` (e.g. with `TestRegisterTriggersOTP()` and `TestVerifyOTPRejectsInvalidCode()`) actually correct?**
   _`NewService()` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Dependencies`, `Provider`, `TokenPair` to the rest of the system?**
-  _155 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _236 weakly-connected nodes found - possible documentation gaps or missing edges._

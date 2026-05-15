@@ -19,3 +19,4 @@ alwaysApply: true
 - For every `/api/v1/*` endpoint, document `X-Platform` and `X-Device-Id` as mandatory request headers.
 - Saved API test cases and documented success/invalid-format examples must exactly match the response envelope actually returned by handlers.
 - Do not merge API changes without synchronized API documentation.
+- Keep `docs/modules/<module>.md` synchronized with endpoint flow details (middleware -> handler -> service -> business outcomes -> response mapping).

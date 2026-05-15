@@ -7,6 +7,8 @@ This file is the living project memory for architecture, conventions, and implem
 - Read this file before implementing changes.
 - Update this file after implementation changes.
 - Link to detailed docs in `docs/architecture/`, `docs/modules/`, `docs/providers/`, `docs/api/`, `docs/database/`, and `docs/workflows/`.
+- For quick API/function tracing, consult module flow docs in `docs/modules/*.md` first.
+- For quick schema validation, consult per-table docs in `docs/database/tables/*.md`.
 
 ## Architecture Decisions
 
@@ -30,11 +32,9 @@ This file is the living project memory for architecture, conventions, and implem
 - Local development environment variables are documented in `.env.example`.
 - Database connection should be configured through `DB_URL`.
 - Every `/api/v1/*` endpoint requires `X-Platform` and non-empty `X-Device-Id` headers.
+- Module docs must capture endpoint flow end-to-end: entry route, middleware behavior, handler mapping, service business logic, and response branches.
+- Schema docs are maintained as one file per table under `docs/database/tables/` and include columns, types, nullability, defaults, PK/FK, and index/unique constraints.
 
-## Migration Notes
-
-- Capture database migration and schema evolution notes.
-- Migration `000017_add_request_id_to_user_otps` adds `user_otps.request_id` as unique and non-null for OTP verification correlation.
 
 ## Important Implementation Details
 
@@ -54,3 +54,5 @@ This file is the living project memory for architecture, conventions, and implem
 
 - Document required implementation, testing, and release workflows.
 - Local database setup workflow is documented in `docs/database/local-postgres.md`.
+- API behavior change workflow: update Postman collection + module endpoint-flow documentation in the same task.
+- Schema change workflow: update relevant files in `docs/database/tables/` in the same task.

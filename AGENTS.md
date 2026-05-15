@@ -8,12 +8,14 @@ The agent must complete all checks below before implementing:
 
 1. Understand existing architecture and current implementation.
 2. Check `docs/knowledge-base.md` and relevant docs sections first.
-3. Identify impacted modules, providers, APIs, and database areas.
-4. Verify dependency direction and module boundaries.
-5. Verify target folder placement before creating files.
-6. Search for existing implementation to avoid duplicate logic.
-7. Prefer extending existing code over rewriting stable code.
-8. Plan minimal scoped changes that satisfy only the requirement.
+3. Use module docs (`docs/modules/*.md`) to trace endpoint/function flow before changing behavior.
+4. Use schema docs (`docs/database/tables/*.md`) to validate table/column/constraint assumptions before DB-related changes.
+5. Identify impacted modules, providers, APIs, and database areas.
+6. Verify dependency direction and module boundaries.
+7. Verify target folder placement before creating files.
+8. Search for existing implementation to avoid duplicate logic.
+9. Prefer extending existing code over rewriting stable code.
+10. Plan minimal scoped changes that satisfy only the requirement.
 
 Mandatory execution gate:
 
@@ -82,6 +84,8 @@ Documentation updates are mandatory for any behavioral, structural, or contract 
 - Provider change -> update `docs/providers/`
 - Database/schema/migration behavior change -> update `docs/database/`
 - Workflow/process change -> update `docs/workflows/`
+- Module documentation must include endpoint flow details: route entry, middleware chain, handler, service logic path, and response branches.
+- Schema documentation must be maintained in `docs/database/tables/` with one file per table and explicit column/constraint details.
 
 ## 5) Knowledge Base Rule
 
@@ -90,6 +94,7 @@ Documentation updates are mandatory for any behavioral, structural, or contract 
 Before implementing:
 
 - consult knowledge base sections relevant to the task
+- consult module flow docs and per-table schema docs for quick flow tracing
 
 After implementing:
 
@@ -106,6 +111,8 @@ Knowledge base must track:
 - important implementation details
 - known caveats
 - important workflows
+- endpoint flow tracing references
+- per-table schema references and caveats
 
 ## 6) API Documentation Rule
 

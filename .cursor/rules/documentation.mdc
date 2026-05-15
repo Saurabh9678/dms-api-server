@@ -10,8 +10,9 @@ alwaysApply: true
 - Update the correct documentation scope:
   - Architecture changes -> `docs/architecture/`
   - API changes -> `docs/api/*.postman_collection.json`
-  - Module changes -> `docs/modules/`
+  - Module changes -> `docs/modules/` (include endpoint flow details: route entry, middleware chain, handler, service path, and business-logic response branches)
   - Provider changes -> `docs/providers/`
-  - Database changes -> `docs/database/`
+  - Database changes -> `docs/database/` and `docs/database/tables/*.md` (one file per table with columns, types, nullability, defaults, PK/FK, unique/index details)
   - Workflow/process changes -> `docs/workflows/`
 - Update `docs/knowledge-base.md` after implementation.
+- Use module flow docs and per-table schema docs as first-stop references when tracing function or API flow.

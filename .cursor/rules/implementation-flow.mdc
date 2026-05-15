@@ -12,6 +12,8 @@ alwaysApply: true
 - Wait for explicit user go-ahead before starting implementation.
 - Review relevant implementation and avoid duplicate logic.
 - Check `docs/knowledge-base.md` and related docs before writing code.
+- Use module flow docs (`docs/modules/*.md`) to trace endpoint/function flow quickly before editing.
+- Use per-table schema docs (`docs/database/tables/*.md`) to validate schema assumptions before DB or business-logic changes.
 - Identify impacted modules/providers/APIs and boundary impact.
 - Confirm dependency direction and correct folder placement.
 - If requirement is ambiguous, ask clarification before implementation.
@@ -27,6 +29,8 @@ alwaysApply: true
 
 - Update tests and documentation for changed behavior.
 - If APIs changed, update `docs/api/<module>.postman_collection.json` in the same task.
+- If module behavior changed, update module flow documentation in `docs/modules/<module>.md`.
+- If schema assumptions changed (or new tables/columns/constraints were added), update `docs/database/tables/*.md` with one file per impacted table.
 - Run required validation commands:
   - `gofmt ./...`
   - `go vet ./...`

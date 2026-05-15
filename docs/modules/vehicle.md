@@ -16,3 +16,4 @@
 ## Documentation Update Checklist
 
 - Update this file when vehicle behavior, schema assumptions, or APIs change.
+- For API or function behavior changes, add/update flow details: route entry, middleware, handler/service path, and response outcomes.

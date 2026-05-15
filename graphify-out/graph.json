@@ -396,7 +396,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_contract_test_go",
-      "community": 10,
+      "community": 110,
       "norm_label": "contract_test.go"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L15",
       "id": "auth_contractservice",
-      "community": 10,
+      "community": 110,
       "norm_label": "contractservice"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L17",
       "id": "auth_contractservice_register",
-      "community": 10,
+      "community": 110,
       "norm_label": ".register()"
     },
     {
@@ -423,7 +423,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L21",
       "id": "auth_contractservice_login",
-      "community": 10,
+      "community": 110,
       "norm_label": ".login()"
     },
     {
@@ -432,7 +432,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L25",
       "id": "auth_contractservice_verifyotp",
-      "community": 10,
+      "community": 110,
       "norm_label": ".verifyotp()"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L29",
       "id": "auth_contractservice_refreshtoken",
-      "community": 10,
+      "community": 110,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L33",
       "id": "auth_contractservice_logout",
-      "community": 10,
+      "community": 110,
       "norm_label": ".logout()"
     },
     {
@@ -459,7 +459,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L37",
       "id": "auth_contract_test_testauthroutecontracts",
-      "community": 10,
+      "community": 110,
       "norm_label": "testauthroutecontracts()"
     },
     {
@@ -468,7 +468,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_handler_test_go",
-      "community": 10,
+      "community": 111,
       "norm_label": "handler_test.go"
     },
     {
@@ -477,7 +477,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L15",
       "id": "auth_fakehandlerauthservice",
-      "community": 10,
+      "community": 125,
       "norm_label": "fakehandlerauthservice"
     },
     {
@@ -486,7 +486,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L17",
       "id": "auth_fakehandlerauthservice_register",
-      "community": 10,
+      "community": 125,
       "norm_label": ".register()"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L21",
       "id": "auth_fakehandlerauthservice_login",
-      "community": 10,
+      "community": 125,
       "norm_label": ".login()"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L25",
       "id": "auth_fakehandlerauthservice_verifyotp",
-      "community": 10,
+      "community": 125,
       "norm_label": ".verifyotp()"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L34",
       "id": "auth_fakehandlerauthservice_refreshtoken",
-      "community": 10,
+      "community": 125,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L43",
       "id": "auth_fakehandlerauthservice_logout",
-      "community": 10,
+      "community": 125,
       "norm_label": ".logout()"
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L47",
       "id": "auth_handler_test_testloginbadrequest",
-      "community": 10,
+      "community": 111,
       "norm_label": "testloginbadrequest()"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L71",
       "id": "auth_handler_test_testverifyotpsuccess",
-      "community": 10,
+      "community": 111,
       "norm_label": "testverifyotpsuccess()"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L92",
       "id": "auth_handler_test_testlogoutrequiresauthorizationheader",
-      "community": 10,
+      "community": 111,
       "norm_label": "testlogoutrequiresauthorizationheader()"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L111",
       "id": "auth_handler_test_testlogoutsuccesswithauthorizationheader",
-      "community": 10,
+      "community": 111,
       "norm_label": "testlogoutsuccesswithauthorizationheader()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L133",
       "id": "auth_handler_test_testlogoutrequiresplatformheader",
-      "community": 10,
+      "community": 111,
       "norm_label": "testlogoutrequiresplatformheader()"
     },
     {
@@ -846,7 +846,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L1",
       "id": "internal_bootstrap_router_go",
-      "community": 1,
+      "community": 113,
       "norm_label": "router.go"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L15",
       "id": "bootstrap_router_newrouter",
-      "community": 1,
+      "community": 113,
       "norm_label": "newrouter()"
     },
     {
@@ -1368,7 +1368,7 @@
       "source_file": "internal/modules/auth/handler.go",
       "source_location": "L21",
       "id": "auth_handler_newhandler",
-      "community": 10,
+      "community": 111,
       "norm_label": "newhandler()"
     },
     {
@@ -2403,7 +2403,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L1",
       "id": "pkg_middleware_recovery_go",
-      "community": 1,
+      "community": 113,
       "norm_label": "recovery.go"
     },
     {
@@ -2412,7 +2412,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L12",
       "id": "middleware_recovery_recovery",
-      "community": 1,
+      "community": 113,
       "norm_label": "recovery()"
     },
     {
@@ -2439,7 +2439,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 1,
+      "community": 113,
       "norm_label": "request_id.go"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 1,
+      "community": 113,
       "norm_label": "requestid()"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 1,
+      "community": 113,
       "norm_label": "newrequestid()"
     },
     {
@@ -2986,7 +2986,7 @@
       "label": "Architecture Decisions",
       "file_type": "document",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L11",
+      "source_location": "L13",
       "id": "docs_knowledge_base_architecture_decisions",
       "community": 33,
       "norm_label": "architecture decisions"
@@ -2995,7 +2995,7 @@
       "label": "Module Responsibilities",
       "file_type": "document",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L15",
+      "source_location": "L17",
       "id": "docs_knowledge_base_module_responsibilities",
       "community": 33,
       "norm_label": "module responsibilities"
@@ -3004,7 +3004,7 @@
       "label": "Provider Responsibilities",
       "file_type": "document",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L19",
+      "source_location": "L21",
       "id": "docs_knowledge_base_provider_responsibilities",
       "community": 33,
       "norm_label": "provider responsibilities"
@@ -3013,7 +3013,7 @@
       "label": "Dependency Rules",
       "file_type": "document",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "docs_knowledge_base_dependency_rules",
       "community": 33,
       "norm_label": "dependency rules"
@@ -3022,19 +3022,10 @@
       "label": "Conventions",
       "file_type": "document",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L27",
+      "source_location": "L29",
       "id": "docs_knowledge_base_conventions",
       "community": 33,
       "norm_label": "conventions"
-    },
-    {
-      "label": "Migration Notes",
-      "file_type": "document",
-      "source_file": "docs/knowledge-base.md",
-      "source_location": "L34",
-      "id": "docs_knowledge_base_migration_notes",
-      "community": 33,
-      "norm_label": "migration notes"
     },
     {
       "label": "Important Implementation Details",
@@ -3238,7 +3229,7 @@
       "label": "Module Ownership",
       "file_type": "document",
       "source_file": "docs/database/schema-overview.md",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "database_schema_overview_module_ownership",
       "community": 100,
       "norm_label": "module ownership"
@@ -3247,19 +3238,982 @@
       "label": "Auth Schema Notes",
       "file_type": "document",
       "source_file": "docs/database/schema-overview.md",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "database_schema_overview_auth_schema_notes",
       "community": 100,
       "norm_label": "auth schema notes"
     },
     {
+      "label": "Table Documentation Index",
+      "file_type": "document",
+      "source_file": "docs/database/schema-overview.md",
+      "source_location": "L20",
+      "id": "database_schema_overview_table_documentation_index",
+      "community": 100,
+      "norm_label": "table documentation index"
+    },
+    {
       "label": "Update Checklist",
       "file_type": "document",
       "source_file": "docs/database/schema-overview.md",
-      "source_location": "L19",
+      "source_location": "L39",
       "id": "database_schema_overview_update_checklist",
       "community": 100,
       "norm_label": "update checklist"
+    },
+    {
+      "label": "user_sessions.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_user_sessions_md",
+      "community": 117,
+      "norm_label": "user_sessions.md"
+    },
+    {
+      "label": "`user_sessions` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L1",
+      "id": "tables_user_sessions_user_sessions_table",
+      "community": 117,
+      "norm_label": "`user_sessions` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L3",
+      "id": "tables_user_sessions_purpose",
+      "community": 117,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L7",
+      "id": "tables_user_sessions_columns",
+      "community": 117,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L22",
+      "id": "tables_user_sessions_keys_and_constraints",
+      "community": 117,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L26",
+      "id": "tables_user_sessions_foreign_keys",
+      "community": 117,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L30",
+      "id": "tables_user_sessions_indexes",
+      "community": 117,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "vehicle_documents.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_documents_md",
+      "community": 119,
+      "norm_label": "vehicle_documents.md"
+    },
+    {
+      "label": "`vehicle_documents` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_documents_vehicle_documents_table",
+      "community": 119,
+      "norm_label": "`vehicle_documents` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_documents_purpose",
+      "community": 119,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_documents_columns",
+      "community": 119,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L22",
+      "id": "tables_vehicle_documents_keys_and_constraints",
+      "community": 119,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L26",
+      "id": "tables_vehicle_documents_foreign_keys",
+      "community": 119,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L31",
+      "id": "tables_vehicle_documents_indexes",
+      "community": 119,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "vehicles.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicles_md",
+      "community": 131,
+      "norm_label": "vehicles.md"
+    },
+    {
+      "label": "`vehicles` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L1",
+      "id": "tables_vehicles_vehicles_table",
+      "community": 131,
+      "norm_label": "`vehicles` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L3",
+      "id": "tables_vehicles_purpose",
+      "community": 131,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L7",
+      "id": "tables_vehicles_columns",
+      "community": 131,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L26",
+      "id": "tables_vehicles_keys_and_constraints",
+      "community": 131,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys Referencing This Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L30",
+      "id": "tables_vehicles_foreign_keys_referencing_this_table",
+      "community": 131,
+      "norm_label": "foreign keys referencing this table"
+    },
+    {
+      "label": "user_showroom_relations.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_user_showroom_relations_md",
+      "community": 118,
+      "norm_label": "user_showroom_relations.md"
+    },
+    {
+      "label": "`user_showroom_relations` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L1",
+      "id": "tables_user_showroom_relations_user_showroom_relations_table",
+      "community": 118,
+      "norm_label": "`user_showroom_relations` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L3",
+      "id": "tables_user_showroom_relations_purpose",
+      "community": 118,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L7",
+      "id": "tables_user_showroom_relations_columns",
+      "community": 118,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L17",
+      "id": "tables_user_showroom_relations_keys_and_constraints",
+      "community": 118,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L22",
+      "id": "tables_user_showroom_relations_foreign_keys",
+      "community": 118,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L28",
+      "id": "tables_user_showroom_relations_indexes",
+      "community": 118,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "user_roles.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_user_roles_md",
+      "community": 116,
+      "norm_label": "user_roles.md"
+    },
+    {
+      "label": "`user_roles` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L1",
+      "id": "tables_user_roles_user_roles_table",
+      "community": 116,
+      "norm_label": "`user_roles` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L3",
+      "id": "tables_user_roles_purpose",
+      "community": 116,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L7",
+      "id": "tables_user_roles_columns",
+      "community": 116,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L14",
+      "id": "tables_user_roles_keys_and_constraints",
+      "community": 116,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Seed Data",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L19",
+      "id": "tables_user_roles_seed_data",
+      "community": 116,
+      "norm_label": "seed data"
+    },
+    {
+      "label": "Foreign Keys Referencing This Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L23",
+      "id": "tables_user_roles_foreign_keys_referencing_this_table",
+      "community": 116,
+      "norm_label": "foreign keys referencing this table"
+    },
+    {
+      "label": "moderators.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_moderators_md",
+      "community": 127,
+      "norm_label": "moderators.md"
+    },
+    {
+      "label": "`moderators` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L1",
+      "id": "tables_moderators_moderators_table",
+      "community": 127,
+      "norm_label": "`moderators` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L3",
+      "id": "tables_moderators_purpose",
+      "community": 127,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L7",
+      "id": "tables_moderators_columns",
+      "community": 127,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L16",
+      "id": "tables_moderators_keys_and_constraints",
+      "community": 127,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L21",
+      "id": "tables_moderators_foreign_keys",
+      "community": 127,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "vehicle_pricing.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_pricing_md",
+      "community": 130,
+      "norm_label": "vehicle_pricing.md"
+    },
+    {
+      "label": "`vehicle_pricing` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_pricing_vehicle_pricing_table",
+      "community": 130,
+      "norm_label": "`vehicle_pricing` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_pricing_purpose",
+      "community": 130,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_pricing_columns",
+      "community": 130,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L21",
+      "id": "tables_vehicle_pricing_keys_and_constraints",
+      "community": 130,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L26",
+      "id": "tables_vehicle_pricing_foreign_keys",
+      "community": 130,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "vehicle_statuses.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_statuses_md",
+      "community": 123,
+      "norm_label": "vehicle_statuses.md"
+    },
+    {
+      "label": "`vehicle_statuses` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_statuses_vehicle_statuses_table",
+      "community": 123,
+      "norm_label": "`vehicle_statuses` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_statuses_purpose",
+      "community": 123,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_statuses_columns",
+      "community": 123,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L20",
+      "id": "tables_vehicle_statuses_keys_and_constraints",
+      "community": 123,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L24",
+      "id": "tables_vehicle_statuses_foreign_keys",
+      "community": 123,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L29",
+      "id": "tables_vehicle_statuses_indexes",
+      "community": 123,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "customers.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_customers_md",
+      "community": 126,
+      "norm_label": "customers.md"
+    },
+    {
+      "label": "`customers` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L1",
+      "id": "tables_customers_customers_table",
+      "community": 126,
+      "norm_label": "`customers` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L3",
+      "id": "tables_customers_purpose",
+      "community": 126,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L7",
+      "id": "tables_customers_columns",
+      "community": 126,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L26",
+      "id": "tables_customers_keys_and_constraints",
+      "community": 126,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys Referencing This Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L31",
+      "id": "tables_customers_foreign_keys_referencing_this_table",
+      "community": 126,
+      "norm_label": "foreign keys referencing this table"
+    },
+    {
+      "label": "customer_vehicle_sales.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_customer_vehicle_sales_md",
+      "community": 114,
+      "norm_label": "customer_vehicle_sales.md"
+    },
+    {
+      "label": "`customer_vehicle_sales` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L1",
+      "id": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "community": 114,
+      "norm_label": "`customer_vehicle_sales` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L3",
+      "id": "tables_customer_vehicle_sales_purpose",
+      "community": 114,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L7",
+      "id": "tables_customer_vehicle_sales_columns",
+      "community": 114,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L21",
+      "id": "tables_customer_vehicle_sales_keys_and_constraints",
+      "community": 114,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L25",
+      "id": "tables_customer_vehicle_sales_foreign_keys",
+      "community": 114,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L30",
+      "id": "tables_customer_vehicle_sales_indexes",
+      "community": 114,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "users.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_users_md",
+      "community": 129,
+      "norm_label": "users.md"
+    },
+    {
+      "label": "`users` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L1",
+      "id": "tables_users_users_table",
+      "community": 129,
+      "norm_label": "`users` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L3",
+      "id": "tables_users_purpose",
+      "community": 129,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L7",
+      "id": "tables_users_columns",
+      "community": 129,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L18",
+      "id": "tables_users_keys_and_constraints",
+      "community": 129,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys Referencing This Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L23",
+      "id": "tables_users_foreign_keys_referencing_this_table",
+      "community": 129,
+      "norm_label": "foreign keys referencing this table"
+    },
+    {
+      "label": "showrooms.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_showrooms_md",
+      "community": 128,
+      "norm_label": "showrooms.md"
+    },
+    {
+      "label": "`showrooms` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L1",
+      "id": "tables_showrooms_showrooms_table",
+      "community": 128,
+      "norm_label": "`showrooms` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L3",
+      "id": "tables_showrooms_purpose",
+      "community": 128,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L7",
+      "id": "tables_showrooms_columns",
+      "community": 128,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L17",
+      "id": "tables_showrooms_keys_and_constraints",
+      "community": 128,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys Referencing This Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L21",
+      "id": "tables_showrooms_foreign_keys_referencing_this_table",
+      "community": 128,
+      "norm_label": "foreign keys referencing this table"
+    },
+    {
+      "label": "user_otps.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_user_otps_md",
+      "community": 115,
+      "norm_label": "user_otps.md"
+    },
+    {
+      "label": "`user_otps` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L1",
+      "id": "tables_user_otps_user_otps_table",
+      "community": 115,
+      "norm_label": "`user_otps` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L3",
+      "id": "tables_user_otps_purpose",
+      "community": 115,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L7",
+      "id": "tables_user_otps_columns",
+      "community": 115,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L23",
+      "id": "tables_user_otps_keys_and_constraints",
+      "community": 115,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L28",
+      "id": "tables_user_otps_foreign_keys",
+      "community": 115,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L32",
+      "id": "tables_user_otps_indexes",
+      "community": 115,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "vehicle_showroom_relations.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_showroom_relations_md",
+      "community": 122,
+      "norm_label": "vehicle_showroom_relations.md"
+    },
+    {
+      "label": "`vehicle_showroom_relations` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "community": 122,
+      "norm_label": "`vehicle_showroom_relations` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_showroom_relations_purpose",
+      "community": 122,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_showroom_relations_columns",
+      "community": 122,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L16",
+      "id": "tables_vehicle_showroom_relations_keys_and_constraints",
+      "community": 122,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L21",
+      "id": "tables_vehicle_showroom_relations_foreign_keys",
+      "community": 122,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L26",
+      "id": "tables_vehicle_showroom_relations_indexes",
+      "community": 122,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "vehicle_expenses.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_expenses_md",
+      "community": 120,
+      "norm_label": "vehicle_expenses.md"
+    },
+    {
+      "label": "`vehicle_expenses` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_expenses_vehicle_expenses_table",
+      "community": 120,
+      "norm_label": "`vehicle_expenses` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_expenses_purpose",
+      "community": 120,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_expenses_columns",
+      "community": 120,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L21",
+      "id": "tables_vehicle_expenses_keys_and_constraints",
+      "community": 120,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L25",
+      "id": "tables_vehicle_expenses_foreign_keys",
+      "community": 120,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L30",
+      "id": "tables_vehicle_expenses_indexes",
+      "community": 120,
+      "norm_label": "indexes"
+    },
+    {
+      "label": "vehicle_images.md",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L1",
+      "id": "docs_database_tables_vehicle_images_md",
+      "community": 121,
+      "norm_label": "vehicle_images.md"
+    },
+    {
+      "label": "`vehicle_images` Table",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L1",
+      "id": "tables_vehicle_images_vehicle_images_table",
+      "community": 121,
+      "norm_label": "`vehicle_images` table"
+    },
+    {
+      "label": "Purpose",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L3",
+      "id": "tables_vehicle_images_purpose",
+      "community": 121,
+      "norm_label": "purpose"
+    },
+    {
+      "label": "Columns",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L7",
+      "id": "tables_vehicle_images_columns",
+      "community": 121,
+      "norm_label": "columns"
+    },
+    {
+      "label": "Keys And Constraints",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L19",
+      "id": "tables_vehicle_images_keys_and_constraints",
+      "community": 121,
+      "norm_label": "keys and constraints"
+    },
+    {
+      "label": "Foreign Keys",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L23",
+      "id": "tables_vehicle_images_foreign_keys",
+      "community": 121,
+      "norm_label": "foreign keys"
+    },
+    {
+      "label": "Indexes",
+      "file_type": "document",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L28",
+      "id": "tables_vehicle_images_indexes",
+      "community": 121,
+      "norm_label": "indexes"
     },
     {
       "label": "storage.md",
@@ -3982,10 +4936,73 @@
       "norm_label": "boundaries"
     },
     {
-      "label": "Documentation Update Checklist",
+      "label": "Endpoint Flow Details",
       "file_type": "document",
       "source_file": "docs/modules/auth.md",
       "source_location": "L23",
+      "id": "modules_auth_endpoint_flow_details",
+      "community": 91,
+      "norm_label": "endpoint flow details"
+    },
+    {
+      "label": "Common Entry Flow (`/api/v1/auth/*`)",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L25",
+      "id": "modules_auth_common_entry_flow_api_v1_auth",
+      "community": 91,
+      "norm_label": "common entry flow (`/api/v1/auth/*`)"
+    },
+    {
+      "label": "`POST /api/v1/auth/register`",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L34",
+      "id": "modules_auth_post_api_v1_auth_register",
+      "community": 91,
+      "norm_label": "`post /api/v1/auth/register`"
+    },
+    {
+      "label": "`POST /api/v1/auth/login`",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L49",
+      "id": "modules_auth_post_api_v1_auth_login",
+      "community": 91,
+      "norm_label": "`post /api/v1/auth/login`"
+    },
+    {
+      "label": "`POST /api/v1/auth/verify-otp`",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L57",
+      "id": "modules_auth_post_api_v1_auth_verify_otp",
+      "community": 91,
+      "norm_label": "`post /api/v1/auth/verify-otp`"
+    },
+    {
+      "label": "`POST /api/v1/auth/refresh-token`",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L74",
+      "id": "modules_auth_post_api_v1_auth_refresh_token",
+      "community": 91,
+      "norm_label": "`post /api/v1/auth/refresh-token`"
+    },
+    {
+      "label": "`POST /api/v1/auth/logout`",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L89",
+      "id": "modules_auth_post_api_v1_auth_logout",
+      "community": 91,
+      "norm_label": "`post /api/v1/auth/logout`"
+    },
+    {
+      "label": "Documentation Update Checklist",
+      "file_type": "document",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L102",
       "id": "modules_auth_documentation_update_checklist",
       "community": 91,
       "norm_label": "documentation update checklist"
@@ -4099,6 +5116,15 @@
       "norm_label": "documentation update checklist"
     },
     {
+      "label": "Migration Notes",
+      "file_type": "document",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L34",
+      "community": 33,
+      "norm_label": "migration notes",
+      "id": "docs_knowledge_base_migration_notes"
+    },
+    {
       "label": ".RevokeAllByUserID()",
       "file_type": "code",
       "source_file": "tests/unit/auth/service_test.go",
@@ -4139,7 +5165,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L1",
-      "community": 10,
+      "community": 112,
       "norm_label": "auth_routes_smoke_test.go",
       "id": "tests_smoke_auth_routes_smoke_test_go"
     },
@@ -4148,7 +5174,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L14",
-      "community": 10,
+      "community": 112,
       "norm_label": "smokeauthservice",
       "id": "smoke_smokeauthservice"
     },
@@ -4157,7 +5183,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L16",
-      "community": 10,
+      "community": 112,
       "norm_label": ".register()",
       "id": "smoke_smokeauthservice_register"
     },
@@ -4166,7 +5192,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L20",
-      "community": 10,
+      "community": 112,
       "norm_label": ".login()",
       "id": "smoke_smokeauthservice_login"
     },
@@ -4175,7 +5201,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L24",
-      "community": 10,
+      "community": 112,
       "norm_label": ".verifyotp()",
       "id": "smoke_smokeauthservice_verifyotp"
     },
@@ -4184,7 +5210,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L28",
-      "community": 10,
+      "community": 112,
       "norm_label": ".refreshtoken()",
       "id": "smoke_smokeauthservice_refreshtoken"
     },
@@ -4193,7 +5219,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L32",
-      "community": 10,
+      "community": 112,
       "norm_label": ".logout()",
       "id": "smoke_smokeauthservice_logout"
     },
@@ -4202,7 +5228,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L36",
-      "community": 10,
+      "community": 112,
       "norm_label": "testauthloginrouteshape()",
       "id": "smoke_auth_routes_smoke_test_testauthloginrouteshape"
     },
@@ -4427,7 +5453,7 @@
       "file_type": "code",
       "source_file": "internal/auth/contract_test.go",
       "source_location": "L1",
-      "community": 10,
+      "community": 110,
       "norm_label": "contract_test.go",
       "id": "internal_auth_contract_test_go"
     },
@@ -4454,7 +5480,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L1",
-      "community": 10,
+      "community": 111,
       "norm_label": "handler_test.go",
       "id": "internal_auth_handler_test_go"
     },
@@ -4463,7 +5489,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L14",
-      "community": 10,
+      "community": 124,
       "norm_label": "fakeauthservice",
       "id": "auth_fakeauthservice"
     },
@@ -4472,7 +5498,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L16",
-      "community": 10,
+      "community": 124,
       "norm_label": ".register()",
       "id": "auth_fakeauthservice_register"
     },
@@ -4481,7 +5507,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L20",
-      "community": 10,
+      "community": 124,
       "norm_label": ".login()",
       "id": "auth_fakeauthservice_login"
     },
@@ -4490,7 +5516,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L24",
-      "community": 10,
+      "community": 124,
       "norm_label": ".verifyotp()",
       "id": "auth_fakeauthservice_verifyotp"
     },
@@ -4499,7 +5525,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L33",
-      "community": 10,
+      "community": 124,
       "norm_label": ".refreshtoken()",
       "id": "auth_fakeauthservice_refreshtoken"
     },
@@ -4508,7 +5534,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L42",
-      "community": 10,
+      "community": 124,
       "norm_label": ".logout()",
       "id": "auth_fakeauthservice_logout"
     },
@@ -6327,9 +7353,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_smoke_auth_auth_routes_smoke_test_go",
-      "target": "auth_auth_routes_smoke_test_testauthloginmissingdevicecontextheaders",
-      "confidence_score": 1.0
+      "target": "auth_auth_routes_smoke_test_testauthloginmissingdevicecontextheaders"
     },
     {
       "relation": "contains",
@@ -6337,9 +7363,9 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_smoke_auth_auth_routes_smoke_test_go",
-      "target": "auth_auth_routes_smoke_test_testauthlogininvalidplatformheader",
-      "confidence_score": 1.0
+      "target": "auth_auth_routes_smoke_test_testauthlogininvalidplatformheader"
     },
     {
       "relation": "method",
@@ -10015,9 +11041,9 @@
       "source_file": "pkg/middleware/device_context.go",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pkg_middleware_device_context_go",
-      "target": "middleware_device_context_requiredevicecontext",
-      "confidence_score": 1.0
+      "target": "middleware_device_context_requiredevicecontext"
     },
     {
       "relation": "contains",
@@ -10646,16 +11672,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/knowledge-base.md",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_knowledge_base_knowledge_base",
-      "target": "docs_knowledge_base_migration_notes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/knowledge-base.md",
       "source_location": "L37",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10681,6 +11697,16 @@
       "confidence_score": 1.0,
       "source": "docs_knowledge_base_knowledge_base",
       "target": "docs_knowledge_base_important_workflows"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/knowledge-base.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_knowledge_base_knowledge_base",
+      "target": "docs_knowledge_base_migration_notes"
     },
     {
       "relation": "contains",
@@ -10856,11 +11882,921 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/database/schema-overview.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "database_schema_overview_schema_overview",
+      "target": "database_schema_overview_table_documentation_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/schema-overview.md",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "database_schema_overview_schema_overview",
       "target": "database_schema_overview_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_user_sessions_md",
+      "target": "tables_user_sessions_user_sessions_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_user_sessions_user_sessions_table",
+      "target": "tables_user_sessions_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_user_sessions_user_sessions_table",
+      "target": "tables_user_sessions_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "tables_user_sessions_user_sessions_table",
+      "target": "tables_user_sessions_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_user_sessions_user_sessions_table",
+      "target": "tables_user_sessions_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_sessions.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tables_user_sessions_user_sessions_table",
+      "target": "tables_user_sessions_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_documents_md",
+      "target": "tables_vehicle_documents_vehicle_documents_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_documents_vehicle_documents_table",
+      "target": "tables_vehicle_documents_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_documents_vehicle_documents_table",
+      "target": "tables_vehicle_documents_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "tables_vehicle_documents_vehicle_documents_table",
+      "target": "tables_vehicle_documents_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_vehicle_documents_vehicle_documents_table",
+      "target": "tables_vehicle_documents_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_documents.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "tables_vehicle_documents_vehicle_documents_table",
+      "target": "tables_vehicle_documents_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicles_md",
+      "target": "tables_vehicles_vehicles_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicles_vehicles_table",
+      "target": "tables_vehicles_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicles_vehicles_table",
+      "target": "tables_vehicles_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_vehicles_vehicles_table",
+      "target": "tables_vehicles_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicles.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tables_vehicles_vehicles_table",
+      "target": "tables_vehicles_foreign_keys_referencing_this_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_user_showroom_relations_md",
+      "target": "tables_user_showroom_relations_user_showroom_relations_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_user_showroom_relations_user_showroom_relations_table",
+      "target": "tables_user_showroom_relations_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_user_showroom_relations_user_showroom_relations_table",
+      "target": "tables_user_showroom_relations_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "tables_user_showroom_relations_user_showroom_relations_table",
+      "target": "tables_user_showroom_relations_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "tables_user_showroom_relations_user_showroom_relations_table",
+      "target": "tables_user_showroom_relations_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_showroom_relations.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tables_user_showroom_relations_user_showroom_relations_table",
+      "target": "tables_user_showroom_relations_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_user_roles_md",
+      "target": "tables_user_roles_user_roles_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_user_roles_user_roles_table",
+      "target": "tables_user_roles_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_user_roles_user_roles_table",
+      "target": "tables_user_roles_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tables_user_roles_user_roles_table",
+      "target": "tables_user_roles_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "tables_user_roles_user_roles_table",
+      "target": "tables_user_roles_seed_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_roles.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "tables_user_roles_user_roles_table",
+      "target": "tables_user_roles_foreign_keys_referencing_this_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_moderators_md",
+      "target": "tables_moderators_moderators_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_moderators_moderators_table",
+      "target": "tables_moderators_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_moderators_moderators_table",
+      "target": "tables_moderators_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "tables_moderators_moderators_table",
+      "target": "tables_moderators_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/moderators.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_moderators_moderators_table",
+      "target": "tables_moderators_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_pricing_md",
+      "target": "tables_vehicle_pricing_vehicle_pricing_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_pricing_vehicle_pricing_table",
+      "target": "tables_vehicle_pricing_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_pricing_vehicle_pricing_table",
+      "target": "tables_vehicle_pricing_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_vehicle_pricing_vehicle_pricing_table",
+      "target": "tables_vehicle_pricing_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_pricing.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_vehicle_pricing_vehicle_pricing_table",
+      "target": "tables_vehicle_pricing_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_statuses_md",
+      "target": "tables_vehicle_statuses_vehicle_statuses_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_statuses_vehicle_statuses_table",
+      "target": "tables_vehicle_statuses_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_statuses_vehicle_statuses_table",
+      "target": "tables_vehicle_statuses_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tables_vehicle_statuses_vehicle_statuses_table",
+      "target": "tables_vehicle_statuses_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "tables_vehicle_statuses_vehicle_statuses_table",
+      "target": "tables_vehicle_statuses_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_statuses.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tables_vehicle_statuses_vehicle_statuses_table",
+      "target": "tables_vehicle_statuses_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_customers_md",
+      "target": "tables_customers_customers_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_customers_customers_table",
+      "target": "tables_customers_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_customers_customers_table",
+      "target": "tables_customers_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_customers_customers_table",
+      "target": "tables_customers_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customers.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "tables_customers_customers_table",
+      "target": "tables_customers_foreign_keys_referencing_this_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_customer_vehicle_sales_md",
+      "target": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "target": "tables_customer_vehicle_sales_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "target": "tables_customer_vehicle_sales_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "target": "tables_customer_vehicle_sales_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "target": "tables_customer_vehicle_sales_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/customer_vehicle_sales.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
+      "target": "tables_customer_vehicle_sales_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_users_md",
+      "target": "tables_users_users_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_users_users_table",
+      "target": "tables_users_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_users_users_table",
+      "target": "tables_users_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "tables_users_users_table",
+      "target": "tables_users_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/users.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "tables_users_users_table",
+      "target": "tables_users_foreign_keys_referencing_this_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_showrooms_md",
+      "target": "tables_showrooms_showrooms_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_showrooms_showrooms_table",
+      "target": "tables_showrooms_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_showrooms_showrooms_table",
+      "target": "tables_showrooms_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "tables_showrooms_showrooms_table",
+      "target": "tables_showrooms_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/showrooms.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_showrooms_showrooms_table",
+      "target": "tables_showrooms_foreign_keys_referencing_this_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_user_otps_md",
+      "target": "tables_user_otps_user_otps_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_user_otps_user_otps_table",
+      "target": "tables_user_otps_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_user_otps_user_otps_table",
+      "target": "tables_user_otps_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "tables_user_otps_user_otps_table",
+      "target": "tables_user_otps_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tables_user_otps_user_otps_table",
+      "target": "tables_user_otps_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/user_otps.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "tables_user_otps_user_otps_table",
+      "target": "tables_user_otps_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_showroom_relations_md",
+      "target": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "target": "tables_vehicle_showroom_relations_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "target": "tables_vehicle_showroom_relations_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "target": "tables_vehicle_showroom_relations_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "target": "tables_vehicle_showroom_relations_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_showroom_relations.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
+      "target": "tables_vehicle_showroom_relations_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_expenses_md",
+      "target": "tables_vehicle_expenses_vehicle_expenses_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_expenses_vehicle_expenses_table",
+      "target": "tables_vehicle_expenses_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_expenses_vehicle_expenses_table",
+      "target": "tables_vehicle_expenses_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tables_vehicle_expenses_vehicle_expenses_table",
+      "target": "tables_vehicle_expenses_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "tables_vehicle_expenses_vehicle_expenses_table",
+      "target": "tables_vehicle_expenses_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_expenses.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tables_vehicle_expenses_vehicle_expenses_table",
+      "target": "tables_vehicle_expenses_indexes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_database_tables_vehicle_images_md",
+      "target": "tables_vehicle_images_vehicle_images_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tables_vehicle_images_vehicle_images_table",
+      "target": "tables_vehicle_images_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tables_vehicle_images_vehicle_images_table",
+      "target": "tables_vehicle_images_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "tables_vehicle_images_vehicle_images_table",
+      "target": "tables_vehicle_images_keys_and_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "tables_vehicle_images_vehicle_images_table",
+      "target": "tables_vehicle_images_foreign_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/database/tables/vehicle_images.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tables_vehicle_images_vehicle_images_table",
+      "target": "tables_vehicle_images_indexes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11516,11 +13452,81 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/modules/auth.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "modules_auth_auth_module",
+      "target": "modules_auth_endpoint_flow_details",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
       "source_location": "L18",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "modules_auth_auth_module",
       "target": "modules_auth_documentation_update_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_common_entry_flow_api_v1_auth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_post_api_v1_auth_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_post_api_v1_auth_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_post_api_v1_auth_verify_otp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_post_api_v1_auth_refresh_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/modules/auth.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "modules_auth_endpoint_flow_details",
+      "target": "modules_auth_post_api_v1_auth_logout",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -13651,5 +15657,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c1b44e7c1b66d1246eed620bb538c6a5f22a0b3b"
+  "built_at_commit": "15e6c18020c3b7de44b9d79e924a537fc51a3b2b"
 }
