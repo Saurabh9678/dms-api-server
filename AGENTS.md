@@ -7,15 +7,16 @@ This file defines mandatory engineering governance for this repository. These ru
 The agent must complete all checks below before implementing:
 
 1. Understand existing architecture and current implementation.
-2. Check `docs/knowledge-base.md` and relevant docs sections first.
-3. Use module docs (`docs/modules/*.md`) to trace endpoint/function flow before changing behavior.
-4. Use schema docs (`docs/database/tables/*.md`) to validate table/column/constraint assumptions before DB-related changes.
-5. Identify impacted modules, providers, APIs, and database areas.
-6. Verify dependency direction and module boundaries.
-7. Verify target folder placement before creating files.
-8. Search for existing implementation to avoid duplicate logic.
-9. Prefer extending existing code over rewriting stable code.
-10. Plan minimal scoped changes that satisfy only the requirement.
+2. Check `docs/index.md` first, then open only task-relevant docs.
+3. Check `docs/knowledge-base.md` and relevant docs sections first.
+4. Use module docs (`docs/modules/*.md`) to trace endpoint/function flow before changing behavior.
+5. Use schema docs (`docs/database/tables/*.md`) to validate table/column/constraint assumptions before DB-related changes.
+6. Identify impacted modules, providers, APIs, and database areas.
+7. Verify dependency direction and module boundaries.
+8. Verify target folder placement before creating files.
+9. Search for existing implementation to avoid duplicate logic.
+10. Prefer extending existing code over rewriting stable code.
+11. Plan minimal scoped changes that satisfy only the requirement.
 
 Mandatory execution gate:
 
@@ -183,3 +184,11 @@ Maintain directional boundaries:
 - Do not refactor unrelated modules while implementing a task.
 - Do not move existing modules unless explicitly requested.
 - Keep PR scope narrow and verifiable.
+
+## 13) Review Efficiency Rule
+
+- Keep review narration concise and implementation-focused.
+- Report only findings that impact implementation decisions or safety.
+- Clearly separate required changes from optional improvements.
+- Retrieve only task-relevant files; avoid scanning unrelated modules/docs.
+- Prefer concise summaries and targeted retrieval over broad repository sweeps.

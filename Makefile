@@ -4,7 +4,7 @@ BIN_PATH := ./bin/$(APP_NAME)
 MIGRATIONS_DIR := ./migrations
 DB_URL ?= postgres://postgres:postgres@localhost:5432/dms?sslmode=disable
 
-.PHONY: help run build test tidy fmt clean graphify-update docker-postgres-up docker-postgres-down docker-postgres-logs migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
+.PHONY: help run build test tidy fmt verify clean graphify-update docker-postgres-up docker-postgres-down docker-postgres-logs migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
 
 help:
 	@echo "Available targets:"
@@ -13,6 +13,7 @@ help:
 	@echo "  make test   - Run tests"
 	@echo "  make tidy   - Tidy module dependencies"
 	@echo "  make fmt    - Format all Go files"
+	@echo "  make verify - Run required validation command sequence"
 	@echo "  make clean  - Remove build artifacts"
 	@echo "  make graphify-update - Refresh AST knowledge graph (no LLM cost)"
 	@echo "  make docker-postgres-up   - Start local Postgres with Docker"
@@ -40,6 +41,13 @@ tidy:
 
 fmt:
 	go fmt ./...
+
+verify:
+	gofmt ./...
+	go vet ./...
+	go test ./...
+	$(MAKE) build
+	$(MAKE) graphify-update
 
 clean:
 	rm -rf ./bin

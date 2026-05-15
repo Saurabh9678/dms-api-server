@@ -396,7 +396,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_contract_test_go",
-      "community": 110,
+      "community": 10,
       "norm_label": "contract_test.go"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L15",
       "id": "auth_contractservice",
-      "community": 110,
+      "community": 10,
       "norm_label": "contractservice"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L17",
       "id": "auth_contractservice_register",
-      "community": 110,
+      "community": 10,
       "norm_label": ".register()"
     },
     {
@@ -423,7 +423,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L21",
       "id": "auth_contractservice_login",
-      "community": 110,
+      "community": 10,
       "norm_label": ".login()"
     },
     {
@@ -432,7 +432,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L25",
       "id": "auth_contractservice_verifyotp",
-      "community": 110,
+      "community": 10,
       "norm_label": ".verifyotp()"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L29",
       "id": "auth_contractservice_refreshtoken",
-      "community": 110,
+      "community": 10,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L33",
       "id": "auth_contractservice_logout",
-      "community": 110,
+      "community": 10,
       "norm_label": ".logout()"
     },
     {
@@ -459,7 +459,7 @@
       "source_file": "tests/unit/auth/contract_test.go",
       "source_location": "L37",
       "id": "auth_contract_test_testauthroutecontracts",
-      "community": 110,
+      "community": 10,
       "norm_label": "testauthroutecontracts()"
     },
     {
@@ -468,7 +468,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_handler_test_go",
-      "community": 111,
+      "community": 10,
       "norm_label": "handler_test.go"
     },
     {
@@ -477,7 +477,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L15",
       "id": "auth_fakehandlerauthservice",
-      "community": 125,
+      "community": 10,
       "norm_label": "fakehandlerauthservice"
     },
     {
@@ -486,7 +486,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L17",
       "id": "auth_fakehandlerauthservice_register",
-      "community": 125,
+      "community": 10,
       "norm_label": ".register()"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L21",
       "id": "auth_fakehandlerauthservice_login",
-      "community": 125,
+      "community": 10,
       "norm_label": ".login()"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L25",
       "id": "auth_fakehandlerauthservice_verifyotp",
-      "community": 125,
+      "community": 10,
       "norm_label": ".verifyotp()"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L34",
       "id": "auth_fakehandlerauthservice_refreshtoken",
-      "community": 125,
+      "community": 10,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L43",
       "id": "auth_fakehandlerauthservice_logout",
-      "community": 125,
+      "community": 10,
       "norm_label": ".logout()"
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L47",
       "id": "auth_handler_test_testloginbadrequest",
-      "community": 111,
+      "community": 10,
       "norm_label": "testloginbadrequest()"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L71",
       "id": "auth_handler_test_testverifyotpsuccess",
-      "community": 111,
+      "community": 10,
       "norm_label": "testverifyotpsuccess()"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L92",
       "id": "auth_handler_test_testlogoutrequiresauthorizationheader",
-      "community": 111,
+      "community": 10,
       "norm_label": "testlogoutrequiresauthorizationheader()"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L111",
       "id": "auth_handler_test_testlogoutsuccesswithauthorizationheader",
-      "community": 111,
+      "community": 10,
       "norm_label": "testlogoutsuccesswithauthorizationheader()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L133",
       "id": "auth_handler_test_testlogoutrequiresplatformheader",
-      "community": 111,
+      "community": 10,
       "norm_label": "testlogoutrequiresplatformheader()"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L1",
       "id": "internal_infra_token_jwt_go",
-      "community": 28,
+      "community": 111,
       "norm_label": "jwt.go"
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L18",
       "id": "token_jwtprovider",
-      "community": 28,
+      "community": 111,
       "norm_label": "jwtprovider"
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L25",
       "id": "token_jwt_newjwtprovider",
-      "community": 28,
+      "community": 111,
       "norm_label": "newjwtprovider()"
     },
     {
@@ -666,7 +666,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L38",
       "id": "token_jwtprovider_issue",
-      "community": 28,
+      "community": 111,
       "norm_label": ".issue()"
     },
     {
@@ -675,7 +675,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L42",
       "id": "token_jwtprovider_rotate",
-      "community": 28,
+      "community": 111,
       "norm_label": ".rotate()"
     },
     {
@@ -684,7 +684,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L46",
       "id": "token_jwtprovider_hashrefreshtoken",
-      "community": 28,
+      "community": 111,
       "norm_label": ".hashrefreshtoken()"
     },
     {
@@ -693,7 +693,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L51",
       "id": "token_jwtprovider_parseaccesstoken",
-      "community": 28,
+      "community": 111,
       "norm_label": ".parseaccesstoken()"
     },
     {
@@ -702,7 +702,7 @@
       "source_file": "internal/infra/token/jwt.go",
       "source_location": "L81",
       "id": "token_jwtprovider_issueforuser",
-      "community": 28,
+      "community": 111,
       "norm_label": ".issueforuser()"
     },
     {
@@ -846,7 +846,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L1",
       "id": "internal_bootstrap_router_go",
-      "community": 113,
+      "community": 1,
       "norm_label": "router.go"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L15",
       "id": "bootstrap_router_newrouter",
-      "community": 113,
+      "community": 1,
       "norm_label": "newrouter()"
     },
     {
@@ -1368,7 +1368,7 @@
       "source_file": "internal/modules/auth/handler.go",
       "source_location": "L21",
       "id": "auth_handler_newhandler",
-      "community": 111,
+      "community": 10,
       "norm_label": "newhandler()"
     },
     {
@@ -2403,7 +2403,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L1",
       "id": "pkg_middleware_recovery_go",
-      "community": 113,
+      "community": 1,
       "norm_label": "recovery.go"
     },
     {
@@ -2412,7 +2412,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L12",
       "id": "middleware_recovery_recovery",
-      "community": 113,
+      "community": 1,
       "norm_label": "recovery()"
     },
     {
@@ -2439,7 +2439,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 113,
+      "community": 1,
       "norm_label": "request_id.go"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 113,
+      "community": 1,
       "norm_label": "requestid()"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 113,
+      "community": 1,
       "norm_label": "newrequestid()"
     },
     {
@@ -2954,6 +2954,87 @@
       "id": "errors_errors_newapperror",
       "community": 31,
       "norm_label": "newapperror()"
+    },
+    {
+      "label": "index.md",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L1",
+      "id": "docs_index_md",
+      "community": 110,
+      "norm_label": "index.md"
+    },
+    {
+      "label": "Documentation Index",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L1",
+      "id": "docs_index_documentation_index",
+      "community": 110,
+      "norm_label": "documentation index"
+    },
+    {
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L5",
+      "id": "docs_index_architecture",
+      "community": 110,
+      "norm_label": "architecture"
+    },
+    {
+      "label": "Modules",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L12",
+      "id": "docs_index_modules",
+      "community": 110,
+      "norm_label": "modules"
+    },
+    {
+      "label": "Database",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L20",
+      "id": "docs_index_database",
+      "community": 110,
+      "norm_label": "database"
+    },
+    {
+      "label": "Providers",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L28",
+      "id": "docs_index_providers",
+      "community": 110,
+      "norm_label": "providers"
+    },
+    {
+      "label": "Workflows",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L36",
+      "id": "docs_index_workflows",
+      "community": 110,
+      "norm_label": "workflows"
+    },
+    {
+      "label": "API Collections",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L43",
+      "id": "docs_index_api_collections",
+      "community": 110,
+      "norm_label": "api collections"
+    },
+    {
+      "label": "Knowledge Base",
+      "file_type": "document",
+      "source_file": "docs/index.md",
+      "source_location": "L49",
+      "id": "docs_index_knowledge_base",
+      "community": 110,
+      "norm_label": "knowledge base"
     },
     {
       "label": "knowledge-base.md",
@@ -4489,7 +4570,7 @@
       "label": "Outcome Rules",
       "file_type": "document",
       "source_file": "docs/workflows/testing-workflow.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "workflows_testing_workflow_outcome_rules",
       "community": 108,
       "norm_label": "outcome rules"
@@ -4525,7 +4606,7 @@
       "label": "Implementation",
       "file_type": "document",
       "source_file": "docs/workflows/implementation-workflow.md",
-      "source_location": "L10",
+      "source_location": "L14",
       "id": "workflows_implementation_workflow_implementation",
       "community": 106,
       "norm_label": "implementation"
@@ -4534,7 +4615,7 @@
       "label": "Post-Implementation",
       "file_type": "document",
       "source_file": "docs/workflows/implementation-workflow.md",
-      "source_location": "L16",
+      "source_location": "L20",
       "id": "workflows_implementation_workflow_post_implementation",
       "community": 106,
       "norm_label": "post-implementation"
@@ -5165,7 +5246,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L1",
-      "community": 112,
+      "community": 10,
       "norm_label": "auth_routes_smoke_test.go",
       "id": "tests_smoke_auth_routes_smoke_test_go"
     },
@@ -5174,7 +5255,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L14",
-      "community": 112,
+      "community": 10,
       "norm_label": "smokeauthservice",
       "id": "smoke_smokeauthservice"
     },
@@ -5183,7 +5264,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L16",
-      "community": 112,
+      "community": 10,
       "norm_label": ".register()",
       "id": "smoke_smokeauthservice_register"
     },
@@ -5192,7 +5273,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L20",
-      "community": 112,
+      "community": 10,
       "norm_label": ".login()",
       "id": "smoke_smokeauthservice_login"
     },
@@ -5201,7 +5282,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L24",
-      "community": 112,
+      "community": 10,
       "norm_label": ".verifyotp()",
       "id": "smoke_smokeauthservice_verifyotp"
     },
@@ -5210,7 +5291,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L28",
-      "community": 112,
+      "community": 10,
       "norm_label": ".refreshtoken()",
       "id": "smoke_smokeauthservice_refreshtoken"
     },
@@ -5219,7 +5300,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L32",
-      "community": 112,
+      "community": 10,
       "norm_label": ".logout()",
       "id": "smoke_smokeauthservice_logout"
     },
@@ -5228,7 +5309,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L36",
-      "community": 112,
+      "community": 10,
       "norm_label": "testauthloginrouteshape()",
       "id": "smoke_auth_routes_smoke_test_testauthloginrouteshape"
     },
@@ -5453,7 +5534,7 @@
       "file_type": "code",
       "source_file": "internal/auth/contract_test.go",
       "source_location": "L1",
-      "community": 110,
+      "community": 10,
       "norm_label": "contract_test.go",
       "id": "internal_auth_contract_test_go"
     },
@@ -5480,7 +5561,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L1",
-      "community": 111,
+      "community": 10,
       "norm_label": "handler_test.go",
       "id": "internal_auth_handler_test_go"
     },
@@ -5489,7 +5570,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L14",
-      "community": 124,
+      "community": 10,
       "norm_label": "fakeauthservice",
       "id": "auth_fakeauthservice"
     },
@@ -5498,7 +5579,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L16",
-      "community": 124,
+      "community": 10,
       "norm_label": ".register()",
       "id": "auth_fakeauthservice_register"
     },
@@ -5507,7 +5588,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L20",
-      "community": 124,
+      "community": 10,
       "norm_label": ".login()",
       "id": "auth_fakeauthservice_login"
     },
@@ -5516,7 +5597,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L24",
-      "community": 124,
+      "community": 10,
       "norm_label": ".verifyotp()",
       "id": "auth_fakeauthservice_verifyotp"
     },
@@ -5525,7 +5606,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L33",
-      "community": 124,
+      "community": 10,
       "norm_label": ".refreshtoken()",
       "id": "auth_fakeauthservice_refreshtoken"
     },
@@ -5534,7 +5615,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L42",
-      "community": 124,
+      "community": 10,
       "norm_label": ".logout()",
       "id": "auth_fakeauthservice_logout"
     },
@@ -11601,6 +11682,86 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_index_md",
+      "target": "docs_index_documentation_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_modules",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_database",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_providers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_workflows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_api_collections",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/index.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "docs_index_documentation_index",
+      "target": "docs_index_knowledge_base",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/knowledge-base.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -11884,9 +12045,9 @@
       "source_file": "docs/database/schema-overview.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "database_schema_overview_schema_overview",
-      "target": "database_schema_overview_table_documentation_index",
-      "confidence_score": 1.0
+      "target": "database_schema_overview_table_documentation_index"
     },
     {
       "relation": "contains",
@@ -11904,9 +12065,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_user_sessions_md",
-      "target": "tables_user_sessions_user_sessions_table",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_user_sessions_table"
     },
     {
       "relation": "contains",
@@ -11914,9 +12075,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_sessions_user_sessions_table",
-      "target": "tables_user_sessions_purpose",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_purpose"
     },
     {
       "relation": "contains",
@@ -11924,9 +12085,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_sessions_user_sessions_table",
-      "target": "tables_user_sessions_columns",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_columns"
     },
     {
       "relation": "contains",
@@ -11934,9 +12095,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_sessions_user_sessions_table",
-      "target": "tables_user_sessions_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -11944,9 +12105,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_sessions_user_sessions_table",
-      "target": "tables_user_sessions_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_foreign_keys"
     },
     {
       "relation": "contains",
@@ -11954,9 +12115,9 @@
       "source_file": "docs/database/tables/user_sessions.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_sessions_user_sessions_table",
-      "target": "tables_user_sessions_indexes",
-      "confidence_score": 1.0
+      "target": "tables_user_sessions_indexes"
     },
     {
       "relation": "contains",
@@ -11964,9 +12125,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_documents_md",
-      "target": "tables_vehicle_documents_vehicle_documents_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_vehicle_documents_table"
     },
     {
       "relation": "contains",
@@ -11974,9 +12135,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_documents_vehicle_documents_table",
-      "target": "tables_vehicle_documents_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_purpose"
     },
     {
       "relation": "contains",
@@ -11984,9 +12145,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_documents_vehicle_documents_table",
-      "target": "tables_vehicle_documents_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_columns"
     },
     {
       "relation": "contains",
@@ -11994,9 +12155,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_documents_vehicle_documents_table",
-      "target": "tables_vehicle_documents_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12004,9 +12165,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_documents_vehicle_documents_table",
-      "target": "tables_vehicle_documents_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12014,9 +12175,9 @@
       "source_file": "docs/database/tables/vehicle_documents.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_documents_vehicle_documents_table",
-      "target": "tables_vehicle_documents_indexes",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_documents_indexes"
     },
     {
       "relation": "contains",
@@ -12024,9 +12185,9 @@
       "source_file": "docs/database/tables/vehicles.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicles_md",
-      "target": "tables_vehicles_vehicles_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicles_vehicles_table"
     },
     {
       "relation": "contains",
@@ -12034,9 +12195,9 @@
       "source_file": "docs/database/tables/vehicles.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicles_vehicles_table",
-      "target": "tables_vehicles_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicles_purpose"
     },
     {
       "relation": "contains",
@@ -12044,9 +12205,9 @@
       "source_file": "docs/database/tables/vehicles.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicles_vehicles_table",
-      "target": "tables_vehicles_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicles_columns"
     },
     {
       "relation": "contains",
@@ -12054,9 +12215,9 @@
       "source_file": "docs/database/tables/vehicles.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicles_vehicles_table",
-      "target": "tables_vehicles_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicles_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12064,9 +12225,9 @@
       "source_file": "docs/database/tables/vehicles.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicles_vehicles_table",
-      "target": "tables_vehicles_foreign_keys_referencing_this_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicles_foreign_keys_referencing_this_table"
     },
     {
       "relation": "contains",
@@ -12074,9 +12235,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_user_showroom_relations_md",
-      "target": "tables_user_showroom_relations_user_showroom_relations_table",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_user_showroom_relations_table"
     },
     {
       "relation": "contains",
@@ -12084,9 +12245,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_showroom_relations_user_showroom_relations_table",
-      "target": "tables_user_showroom_relations_purpose",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_purpose"
     },
     {
       "relation": "contains",
@@ -12094,9 +12255,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_showroom_relations_user_showroom_relations_table",
-      "target": "tables_user_showroom_relations_columns",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_columns"
     },
     {
       "relation": "contains",
@@ -12104,9 +12265,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_showroom_relations_user_showroom_relations_table",
-      "target": "tables_user_showroom_relations_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12114,9 +12275,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_showroom_relations_user_showroom_relations_table",
-      "target": "tables_user_showroom_relations_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12124,9 +12285,9 @@
       "source_file": "docs/database/tables/user_showroom_relations.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_showroom_relations_user_showroom_relations_table",
-      "target": "tables_user_showroom_relations_indexes",
-      "confidence_score": 1.0
+      "target": "tables_user_showroom_relations_indexes"
     },
     {
       "relation": "contains",
@@ -12134,9 +12295,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_user_roles_md",
-      "target": "tables_user_roles_user_roles_table",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_user_roles_table"
     },
     {
       "relation": "contains",
@@ -12144,9 +12305,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_roles_user_roles_table",
-      "target": "tables_user_roles_purpose",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_purpose"
     },
     {
       "relation": "contains",
@@ -12154,9 +12315,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_roles_user_roles_table",
-      "target": "tables_user_roles_columns",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_columns"
     },
     {
       "relation": "contains",
@@ -12164,9 +12325,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_roles_user_roles_table",
-      "target": "tables_user_roles_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12174,9 +12335,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_roles_user_roles_table",
-      "target": "tables_user_roles_seed_data",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_seed_data"
     },
     {
       "relation": "contains",
@@ -12184,9 +12345,9 @@
       "source_file": "docs/database/tables/user_roles.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_roles_user_roles_table",
-      "target": "tables_user_roles_foreign_keys_referencing_this_table",
-      "confidence_score": 1.0
+      "target": "tables_user_roles_foreign_keys_referencing_this_table"
     },
     {
       "relation": "contains",
@@ -12194,9 +12355,9 @@
       "source_file": "docs/database/tables/moderators.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_moderators_md",
-      "target": "tables_moderators_moderators_table",
-      "confidence_score": 1.0
+      "target": "tables_moderators_moderators_table"
     },
     {
       "relation": "contains",
@@ -12204,9 +12365,9 @@
       "source_file": "docs/database/tables/moderators.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_moderators_moderators_table",
-      "target": "tables_moderators_purpose",
-      "confidence_score": 1.0
+      "target": "tables_moderators_purpose"
     },
     {
       "relation": "contains",
@@ -12214,9 +12375,9 @@
       "source_file": "docs/database/tables/moderators.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_moderators_moderators_table",
-      "target": "tables_moderators_columns",
-      "confidence_score": 1.0
+      "target": "tables_moderators_columns"
     },
     {
       "relation": "contains",
@@ -12224,9 +12385,9 @@
       "source_file": "docs/database/tables/moderators.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_moderators_moderators_table",
-      "target": "tables_moderators_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_moderators_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12234,9 +12395,9 @@
       "source_file": "docs/database/tables/moderators.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_moderators_moderators_table",
-      "target": "tables_moderators_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_moderators_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12244,9 +12405,9 @@
       "source_file": "docs/database/tables/vehicle_pricing.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_pricing_md",
-      "target": "tables_vehicle_pricing_vehicle_pricing_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_pricing_vehicle_pricing_table"
     },
     {
       "relation": "contains",
@@ -12254,9 +12415,9 @@
       "source_file": "docs/database/tables/vehicle_pricing.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_pricing_vehicle_pricing_table",
-      "target": "tables_vehicle_pricing_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_pricing_purpose"
     },
     {
       "relation": "contains",
@@ -12264,9 +12425,9 @@
       "source_file": "docs/database/tables/vehicle_pricing.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_pricing_vehicle_pricing_table",
-      "target": "tables_vehicle_pricing_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_pricing_columns"
     },
     {
       "relation": "contains",
@@ -12274,9 +12435,9 @@
       "source_file": "docs/database/tables/vehicle_pricing.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_pricing_vehicle_pricing_table",
-      "target": "tables_vehicle_pricing_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_pricing_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12284,9 +12445,9 @@
       "source_file": "docs/database/tables/vehicle_pricing.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_pricing_vehicle_pricing_table",
-      "target": "tables_vehicle_pricing_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_pricing_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12294,9 +12455,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_statuses_md",
-      "target": "tables_vehicle_statuses_vehicle_statuses_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_vehicle_statuses_table"
     },
     {
       "relation": "contains",
@@ -12304,9 +12465,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_statuses_vehicle_statuses_table",
-      "target": "tables_vehicle_statuses_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_purpose"
     },
     {
       "relation": "contains",
@@ -12314,9 +12475,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_statuses_vehicle_statuses_table",
-      "target": "tables_vehicle_statuses_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_columns"
     },
     {
       "relation": "contains",
@@ -12324,9 +12485,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_statuses_vehicle_statuses_table",
-      "target": "tables_vehicle_statuses_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12334,9 +12495,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_statuses_vehicle_statuses_table",
-      "target": "tables_vehicle_statuses_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12344,9 +12505,9 @@
       "source_file": "docs/database/tables/vehicle_statuses.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_statuses_vehicle_statuses_table",
-      "target": "tables_vehicle_statuses_indexes",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_statuses_indexes"
     },
     {
       "relation": "contains",
@@ -12354,9 +12515,9 @@
       "source_file": "docs/database/tables/customers.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_customers_md",
-      "target": "tables_customers_customers_table",
-      "confidence_score": 1.0
+      "target": "tables_customers_customers_table"
     },
     {
       "relation": "contains",
@@ -12364,9 +12525,9 @@
       "source_file": "docs/database/tables/customers.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customers_customers_table",
-      "target": "tables_customers_purpose",
-      "confidence_score": 1.0
+      "target": "tables_customers_purpose"
     },
     {
       "relation": "contains",
@@ -12374,9 +12535,9 @@
       "source_file": "docs/database/tables/customers.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customers_customers_table",
-      "target": "tables_customers_columns",
-      "confidence_score": 1.0
+      "target": "tables_customers_columns"
     },
     {
       "relation": "contains",
@@ -12384,9 +12545,9 @@
       "source_file": "docs/database/tables/customers.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customers_customers_table",
-      "target": "tables_customers_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_customers_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12394,9 +12555,9 @@
       "source_file": "docs/database/tables/customers.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customers_customers_table",
-      "target": "tables_customers_foreign_keys_referencing_this_table",
-      "confidence_score": 1.0
+      "target": "tables_customers_foreign_keys_referencing_this_table"
     },
     {
       "relation": "contains",
@@ -12404,9 +12565,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_customer_vehicle_sales_md",
-      "target": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_customer_vehicle_sales_table"
     },
     {
       "relation": "contains",
@@ -12414,9 +12575,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "target": "tables_customer_vehicle_sales_purpose",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_purpose"
     },
     {
       "relation": "contains",
@@ -12424,9 +12585,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "target": "tables_customer_vehicle_sales_columns",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_columns"
     },
     {
       "relation": "contains",
@@ -12434,9 +12595,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "target": "tables_customer_vehicle_sales_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12444,9 +12605,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "target": "tables_customer_vehicle_sales_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12454,9 +12615,9 @@
       "source_file": "docs/database/tables/customer_vehicle_sales.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_customer_vehicle_sales_customer_vehicle_sales_table",
-      "target": "tables_customer_vehicle_sales_indexes",
-      "confidence_score": 1.0
+      "target": "tables_customer_vehicle_sales_indexes"
     },
     {
       "relation": "contains",
@@ -12464,9 +12625,9 @@
       "source_file": "docs/database/tables/users.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_users_md",
-      "target": "tables_users_users_table",
-      "confidence_score": 1.0
+      "target": "tables_users_users_table"
     },
     {
       "relation": "contains",
@@ -12474,9 +12635,9 @@
       "source_file": "docs/database/tables/users.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_users_users_table",
-      "target": "tables_users_purpose",
-      "confidence_score": 1.0
+      "target": "tables_users_purpose"
     },
     {
       "relation": "contains",
@@ -12484,9 +12645,9 @@
       "source_file": "docs/database/tables/users.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_users_users_table",
-      "target": "tables_users_columns",
-      "confidence_score": 1.0
+      "target": "tables_users_columns"
     },
     {
       "relation": "contains",
@@ -12494,9 +12655,9 @@
       "source_file": "docs/database/tables/users.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_users_users_table",
-      "target": "tables_users_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_users_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12504,9 +12665,9 @@
       "source_file": "docs/database/tables/users.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_users_users_table",
-      "target": "tables_users_foreign_keys_referencing_this_table",
-      "confidence_score": 1.0
+      "target": "tables_users_foreign_keys_referencing_this_table"
     },
     {
       "relation": "contains",
@@ -12514,9 +12675,9 @@
       "source_file": "docs/database/tables/showrooms.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_showrooms_md",
-      "target": "tables_showrooms_showrooms_table",
-      "confidence_score": 1.0
+      "target": "tables_showrooms_showrooms_table"
     },
     {
       "relation": "contains",
@@ -12524,9 +12685,9 @@
       "source_file": "docs/database/tables/showrooms.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_showrooms_showrooms_table",
-      "target": "tables_showrooms_purpose",
-      "confidence_score": 1.0
+      "target": "tables_showrooms_purpose"
     },
     {
       "relation": "contains",
@@ -12534,9 +12695,9 @@
       "source_file": "docs/database/tables/showrooms.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_showrooms_showrooms_table",
-      "target": "tables_showrooms_columns",
-      "confidence_score": 1.0
+      "target": "tables_showrooms_columns"
     },
     {
       "relation": "contains",
@@ -12544,9 +12705,9 @@
       "source_file": "docs/database/tables/showrooms.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_showrooms_showrooms_table",
-      "target": "tables_showrooms_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_showrooms_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12554,9 +12715,9 @@
       "source_file": "docs/database/tables/showrooms.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_showrooms_showrooms_table",
-      "target": "tables_showrooms_foreign_keys_referencing_this_table",
-      "confidence_score": 1.0
+      "target": "tables_showrooms_foreign_keys_referencing_this_table"
     },
     {
       "relation": "contains",
@@ -12564,9 +12725,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_user_otps_md",
-      "target": "tables_user_otps_user_otps_table",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_user_otps_table"
     },
     {
       "relation": "contains",
@@ -12574,9 +12735,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_otps_user_otps_table",
-      "target": "tables_user_otps_purpose",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_purpose"
     },
     {
       "relation": "contains",
@@ -12584,9 +12745,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_otps_user_otps_table",
-      "target": "tables_user_otps_columns",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_columns"
     },
     {
       "relation": "contains",
@@ -12594,9 +12755,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_otps_user_otps_table",
-      "target": "tables_user_otps_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12604,9 +12765,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_otps_user_otps_table",
-      "target": "tables_user_otps_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12614,9 +12775,9 @@
       "source_file": "docs/database/tables/user_otps.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_user_otps_user_otps_table",
-      "target": "tables_user_otps_indexes",
-      "confidence_score": 1.0
+      "target": "tables_user_otps_indexes"
     },
     {
       "relation": "contains",
@@ -12624,9 +12785,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_showroom_relations_md",
-      "target": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table"
     },
     {
       "relation": "contains",
@@ -12634,9 +12795,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "target": "tables_vehicle_showroom_relations_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_purpose"
     },
     {
       "relation": "contains",
@@ -12644,9 +12805,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "target": "tables_vehicle_showroom_relations_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_columns"
     },
     {
       "relation": "contains",
@@ -12654,9 +12815,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "target": "tables_vehicle_showroom_relations_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12664,9 +12825,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "target": "tables_vehicle_showroom_relations_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12674,9 +12835,9 @@
       "source_file": "docs/database/tables/vehicle_showroom_relations.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_showroom_relations_vehicle_showroom_relations_table",
-      "target": "tables_vehicle_showroom_relations_indexes",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_showroom_relations_indexes"
     },
     {
       "relation": "contains",
@@ -12684,9 +12845,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_expenses_md",
-      "target": "tables_vehicle_expenses_vehicle_expenses_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_vehicle_expenses_table"
     },
     {
       "relation": "contains",
@@ -12694,9 +12855,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_expenses_vehicle_expenses_table",
-      "target": "tables_vehicle_expenses_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_purpose"
     },
     {
       "relation": "contains",
@@ -12704,9 +12865,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_expenses_vehicle_expenses_table",
-      "target": "tables_vehicle_expenses_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_columns"
     },
     {
       "relation": "contains",
@@ -12714,9 +12875,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_expenses_vehicle_expenses_table",
-      "target": "tables_vehicle_expenses_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12724,9 +12885,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_expenses_vehicle_expenses_table",
-      "target": "tables_vehicle_expenses_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12734,9 +12895,9 @@
       "source_file": "docs/database/tables/vehicle_expenses.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_expenses_vehicle_expenses_table",
-      "target": "tables_vehicle_expenses_indexes",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_expenses_indexes"
     },
     {
       "relation": "contains",
@@ -12744,9 +12905,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_database_tables_vehicle_images_md",
-      "target": "tables_vehicle_images_vehicle_images_table",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_vehicle_images_table"
     },
     {
       "relation": "contains",
@@ -12754,9 +12915,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_images_vehicle_images_table",
-      "target": "tables_vehicle_images_purpose",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_purpose"
     },
     {
       "relation": "contains",
@@ -12764,9 +12925,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_images_vehicle_images_table",
-      "target": "tables_vehicle_images_columns",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_columns"
     },
     {
       "relation": "contains",
@@ -12774,9 +12935,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_images_vehicle_images_table",
-      "target": "tables_vehicle_images_keys_and_constraints",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_keys_and_constraints"
     },
     {
       "relation": "contains",
@@ -12784,9 +12945,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_images_vehicle_images_table",
-      "target": "tables_vehicle_images_foreign_keys",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_foreign_keys"
     },
     {
       "relation": "contains",
@@ -12794,9 +12955,9 @@
       "source_file": "docs/database/tables/vehicle_images.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tables_vehicle_images_vehicle_images_table",
-      "target": "tables_vehicle_images_indexes",
-      "confidence_score": 1.0
+      "target": "tables_vehicle_images_indexes"
     },
     {
       "relation": "contains",
@@ -13454,9 +13615,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_auth_module",
-      "target": "modules_auth_endpoint_flow_details",
-      "confidence_score": 1.0
+      "target": "modules_auth_endpoint_flow_details"
     },
     {
       "relation": "contains",
@@ -13474,9 +13635,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_common_entry_flow_api_v1_auth",
-      "confidence_score": 1.0
+      "target": "modules_auth_common_entry_flow_api_v1_auth"
     },
     {
       "relation": "contains",
@@ -13484,9 +13645,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_post_api_v1_auth_register",
-      "confidence_score": 1.0
+      "target": "modules_auth_post_api_v1_auth_register"
     },
     {
       "relation": "contains",
@@ -13494,9 +13655,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_post_api_v1_auth_login",
-      "confidence_score": 1.0
+      "target": "modules_auth_post_api_v1_auth_login"
     },
     {
       "relation": "contains",
@@ -13504,9 +13665,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_post_api_v1_auth_verify_otp",
-      "confidence_score": 1.0
+      "target": "modules_auth_post_api_v1_auth_verify_otp"
     },
     {
       "relation": "contains",
@@ -13514,9 +13675,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_post_api_v1_auth_refresh_token",
-      "confidence_score": 1.0
+      "target": "modules_auth_post_api_v1_auth_refresh_token"
     },
     {
       "relation": "contains",
@@ -13524,9 +13685,9 @@
       "source_file": "docs/modules/auth.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_auth_endpoint_flow_details",
-      "target": "modules_auth_post_api_v1_auth_logout",
-      "confidence_score": 1.0
+      "target": "modules_auth_post_api_v1_auth_logout"
     },
     {
       "relation": "contains",
@@ -15657,5 +15818,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "15e6c18020c3b7de44b9d79e924a537fc51a3b2b"
+  "built_at_commit": "b0a966a9320e5b01a4f67cc99e94245f9413b631"
 }

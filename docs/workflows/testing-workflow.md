@@ -12,6 +12,7 @@ Run the following before considering the task complete:
 2. `go vet ./...`
 3. `go test ./...`
 4. `make build`
+5. `make graphify-update`
 
 ## Outcome Rules
 
