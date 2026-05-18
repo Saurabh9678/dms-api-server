@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | grep -q 'AGENTS\\.md$' && cp AGENTS.md CLAUDE.md || true",
+            "statusMessage": "Syncing AGENTS.md → CLAUDE.md"
+          }
+        ]
+      }
+    ]
+  }
+}
