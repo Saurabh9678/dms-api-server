@@ -2,37 +2,39 @@
 
 ## Context
 
-The `users` table has a nullable `name` column but no API to set it. A user completing OTP auth gets a session with a JWT. This task adds a protected profile-update endpoint so authenticated users can set their display name. The previous execution session already added `CodeInvalidName` to `pkg/errors/codes.go`; `pkg/middleware/auth.go` still has a stub that always returns 401.
+The `users` table has a nullable `name` column but no API to set it. A user completing OTP auth gets a session with a JWT. This task adds a protected profile-update endpoint so authenticated users can set their display name. `pkg/errors/codes.go` does not yet define `CodeInvalidName`; add it before wiring user error mappers. `pkg/middleware/auth.go` is still a stub that always returns 401.
 
 ## Key Changes
 
-1. **`pkg/middleware/auth.go`** — Replace stub with a real `RequireAuth(parser TokenParser)` middleware. Define a local `TokenParser` interface (`ParseAccessToken(string) (uint64, error)`) and an exported `ContextKeyUserID = "userID"` constant. Extracts `Authorization: Bearer <token>`, parses userID, stores it in gin context, returns `401 INVALID_ACCESS_TOKEN` on failure.
+1. **`pkg/errors/codes.go`** — Add `CodeInvalidName = "INVALID_NAME"` constant for profile name validation errors.
 
-2. **`internal/modules/user/errors.go`** — Add `ErrInvalidName` sentinel and register mapper → `CodeInvalidName`, HTTP 422.
+2. **`pkg/middleware/auth.go`** — Replace stub with a real `RequireAuth(parser TokenParser)` middleware. Define a local `TokenParser` interface (`ParseAccessToken(string) (uint64, error)`) and an exported `ContextKeyUserID = "userID"` constant. Extracts `Authorization: Bearer <token>`, parses userID, stores it in gin context, returns `401 INVALID_ACCESS_TOKEN` on failure.
 
-3. **`internal/modules/user/dto.go`** — Add `UpdateProfileRequest { Name string binding:"required" }` and `UpdateProfileResponse { ID uint64; Name string }`.
+3. **`internal/modules/user/errors.go`** — Add `ErrInvalidName` sentinel and register mapper → `CodeInvalidName`, HTTP 422.
 
-4. **`internal/modules/user/repository.go`** — Add `UpdateName(ctx, userID uint64, name string) error` using GORM `Model(&User{ID: userID}).Update("name", name)` with a `RowsAffected == 0` guard returning `ErrUserNotFound`.
+4. **`internal/modules/user/dto.go`** — Add `UpdateProfileRequest { Name string binding:"required" }` and `UpdateProfileResponse { ID uint64; Name string }`.
 
-5. **`internal/modules/user/service.go`** — New file. Define `Service` interface with `UpdateProfile(ctx, userID uint64, req UpdateProfileRequest) (*UpdateProfileResponse, error)`. Private `userRepo` interface only exposes `UpdateName`. Name validation: trim → non-empty → at least one Unicode letter (`\p{L}`) → only valid chars (`^[\p{L}\s'\-]+$`); violations return `ErrInvalidName`.
+5. **`internal/modules/user/repository.go`** — Add `UpdateName(ctx, userID uint64, name string) error` using GORM `Model(&User{ID: userID}).Update("name", name)` with a `RowsAffected == 0` guard returning `ErrUserNotFound`.
 
-6. **`internal/modules/user/handler.go`** — New file. `Handler { service Service }`. `UpdateProfile`: reads `userID` from context (`c.GetUint64(middleware.ContextKeyUserID)`), binds JSON body, calls service, responds `200 OK` with `UpdateProfileResponse`.
+6. **`internal/modules/user/service.go`** — New file. Define `Service` interface with `UpdateProfile(ctx, userID uint64, req UpdateProfileRequest) (*UpdateProfileResponse, error)`. Private `userRepo` interface only exposes `UpdateName`. Name validation: trim → non-empty → at least one Unicode letter (`\p{L}`) → only valid chars (`^[\p{L}\s'\-]+$`); violations return `ErrInvalidName`.
 
-7. **`internal/modules/user/routes.go`** — New file. `RegisterRoutes(rg *gin.RouterGroup, h *Handler)` registers `PATCH /user/me` → `h.UpdateProfile`.
+7. **`internal/modules/user/handler.go`** — New file. `Handler { service Service }`. `UpdateProfile`: reads `userID` from context (`c.GetUint64(middleware.ContextKeyUserID)`), binds JSON body, calls service, responds `200 OK` with `UpdateProfileResponse`.
 
-8. **`internal/bootstrap/dependencies.go`** — Add `UserHandler *user.Handler` and `TokenProvider tokenprovider.Provider` to `Dependencies`. Wire `user.NewService(userRepo)` → `user.NewHandler(svc)` → assign to deps.
+8. **`internal/modules/user/routes.go`** — New file. `RegisterRoutes(rg *gin.RouterGroup, h *Handler)` registers `PATCH /user/me` → `h.UpdateProfile`.
 
-9. **`internal/bootstrap/router.go`** — After auth routes, create a protected sub-group: `protected := api.Group(""); protected.Use(middleware.RequireAuth(deps.TokenProvider))`. Call `user.RegisterRoutes(protected, deps.UserHandler)`. Also import the user module package.
+9. **`internal/bootstrap/dependencies.go`** — Add `UserHandler *user.Handler` and `TokenProvider tokenprovider.Provider` to `Dependencies`. Wire `user.NewService(userRepo)` → `user.NewHandler(svc)` → assign to deps.
 
-10. **Tests** — `tests/unit/user/handler_test.go`: test missing body (400), missing userID in context (400/401), valid call (200). `tests/unit/user/service_test.go`: test empty name, spaces-only, numbers-only, valid name, name with hyphen/apostrophe.
+10. **`internal/bootstrap/router.go`** — After auth routes, create a protected sub-group: `protected := api.Group(""); protected.Use(middleware.RequireAuth(deps.TokenProvider))`. Call `user.RegisterRoutes(protected, deps.UserHandler)`. Also import the user module package.
 
-11. **Docs** — Update `docs/api/user.postman_collection.json` with `PATCH /api/v1/user/me` item. Update `docs/modules/user.md` with endpoint flow. Update `docs/knowledge-base.md` with new decisions.
+11. **Tests** — `tests/unit/user/handler_test.go`: test missing body (400), missing userID in context (400/401), valid call (200). `tests/unit/user/service_test.go`: test empty name, spaces-only, numbers-only, valid name, name with hyphen/apostrophe.
+
+12. **Docs** — Update `docs/api/user.postman_collection.json` with `PATCH /api/v1/user/me` item. Update `docs/modules/user.md` with endpoint flow. Update `docs/knowledge-base.md` with new decisions.
 
 ## Files Impacted
 
 | File | Action |
 |---|---|
-| `pkg/errors/codes.go` | Already done — `CodeInvalidName` added |
+| `pkg/errors/codes.go` | Modify — add `CodeInvalidName = "INVALID_NAME"` |
 | `pkg/middleware/auth.go` | Modify — implement real RequireAuth |
 | `internal/modules/user/errors.go` | Modify — add ErrInvalidName + mapper |
 | `internal/modules/user/dto.go` | Modify — add DTOs |
@@ -50,18 +52,19 @@ The `users` table has a nullable `name` column but no API to set it. A user comp
 
 ## Execution Steps
 
-1. Implement `RequireAuth` + `TokenParser` interface + `ContextKeyUserID` in `pkg/middleware/auth.go`
-2. Add `ErrInvalidName` + mapper to `internal/modules/user/errors.go`
-3. Update `internal/modules/user/dto.go` with request/response DTOs
-4. Add `UpdateName` to `internal/modules/user/repository.go`
-5. Create `internal/modules/user/service.go` with Service interface, local repo interface, and name validation (package-level compiled regexps)
-6. Create `internal/modules/user/handler.go`
-7. Create `internal/modules/user/routes.go`
-8. Update `internal/bootstrap/dependencies.go` to wire user module and expose `TokenProvider`
-9. Update `internal/bootstrap/router.go` to add protected group with user routes
-10. Write unit tests in `tests/unit/user/handler_test.go` and `tests/unit/user/service_test.go`
-11. Update docs: `docs/modules/user.md`, `docs/api/user.postman_collection.json`, `docs/knowledge-base.md`
-12. Run `gofmt ./...`, `go vet ./...`, `go test ./...`, `make build`, `make graphify-update`
+1. Add `CodeInvalidName = "INVALID_NAME"` to `pkg/errors/codes.go` (after `CodeInvalidRequest` or alongside other validation codes)
+2. Implement `RequireAuth` + `TokenParser` interface + `ContextKeyUserID` in `pkg/middleware/auth.go`
+3. Add `ErrInvalidName` + mapper to `internal/modules/user/errors.go`
+4. Update `internal/modules/user/dto.go` with request/response DTOs
+5. Add `UpdateName` to `internal/modules/user/repository.go`
+6. Create `internal/modules/user/service.go` with Service interface, local repo interface, and name validation (package-level compiled regexps)
+7. Create `internal/modules/user/handler.go`
+8. Create `internal/modules/user/routes.go`
+9. Update `internal/bootstrap/dependencies.go` to wire user module and expose `TokenProvider`
+10. Update `internal/bootstrap/router.go` to add protected group with user routes
+11. Write unit tests in `tests/unit/user/handler_test.go` and `tests/unit/user/service_test.go`
+12. Update docs: `docs/modules/user.md`, `docs/api/user.postman_collection.json`, `docs/knowledge-base.md`
+13. Run `gofmt ./...`, `go vet ./...`, `go test ./...`, `make build`, `make graphify-update`
 
 ## Risks / Notes
 
