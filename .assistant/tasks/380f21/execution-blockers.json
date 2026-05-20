@@ -1,0 +1,42 @@
+[
+  {
+    "blocker_id": "478818d4",
+    "step_id": "step-5",
+    "summary": "Step 5 requires running `make verify` to validate the implementation, but this command requires user approval to execute",
+    "question": "Can you approve execution of `make verify` to complete the validation step? This command will run formatting checks, lint, tests, 100% coverage verification on changed packages, build, and graphify update—all without modifying files destructively.",
+    "created_at": "2026-05-20T19:08:26.071612+00:00",
+    "status": "resolved",
+    "response": "execute the make verify command",
+    "resolved_at": "2026-05-20T19:10:10.994873+00:00"
+  },
+  {
+    "blocker_id": "d2ab0d5e",
+    "step_id": "step-5",
+    "summary": "Coverage gate requires 100% coverage on all functions in the user module, but three database layer functions (FindByPhone, Create, UpdateName) cannot be tested with unit tests—they require integration tests with a real PostgreSQL database. These functions were not modified by this task and their coverage gap predates this refactoring.",
+    "question": "Should I set up integration tests with PostgreSQL to cover the database layer functions, or should the coverage gate exemption be made for pre-existing untested database code?",
+    "created_at": "2026-05-20T19:40:19.042359+00:00",
+    "status": "resolved",
+    "response": "you can skip integration test as of now",
+    "resolved_at": "2026-05-20T19:42:06.234592+00:00"
+  },
+  {
+    "blocker_id": "4b5b838a",
+    "step_id": "step-5",
+    "summary": "Coverage gate requires 100% coverage on all functions in the user module, but three database layer functions (FindByPhone, Create, UpdateName) cannot be tested with unit tests—they require integration tests with a real PostgreSQL database. These functions were not modified by this task and their coverage gap predates this refactoring.",
+    "question": "Is it acceptable to proceed with the routes refactoring complete (100% coverage on all affected code) and leave database layer integration tests as a separate task?",
+    "created_at": "2026-05-20T19:40:19.042359+00:00",
+    "status": "resolved",
+    "response": "you can skip integration test as of now",
+    "resolved_at": "2026-05-20T19:42:06.234592+00:00"
+  },
+  {
+    "blocker_id": "750ba158",
+    "step_id": "step-5",
+    "summary": "Coverage gate requires 100% on all functions in internal/modules/user package because tests were added. Pre-existing repository functions (FindByPhone, Create, UpdateName) are uncovered and block validation.",
+    "question": "Should I add unit tests with gorm mocking for the repository functions, or would you prefer a different approach to resolve the coverage gate?",
+    "created_at": "2026-05-20T19:44:20.162576+00:00",
+    "status": "resolved",
+    "response": "you can skip the 100% coverage now and raise a PR",
+    "resolved_at": "2026-05-20T19:45:31.771730+00:00"
+  }
+]
