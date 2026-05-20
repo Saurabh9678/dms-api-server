@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"infiour.local/dms-api-server/internal/modules/auth"
 	"infiour.local/dms-api-server/internal/modules/user"
+	"infiour.local/dms-api-server/internal/modules/vehicle"
 	"infiour.local/dms-api-server/pkg/config"
 	"infiour.local/dms-api-server/pkg/errors"
 	"infiour.local/dms-api-server/pkg/middleware"
@@ -40,6 +41,7 @@ func newRouter(cfg *config.Config, log *slog.Logger, deps *Dependencies, sqlDB *
 	protected := api.Group("")
 	protected.Use(middleware.RequireAuth(deps.TokenProvider))
 	user.RegisterRoutes(protected, deps.UserHandler)
+	vehicle.RegisterRoutes(protected, deps.VehicleHandler)
 
 	return engine
 }
