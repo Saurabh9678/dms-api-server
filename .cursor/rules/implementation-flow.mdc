@@ -31,9 +31,6 @@ alwaysApply: true
 - If APIs changed, update `docs/api/<module>.postman_collection.json` in the same task.
 - If module behavior changed, update module flow documentation in `docs/modules/<module>.md`.
 - If schema assumptions changed (or new tables/columns/constraints were added), update `docs/database/tables/*.md` with one file per impacted table.
-- Run required validation commands:
-  - `gofmt ./...`
-  - `go vet ./...`
-  - `go test ./...`
-  - `make build`
-  - `make graphify-update`
+- Tests for changed code must reach **100% coverage** with cases for **all branches**.
+- Run `make verify` (includes lint gate and 100% coverage on changed packages).
+- Confirm zero lint errors in changed files before finishing.

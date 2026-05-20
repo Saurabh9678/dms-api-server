@@ -57,6 +57,7 @@ This file is the living project memory for architecture, conventions, and implem
 ## Important Workflows
 
 - Document required implementation, testing, and release workflows.
+- `make verify` is the required validation entrypoint: lint (`scripts/verify-lint.sh`), tests, **100% function coverage on changed packages** (`scripts/verify-changed-coverage.sh` vs `origin/main`), build, and graphify update.
 - Local database setup workflow is documented in `docs/database/local-postgres.md`.
 - API behavior change workflow: update Postman collection + module endpoint-flow documentation in the same task.
 - Schema change workflow: update relevant files in `docs/database/tables/` in the same task.
