@@ -24,7 +24,7 @@
 **Middleware Chain**: `RequireDeviceContext` → `RequireAuth`
 
 **Flow**:
-1. **Route Entry**: `PATCH /api/v1/user/me` registered on protected sub-group in `internal/bootstrap/router.go`
+1. **Route Entry**: `PATCH /api/v1/user/me` — registered as `PATCH /me` on `/user` sub-group inside `RegisterRoutes` (`internal/modules/user/routes.go`), which is mounted on the protected sub-group in `internal/bootstrap/router.go`
 2. **RequireDeviceContext Middleware**: Validates `X-Platform` and `X-Device-Id` headers; returns 400 `INVALID_DEVICE_CONTEXT` on failure
 3. **RequireAuth Middleware**: Extracts Bearer token from `Authorization` header, parses JWT via `TokenProvider.ParseAccessToken`, sets user ID in context; returns 401 `INVALID_ACCESS_TOKEN` on invalid token
 4. **Handler** (`internal/modules/user/handler.go`):
