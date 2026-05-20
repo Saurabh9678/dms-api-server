@@ -13,8 +13,8 @@ import (
 )
 
 type Dependencies struct {
-	AuthHandler *auth.Handler
-	UserHandler *user.Handler
+	AuthHandler   *auth.Handler
+	UserHandler   *user.Handler
 	TokenProvider tokenprovider.Provider
 }
 
@@ -33,8 +33,8 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	userHandler := user.NewHandler(userSvc)
 
 	return &Dependencies{
-		AuthHandler: authHandler,
-		UserHandler: userHandler,
+		AuthHandler:   authHandler,
+		UserHandler:   userHandler,
 		TokenProvider: tokenProvider,
 	}
 }
