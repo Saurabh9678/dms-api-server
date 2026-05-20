@@ -10,10 +10,10 @@ import (
 )
 
 type fakeServiceRepo struct {
-	updatedUserID    uint64
-	updatedName      string
-	err              error
-	callCount        int
+	updatedUserID uint64
+	updatedName   string
+	err           error
+	callCount     int
 }
 
 func (f *fakeServiceRepo) UpdateName(ctx context.Context, userID uint64, name string) error {
@@ -51,7 +51,7 @@ func TestUpdateProfileValidName(t *testing.T) {
 	}
 }
 
-func TestUpdateProfileEmptyName(t *testing.T) {
+func TestUpdateProfileServiceEmptyName(t *testing.T) {
 	repo := &fakeServiceRepo{}
 	service := user.NewService(repo)
 
