@@ -45,6 +45,10 @@ This file is the living project memory for architecture, conventions, and implem
 - Auth logout now uses `Authorization: Bearer <accessToken>` with `X-Platform`, no request body, and revokes active sessions only for that platform.
 - OTP verify enforces single active session per user+platform by revoking existing active sessions on that platform before creating a new session.
 - Missing or invalid `/api/v1` device-context headers return `INVALID_DEVICE_CONTEXT` with message `invalid request`.
+- `RequireAuth` middleware in `pkg/middleware/auth.go` implements token-based access control. It takes a `TokenParser` interface (defined locally in `pkg/`) to parse JWT access tokens without creating a dependency on `internal/` packages. The middleware extracts Bearer tokens from `Authorization` headers, parses them, sets `userID` in context, and returns 401 `INVALID_ACCESS_TOKEN` on failure.
+- Protected routes are registered on a sub-group created within the API v1 group that chains `RequireAuth(tokenProvider)` middleware. This ensures protected endpoints automatically inherit `RequireDeviceContext` from the parent group.
+- User profile name validation follows the convention: validation logic lives in the service layer (business rules), while binding tags handle required/format constraints. Valid name characters: Unicode letters, spaces, hyphens, apostrophes (regex `^[\p{L}\s''-]+$`). Empty or blank names are rejected with 400 `INVALID_REQUEST`.
+- `PATCH /api/v1/user/me` is the first protected user endpoint. It updates the authenticated user's profile name by extracting user ID from the JWT context set by `RequireAuth`.
 
 ## Known Caveats
 
