@@ -144,3 +144,26 @@ func TestUpdateProfileMissingName(t *testing.T) {
 		t.Fatalf("expected INVALID_REQUEST code, got %s", resp.Body.String())
 	}
 }
+
+func TestUpdateProfileInvalidUserIDType(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	service := &fakeHandlerUpdateService{}
+	h := user.NewHandler(service)
+	engine.PATCH("/user/me", func(c *gin.Context) {
+		c.Set(middleware.ContextKeyUserID, "not-a-uint64")
+		h.UpdateProfile(c)
+	})
+
+	req := httptest.NewRequest(http.MethodPatch, "/user/me", bytes.NewBufferString(`{"name":"John Doe"}`))
+	req.Header.Set("Content-Type", "application/json")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_ACCESS_TOKEN"`) {
+		t.Fatalf("expected INVALID_ACCESS_TOKEN code, got %s", resp.Body.String())
+	}
+}
