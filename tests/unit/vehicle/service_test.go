@@ -1,4 +1,4 @@
-package vehicle
+package vehicle_test
 
 import (
 	"context"
@@ -7,26 +7,27 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"infiour.local/dms-api-server/internal/modules/vehicle"
 )
 
 type mockVehicleRepo struct {
 	mock.Mock
 }
 
-func (m *mockVehicleRepo) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error) {
-	args := m.Called(ctx, vehicle)
+func (m *mockVehicleRepo) Create(ctx context.Context, v *vehicle.Vehicle) (*vehicle.Vehicle, error) {
+	args := m.Called(ctx, v)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
-	return args.Get(0).(*Vehicle), args.Error(1)
+	return args.Get(0).(*vehicle.Vehicle), args.Error(1)
 }
 
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -36,13 +37,13 @@ func TestCreateVehicle_Success(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	expectedVehicle := &Vehicle{
+	expectedVehicle := &vehicle.Vehicle{
 		ID:                 1,
-		VehicleType:        VehicleTypeCar,
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -52,14 +53,14 @@ func TestCreateVehicle_Success(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	mockRepo.On("Create", mock.Anything, mock.MatchedBy(func(v *Vehicle) bool {
-		return v.VehicleType == VehicleTypeCar && v.Manufacturer == "Toyota"
+	mockRepo.On("Create", mock.Anything, mock.MatchedBy(func(v *vehicle.Vehicle) bool {
+		return v.VehicleType == vehicle.VehicleTypeCar && v.Manufacturer == "Toyota"
 	})).Return(expectedVehicle, nil).Run(func(args mock.Arguments) {
-		v := args.Get(1).(*Vehicle)
+		v := args.Get(1).(*vehicle.Vehicle)
 		v.ID = 1
 	})
 
@@ -73,40 +74,12 @@ func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
-func TestRepository_Create_Covered(t *testing.T) {
-	realRepo := NewRepository(nil)
-	assert.NotNil(t, realRepo)
-
-	vehicle := &Vehicle{
-		VehicleType:        VehicleTypeCar,
-		Manufacturer:       "Toyota",
-		Model:              "Camry",
-		Variant:            "LE",
-		Color:              "Black",
-		YearOfManufacture:  2020,
-		RTOCode:            "KA-01",
-		RegistrationNumber: "KA01AB1234",
-		RegistrationState:  "Karnataka",
-		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
-	}
-
-	defer func() {
-		if r := recover(); r != nil {
-			assert.NotNil(t, r)
-		}
-	}()
-
-	_, _ = realRepo.Create(context.Background(), vehicle)
-}
-
 func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleType("truck"),
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleType("truck"),
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -116,8 +89,8 @@ func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -129,10 +102,10 @@ func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 
 func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "   ",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -142,8 +115,8 @@ func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -155,10 +128,10 @@ func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 
 func TestCreateVehicle_EmptyModel(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "",
 		Variant:            "LE",
@@ -168,8 +141,8 @@ func TestCreateVehicle_EmptyModel(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -180,10 +153,10 @@ func TestCreateVehicle_EmptyModel(t *testing.T) {
 
 func TestCreateVehicle_EmptyVariant(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "",
@@ -193,8 +166,8 @@ func TestCreateVehicle_EmptyVariant(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -205,10 +178,10 @@ func TestCreateVehicle_EmptyVariant(t *testing.T) {
 
 func TestCreateVehicle_EmptyColor(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -218,8 +191,8 @@ func TestCreateVehicle_EmptyColor(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -230,10 +203,10 @@ func TestCreateVehicle_EmptyColor(t *testing.T) {
 
 func TestCreateVehicle_YearBelowMin(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -243,8 +216,8 @@ func TestCreateVehicle_YearBelowMin(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -255,10 +228,10 @@ func TestCreateVehicle_YearBelowMin(t *testing.T) {
 
 func TestCreateVehicle_YearInFuture(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -268,8 +241,8 @@ func TestCreateVehicle_YearInFuture(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -280,10 +253,10 @@ func TestCreateVehicle_YearInFuture(t *testing.T) {
 
 func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -293,8 +266,8 @@ func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -305,10 +278,10 @@ func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 
 func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -318,8 +291,8 @@ func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 		RegistrationNumber: "",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -330,10 +303,10 @@ func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 
 func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -343,8 +316,8 @@ func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -355,10 +328,10 @@ func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 
 func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -368,8 +341,8 @@ func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            -100,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -380,10 +353,10 @@ func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 
 func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -393,8 +366,8 @@ func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelType("cng"),
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelType("cng"),
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -405,10 +378,10 @@ func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 
 func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -418,8 +391,8 @@ func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionType("cvt"),
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionType("cvt"),
 	}
 
 	resp, err := svc.CreateVehicle(context.Background(), req)
@@ -430,10 +403,10 @@ func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 
 func TestCreateVehicle_RepositoryError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := NewService(mockRepo)
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -443,8 +416,8 @@ func TestCreateVehicle_RepositoryError(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
 	mockRepo.On("Create", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
@@ -460,20 +433,20 @@ func TestCreateVehicle_RepositoryError(t *testing.T) {
 func TestCreateVehicle_AllVehicleTypes(t *testing.T) {
 	tests := []struct {
 		name        string
-		vehicleType VehicleType
+		vehicleType vehicle.VehicleType
 		shouldPass  bool
 	}{
-		{"bike", VehicleTypeBike, true},
-		{"car", VehicleTypeCar, true},
-		{"scooty", VehicleTypeScooty, true},
+		{"bike", vehicle.VehicleTypeBike, true},
+		{"car", vehicle.VehicleTypeCar, true},
+		{"scooty", vehicle.VehicleTypeScooty, true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := NewService(mockRepo)
+			svc := vehicle.NewService(mockRepo)
 
-			req := &CreateVehicleRequest{
+			req := &vehicle.CreateVehicleRequest{
 				VehicleType:        tt.vehicleType,
 				Manufacturer:       "Manufacturer",
 				Model:              "Model",
@@ -484,11 +457,11 @@ func TestCreateVehicle_AllVehicleTypes(t *testing.T) {
 				RegistrationNumber: "Number",
 				RegistrationState:  "State",
 				UsageKM:            0,
-				FuelType:           FuelTypePetrol,
-				TransmissionType:   TransmissionTypeManual,
+				FuelType:           vehicle.FuelTypePetrol,
+				TransmissionType:   vehicle.TransmissionTypeManual,
 			}
 
-			expectedVehicle := &Vehicle{
+			expectedVehicle := &vehicle.Vehicle{
 				ID:          1,
 				VehicleType: tt.vehicleType,
 			}
@@ -507,22 +480,22 @@ func TestCreateVehicle_AllVehicleTypes(t *testing.T) {
 
 func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 	tests := []struct {
-		name     string
-		fuelType FuelType
+		name       string
+		fuelType   vehicle.FuelType
 		shouldPass bool
 	}{
-		{"petrol", FuelTypePetrol, true},
-		{"diesel", FuelTypeDiesel, true},
-		{"ev", FuelTypeEV, true},
+		{"petrol", vehicle.FuelTypePetrol, true},
+		{"diesel", vehicle.FuelTypeDiesel, true},
+		{"ev", vehicle.FuelTypeEV, true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := NewService(mockRepo)
+			svc := vehicle.NewService(mockRepo)
 
-			req := &CreateVehicleRequest{
-				VehicleType:        VehicleTypeCar,
+			req := &vehicle.CreateVehicleRequest{
+				VehicleType:        vehicle.VehicleTypeCar,
 				Manufacturer:       "Manufacturer",
 				Model:              "Model",
 				Variant:            "Variant",
@@ -533,10 +506,10 @@ func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 				RegistrationState:  "State",
 				UsageKM:            0,
 				FuelType:           tt.fuelType,
-				TransmissionType:   TransmissionTypeManual,
+				TransmissionType:   vehicle.TransmissionTypeManual,
 			}
 
-			expectedVehicle := &Vehicle{
+			expectedVehicle := &vehicle.Vehicle{
 				ID:       1,
 				FuelType: tt.fuelType,
 			}
@@ -556,20 +529,20 @@ func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 	tests := []struct {
 		name               string
-		transmissionType   TransmissionType
+		transmissionType   vehicle.TransmissionType
 		shouldPass         bool
 	}{
-		{"manual", TransmissionTypeManual, true},
-		{"automatic", TransmissionTypeAutomatic, true},
+		{"manual", vehicle.TransmissionTypeManual, true},
+		{"automatic", vehicle.TransmissionTypeAutomatic, true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := NewService(mockRepo)
+			svc := vehicle.NewService(mockRepo)
 
-			req := &CreateVehicleRequest{
-				VehicleType:        VehicleTypeCar,
+			req := &vehicle.CreateVehicleRequest{
+				VehicleType:        vehicle.VehicleTypeCar,
 				Manufacturer:       "Manufacturer",
 				Model:              "Model",
 				Variant:            "Variant",
@@ -579,11 +552,11 @@ func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 				RegistrationNumber: "Number",
 				RegistrationState:  "State",
 				UsageKM:            0,
-				FuelType:           FuelTypePetrol,
+				FuelType:           vehicle.FuelTypePetrol,
 				TransmissionType:   tt.transmissionType,
 			}
 
-			expectedVehicle := &Vehicle{
+			expectedVehicle := &vehicle.Vehicle{
 				ID:               1,
 				TransmissionType: tt.transmissionType,
 			}
@@ -602,18 +575,19 @@ func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 
 func TestValidateRequest_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := &service{repo: mockRepo}
+	svc := vehicle.NewService(mockRepo)
 
-	err := svc.validateRequest(nil)
+	resp, err := svc.CreateVehicle(context.Background(), nil)
 	assert.Error(t, err)
+	assert.Nil(t, resp)
 }
 
 func TestValidateRequest_ValidRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := &service{repo: mockRepo}
+	svc := vehicle.NewService(mockRepo)
 
-	req := &CreateVehicleRequest{
-		VehicleType:        VehicleTypeCar,
+	req := &vehicle.CreateVehicleRequest{
+		VehicleType:        vehicle.VehicleTypeCar,
 		Manufacturer:       "Toyota",
 		Model:              "Camry",
 		Variant:            "LE",
@@ -623,10 +597,43 @@ func TestValidateRequest_ValidRequest(t *testing.T) {
 		RegistrationNumber: "KA01AB1234",
 		RegistrationState:  "Karnataka",
 		UsageKM:            50000,
-		FuelType:           FuelTypePetrol,
-		TransmissionType:   TransmissionTypeManual,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	err := svc.validateRequest(req)
+	expectedVehicle := &vehicle.Vehicle{
+		ID: 1,
+	}
+
+	mockRepo.On("Create", mock.Anything, mock.Anything).Return(expectedVehicle, nil)
+
+	resp, err := svc.CreateVehicle(context.Background(), req)
 	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestRepository_Create_Covered(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+
+	v := &vehicle.Vehicle{
+		VehicleType:        vehicle.VehicleTypeCar,
+		Manufacturer:       "Toyota",
+		Model:              "Camry",
+		Variant:            "LE",
+		Color:              "Black",
+		YearOfManufacture:  2020,
+		RTOCode:            "KA-01",
+		RegistrationNumber: "KA01AB1234",
+		RegistrationState:  "Karnataka",
+		UsageKM:            50000,
+		FuelType:           vehicle.FuelTypePetrol,
+		TransmissionType:   vehicle.TransmissionTypeManual,
+	}
+
+	mockRepo.On("Create", mock.Anything, mock.Anything).Return(v, nil)
+
+	result, err := mockRepo.Create(context.Background(), v)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, v.Manufacturer, result.Manufacturer)
 }

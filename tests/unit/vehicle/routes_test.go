@@ -1,4 +1,4 @@
-package vehicle
+package vehicle_test
 
 import (
 	"context"
@@ -7,18 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"infiour.local/dms-api-server/internal/modules/vehicle"
 )
 
 type mockRoutesService struct {
 	mock.Mock
 }
 
-func (m *mockRoutesService) CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error) {
+func (m *mockRoutesService) CreateVehicle(ctx context.Context, req *vehicle.CreateVehicleRequest) (*vehicle.CreateVehicleResponse, error) {
 	args := m.Called(ctx, req)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
-	return args.Get(0).(*CreateVehicleResponse), args.Error(1)
+	return args.Get(0).(*vehicle.CreateVehicleResponse), args.Error(1)
 }
 
 func TestRegisterRoutes(t *testing.T) {
@@ -27,9 +28,9 @@ func TestRegisterRoutes(t *testing.T) {
 	router := engine.Group("/api/v1")
 
 	mockSvc := new(mockRoutesService)
-	handler := NewHandler(mockSvc)
+	handler := vehicle.NewHandler(mockSvc)
 
-	RegisterRoutes(router, handler)
+	vehicle.RegisterRoutes(router, handler)
 
 	routes := engine.Routes()
 	assert.NotEmpty(t, routes)
