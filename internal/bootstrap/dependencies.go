@@ -8,11 +8,14 @@ import (
 	infratoken "infiour.local/dms-api-server/internal/infra/token"
 	"infiour.local/dms-api-server/internal/modules/auth"
 	"infiour.local/dms-api-server/internal/modules/user"
+	tokenprovider "infiour.local/dms-api-server/internal/providers/token"
 	"infiour.local/dms-api-server/pkg/config"
 )
 
 type Dependencies struct {
 	AuthHandler *auth.Handler
+	UserHandler *user.Handler
+	TokenProvider tokenprovider.Provider
 }
 
 func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Dependencies {
@@ -26,7 +29,12 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	authSvc := auth.NewService(userRepo, otpRepo, sessionRepo, otpProvider, tokenProvider, cfg.Auth, db)
 	authHandler := auth.NewHandler(authSvc)
 
+	userSvc := user.NewService(userRepo)
+	userHandler := user.NewHandler(userSvc)
+
 	return &Dependencies{
 		AuthHandler: authHandler,
+		UserHandler: userHandler,
+		TokenProvider: tokenProvider,
 	}
 }

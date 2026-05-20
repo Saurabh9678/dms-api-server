@@ -62,18 +62,37 @@ Additional constraints:
 After every task, the agent must:
 
 1. Create or update tests for changed behavior.
-2. Run validation commands.
-3. Ensure build passes.
+2. Achieve **100% test coverage** on all packages and files touched by the task.
+3. Write test cases for **every branch** in changed code (success paths, error paths, nil/empty inputs, boundary conditions, and all `if`/`else`/`switch`/early-return branches).
+4. Run validation commands and confirm **zero lint errors** remain in changed files.
+5. Ensure build passes.
 
-Mandatory validation commands:
+Coverage requirements:
+
+- New or modified production code must have corresponding unit tests.
+- Do not finish a task with uncovered statements or branches in impacted packages.
+- Prefer table-driven tests when multiple branches share setup.
+
+Mandatory validation command:
 
 ```bash
-gofmt ./...
-go vet ./...
-go test ./...
-make build
-make graphify-update
+make verify
 ```
+
+`make verify` runs formatting checks, lint (`go vet` and `golangci-lint` when installed), all tests, **100% coverage on changed packages** (via `scripts/verify-changed-coverage.sh`), build, and graphify update.
+
+Coverage gate details:
+
+- Changed packages are detected from `origin/main` (override with `VERIFY_BASE_REF=<ref>`).
+- Check all module packages with `VERIFY_COVERAGE_ALL=1 make verify-coverage`.
+- Every function in each changed package must report `100.0%` in `go tool cover -func`.
+- Write tests for all branches before running `make verify`.
+
+Lint requirements:
+
+- Validation is incomplete while any linter diagnostic remains in changed files.
+- Fix all reported lint issues (compile errors, unused symbols, `go vet` warnings, and IDE/static-analysis findings) before marking the task done.
+- Re-run validation after fixes until the workspace is clean.
 
 ## 4) Documentation Rules
 

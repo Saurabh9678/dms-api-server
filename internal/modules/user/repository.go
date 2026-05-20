@@ -40,3 +40,14 @@ func (r *Repository) Create(ctx context.Context, record *User) (*User, error) {
 	}
 	return &model, nil
 }
+
+func (r *Repository) UpdateName(ctx context.Context, userID uint64, name string) error {
+	result := r.db.WithContext(ctx).Model(&User{}).Where("id = ?", userID).Update("name", name)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return ErrUserNotFound
+	}
+	return nil
+}

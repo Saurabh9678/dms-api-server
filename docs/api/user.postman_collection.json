@@ -2,14 +2,87 @@
   "info": {
     "name": "DMS API - User",
     "_postman_id": "dms-api-user-collection",
-    "description": "User API collection scaffold. Add endpoint items as APIs are introduced.",
+    "description": "User API collection. Profile management endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [],
+  "item": [
+    {
+      "name": "Update Profile",
+      "id": "user-update-profile",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "X-Platform",
+            "value": "web"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "browser-1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/user/me",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "me"
+          ]
+        },
+        "description": "User: Protected endpoint (requires Bearer token). Updates authenticated user's profile name. Name must be non-empty after trim and contain only letters, spaces, hyphens, and apostrophes."
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"profile updated\",\n  \"data\": {\n    \"name\": \"John Doe\"\n  }\n}"
+        },
+        {
+          "name": "Invalid Request (empty/invalid name)",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+        },
+        {
+          "name": "Invalid Device Context",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+        },
+        {
+          "name": "Invalid Access Token",
+          "status": "Unauthorized",
+          "code": 401,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"Invalid access token\"\n  }\n}"
+        }
+      ]
+    }
+  ],
   "variable": [
     {
       "key": "base_url",
       "value": "http://localhost:8080"
+    },
+    {
+      "key": "access_token",
+      "value": ""
     }
   ]
 }

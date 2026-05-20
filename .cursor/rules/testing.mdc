@@ -6,10 +6,11 @@ alwaysApply: true
 # Testing Discipline
 
 - Every behavior change requires test updates or new tests.
+- Achieve **100% test coverage** on all packages and files touched by the task.
+- Write test cases for **every branch** in changed code (success, error, nil/empty, boundary, and all conditional paths).
 - Do not finish a task without executing validation commands.
-- Required command sequence:
-  - `gofmt ./...`
-  - `go vet ./...`
-  - `go test ./...`
-  - `make build`
+- Required command: `make verify` (lint gate, tests, 100% changed-package coverage, build, graphify).
+- Optional: `VERIFY_COVERAGE_ALL=1 make verify-coverage` to gate every `internal/modules/*` package.
+- Override diff base with `VERIFY_BASE_REF=<ref>` when needed.
+- Validation is incomplete while any lint diagnostic remains in changed files; fix all lint issues before finishing.
 - If tests are missing due to ambiguity, ask clarification and document gap.

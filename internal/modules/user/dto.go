@@ -1,3 +1,9 @@
 package user
 
-// DTOs for future user APIs live here.
+type UpdateProfileRequest struct {
+	Name string `json:"name" binding:"required"`
+}
+
+type UpdateProfileResponse struct {
+	Name string `json:"name"`
+}
