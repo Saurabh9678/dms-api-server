@@ -98,7 +98,7 @@ func TestRepository_Create_Covered(t *testing.T) {
 		}
 	}()
 
-	realRepo.Create(context.Background(), vehicle)
+	_, _ = realRepo.Create(context.Background(), vehicle)
 }
 
 func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
