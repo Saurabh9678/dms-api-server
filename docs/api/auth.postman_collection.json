@@ -200,7 +200,7 @@
               "name": "Success",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"OTP verified successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\"\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP verified successfully\",\n  \"data\": {\n    \"accessToken\": \"...\",\n    \"refreshToken\": \"...\",\n    \"expiresIn\": 3600,\n    \"tokenType\": \"Bearer\",\n    \"required_name\": true\n  }\n}"
             },
             {
               "name": "Invalid Request",

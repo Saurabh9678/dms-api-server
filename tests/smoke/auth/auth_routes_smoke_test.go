@@ -23,8 +23,8 @@ func (s *smokeAuthService) Login(_ context.Context, _ auth.LoginRequest) (*auth.
 	return &auth.TriggerOTPResponse{Message: "ok"}, nil
 }
 
-func (s *smokeAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.TokenResponse, error) {
-	return &auth.TokenResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer"}, nil
+func (s *smokeAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.VerifyOTPResponse, error) {
+	return &auth.VerifyOTPResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer", RequiredName: false}, nil
 }
 
 func (s *smokeAuthService) RefreshToken(_ context.Context, _ auth.RefreshTokenRequest) (*auth.TokenResponse, error) {

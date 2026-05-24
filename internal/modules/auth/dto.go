@@ -41,3 +41,11 @@ type TokenResponse struct {
 	ExpiresIn    int64  `json:"expiresIn"`
 	TokenType    string `json:"tokenType"`
 }
+
+type VerifyOTPResponse struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+	ExpiresIn    int64  `json:"expiresIn"`
+	TokenType    string `json:"tokenType"`
+	RequiredName bool   `json:"required_name"`
+}

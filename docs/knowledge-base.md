@@ -42,6 +42,7 @@ This file is the living project memory for architecture, conventions, and implem
 - Local Postgres Docker setup is defined in `docker-compose.yml` and uses database `dms` on `localhost:5432`.
 - Local DB start/stop/log commands are exposed via `make docker-postgres-up`, `make docker-postgres-down`, and `make docker-postgres-logs`.
 - Auth register/login responses now include `requestId` in payload; verify-otp accepts `requestId` plus `otpCode`.
+- Verify OTP response now includes `required_name` (bool). `true` means `user.name IS NULL` — client should prompt the user to set a profile name. `false` means name is already set. The service fetches the user by ID after session creation to determine this. `VerifyOTPResponse` is a separate DTO from `TokenResponse` (which is used by refresh-token).
 - Auth logout now uses `Authorization: Bearer <accessToken>` with `X-Platform`, no request body, and revokes active sessions only for that platform.
 - OTP verify enforces single active session per user+platform by revoking existing active sessions on that platform before creating a new session.
 - Missing or invalid `/api/v1` device-context headers return `INVALID_DEVICE_CONTEXT` with message `invalid request`.
