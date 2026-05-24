@@ -16,6 +16,7 @@ import (
 
 type fakeUserRepo struct {
 	records map[string]*user.User
+	byID    map[uint64]*user.User
 	nextID  uint64
 }
 
@@ -28,12 +29,21 @@ func (f *fakeUserRepo) FindByPhone(_ context.Context, countryCode string, phoneN
 	return entity, nil
 }
 
+func (f *fakeUserRepo) FindByID(_ context.Context, userID uint64) (*user.User, error) {
+	entity, ok := f.byID[userID]
+	if !ok {
+		return nil, user.ErrUserNotFound
+	}
+	return entity, nil
+}
+
 func (f *fakeUserRepo) Create(_ context.Context, entity *user.User) (*user.User, error) {
 	f.nextID++
 	copy := *entity
 	copy.ID = f.nextID
 	key := copy.CountryCode + "|" + copy.PhoneNumber
 	f.records[key] = &copy
+	f.byID[copy.ID] = &copy
 	return &copy, nil
 }
 
@@ -191,7 +201,7 @@ func (f *fakeTokenProvider) ParseAccessToken(token string) (uint64, error) {
 }
 
 func TestRegisterTriggersOTP(t *testing.T) {
-	userRepo := &fakeUserRepo{records: map[string]*user.User{}}
+	userRepo := &fakeUserRepo{records: map[string]*user.User{}, byID: map[uint64]*user.User{}}
 	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
 	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
 	sender := &fakeOTPProvider{}
@@ -226,10 +236,10 @@ func TestRegisterTriggersOTP(t *testing.T) {
 }
 
 func TestVerifyOTPRejectsInvalidCode(t *testing.T) {
+	u := &user.User{ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"}
 	userRepo := &fakeUserRepo{
-		records: map[string]*user.User{
-			"+91|9999999999": {ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"},
-		},
+		records: map[string]*user.User{"+91|9999999999": u},
+		byID:    map[uint64]*user.User{1: u},
 	}
 	otpRepo := &fakeOTPRepo{
 		activeByRequestID: map[string]*auth.UserOTP{
@@ -253,10 +263,10 @@ func TestVerifyOTPRejectsInvalidCode(t *testing.T) {
 }
 
 func TestRefreshAndLogout(t *testing.T) {
+	u := &user.User{ID: 1, CountryCode: "+91", PhoneNumber: "9999999999", Name: "Alice"}
 	userRepo := &fakeUserRepo{
-		records: map[string]*user.User{
-			"+91|9999999999": {ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"},
-		},
+		records: map[string]*user.User{"+91|9999999999": u},
+		byID:    map[uint64]*user.User{1: u},
 	}
 	otpRepo := &fakeOTPRepo{
 		activeByRequestID: map[string]*auth.UserOTP{
@@ -277,6 +287,9 @@ func TestRefreshAndLogout(t *testing.T) {
 	}
 	if verifyResp.RefreshToken == "" {
 		t.Fatalf("expected refresh token")
+	}
+	if verifyResp.RequiredName {
+		t.Fatalf("expected required_name false for user with name set")
 	}
 
 	refreshResp, err := service.RefreshToken(context.Background(), auth.RefreshTokenRequest{RefreshToken: "refresh-token"})
@@ -302,7 +315,7 @@ func TestRefreshAndLogout(t *testing.T) {
 }
 
 func TestLogoutRejectsInvalidAccessToken(t *testing.T) {
-	userRepo := &fakeUserRepo{records: map[string]*user.User{}}
+	userRepo := &fakeUserRepo{records: map[string]*user.User{}, byID: map[uint64]*user.User{}}
 	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
 	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
 	service := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
@@ -314,10 +327,10 @@ func TestLogoutRejectsInvalidAccessToken(t *testing.T) {
 }
 
 func TestVerifyOTPRevokesExistingSessionsForSamePlatform(t *testing.T) {
+	u := &user.User{ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"}
 	userRepo := &fakeUserRepo{
-		records: map[string]*user.User{
-			"+91|9999999999": {ID: 1, CountryCode: "+91", PhoneNumber: "9999999999"},
-		},
+		records: map[string]*user.User{"+91|9999999999": u},
+		byID:    map[uint64]*user.User{1: u},
 	}
 	otpRepo := &fakeOTPRepo{
 		activeByRequestID: map[string]*auth.UserOTP{
@@ -353,5 +366,86 @@ func TestVerifyOTPRevokesExistingSessionsForSamePlatform(t *testing.T) {
 	}
 	if sessionRepo.sessionByHash["old-ios"].Revoked {
 		t.Fatalf("expected ios session to remain active")
+	}
+}
+
+func TestVerifyOTPRequiredNameTrueWhenNameEmpty(t *testing.T) {
+	u := &user.User{ID: 1, CountryCode: "+91", PhoneNumber: "9999999999", Name: ""}
+	userRepo := &fakeUserRepo{
+		records: map[string]*user.User{"+91|9999999999": u},
+		byID:    map[uint64]*user.User{1: u},
+	}
+	otpRepo := &fakeOTPRepo{
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Aa11Bb22": {ID: 1, UserID: 1, RequestID: "Aa11Bb22", OTPCode: "111111", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		},
+	}
+	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
+	svc := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
+
+	resp, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
+		RequestID: "Aa11Bb22",
+		OTPCode:   "111111",
+		Platform:  "web",
+		DeviceID:  "device-1",
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if !resp.RequiredName {
+		t.Fatalf("expected required_name true for user with no name")
+	}
+}
+
+func TestVerifyOTPRequiredNameFalseWhenNameSet(t *testing.T) {
+	u := &user.User{ID: 2, CountryCode: "+91", PhoneNumber: "8888888888", Name: "Bob"}
+	userRepo := &fakeUserRepo{
+		records: map[string]*user.User{"+91|8888888888": u},
+		byID:    map[uint64]*user.User{2: u},
+	}
+	otpRepo := &fakeOTPRepo{
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Cc33Dd44": {ID: 2, UserID: 2, RequestID: "Cc33Dd44", OTPCode: "222222", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		},
+	}
+	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
+	svc := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
+
+	resp, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
+		RequestID: "Cc33Dd44",
+		OTPCode:   "222222",
+		Platform:  "web",
+		DeviceID:  "device-2",
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.RequiredName {
+		t.Fatalf("expected required_name false for user with name set")
+	}
+}
+
+func TestVerifyOTPFailsWhenFindByIDErrors(t *testing.T) {
+	u := &user.User{ID: 3, CountryCode: "+91", PhoneNumber: "7777777777"}
+	userRepo := &fakeUserRepo{
+		records: map[string]*user.User{"+91|7777777777": u},
+		byID:    map[uint64]*user.User{},
+	}
+	otpRepo := &fakeOTPRepo{
+		activeByRequestID: map[string]*auth.UserOTP{
+			"Ee55Ff66": {ID: 3, UserID: 3, RequestID: "Ee55Ff66", OTPCode: "333333", Platform: auth.OTPPlatformWeb, OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute)},
+		},
+	}
+	sessionRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
+	svc := auth.NewService(userRepo, otpRepo, sessionRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{}, &gorm.DB{})
+
+	_, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
+		RequestID: "Ee55Ff66",
+		OTPCode:   "333333",
+		Platform:  "web",
+		DeviceID:  "device-3",
+	})
+	if !errors.Is(err, user.ErrUserNotFound) {
+		t.Fatalf("expected ErrUserNotFound when FindByID fails, got %v", err)
 	}
 }

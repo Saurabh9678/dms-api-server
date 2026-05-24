@@ -66,7 +66,10 @@
    - Issues access/refresh token pair via token provider.
    - Revokes all active sessions for same user+platform.
    - Creates new session row in `user_sessions`.
-4. Success response: `200` with envelope message `OTP verified successfully` and payload `{ accessToken, refreshToken, expiresIn, tokenType }`.
+   - Fetches the authenticated user by ID and sets `required_name: true` if `user.name` is empty, `false` otherwise.
+4. Success response: `200` with envelope message `OTP verified successfully` and payload `{ accessToken, refreshToken, expiresIn, tokenType, required_name }`.
+   - `required_name: true` means the user has not yet set their profile name; the client should prompt for it.
+   - `required_name: false` means the user already has a name set.
 5. Failure responses:
    - Validation/device context errors -> `400`.
    - OTP/token/session business errors -> mapped auth error codes, generally `401`.

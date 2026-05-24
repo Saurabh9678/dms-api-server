@@ -22,8 +22,8 @@ func (f *contractService) Login(_ context.Context, _ auth.LoginRequest) (*auth.T
 	return &auth.TriggerOTPResponse{Message: "If the account is valid, an OTP has been sent"}, nil
 }
 
-func (f *contractService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.TokenResponse, error) {
-	return &auth.TokenResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer"}, nil
+func (f *contractService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.VerifyOTPResponse, error) {
+	return &auth.VerifyOTPResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer", RequiredName: false}, nil
 }
 
 func (f *contractService) RefreshToken(_ context.Context, _ auth.RefreshTokenRequest) (*auth.TokenResponse, error) {

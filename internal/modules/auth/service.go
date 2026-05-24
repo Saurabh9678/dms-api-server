@@ -19,7 +19,7 @@ import (
 type Service interface {
 	Register(ctx context.Context, req RegisterRequest) (*TriggerOTPResponse, error)
 	Login(ctx context.Context, req LoginRequest) (*TriggerOTPResponse, error)
-	VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*TokenResponse, error)
+	VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyOTPResponse, error)
 	RefreshToken(ctx context.Context, req RefreshTokenRequest) (*TokenResponse, error)
 	Logout(ctx context.Context, req LogoutRequest) error
 }
@@ -27,6 +27,7 @@ type Service interface {
 type userRepo interface {
 	FindByPhone(ctx context.Context, countryCode string, phoneNumber string) (*user.User, error)
 	Create(ctx context.Context, record *user.User) (*user.User, error)
+	FindByID(ctx context.Context, userID uint64) (*user.User, error)
 }
 
 type otpRepo interface {
@@ -151,7 +152,7 @@ func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumbe
 	}, nil
 }
 
-func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*TokenResponse, error) {
+func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyOTPResponse, error) {
 	platform := OTPPlatform(req.Platform)
 	otpRecord, err := s.otps.FindLatestActiveByRequestIDAndPlatform(ctx, strings.TrimSpace(req.RequestID), platform, OTPForMobile)
 	if err != nil {
@@ -197,11 +198,17 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*TokenRe
 		return nil, err
 	}
 
-	return &TokenResponse{
+	foundUser, err := s.users.FindByID(ctx, otpRecord.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &VerifyOTPResponse{
 		AccessToken:  pair.AccessToken,
 		RefreshToken: pair.RefreshToken,
 		ExpiresIn:    pair.AccessTokenTTL,
 		TokenType:    "Bearer",
+		RequiredName: foundUser.Name == "",
 	}, nil
 }
 
