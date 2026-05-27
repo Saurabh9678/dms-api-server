@@ -3,6 +3,8 @@ package dashboard
 import (
 	"context"
 	"time"
+
+	"golang.org/x/sync/errgroup"
 )
 
 // Service defines the dashboard use-case contract.
@@ -52,23 +54,37 @@ func (s *service) GetDashboard(ctx context.Context, req GetDashboardRequest) (*D
 
 	params := QueryParams{From: from, ShowroomID: req.ShowroomID}
 
-	sales, err := s.repo.FetchSalesSummary(ctx, params)
-	if err != nil {
-		return nil, err
-	}
+	var (
+		sales     *SalesQueryResult
+		inventory *InventoryQueryResult
+		expenses  *ExpenseQueryResult
+		topTypes  []VehicleTypeQueryResult
+	)
 
-	inventory, err := s.repo.FetchInventorySummary(ctx, params)
-	if err != nil {
-		return nil, err
-	}
+	g, gctx := errgroup.WithContext(ctx)
 
-	expenses, err := s.repo.FetchExpenseSummary(ctx, params)
-	if err != nil {
-		return nil, err
-	}
+	g.Go(func() error {
+		var err error
+		sales, err = s.repo.FetchSalesSummary(gctx, params)
+		return err
+	})
+	g.Go(func() error {
+		var err error
+		inventory, err = s.repo.FetchInventorySummary(gctx, params)
+		return err
+	})
+	g.Go(func() error {
+		var err error
+		expenses, err = s.repo.FetchExpenseSummary(gctx, params)
+		return err
+	})
+	g.Go(func() error {
+		var err error
+		topTypes, err = s.repo.FetchTopVehicleTypes(gctx, params)
+		return err
+	})
 
-	topTypes, err := s.repo.FetchTopVehicleTypes(ctx, params)
-	if err != nil {
+	if err := g.Wait(); err != nil {
 		return nil, err
 	}
 
