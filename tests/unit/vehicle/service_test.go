@@ -528,9 +528,9 @@ func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 
 func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 	tests := []struct {
-		name               string
-		transmissionType   vehicle.TransmissionType
-		shouldPass         bool
+		name             string
+		transmissionType vehicle.TransmissionType
+		shouldPass       bool
 	}{
 		{"manual", vehicle.TransmissionTypeManual, true},
 		{"automatic", vehicle.TransmissionTypeAutomatic, true},
