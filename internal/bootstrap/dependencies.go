@@ -7,6 +7,7 @@ import (
 	infraotp "infiour.local/dms-api-server/internal/infra/otp"
 	infratoken "infiour.local/dms-api-server/internal/infra/token"
 	"infiour.local/dms-api-server/internal/modules/auth"
+	"infiour.local/dms-api-server/internal/modules/dashboard"
 	"infiour.local/dms-api-server/internal/modules/user"
 	"infiour.local/dms-api-server/internal/modules/vehicle"
 	tokenprovider "infiour.local/dms-api-server/internal/providers/token"
@@ -14,10 +15,11 @@ import (
 )
 
 type Dependencies struct {
-	AuthHandler   *auth.Handler
-	UserHandler   *user.Handler
-	VehicleHandler *vehicle.Handler
-	TokenProvider tokenprovider.Provider
+	AuthHandler      *auth.Handler
+	UserHandler      *user.Handler
+	VehicleHandler   *vehicle.Handler
+	DashboardHandler *dashboard.Handler
+	TokenProvider    tokenprovider.Provider
 }
 
 func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Dependencies {
@@ -38,10 +40,15 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	vehicleSvc := vehicle.NewService(vehicleRepo)
 	vehicleHandler := vehicle.NewHandler(vehicleSvc)
 
+	dashboardRepo := dashboard.NewRepository(db)
+	dashboardSvc := dashboard.NewService(dashboardRepo)
+	dashboardHandler := dashboard.NewHandler(dashboardSvc)
+
 	return &Dependencies{
-		AuthHandler:    authHandler,
-		UserHandler:    userHandler,
-		VehicleHandler: vehicleHandler,
-		TokenProvider:  tokenProvider,
+		AuthHandler:      authHandler,
+		UserHandler:      userHandler,
+		VehicleHandler:   vehicleHandler,
+		DashboardHandler: dashboardHandler,
+		TokenProvider:    tokenProvider,
 	}
 }
