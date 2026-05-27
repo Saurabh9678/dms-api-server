@@ -1,5 +1,59 @@
 package vehicle
 
+type ListVehiclesQuery struct {
+	Statuses     []string `form:"status"`
+	VehicleTypes []string `form:"type"`
+	MinPrice     *float64 `form:"min_price"`
+	MaxPrice     *float64 `form:"max_price"`
+	Page         int      `form:"page,default=1"`
+	Limit        int      `form:"limit,default=20"`
+}
+
+type VehicleStatusSummary struct {
+	Status    string `json:"status"`
+	StartedAt string `json:"started_at"`
+}
+
+type VehiclePricingSummary struct {
+	BuyingPrice float64 `json:"buying_price"`
+	PriceTag    float64 `json:"price_tag"`
+	Currency    string  `json:"currency"`
+	TaggedAt    string  `json:"tagged_at"`
+}
+
+type VehicleListItem struct {
+	ID                 uint64                 `json:"id"`
+	VehicleType        string                 `json:"vehicle_type"`
+	Manufacturer       string                 `json:"manufacturer"`
+	Model              string                 `json:"model"`
+	Variant            string                 `json:"variant"`
+	Color              string                 `json:"color"`
+	YearOfManufacture  int                    `json:"year_of_manufacture"`
+	RTOCode            string                 `json:"rto_code"`
+	RegistrationNumber string                 `json:"registration_number"`
+	RegistrationState  string                 `json:"registration_state"`
+	UsageKM            int                    `json:"usage_km"`
+	FuelType           string                 `json:"fuel_type"`
+	TransmissionType   string                 `json:"transmission_type"`
+	CurrentStatus      *VehicleStatusSummary  `json:"current_status"`
+	Pricing            *VehiclePricingSummary `json:"pricing"`
+	CreatedAt          string                 `json:"created_at"`
+	UpdatedAt          string                 `json:"updated_at"`
+}
+
+type CategoryListing struct {
+	Total    int64             `json:"total"`
+	Page     int               `json:"page"`
+	Limit    int               `json:"limit"`
+	Vehicles []VehicleListItem `json:"vehicles"`
+}
+
+type ListVehiclesResponse struct {
+	Cars     *CategoryListing `json:"cars,omitempty"`
+	Bikes    *CategoryListing `json:"bikes,omitempty"`
+	Scooties *CategoryListing `json:"scooties,omitempty"`
+}
+
 type CreateVehicleRequest struct {
 	VehicleType        VehicleType      `json:"vehicle_type" binding:"required"`
 	Manufacturer       string           `json:"manufacturer" binding:"required"`

@@ -27,6 +27,14 @@ func (m *mockHandlerService) CreateVehicle(ctx context.Context, req *vehicle.Cre
 	return args.Get(0).(*vehicle.CreateVehicleResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) ListVehicles(ctx context.Context, query *vehicle.ListVehiclesQuery) (*vehicle.ListVehiclesResponse, error) {
+	args := m.Called(ctx, query)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.ListVehiclesResponse), args.Error(1)
+}
+
 func TestHandler_CreateVehicle_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockSvc := new(mockHandlerService)
@@ -175,4 +183,64 @@ type mockError struct{}
 
 func (e *mockError) Error() string {
 	return "test error"
+}
+
+func TestHandler_ListVehicles_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	respData := &vehicle.ListVehiclesResponse{
+		Cars: &vehicle.CategoryListing{
+			Total:    1,
+			Page:     1,
+			Limit:    20,
+			Vehicles: []vehicle.VehicleListItem{{ID: 1, VehicleType: "car"}},
+		},
+	}
+
+	mockSvc.On("ListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_ListVehicles_InvalidQueryParam(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?page=abc", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
+}
+
+func TestHandler_ListVehicles_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	mockSvc.On("ListVehicles", mock.Anything, mock.Anything).Return(nil, &mockError{})
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.ListVehicles(ctx)
+
+	mockSvc.AssertExpectations(t)
 }
