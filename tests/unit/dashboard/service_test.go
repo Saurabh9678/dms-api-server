@@ -3,14 +3,17 @@ package dashboard_test
 import (
 	"context"
 	"errors"
+	"sync"
 	"testing"
 	"time"
 
 	"infiour.local/dms-api-server/internal/modules/dashboard"
 )
 
-// fakeRepo is a controllable in-memory implementation of the dashboardRepo interface.
+// fakeRepo is a goroutine-safe controllable in-memory implementation of the dashboardRepo interface.
 type fakeRepo struct {
+	mu sync.Mutex
+
 	salesResult     *dashboard.SalesQueryResult
 	salesErr        error
 	inventoryResult *dashboard.InventoryQueryResult
@@ -27,44 +30,60 @@ type fakeRepo struct {
 }
 
 func (f *fakeRepo) FetchSalesSummary(_ context.Context, params dashboard.QueryParams) (*dashboard.SalesQueryResult, error) {
+	f.mu.Lock()
 	f.capturedSalesParams = params
-	if f.salesErr != nil {
-		return nil, f.salesErr
+	salesErr := f.salesErr
+	salesResult := f.salesResult
+	f.mu.Unlock()
+	if salesErr != nil {
+		return nil, salesErr
 	}
-	if f.salesResult != nil {
-		return f.salesResult, nil
+	if salesResult != nil {
+		return salesResult, nil
 	}
 	return &dashboard.SalesQueryResult{}, nil
 }
 
 func (f *fakeRepo) FetchInventorySummary(_ context.Context, params dashboard.QueryParams) (*dashboard.InventoryQueryResult, error) {
+	f.mu.Lock()
 	f.capturedInventoryParams = params
-	if f.inventoryErr != nil {
-		return nil, f.inventoryErr
+	inventoryErr := f.inventoryErr
+	inventoryResult := f.inventoryResult
+	f.mu.Unlock()
+	if inventoryErr != nil {
+		return nil, inventoryErr
 	}
-	if f.inventoryResult != nil {
-		return f.inventoryResult, nil
+	if inventoryResult != nil {
+		return inventoryResult, nil
 	}
 	return &dashboard.InventoryQueryResult{}, nil
 }
 
 func (f *fakeRepo) FetchExpenseSummary(_ context.Context, params dashboard.QueryParams) (*dashboard.ExpenseQueryResult, error) {
+	f.mu.Lock()
 	f.capturedExpenseParams = params
-	if f.expenseErr != nil {
-		return nil, f.expenseErr
+	expenseErr := f.expenseErr
+	expenseResult := f.expenseResult
+	f.mu.Unlock()
+	if expenseErr != nil {
+		return nil, expenseErr
 	}
-	if f.expenseResult != nil {
-		return f.expenseResult, nil
+	if expenseResult != nil {
+		return expenseResult, nil
 	}
 	return &dashboard.ExpenseQueryResult{}, nil
 }
 
 func (f *fakeRepo) FetchTopVehicleTypes(_ context.Context, params dashboard.QueryParams) ([]dashboard.VehicleTypeQueryResult, error) {
+	f.mu.Lock()
 	f.capturedTopTypesParams = params
-	if f.topTypesErr != nil {
-		return nil, f.topTypesErr
+	topTypesErr := f.topTypesErr
+	topTypesResult := f.topTypesResult
+	f.mu.Unlock()
+	if topTypesErr != nil {
+		return nil, topTypesErr
 	}
-	return f.topTypesResult, nil
+	return topTypesResult, nil
 }
 
 func newService(repo *fakeRepo) dashboard.Service {
