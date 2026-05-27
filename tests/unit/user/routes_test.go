@@ -18,6 +18,12 @@ func (f *fakeRoutesService) UpdateProfile(_ context.Context, _ uint64, _ user.Up
 	return &user.UpdateProfileResponse{Name: "John Doe"}, nil
 }
 
+func (f *fakeRoutesService) GetProfile(_ context.Context, _ uint64) (*user.GetProfileResponse, error) {
+	name := "Alice"
+	phone := "+919999999999"
+	return &user.GetProfileResponse{Name: &name, PhoneNumber: &phone, ShowroomRoles: []user.ShowroomRole{}}, nil
+}
+
 func TestRegisterRoutesSuccessfulPatch(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
@@ -64,5 +70,29 @@ func TestRegisterRoutesUndefinedPath404(t *testing.T) {
 
 	if resp.Code != http.StatusNotFound {
 		t.Fatalf("expected 404, got %d: %s", resp.Code, resp.Body.String())
+	}
+}
+
+func TestRegisterRoutesSuccessfulGet(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	api := engine.Group("/api/v1")
+	api.Use(middleware.RequireDeviceContext())
+	protected := api.Group("")
+	protected.Use(func(c *gin.Context) {
+		c.Set(middleware.ContextKeyUserID, uint64(42))
+		c.Next()
+	})
+	h := user.NewHandler(&fakeRoutesService{})
+	user.RegisterRoutes(protected, h)
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/user/me", nil)
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", resp.Code, resp.Body.String())
 	}
 }

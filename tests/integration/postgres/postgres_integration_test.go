@@ -21,7 +21,7 @@ func TestPostgresConnectionFromEnv(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql db: %v", err)
 	}
-	defer sqlDB.Close()
+	defer func() { _ = sqlDB.Close() }()
 
 	if err := sqlDB.Ping(); err != nil {
 		t.Fatalf("ping postgres: %v", err)

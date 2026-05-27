@@ -74,6 +74,67 @@
         }
       ]
     }
+    ,
+    {
+      "name": "Get Profile",
+      "id": "user-get-profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "X-Platform",
+            "value": "web"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "browser-1"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/user/me",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "me"
+          ]
+        },
+        "description": "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, phone number, and all showroom-role pairs. Fields are nullable."
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": \"John Doe\",\n    \"phone_number\": \"+919999999999\",\n    \"showroom_roles\": [\n      {\"showroom_id\": 1, \"showroom_name\": \"Showroom A\", \"role\": \"owner\"},\n      {\"showroom_id\": 2, \"showroom_name\": \"Showroom B\", \"role\": \"manager\"}\n    ]\n  }\n}"
+        },
+        {
+          "name": "Success (no name set)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": null,\n    \"phone_number\": \"+919999999999\",\n    \"showroom_roles\": []\n  }\n}"
+        },
+        {
+          "name": "Invalid Device Context",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+        },
+        {
+          "name": "Invalid Access Token",
+          "status": "Unauthorized",
+          "code": 401,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+        }
+      ]
+    }
   ],
   "variable": [
     {

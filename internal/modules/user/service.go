@@ -11,9 +11,12 @@ import (
 
 type Service interface {
 	UpdateProfile(ctx context.Context, userID uint64, req UpdateProfileRequest) (*UpdateProfileResponse, error)
+	GetProfile(ctx context.Context, userID uint64) (*GetProfileResponse, error)
 }
 
 type profileRepo interface {
+	FindByID(ctx context.Context, userID uint64) (*User, error)
+	FindShowroomRolesByUserID(ctx context.Context, userID uint64) ([]ShowroomRole, error)
 	UpdateName(ctx context.Context, userID uint64, name string) error
 }
 
@@ -43,4 +46,34 @@ func (s *service) UpdateProfile(ctx context.Context, userID uint64, req UpdatePr
 	}
 
 	return &UpdateProfileResponse{Name: trimmedName}, nil
+}
+
+func (s *service) GetProfile(ctx context.Context, userID uint64) (*GetProfileResponse, error) {
+	u, err := s.repo.FindByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	showroomRoles, err := s.repo.FindShowroomRolesByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var name *string
+	if u.Name != "" {
+		n := u.Name
+		name = &n
+	}
+
+	var phoneNumber *string
+	if u.CountryCode != "" || u.PhoneNumber != "" {
+		combined := u.CountryCode + u.PhoneNumber
+		phoneNumber = &combined
+	}
+
+	return &GetProfileResponse{
+		Name:          name,
+		PhoneNumber:   phoneNumber,
+		ShowroomRoles: showroomRoles,
+	}, nil
 }

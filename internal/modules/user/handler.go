@@ -44,3 +44,25 @@ func (h *Handler) UpdateProfile(c *gin.Context) {
 
 	response.OK(c, "profile updated", resp)
 }
+
+func (h *Handler) GetProfile(c *gin.Context) {
+	userIDVal, exists := c.Get(middleware.ContextKeyUserID)
+	if !exists {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return
+	}
+
+	userID, ok := userIDVal.(uint64)
+	if !ok {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return
+	}
+
+	resp, err := h.service.GetProfile(c.Request.Context(), userID)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "profile fetched", resp)
+}
