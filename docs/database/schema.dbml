@@ -1,0 +1,271 @@
+// DMS API Server — Full Database Schema
+// Import at: https://dbdiagram.io/d
+// Enums: platform_type (web|ios_mobile|android_mobile|desktop),
+//        otp_for_type (mobile|email),
+//        vehicle_type (bike|car|scooty),
+//        fuel_type (petrol|diesel|ev),
+//        transmission_type (manual|automatic),
+//        vehicle_status (garage|inspection|ready_for_sale|sold),
+//        vehicle_document_type (registration_certificate|insurance|pollution),
+//        vehicle_image_label (front|interior|exterior|back|wheel)
+
+// ─── Auth / User ────────────────────────────────────────────────────────────
+
+Table users {
+  id           BIGSERIAL   [pk, increment, not null]
+  email        VARCHAR     [null]
+  phone_number VARCHAR     [not null]
+  country_code VARCHAR     [not null]
+  name         VARCHAR     [null]
+  created_at   TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at   TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at   TIMESTAMPTZ [null]
+}
+
+Table user_roles {
+  id         BIGSERIAL   [pk, increment, not null]
+  type       VARCHAR     [not null, unique, note: 'owner | manager | employee']
+  created_at TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table user_otps {
+  id            BIGSERIAL   [pk, increment, not null]
+  user_id       BIGINT      [not null, ref: > users.id]
+  otp_code      VARCHAR(6)  [not null]
+  platform      VARCHAR     [not null, note: 'platform_type enum']
+  otp_for       VARCHAR     [not null, note: 'otp_for_type enum']
+  device_id     VARCHAR(255)[null]
+  attempt_count INT         [not null, default: 0]
+  resend_count  INT         [not null, default: 0]
+  is_used       BOOLEAN     [not null, default: false]
+  expires_at    TIMESTAMPTZ [not null]
+  created_at    TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  verified_at   TIMESTAMPTZ [null]
+  request_id    VARCHAR(8)  [not null, unique]
+
+  indexes {
+    user_id    [name: 'idx_user_otps_user_id']
+    otp_code   [name: 'idx_user_otps_otp_code']
+    request_id [unique, name: 'idx_user_otps_request_id']
+  }
+}
+
+Table user_sessions {
+  id                  BIGSERIAL    [pk, increment, not null]
+  user_id             BIGINT       [not null, ref: > users.id]
+  platform            VARCHAR      [not null, note: 'platform_type enum']
+  device_id           VARCHAR(255) [null]
+  ip_address          VARCHAR(45)  [null]
+  refresh_token_hash  VARCHAR(256) [null]
+  created_at          TIMESTAMPTZ  [not null, default: `CURRENT_TIMESTAMP`]
+  last_used_at        TIMESTAMPTZ  [not null, default: `CURRENT_TIMESTAMP`]
+  expires_at          TIMESTAMPTZ  [null]
+  revoked             BOOLEAN      [not null, default: false]
+  compromised         BOOLEAN      [not null, default: false]
+  revoked_reason      VARCHAR(255) [null]
+
+  indexes {
+    user_id            [name: 'idx_user_sessions_user_id']
+    refresh_token_hash [name: 'idx_user_sessions_refresh_token_hash']
+  }
+}
+
+Table moderators {
+  id           BIGSERIAL   [pk, increment, not null]
+  user_id      BIGINT      [not null, unique, ref: > users.id]
+  access_level VARCHAR     [not null]
+  remarks      TEXT        [null]
+  created_at   TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at   TIMESTAMPTZ [null]
+}
+
+// ─── Showrooms ───────────────────────────────────────────────────────────────
+
+Table showrooms {
+  id                   BIGSERIAL   [pk, increment, not null]
+  name                 VARCHAR     [not null]
+  showroom_logo        TEXT        [null]
+  showroom_geolocation JSON        [null]
+  created_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at           TIMESTAMPTZ [null]
+}
+
+Table user_showroom_relations {
+  id          BIGSERIAL   [pk, increment, not null]
+  user_id     BIGINT      [not null, ref: > users.id]
+  showroom_id BIGINT      [not null, ref: > showrooms.id]
+  role_id     BIGINT      [not null, ref: > user_roles.id]
+  created_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at  TIMESTAMPTZ [null]
+
+  indexes {
+    (user_id, showroom_id, role_id) [unique]
+    user_id     [name: 'idx_user_showroom_relations_user_id']
+    showroom_id [name: 'idx_user_showroom_relations_showroom_id']
+    role_id     [name: 'idx_user_showroom_relations_role_id']
+  }
+}
+
+// ─── Vehicles ────────────────────────────────────────────────────────────────
+
+Table vehicles {
+  id                   BIGSERIAL   [pk, increment, not null]
+  type                 VARCHAR     [not null, note: 'vehicle_type: bike | car | scooty']
+  manufacturer         VARCHAR     [not null]
+  model                VARCHAR     [not null]
+  variant              VARCHAR     [not null]
+  color                VARCHAR     [not null]
+  year_of_manufacture  INT         [not null]
+  rto_code             VARCHAR     [not null]
+  registration_number  VARCHAR     [not null]
+  registration_state   VARCHAR     [not null]
+  usage_km             INT         [not null]
+  fuel_type            VARCHAR     [not null, note: 'fuel_type: petrol | diesel | ev']
+  transmission_type    VARCHAR     [not null, note: 'transmission_type: manual | automatic']
+  created_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at           TIMESTAMPTZ [null]
+}
+
+Table vehicle_pricing {
+  id            BIGSERIAL        [pk, increment, not null]
+  vehicle_id    BIGINT           [not null, unique, ref: - vehicles.id]
+  buying_price  "NUMERIC(10,2)"  [not null]
+  buying_date   DATE             [not null]
+  price_tag     "NUMERIC(10,2)"  [null]
+  tagged_at     TIMESTAMPTZ      [null]
+  currency      VARCHAR(10)      [not null, default: 'inr']
+  remarks       TEXT             [null]
+  created_at    TIMESTAMPTZ      [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at    TIMESTAMPTZ      [null]
+  deleted_at    TIMESTAMPTZ      [null]
+}
+
+Table vehicle_statuses {
+  id          BIGSERIAL   [pk, increment, not null]
+  vehicle_id  BIGINT      [not null, ref: > vehicles.id]
+  status      VARCHAR     [not null, note: 'vehicle_status: garage | inspection | ready_for_sale | sold']
+  description TEXT        [null]
+  started_at  TIMESTAMPTZ [not null]
+  ended_at    TIMESTAMPTZ [null]
+  added_by    BIGINT      [null, ref: > users.id]
+  created_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at  TIMESTAMPTZ [null]
+
+  indexes {
+    vehicle_id [name: 'idx_vehicle_statuses_vehicle_id']
+  }
+}
+
+Table vehicle_expenses {
+  id          BIGSERIAL       [pk, increment, not null]
+  vehicle_id  BIGINT          [not null, ref: > vehicles.id]
+  status_id   BIGINT          [null, ref: > vehicle_statuses.id]
+  type        VARCHAR         [not null]
+  amount      "NUMERIC(10,2)" [not null]
+  paid_to     VARCHAR         [null]
+  description TEXT            [null]
+  date        TIMESTAMPTZ     [null]
+  created_at  TIMESTAMPTZ     [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  TIMESTAMPTZ     [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at  TIMESTAMPTZ     [null]
+
+  indexes {
+    vehicle_id [name: 'idx_vehicle_expenses_vehicle_id']
+    status_id  [name: 'idx_vehicle_expenses_status_id']
+  }
+}
+
+Table vehicle_documents {
+  id            BIGSERIAL   [pk, increment, not null]
+  vehicle_id    BIGINT      [not null, ref: > vehicles.id]
+  document_type VARCHAR     [null, note: 'vehicle_document_type: registration_certificate | insurance | pollution']
+  document_url  TEXT        [not null]
+  valid_from    DATE        [null]
+  valid_till    DATE        [null]
+  remarks       TEXT        [null]
+  uploaded_at   TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  uploaded_by   BIGINT      [null, ref: > users.id]
+  created_at    TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at    TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at    TIMESTAMPTZ [null]
+
+  indexes {
+    vehicle_id [name: 'idx_vehicle_documents_vehicle_id']
+  }
+}
+
+Table vehicle_images {
+  id          BIGSERIAL   [pk, increment, not null]
+  vehicle_id  BIGINT      [not null, ref: > vehicles.id]
+  image_url   TEXT        [not null]
+  label       VARCHAR     [null, note: 'vehicle_image_label: front | interior | exterior | back | wheel']
+  uploaded_at TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  uploaded_by BIGINT      [null, ref: > users.id]
+  created_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at  TIMESTAMPTZ [null]
+
+  indexes {
+    vehicle_id [name: 'idx_vehicle_images_vehicle_id']
+  }
+}
+
+Table vehicle_showroom_relations {
+  id          BIGSERIAL   [pk, increment, not null]
+  showroom_id BIGINT      [not null, ref: > showrooms.id]
+  vehicle_id  BIGINT      [not null, ref: > vehicles.id]
+  created_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at  TIMESTAMPTZ [null]
+
+  indexes {
+    (showroom_id, vehicle_id) [unique]
+    vehicle_id  [name: 'idx_vehicle_showroom_relations_vehicle_id']
+    showroom_id [name: 'idx_vehicle_showroom_relations_showroom_id']
+  }
+}
+
+// ─── Sales ───────────────────────────────────────────────────────────────────
+
+Table customers {
+  id               BIGSERIAL   [pk, increment, not null]
+  first_name       VARCHAR     [not null]
+  last_name        VARCHAR     [null]
+  email            VARCHAR     [null]
+  phone_number     VARCHAR     [not null, unique]
+  alt_phone_number VARCHAR     [null]
+  address          TEXT        [null]
+  city             VARCHAR     [null]
+  state            VARCHAR     [null]
+  pincode          VARCHAR     [null]
+  id_proof_type    VARCHAR     [null]
+  id_proof_number  VARCHAR     [null]
+  id_proof_url     TEXT        [null]
+  created_at       TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at       TIMESTAMPTZ [null]
+  deleted_at       TIMESTAMPTZ [null]
+}
+
+Table customer_vehicle_sales {
+  id           BIGSERIAL       [pk, increment, not null]
+  customer_id  BIGINT          [not null, ref: > customers.id]
+  vehicle_id   BIGINT          [not null, ref: > vehicles.id]
+  sale_price   "NUMERIC(10,2)" [not null]
+  sale_date    DATE            [not null]
+  payment_mode VARCHAR         [null]
+  receipt_url  TEXT            [null]
+  remarks      TEXT            [null]
+  created_at   TIMESTAMPTZ     [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at   TIMESTAMPTZ     [null]
+  deleted_at   TIMESTAMPTZ     [null]
+
+  indexes {
+    customer_id [name: 'idx_customer_vehicle_sales_customer_id']
+    vehicle_id  [name: 'idx_customer_vehicle_sales_vehicle_id']
+  }
+}
