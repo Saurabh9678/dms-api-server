@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"infiour.local/dms-api-server/internal/modules/user"
@@ -57,5 +58,55 @@ func TestFindByIDUserWithEmptyName(t *testing.T) {
 	}
 	if result.Name != "" {
 		t.Fatalf("expected empty name, got %q", result.Name)
+	}
+}
+
+type fakeShowroomRolesStore struct {
+	roles []user.ShowroomRole
+	err   error
+}
+
+func (f *fakeShowroomRolesStore) FindShowroomRolesByUserID(_ context.Context, _ uint64) ([]user.ShowroomRole, error) {
+	return f.roles, f.err
+}
+
+func TestFindShowroomRolesByUserIDReturnsRoles(t *testing.T) {
+	store := &fakeShowroomRolesStore{
+		roles: []user.ShowroomRole{
+			{ShowroomID: 1, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
+			{ShowroomID: 2, ShowroomName: "Showroom B", Role: user.UserRoleTypeManager},
+		},
+	}
+
+	results, err := store.FindShowroomRolesByUserID(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(results) != 2 {
+		t.Fatalf("expected 2 roles, got %d", len(results))
+	}
+	if results[0].Role != user.UserRoleTypeOwner {
+		t.Fatalf("expected owner role, got %s", results[0].Role)
+	}
+}
+
+func TestFindShowroomRolesByUserIDReturnsEmpty(t *testing.T) {
+	store := &fakeShowroomRolesStore{roles: []user.ShowroomRole{}}
+
+	results, err := store.FindShowroomRolesByUserID(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(results) != 0 {
+		t.Fatalf("expected empty slice, got %d", len(results))
+	}
+}
+
+func TestFindShowroomRolesByUserIDError(t *testing.T) {
+	store := &fakeShowroomRolesStore{err: errors.New("db error")}
+
+	_, err := store.FindShowroomRolesByUserID(context.Background(), 42)
+	if err == nil {
+		t.Fatalf("expected error")
 	}
 }

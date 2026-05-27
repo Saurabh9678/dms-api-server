@@ -14,6 +14,18 @@ type fakeServiceRepo struct {
 	updatedName   string
 	err           error
 	callCount     int
+	user          *user.User
+	showroomRoles []user.ShowroomRole
+	findErr       error
+	rolesErr      error
+}
+
+func (f *fakeServiceRepo) FindByID(_ context.Context, _ uint64) (*user.User, error) {
+	return f.user, f.findErr
+}
+
+func (f *fakeServiceRepo) FindShowroomRolesByUserID(_ context.Context, _ uint64) ([]user.ShowroomRole, error) {
+	return f.showroomRoles, f.rolesErr
 }
 
 func (f *fakeServiceRepo) UpdateName(ctx context.Context, userID uint64, name string) error {
@@ -221,5 +233,109 @@ func TestUpdateProfileValidNameWithNumbers(t *testing.T) {
 	}
 	if appErr.Code != apperrors.CodeInvalidRequest {
 		t.Fatalf("expected INVALID_REQUEST code, got %s", appErr.Code)
+	}
+}
+
+func TestGetProfileSuccess(t *testing.T) {
+	repo := &fakeServiceRepo{
+		user: &user.User{ID: 1, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999"},
+		showroomRoles: []user.ShowroomRole{
+			{ShowroomID: 10, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
+		},
+	}
+	svc := user.NewService(repo)
+
+	resp, err := svc.GetProfile(context.Background(), 1)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.Name == nil || *resp.Name != "Alice" {
+		t.Fatalf("expected name Alice, got %v", resp.Name)
+	}
+	if resp.PhoneNumber == nil || *resp.PhoneNumber != "+919999999999" {
+		t.Fatalf("expected phone +919999999999, got %v", resp.PhoneNumber)
+	}
+	if len(resp.ShowroomRoles) != 1 || resp.ShowroomRoles[0].ShowroomID != 10 {
+		t.Fatalf("unexpected showroom roles: %+v", resp.ShowroomRoles)
+	}
+}
+
+func TestGetProfileNullName(t *testing.T) {
+	repo := &fakeServiceRepo{
+		user:          &user.User{ID: 2, Name: "", CountryCode: "+91", PhoneNumber: "8888888888"},
+		showroomRoles: []user.ShowroomRole{},
+	}
+	svc := user.NewService(repo)
+
+	resp, err := svc.GetProfile(context.Background(), 2)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.Name != nil {
+		t.Fatalf("expected nil name, got %v", resp.Name)
+	}
+	if resp.ShowroomRoles == nil {
+		t.Fatalf("expected empty slice, got nil")
+	}
+}
+
+func TestGetProfileUserNotFound(t *testing.T) {
+	repo := &fakeServiceRepo{findErr: user.ErrUserNotFound}
+	svc := user.NewService(repo)
+
+	_, err := svc.GetProfile(context.Background(), 99)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+	if !errors.Is(err, user.ErrUserNotFound) {
+		t.Fatalf("expected ErrUserNotFound, got %v", err)
+	}
+}
+
+func TestGetProfileRolesRepoError(t *testing.T) {
+	repo := &fakeServiceRepo{
+		user:     &user.User{ID: 1, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999"},
+		rolesErr: errors.New("db error"),
+	}
+	svc := user.NewService(repo)
+
+	_, err := svc.GetProfile(context.Background(), 1)
+	if err == nil {
+		t.Fatalf("expected error from roles repo")
+	}
+}
+
+func TestGetProfileEmptyPhoneNumber(t *testing.T) {
+	repo := &fakeServiceRepo{
+		user:          &user.User{ID: 3, Name: "Bob", CountryCode: "", PhoneNumber: ""},
+		showroomRoles: []user.ShowroomRole{},
+	}
+	svc := user.NewService(repo)
+
+	resp, err := svc.GetProfile(context.Background(), 3)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.PhoneNumber != nil {
+		t.Fatalf("expected nil phone number, got %v", resp.PhoneNumber)
+	}
+}
+
+func TestGetProfileMultipleShowroomRoles(t *testing.T) {
+	repo := &fakeServiceRepo{
+		user: &user.User{ID: 4, Name: "Carol", CountryCode: "+91", PhoneNumber: "7777777777"},
+		showroomRoles: []user.ShowroomRole{
+			{ShowroomID: 1, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
+			{ShowroomID: 2, ShowroomName: "Showroom B", Role: user.UserRoleTypeManager},
+		},
+	}
+	svc := user.NewService(repo)
+
+	resp, err := svc.GetProfile(context.Background(), 4)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(resp.ShowroomRoles) != 2 {
+		t.Fatalf("expected 2 showroom roles, got %d", len(resp.ShowroomRoles))
 	}
 }

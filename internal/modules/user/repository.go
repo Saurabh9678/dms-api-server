@@ -53,6 +53,21 @@ func (r *Repository) Create(ctx context.Context, record *User) (*User, error) {
 	return &model, nil
 }
 
+func (r *Repository) FindShowroomRolesByUserID(ctx context.Context, userID uint64) ([]ShowroomRole, error) {
+	var results []ShowroomRole
+	err := r.db.WithContext(ctx).
+		Table("user_showroom_relations usr").
+		Select("usr.showroom_id, s.name AS showroom_name, ur.type AS role").
+		Joins("JOIN showrooms s ON s.id = usr.showroom_id").
+		Joins("JOIN user_roles ur ON ur.id = usr.role_id").
+		Where("usr.user_id = ? AND usr.deleted_at IS NULL", userID).
+		Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 func (r *Repository) UpdateName(ctx context.Context, userID uint64, name string) error {
 	result := r.db.WithContext(ctx).Model(&User{}).Where("id = ?", userID).Update("name", name)
 	if result.Error != nil {

@@ -11,14 +11,14 @@ import (
 
 // fakeRepo is a controllable in-memory implementation of the dashboardRepo interface.
 type fakeRepo struct {
-	salesResult    *dashboard.SalesQueryResult
-	salesErr       error
+	salesResult     *dashboard.SalesQueryResult
+	salesErr        error
 	inventoryResult *dashboard.InventoryQueryResult
-	inventoryErr   error
-	expenseResult  *dashboard.ExpenseQueryResult
-	expenseErr     error
-	topTypesResult []dashboard.VehicleTypeQueryResult
-	topTypesErr    error
+	inventoryErr    error
+	expenseResult   *dashboard.ExpenseQueryResult
+	expenseErr      error
+	topTypesResult  []dashboard.VehicleTypeQueryResult
+	topTypesErr     error
 
 	capturedSalesParams     dashboard.QueryParams
 	capturedInventoryParams dashboard.QueryParams
