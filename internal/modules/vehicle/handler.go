@@ -38,3 +38,19 @@ func (h *Handler) CreateVehicle(c *gin.Context) {
 
 	response.Created(c, "vehicle created", resp)
 }
+
+func (h *Handler) ListVehicles(c *gin.Context) {
+	var query ListVehiclesQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	resp, err := h.service.ListVehicles(c.Request.Context(), &query)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "vehicle listing", resp)
+}

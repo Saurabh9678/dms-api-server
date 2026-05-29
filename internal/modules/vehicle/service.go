@@ -11,10 +11,13 @@ import (
 
 type Service interface {
 	CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error)
+	ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*ListVehiclesResponse, error)
 }
 
 type vehicleRepo interface {
 	Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error)
+	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
+	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]int64, error)
 }
 
 type service struct {
@@ -126,6 +129,162 @@ func (s *service) validateRequest(req *CreateVehicleRequest) error {
 	}
 
 	return nil
+}
+
+func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*ListVehiclesResponse, error) {
+	if err := s.validateListQuery(query); err != nil {
+		return nil, err
+	}
+
+	statuses := make([]VehicleStatusType, 0, len(query.Statuses))
+	if len(query.Statuses) == 0 {
+		statuses = append(statuses, VehicleStatusTypeReadyForSale)
+	} else {
+		for _, s := range query.Statuses {
+			statuses = append(statuses, VehicleStatusType(s))
+		}
+	}
+
+	types := make([]VehicleType, 0, len(query.VehicleTypes))
+	for _, t := range query.VehicleTypes {
+		types = append(types, VehicleType(t))
+	}
+
+	filter := ListFilter{
+		Statuses:     statuses,
+		VehicleTypes: types,
+		MinPrice:     query.MinPrice,
+		MaxPrice:     query.MaxPrice,
+		Page:         query.Page,
+		Limit:        query.Limit,
+	}
+
+	counts, err := s.repo.CountByType(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	vehicles, err := s.repo.List(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	grouped := map[VehicleType][]VehicleListItem{
+		VehicleTypeCar:    {},
+		VehicleTypeBike:   {},
+		VehicleTypeScooty: {},
+	}
+	for _, v := range vehicles {
+		item := toVehicleListItem(v)
+		grouped[v.VehicleType] = append(grouped[v.VehicleType], item)
+	}
+
+	wantType := map[VehicleType]bool{}
+	if len(types) == 0 {
+		wantType[VehicleTypeCar] = true
+		wantType[VehicleTypeBike] = true
+		wantType[VehicleTypeScooty] = true
+	} else {
+		for _, t := range types {
+			wantType[t] = true
+		}
+	}
+
+	resp := &ListVehiclesResponse{}
+	if wantType[VehicleTypeCar] {
+		resp.Cars = &CategoryListing{
+			Total:    counts[VehicleTypeCar],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeCar],
+		}
+	}
+	if wantType[VehicleTypeBike] {
+		resp.Bikes = &CategoryListing{
+			Total:    counts[VehicleTypeBike],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeBike],
+		}
+	}
+	if wantType[VehicleTypeScooty] {
+		resp.Scooties = &CategoryListing{
+			Total:    counts[VehicleTypeScooty],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeScooty],
+		}
+	}
+
+	return resp, nil
+}
+
+func toVehicleListItem(v VehicleWithDetails) VehicleListItem {
+	item := VehicleListItem{
+		ID:                 v.ID,
+		VehicleType:        string(v.VehicleType),
+		Manufacturer:       v.Manufacturer,
+		Model:              v.Model,
+		Variant:            v.Variant,
+		Color:              v.Color,
+		YearOfManufacture:  v.YearOfManufacture,
+		RTOCode:            v.RTOCode,
+		RegistrationNumber: v.RegistrationNumber,
+		RegistrationState:  v.RegistrationState,
+		UsageKM:            v.UsageKM,
+		FuelType:           string(v.FuelType),
+		TransmissionType:   string(v.TransmissionType),
+		CreatedAt:          v.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
+	}
+	if v.CurrentStatus != nil {
+		item.CurrentStatus = &VehicleStatusSummary{
+			Status:    string(v.CurrentStatus.Status),
+			StartedAt: v.CurrentStatus.StartedAt.Format(time.RFC3339),
+		}
+	}
+	if v.CurrentPricing != nil {
+		item.Pricing = &VehiclePricingSummary{
+			BuyingPrice: v.CurrentPricing.BuyingPrice,
+			PriceTag:    v.CurrentPricing.PriceTag,
+			Currency:    string(v.CurrentPricing.Currency),
+			TaggedAt:    v.CurrentPricing.TaggedAt.Format(time.RFC3339),
+		}
+	}
+	return item
+}
+
+func (s *service) validateListQuery(query *ListVehiclesQuery) error {
+	if query == nil {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.Page < 1 {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.Limit < 1 || query.Limit > 100 {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	for _, s := range query.Statuses {
+		if !isValidVehicleStatusType(VehicleStatusType(s)) {
+			return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+	}
+	for _, t := range query.VehicleTypes {
+		if !isValidVehicleType(VehicleType(t)) {
+			return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+	}
+	if query.MinPrice != nil && query.MaxPrice != nil && *query.MinPrice > *query.MaxPrice {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	return nil
+}
+
+func isValidVehicleStatusType(st VehicleStatusType) bool {
+	return st == VehicleStatusTypeGarage ||
+		st == VehicleStatusTypeInspection ||
+		st == VehicleStatusTypeReadyForSale ||
+		st == VehicleStatusTypeSold
 }
 
 func isValidVehicleType(vt VehicleType) bool {

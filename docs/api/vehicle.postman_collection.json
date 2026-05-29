@@ -2,14 +2,94 @@
   "info": {
     "name": "DMS API - Vehicle",
     "_postman_id": "dms-api-vehicle-collection",
-    "description": "Vehicle API collection scaffold. Add endpoint items as APIs are introduced.",
+    "description": "Vehicle API endpoints for DMS",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [],
+  "item": [
+    {
+      "name": "Create Vehicle",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Platform", "value": "web", "description": "Required: web | ios_mobile | android_mobile | desktop" },
+          { "key": "X-Device-Id", "value": "device-001", "description": "Required: non-empty device identifier" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}", "description": "Required: JWT access token" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"vehicle_type\": \"car\",\n  \"manufacturer\": \"Toyota\",\n  \"model\": \"Camry\",\n  \"variant\": \"LE\",\n  \"color\": \"Black\",\n  \"year_of_manufacture\": 2020,\n  \"rto_code\": \"KA-01\",\n  \"registration_number\": \"KA01AB1234\",\n  \"registration_state\": \"Karnataka\",\n  \"usage_km\": 50000,\n  \"fuel_type\": \"petrol\",\n  \"transmission_type\": \"manual\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/vehicle",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "vehicle"]
+        },
+        "description": "Create a new vehicle in inventory"
+      },
+      "response": [
+        {
+          "name": "201 Created",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"vehicle created\",\n  \"data\": {\n    \"id\": 1,\n    \"vehicle_type\": \"car\",\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Camry\",\n    \"variant\": \"LE\",\n    \"color\": \"Black\",\n    \"year_of_manufacture\": 2020,\n    \"rto_code\": \"KA-01\",\n    \"registration_number\": \"KA01AB1234\",\n    \"registration_state\": \"Karnataka\",\n    \"usage_km\": 50000,\n    \"fuel_type\": \"petrol\",\n    \"transmission_type\": \"manual\",\n    \"created_at\": \"2024-01-01T00:00:00Z\",\n    \"updated_at\": \"2024-01-01T00:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Vehicles by Category",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "X-Platform", "value": "web", "description": "Required: web | ios_mobile | android_mobile | desktop" },
+          { "key": "X-Device-Id", "value": "device-001", "description": "Required: non-empty device identifier" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}", "description": "Required: JWT access token" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "vehicle", "listing"],
+          "query": [
+            { "key": "status", "value": "ready_for_sale", "description": "Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: ready_for_sale" },
+            { "key": "type", "value": "", "description": "Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all", "disabled": true },
+            { "key": "min_price", "value": "", "description": "Minimum price_tag filter", "disabled": true },
+            { "key": "max_price", "value": "", "description": "Maximum price_tag filter", "disabled": true },
+            { "key": "page", "value": "1", "description": "Page number (min 1)" },
+            { "key": "limit", "value": "20", "description": "Items per page (1–100)" }
+          ]
+        },
+        "description": "List vehicles grouped by category (cars, bikes, scooties). Supports filtering by status, type, and price range with pagination."
+      },
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"vehicle listing\",\n  \"data\": {\n    \"cars\": {\n      \"total\": 2,\n      \"page\": 1,\n      \"limit\": 20,\n      \"vehicles\": [\n        {\n          \"id\": 1,\n          \"vehicle_type\": \"car\",\n          \"manufacturer\": \"Toyota\",\n          \"model\": \"Camry\",\n          \"variant\": \"LE\",\n          \"color\": \"Black\",\n          \"year_of_manufacture\": 2020,\n          \"rto_code\": \"KA-01\",\n          \"registration_number\": \"KA01AB1234\",\n          \"registration_state\": \"Karnataka\",\n          \"usage_km\": 50000,\n          \"fuel_type\": \"petrol\",\n          \"transmission_type\": \"manual\",\n          \"current_status\": {\n            \"status\": \"ready_for_sale\",\n            \"started_at\": \"2024-01-01T00:00:00Z\"\n          },\n          \"pricing\": {\n            \"buying_price\": 200000,\n            \"price_tag\": 350000,\n            \"currency\": \"inr\",\n            \"tagged_at\": \"2024-01-01T00:00:00Z\"\n          },\n          \"created_at\": \"2024-01-01T00:00:00Z\",\n          \"updated_at\": \"2024-01-01T00:00:00Z\"\n        }\n      ]\n    },\n    \"bikes\": {\n      \"total\": 0,\n      \"page\": 1,\n      \"limit\": 20,\n      \"vehicles\": []\n    },\n    \"scooties\": {\n      \"total\": 0,\n      \"page\": 1,\n      \"limit\": 20,\n      \"vehicles\": []\n    }\n  }\n}"
+        },
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+        }
+      ]
+    }
+  ],
   "variable": [
     {
       "key": "base_url",
       "value": "http://localhost:8080"
+    },
+    {
+      "key": "access_token",
+      "value": ""
     }
   ]
 }
