@@ -4,7 +4,7 @@ BIN_PATH := ./bin/$(APP_NAME)
 MIGRATIONS_DIR := ./migrations
 DB_URL ?= postgres://postgres:postgres@localhost:5432/dms?sslmode=disable
 
-.PHONY: help run build test tidy fmt verify verify-lint verify-coverage clean graphify-update docker-postgres-up docker-postgres-down docker-postgres-logs migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
+.PHONY: help run build test tidy fmt verify verify-lint verify-coverage clean graphify-update deps docker-postgres-up docker-postgres-down docker-postgres-logs migrate-up migrate-down migrate-down-all migrate-version migrate-create migrate-force
 
 help:
 	@echo "Available targets:"
@@ -27,6 +27,7 @@ help:
 	@echo "  make migrate-down-all                 - Roll back all migrations"
 	@echo "  make migrate-version                  - Show current migration version"
 	@echo "  make migrate-force VERSION=<version>  - Force migration version"
+	@echo "  make deps   - Download and verify Go module dependencies"
 
 run:
 	go run $(CMD_PATH)
@@ -37,6 +38,10 @@ build:
 
 test:
 	go test ./...
+
+deps:
+	go mod download
+	go mod verify
 
 tidy:
 	go mod tidy
