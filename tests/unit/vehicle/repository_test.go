@@ -11,3 +11,7 @@ func TestNewRepository(t *testing.T) {
 	repo := vehicle.NewRepository(nil)
 	assert.NotNil(t, repo)
 }
+
+func TestErrVehicleNotFound(t *testing.T) {
+	assert.EqualError(t, vehicle.ErrVehicleNotFound, "vehicle not found")
+}

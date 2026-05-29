@@ -68,6 +68,18 @@ func (r *Repository) FindShowroomRolesByUserID(ctx context.Context, userID uint6
 	return results, nil
 }
 
+func (r *Repository) LoadUserShowroomRoles(ctx context.Context, userID uint64) (map[uint64]string, error) {
+	roles, err := r.FindShowroomRolesByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[uint64]string, len(roles))
+	for _, sr := range roles {
+		result[sr.ShowroomID] = string(sr.Role)
+	}
+	return result, nil
+}
+
 func (r *Repository) UpdateName(ctx context.Context, userID uint64, name string) error {
 	result := r.db.WithContext(ctx).Model(&User{}).Where("id = ?", userID).Update("name", name)
 	if result.Error != nil {

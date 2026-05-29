@@ -38,6 +38,14 @@ func (m *mockVehicleRepo) CountByType(ctx context.Context, f vehicle.ListFilter)
 	return args.Get(0).(map[vehicle.VehicleType]int64), args.Error(1)
 }
 
+func (m *mockVehicleRepo) GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*vehicle.VehicleFullDetails, error) {
+	args := m.Called(ctx, vehicleID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleFullDetails), args.Error(1)
+}
+
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := vehicle.NewService(mockRepo)
@@ -901,6 +909,46 @@ func TestListVehicles_CountByTypeError(t *testing.T) {
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
+}
+
+func TestGetVehicleByID_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	details := &vehicle.VehicleFullDetails{
+		Vehicle: vehicle.Vehicle{ID: 5, VehicleType: vehicle.VehicleTypeCar},
+	}
+	mockRepo.On("GetByIDWithFullDetails", mock.Anything, uint64(5)).Return(details, nil)
+
+	result, err := svc.GetVehicleByID(context.Background(), 5)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, uint64(5), result.Vehicle.ID)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestGetVehicleByID_NotFound(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	mockRepo.On("GetByIDWithFullDetails", mock.Anything, uint64(99)).Return(nil, vehicle.ErrVehicleNotFound)
+
+	result, err := svc.GetVehicleByID(context.Background(), 99)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+	assert.Nil(t, result)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestGetVehicleByID_RepoError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	mockRepo.On("GetByIDWithFullDetails", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
+
+	result, err := svc.GetVehicleByID(context.Background(), 1)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	mockRepo.AssertExpectations(t)
 }
 
 func TestListVehicles_ListError(t *testing.T) {

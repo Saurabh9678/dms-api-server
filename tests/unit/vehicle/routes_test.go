@@ -2,6 +2,7 @@ package vehicle_test
 
 import (
 	"context"
+	"net/http"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,16 @@ func (m *mockRoutesService) ListVehicles(ctx context.Context, query *vehicle.Lis
 	return args.Get(0).(*vehicle.ListVehiclesResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) GetVehicleByID(ctx context.Context, vehicleID uint64) (*vehicle.VehicleFullDetails, error) {
+	args := m.Called(ctx, vehicleID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleFullDetails), args.Error(1)
+}
+
+func noopMiddleware(c *gin.Context) { c.Next() }
+
 func TestRegisterRoutes(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
@@ -38,7 +49,7 @@ func TestRegisterRoutes(t *testing.T) {
 	mockSvc := new(mockRoutesService)
 	handler := vehicle.NewHandler(mockSvc)
 
-	vehicle.RegisterRoutes(router, handler)
+	vehicle.RegisterRoutes(router, handler, noopMiddleware)
 
 	routes := engine.Routes()
 	assert.NotEmpty(t, routes)
@@ -50,4 +61,30 @@ func TestRegisterRoutes(t *testing.T) {
 
 	assert.True(t, routeMap["POST:/api/v1/vehicle"], "POST /api/v1/vehicle route should be registered")
 	assert.True(t, routeMap["GET:/api/v1/vehicle/listing"], "GET /api/v1/vehicle/listing route should be registered")
+	assert.True(t, routeMap["GET:/api/v1/vehicle/:id"], "GET /api/v1/vehicle/:id route should be registered")
+}
+
+func TestRegisterRoutes_NoopMiddlewareUsed(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	router := engine.Group("/api/v1")
+
+	mockSvc := new(mockRoutesService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	called := false
+	testMiddleware := func(c *gin.Context) {
+		called = true
+		c.AbortWithStatus(http.StatusTeapot)
+	}
+
+	vehicle.RegisterRoutes(router, handler, testMiddleware)
+
+	routes := engine.Routes()
+	routeMap := map[string]bool{}
+	for _, route := range routes {
+		routeMap[route.Method+":"+route.Path] = true
+	}
+	assert.True(t, routeMap["GET:/api/v1/vehicle/:id"])
+	_ = called
 }

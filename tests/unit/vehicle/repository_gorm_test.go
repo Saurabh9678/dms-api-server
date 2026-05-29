@@ -211,3 +211,127 @@ func TestVehicleRepositoryCountByType_Error(t *testing.T) {
 	_, err := repo.CountByType(context.Background(), filter)
 	assert.Error(t, err)
 }
+
+func TestGetByIDWithFullDetails_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	_, err := repo.GetByIDWithFullDetails(context.Background(), 999)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestGetByIDWithFullDetails_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.GetByIDWithFullDetails(context.Background(), 1)
+	assert.Error(t, err)
+	assert.NotErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestGetByIDWithFullDetails_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	vehicleCols := []string{
+		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
+		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
+	}
+	vehicleRows := sqlmock.NewRows(vehicleCols).
+		AddRow(uint64(1), "car", "Toyota", "Camry", "LE", "Black", 2020, "KA-01", "KA01AB1234", "Karnataka", 50000, "petrol", "manual", now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicles"`).WillReturnRows(vehicleRows)
+
+	pricingCols := []string{"id", "vehicle_id", "buying_price", "buying_date", "price_tag", "tagged_at", "currency", "remarks", "created_at", "updated_at", "deleted_at"}
+	pricingRows := sqlmock.NewRows(pricingCols).
+		AddRow(uint64(1), uint64(1), 200000.0, now, 300000.0, now, "inr", "", now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).WillReturnRows(pricingRows)
+
+	statusCols := []string{"id", "vehicle_id", "status", "description", "started_at", "ended_at", "added_by", "created_at", "updated_at", "deleted_at"}
+	statusRows := sqlmock.NewRows(statusCols).
+		AddRow(uint64(1), uint64(1), "ready_for_sale", "", now, now, uint64(1), now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_statuses"`).WillReturnRows(statusRows)
+
+	docCols := []string{"id", "vehicle_id", "document_type", "document_url", "valid_from", "valid_till", "remarks", "uploaded_at", "uploaded_by", "created_at", "updated_at", "deleted_at"}
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_documents"`).WillReturnRows(sqlmock.NewRows(docCols))
+
+	expCols := []string{"id", "vehicle_id", "status_id", "type", "amount", "paid_to", "description", "date", "created_at", "updated_at", "deleted_at"}
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_expenses"`).WillReturnRows(sqlmock.NewRows(expCols))
+
+	imgCols := []string{"id", "vehicle_id", "image_url", "label", "uploaded_at", "uploaded_by", "created_at", "updated_at", "deleted_at"}
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_images"`).WillReturnRows(sqlmock.NewRows(imgCols))
+
+	showroomCols := []string{"id", "vehicle_id", "showroom_id", "created_at", "updated_at", "deleted_at"}
+	showroomRows := sqlmock.NewRows(showroomCols).AddRow(uint64(1), uint64(1), uint64(10), now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_showroom_relations"`).WillReturnRows(showroomRows)
+
+	saleCols := []string{
+		"sale_price", "sale_date", "payment_mode", "receipt_url", "remarks",
+		"customer_first_name", "customer_last_name", "customer_email",
+		"customer_phone", "customer_address", "customer_city", "customer_state",
+	}
+	mock.ExpectQuery(`customer_vehicle_sales`).WillReturnRows(sqlmock.NewRows(saleCols))
+
+	details, err := repo.GetByIDWithFullDetails(context.Background(), 1)
+	assert.NoError(t, err)
+	assert.NotNil(t, details)
+	assert.Equal(t, uint64(1), details.Vehicle.ID)
+	assert.NotNil(t, details.Pricing)
+	assert.Equal(t, 1, len(details.Statuses))
+	assert.Equal(t, uint64(10), details.ShowroomID)
+	assert.Nil(t, details.SaleInfo)
+}
+
+func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	vehicleCols := []string{
+		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
+		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
+	}
+	vehicleRows := sqlmock.NewRows(vehicleCols).
+		AddRow(uint64(2), "car", "Honda", "City", "V", "White", 2021, "DL-01", "DL01XY5678", "Delhi", 30000, "petrol", "automatic", now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicles"`).WillReturnRows(vehicleRows)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_statuses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_documents"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_expenses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_images"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	saleCols := []string{
+		"sale_price", "sale_date", "payment_mode", "receipt_url", "remarks",
+		"customer_first_name", "customer_last_name", "customer_email",
+		"customer_phone", "customer_address", "customer_city", "customer_state",
+	}
+	saleRows := sqlmock.NewRows(saleCols).
+		AddRow(500000.0, now, "cash", "https://receipt.url", "sold", "John", "Doe", "john@example.com", "9876543210", "123 Main St", "Mumbai", "Maharashtra")
+	mock.ExpectQuery(`customer_vehicle_sales`).WillReturnRows(saleRows)
+
+	details, err := repo.GetByIDWithFullDetails(context.Background(), 2)
+	assert.NoError(t, err)
+	assert.NotNil(t, details)
+	assert.NotNil(t, details.SaleInfo)
+	assert.Equal(t, 500000.0, details.SaleInfo.SalePrice)
+	assert.Equal(t, "John", details.SaleInfo.CustomerFirstName)
+}

@@ -2,6 +2,7 @@ package vehicle
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,6 +14,114 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
+}
+
+type VehicleSaleInfo struct {
+	SalePrice         float64
+	SaleDate          time.Time
+	PaymentMode       string
+	ReceiptUrl        string
+	Remarks           string
+	CustomerFirstName string
+	CustomerLastName  string
+	CustomerEmail     string
+	CustomerPhone     string
+	CustomerAddress   string
+	CustomerCity      string
+	CustomerState     string
+}
+
+type VehicleFullDetails struct {
+	Vehicle    Vehicle
+	Pricing    *VehiclePricing
+	Statuses   []VehicleStatus
+	Documents  []VehicleDocument
+	Expenses   []VehicleExpenses
+	Images     []VehicleImage
+	ShowroomID uint64
+	SaleInfo   *VehicleSaleInfo
+}
+
+type saleRow struct {
+	SalePrice         float64   `gorm:"column:sale_price"`
+	SaleDate          time.Time `gorm:"column:sale_date"`
+	PaymentMode       string    `gorm:"column:payment_mode"`
+	ReceiptUrl        string    `gorm:"column:receipt_url"`
+	Remarks           string    `gorm:"column:remarks"`
+	CustomerFirstName string    `gorm:"column:customer_first_name"`
+	CustomerLastName  string    `gorm:"column:customer_last_name"`
+	CustomerEmail     string    `gorm:"column:customer_email"`
+	CustomerPhone     string    `gorm:"column:customer_phone"`
+	CustomerAddress   string    `gorm:"column:customer_address"`
+	CustomerCity      string    `gorm:"column:customer_city"`
+	CustomerState     string    `gorm:"column:customer_state"`
+}
+
+func (r *Repository) GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error) {
+	var v Vehicle
+	if err := r.db.WithContext(ctx).First(&v, vehicleID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrVehicleNotFound
+		}
+		return nil, err
+	}
+
+	details := &VehicleFullDetails{Vehicle: v}
+
+	var pricing VehiclePricing
+	if err := r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).Order("id DESC").First(&pricing).Error; err == nil {
+		details.Pricing = &pricing
+	}
+
+	var statuses []VehicleStatus
+	r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).Order("started_at DESC").Find(&statuses)
+	details.Statuses = statuses
+
+	var docs []VehicleDocument
+	r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).Find(&docs)
+	details.Documents = docs
+
+	var expenses []VehicleExpenses
+	r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).Find(&expenses)
+	details.Expenses = expenses
+
+	var images []VehicleImage
+	r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).Find(&images)
+	details.Images = images
+
+	var showroomRel VehicleShowroom
+	if err := r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).First(&showroomRel).Error; err == nil {
+		details.ShowroomID = showroomRel.ShowroomID
+	}
+
+	var sale saleRow
+	result := r.db.WithContext(ctx).Raw(`
+		SELECT cvs.sale_price, cvs.sale_date, cvs.payment_mode, cvs.receipt_url, cvs.remarks,
+		       c.first_name AS customer_first_name, c.last_name AS customer_last_name,
+		       c.email AS customer_email, c.phone_number AS customer_phone,
+		       c.address AS customer_address, c.city AS customer_city, c.state AS customer_state
+		FROM customer_vehicle_sales cvs
+		JOIN customers c ON c.id = cvs.customer_id
+		WHERE cvs.vehicle_id = ? AND cvs.deleted_at IS NULL
+		ORDER BY cvs.id DESC LIMIT 1`, vehicleID).Scan(&sale)
+	if result.Error == nil && result.RowsAffected > 0 {
+		details.SaleInfo = &VehicleSaleInfo{
+			SalePrice:         sale.SalePrice,
+			SaleDate:          sale.SaleDate,
+			PaymentMode:       sale.PaymentMode,
+			ReceiptUrl:        sale.ReceiptUrl,
+			Remarks:           sale.Remarks,
+			CustomerFirstName: sale.CustomerFirstName,
+			CustomerLastName:  sale.CustomerLastName,
+			CustomerEmail:     sale.CustomerEmail,
+			CustomerPhone:     sale.CustomerPhone,
+			CustomerAddress:   sale.CustomerAddress,
+			CustomerCity:      sale.CustomerCity,
+			CustomerState:     sale.CustomerState,
+		}
+	}
+
+	return details, nil
 }
 
 func (r *Repository) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error) {

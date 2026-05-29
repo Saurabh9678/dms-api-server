@@ -12,12 +12,14 @@ import (
 type Service interface {
 	CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error)
 	ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*ListVehiclesResponse, error)
+	GetVehicleByID(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
 }
 
 type vehicleRepo interface {
 	Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error)
 	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
 	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]int64, error)
+	GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
 }
 
 type service struct {
@@ -278,6 +280,10 @@ func (s *service) validateListQuery(query *ListVehiclesQuery) error {
 		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
 	}
 	return nil
+}
+
+func (s *service) GetVehicleByID(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error) {
+	return s.repo.GetByIDWithFullDetails(ctx, vehicleID)
 }
 
 func isValidVehicleStatusType(st VehicleStatusType) bool {
