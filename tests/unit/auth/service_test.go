@@ -51,9 +51,20 @@ type fakeOTPRepo struct {
 	lastCreated       *auth.UserOTP
 	activeByRequestID map[string]*auth.UserOTP
 	incrementedID     uint64
+	// error injection
+	createErr        error
+	createErrCount   int  // if > 0, return createErr for this many calls, then succeed
+	createCallCount  int
+	markUsedErr      error
 }
 
 func (f *fakeOTPRepo) Create(_ context.Context, entity *auth.UserOTP) (*auth.UserOTP, error) {
+	f.createCallCount++
+	if f.createErr != nil {
+		if f.createErrCount <= 0 || f.createCallCount <= f.createErrCount {
+			return nil, f.createErr
+		}
+	}
 	copy := *entity
 	copy.ID = 100
 	f.lastCreated = &copy
@@ -75,6 +86,9 @@ func (f *fakeOTPRepo) IncrementAttempt(_ context.Context, otpID uint64) error {
 }
 
 func (f *fakeOTPRepo) MarkUsed(_ context.Context, otpID uint64, verifiedAt time.Time) error {
+	if f.markUsedErr != nil {
+		return f.markUsedErr
+	}
 	for _, item := range f.activeByRequestID {
 		if item.ID == otpID {
 			item.IsUsed = true
@@ -91,9 +105,15 @@ type fakeSessionRepo struct {
 	revokedID     uint64
 	revokedUserID uint64
 	revokedOnPlat auth.OTPPlatform
+	// error injection
+	createErr           error
+	rotateErr           error
 }
 
 func (f *fakeSessionRepo) Create(_ context.Context, entity *auth.UserSession) (*auth.UserSession, error) {
+	if f.createErr != nil {
+		return nil, f.createErr
+	}
 	copy := *entity
 	copy.ID = 501
 	f.sessionByHash[copy.RefreshTokenHash] = &copy
@@ -109,6 +129,9 @@ func (f *fakeSessionRepo) FindByRefreshTokenHash(_ context.Context, refreshToken
 }
 
 func (f *fakeSessionRepo) RotateRefreshToken(_ context.Context, sessionID uint64, refreshTokenHash string, expiresAt time.Time, lastUsedAt time.Time) error {
+	if f.rotateErr != nil {
+		return f.rotateErr
+	}
 	f.rotatedID = sessionID
 	for _, session := range f.sessionByHash {
 		if session.ID == sessionID {
