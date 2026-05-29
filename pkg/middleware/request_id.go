@@ -23,8 +23,7 @@ func RequestID() gin.HandlerFunc {
 
 func newRequestID() string {
 	buf := make([]byte, 16)
-	if _, err := rand.Read(buf); err != nil {
-		return "request-id-fallback"
-	}
+	// crypto/rand.Read panics on entropy failure in Go 1.20+; error is unreachable.
+	_, _ = rand.Read(buf)
 	return hex.EncodeToString(buf)
 }
