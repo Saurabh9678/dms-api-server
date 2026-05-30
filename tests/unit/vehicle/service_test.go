@@ -14,8 +14,8 @@ type mockVehicleRepo struct {
 	mock.Mock
 }
 
-func (m *mockVehicleRepo) Create(ctx context.Context, v *vehicle.Vehicle) (*vehicle.Vehicle, error) {
-	args := m.Called(ctx, v)
+func (m *mockVehicleRepo) CreateWithInitialStatus(ctx context.Context, v *vehicle.Vehicle, status *vehicle.VehicleStatus) (*vehicle.Vehicle, error) {
+	args := m.Called(ctx, v, status)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -139,14 +139,14 @@ func TestCreateVehicle_Success(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	mockRepo.On("Create", mock.Anything, mock.MatchedBy(func(v *vehicle.Vehicle) bool {
+	mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.MatchedBy(func(v *vehicle.Vehicle) bool {
 		return v.VehicleType == vehicle.VehicleTypeCar && v.Manufacturer == "Toyota"
-	})).Return(expectedVehicle, nil).Run(func(args mock.Arguments) {
+	}), mock.Anything).Return(expectedVehicle, nil).Run(func(args mock.Arguments) {
 		v := args.Get(1).(*vehicle.Vehicle)
 		v.ID = 1
 	})
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -175,11 +175,11 @@ func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	mockRepo.AssertNotCalled(t, "Create")
+	mockRepo.AssertNotCalled(t, "CreateWithInitialStatus")
 }
 
 func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
@@ -201,11 +201,11 @@ func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	mockRepo.AssertNotCalled(t, "Create")
+	mockRepo.AssertNotCalled(t, "CreateWithInitialStatus")
 }
 
 func TestCreateVehicle_EmptyModel(t *testing.T) {
@@ -227,7 +227,7 @@ func TestCreateVehicle_EmptyModel(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -252,7 +252,7 @@ func TestCreateVehicle_EmptyVariant(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -277,7 +277,7 @@ func TestCreateVehicle_EmptyColor(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -302,7 +302,7 @@ func TestCreateVehicle_YearBelowMin(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -327,7 +327,7 @@ func TestCreateVehicle_YearInFuture(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -352,7 +352,7 @@ func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -377,7 +377,7 @@ func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -402,7 +402,7 @@ func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -427,7 +427,7 @@ func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -452,7 +452,7 @@ func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -477,7 +477,7 @@ func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionType("cvt"),
 	}
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -502,9 +502,9 @@ func TestCreateVehicle_RepositoryError(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	mockRepo.On("Create", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+	mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -548,9 +548,9 @@ func TestCreateVehicle_AllVehicleTypes(t *testing.T) {
 				VehicleType: tt.vehicleType,
 			}
 
-			mockRepo.On("Create", mock.Anything, mock.Anything).Return(expectedVehicle, nil)
+			mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(expectedVehicle, nil)
 
-			resp, err := svc.CreateVehicle(context.Background(), req)
+			resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 			if tt.shouldPass {
 				assert.NoError(t, err)
@@ -596,9 +596,9 @@ func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 				FuelType: tt.fuelType,
 			}
 
-			mockRepo.On("Create", mock.Anything, mock.Anything).Return(expectedVehicle, nil)
+			mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(expectedVehicle, nil)
 
-			resp, err := svc.CreateVehicle(context.Background(), req)
+			resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 			if tt.shouldPass {
 				assert.NoError(t, err)
@@ -643,9 +643,9 @@ func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 				TransmissionType: tt.transmissionType,
 			}
 
-			mockRepo.On("Create", mock.Anything, mock.Anything).Return(expectedVehicle, nil)
+			mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(expectedVehicle, nil)
 
-			resp, err := svc.CreateVehicle(context.Background(), req)
+			resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 
 			if tt.shouldPass {
 				assert.NoError(t, err)
@@ -659,7 +659,7 @@ func TestValidateRequest_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := vehicle.NewService(mockRepo)
 
-	resp, err := svc.CreateVehicle(context.Background(), nil)
+	resp, err := svc.CreateVehicle(context.Background(), nil, uint64(0))
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }
@@ -687,14 +687,14 @@ func TestValidateRequest_ValidRequest(t *testing.T) {
 		ID: 1,
 	}
 
-	mockRepo.On("Create", mock.Anything, mock.Anything).Return(expectedVehicle, nil)
+	mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(expectedVehicle, nil)
 
-	resp, err := svc.CreateVehicle(context.Background(), req)
+	resp, err := svc.CreateVehicle(context.Background(), req, uint64(1))
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 }
 
-func TestRepository_Create_Covered(t *testing.T) {
+func TestRepository_CreateWithInitialStatus_Covered(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 
 	v := &vehicle.Vehicle{
@@ -711,10 +711,11 @@ func TestRepository_Create_Covered(t *testing.T) {
 		FuelType:           vehicle.FuelTypePetrol,
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
+	s := &vehicle.VehicleStatus{Status: vehicle.VehicleStatusTypeBought, AddedBy: 1}
 
-	mockRepo.On("Create", mock.Anything, mock.Anything).Return(v, nil)
+	mockRepo.On("CreateWithInitialStatus", mock.Anything, mock.Anything, mock.Anything).Return(v, nil)
 
-	result, err := mockRepo.Create(context.Background(), v)
+	result, err := mockRepo.CreateWithInitialStatus(context.Background(), v, s)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, v.Manufacturer, result.Manufacturer)

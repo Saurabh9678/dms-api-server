@@ -23,6 +23,7 @@ type VehicleStatus struct {
 type VehicleStatusType string
 
 const (
+	VehicleStatusTypeBought       VehicleStatusType = "bought"
 	VehicleStatusTypeGarage       VehicleStatusType = "garage"
 	VehicleStatusTypeInspection   VehicleStatusType = "inspection"
 	VehicleStatusTypeReadyForSale VehicleStatusType = "ready_for_sale"

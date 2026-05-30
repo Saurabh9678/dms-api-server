@@ -42,13 +42,14 @@ func (h *Handler) CreateVehicle(c *gin.Context) {
 		return
 	}
 
-	_, exists := c.Get(middleware.ContextKeyUserID)
+	userIDVal, exists := c.Get(middleware.ContextKeyUserID)
 	if !exists {
 		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
 		return
 	}
+	userID := userIDVal.(uint64)
 
-	resp, err := h.service.CreateVehicle(c.Request.Context(), &req)
+	resp, err := h.service.CreateVehicle(c.Request.Context(), &req, userID)
 	if err != nil {
 		response.FromError(c, err)
 		return

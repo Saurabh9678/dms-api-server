@@ -15,8 +15,8 @@ type mockRoutesService struct {
 	mock.Mock
 }
 
-func (m *mockRoutesService) CreateVehicle(ctx context.Context, req *vehicle.CreateVehicleRequest) (*vehicle.CreateVehicleResponse, error) {
-	args := m.Called(ctx, req)
+func (m *mockRoutesService) CreateVehicle(ctx context.Context, req *vehicle.CreateVehicleRequest, addedBy uint64) (*vehicle.CreateVehicleResponse, error) {
+	args := m.Called(ctx, req, addedBy)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}

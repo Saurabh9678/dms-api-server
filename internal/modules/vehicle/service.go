@@ -10,7 +10,7 @@ import (
 )
 
 type Service interface {
-	CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error)
+	CreateVehicle(ctx context.Context, req *CreateVehicleRequest, addedBy uint64) (*CreateVehicleResponse, error)
 	ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*ListVehiclesResponse, error)
 	GetVehicleByID(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
 	PublicListVehicles(ctx context.Context, query *PublicListVehiclesQuery) (*PublicListVehiclesResponse, error)
@@ -20,7 +20,7 @@ type Service interface {
 }
 
 type vehicleRepo interface {
-	Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error)
+	CreateWithInitialStatus(ctx context.Context, vehicle *Vehicle, status *VehicleStatus) (*Vehicle, error)
 	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
 	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]int64, error)
 	GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
@@ -44,7 +44,7 @@ func NewService(repo vehicleRepo) Service {
 	}
 }
 
-func (s *service) CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error) {
+func (s *service) CreateVehicle(ctx context.Context, req *CreateVehicleRequest, addedBy uint64) (*CreateVehicleResponse, error) {
 	if err := s.validateRequest(req); err != nil {
 		return nil, err
 	}
@@ -64,7 +64,15 @@ func (s *service) CreateVehicle(ctx context.Context, req *CreateVehicleRequest) 
 		TransmissionType:   req.TransmissionType,
 	}
 
-	created, err := s.repo.Create(ctx, vehicle)
+	now := time.Now()
+	status := &VehicleStatus{
+		Status:    VehicleStatusTypeBought,
+		StartedAt: now,
+		EndedAt:   now,
+		AddedBy:   addedBy,
+	}
+
+	created, err := s.repo.CreateWithInitialStatus(ctx, vehicle, status)
 	if err != nil {
 		return nil, err
 	}

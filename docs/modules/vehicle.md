@@ -21,9 +21,9 @@
 
 **Flow:**
 1. `POST /api/v1/vehicle` → `RequireDeviceContext` → `RequireAuth` → `vehicle.Handler.CreateVehicle`
-2. Handler: `ShouldBindJSON` → calls `service.CreateVehicle`
-3. Service: validates all fields (type, manufacturer, model, variant, color, year, RTO, registration, state, usageKM, fuel, transmission) → calls `repo.Create`
-4. Repository: GORM `Create` on `vehicles` table
+2. Handler: `ShouldBindJSON` → extracts `userID` from context → calls `service.CreateVehicle(ctx, req, userID)`
+3. Service: validates all fields (type, manufacturer, model, variant, color, year, RTO, registration, state, usageKM, fuel, transmission) → builds initial `VehicleStatus{status: bought, addedBy: userID}` → calls `repo.CreateWithInitialStatus`
+4. Repository: runs a DB transaction — GORM `Create` on `vehicles`, then GORM `Create` on `vehicle_statuses` with `status = bought`. Both are atomic; if the status insert fails the vehicle insert is rolled back.
 5. Response: `201 Created` with vehicle fields
 
 ---

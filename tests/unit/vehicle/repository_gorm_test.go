@@ -735,3 +735,58 @@ func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
 	assert.Equal(t, 500000.0, details.SaleInfo.SalePrice)
 	assert.Equal(t, "John", details.SaleInfo.CustomerFirstName)
 }
+
+func TestRepo_CreateWithInitialStatus_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(5)))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectCommit()
+
+	v := &vehicle.Vehicle{VehicleType: "car", Manufacturer: "Toyota"}
+	s := &vehicle.VehicleStatus{Status: vehicle.VehicleStatusTypeBought, AddedBy: 1}
+
+	result, err := repo.CreateWithInitialStatus(context.Background(), v, s)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, "Toyota", result.Manufacturer)
+	assert.Equal(t, uint64(5), s.VehicleID)
+}
+
+func TestRepo_CreateWithInitialStatus_VehicleInsertError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicles"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	v := &vehicle.Vehicle{VehicleType: "car"}
+	s := &vehicle.VehicleStatus{Status: vehicle.VehicleStatusTypeBought, AddedBy: 1}
+
+	_, err := repo.CreateWithInitialStatus(context.Background(), v, s)
+	assert.Error(t, err)
+}
+
+func TestRepo_CreateWithInitialStatus_StatusInsertError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(3)))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	v := &vehicle.Vehicle{VehicleType: "bike"}
+	s := &vehicle.VehicleStatus{Status: vehicle.VehicleStatusTypeBought, AddedBy: 1}
+
+	_, err := repo.CreateWithInitialStatus(context.Background(), v, s)
+	assert.Error(t, err)
+}

@@ -19,3 +19,7 @@ func TestErrVehicleNotFound(t *testing.T) {
 func TestErrVehicleSold(t *testing.T) {
 	assert.EqualError(t, vehicle.ErrVehicleSold, "vehicle is sold")
 }
+
+func TestVehicleStatusTypeBought(t *testing.T) {
+	assert.Equal(t, vehicle.VehicleStatusType("bought"), vehicle.VehicleStatusTypeBought)
+}

@@ -8,7 +8,7 @@
 
 - `id`: `BIGSERIAL`, primary key, auto-increment, not null.
 - `vehicle_id`: `BIGINT`, not null, foreign key.
-- `status`: `vehicle_status`, enum, not null (`garage`, `inspection`, `ready_for_sale`, `sold`).
+- `status`: `vehicle_status`, enum, not null (`bought`, `garage`, `inspection`, `ready_for_sale`, `sold`). `bought` is the initial status automatically inserted when a vehicle is created.
 - `description`: `TEXT`, nullable.
 - `started_at`: `TIMESTAMPTZ`, not null.
 - `ended_at`: `TIMESTAMPTZ`, nullable.

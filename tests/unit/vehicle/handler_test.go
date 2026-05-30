@@ -19,8 +19,8 @@ type mockHandlerService struct {
 	mock.Mock
 }
 
-func (m *mockHandlerService) CreateVehicle(ctx context.Context, req *vehicle.CreateVehicleRequest) (*vehicle.CreateVehicleResponse, error) {
-	args := m.Called(ctx, req)
+func (m *mockHandlerService) CreateVehicle(ctx context.Context, req *vehicle.CreateVehicleRequest, addedBy uint64) (*vehicle.CreateVehicleResponse, error) {
+	args := m.Called(ctx, req, addedBy)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -110,7 +110,7 @@ func TestHandler_CreateVehicle_Success(t *testing.T) {
 		UpdatedAt:          "2024-01-01T00:00:00Z",
 	}
 
-	mockSvc.On("CreateVehicle", mock.Anything, mock.Anything).Return(respData, nil)
+	mockSvc.On("CreateVehicle", mock.Anything, mock.Anything, mock.Anything).Return(respData, nil)
 
 	body, _ := json.Marshal(reqBody)
 	req := httptest.NewRequest("POST", "/api/v1/vehicle", bytes.NewBuffer(body))
@@ -200,7 +200,7 @@ func TestHandler_CreateVehicle_ServiceError(t *testing.T) {
 		TransmissionType:   vehicle.TransmissionTypeManual,
 	}
 
-	mockSvc.On("CreateVehicle", mock.Anything, mock.Anything).Return(nil, &mockError{})
+	mockSvc.On("CreateVehicle", mock.Anything, mock.Anything, mock.Anything).Return(nil, &mockError{})
 
 	body, _ := json.Marshal(reqBody)
 	req := httptest.NewRequest("POST", "/api/v1/vehicle", bytes.NewBuffer(body))

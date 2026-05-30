@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"infiour.local/dms-api-server/pkg/database"
 )
 
 type Repository struct {
@@ -201,6 +202,20 @@ func (r *Repository) UpdatePricingFields(ctx context.Context, vehicleID uint64, 
 
 func (r *Repository) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error) {
 	if err := r.db.WithContext(ctx).Create(vehicle).Error; err != nil {
+		return nil, err
+	}
+	return vehicle, nil
+}
+
+func (r *Repository) CreateWithInitialStatus(ctx context.Context, vehicle *Vehicle, status *VehicleStatus) (*Vehicle, error) {
+	err := database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
+		if err := tx.Create(vehicle).Error; err != nil {
+			return err
+		}
+		status.VehicleID = vehicle.ID
+		return tx.Create(status).Error
+	})
+	if err != nil {
 		return nil, err
 	}
 	return vehicle, nil
