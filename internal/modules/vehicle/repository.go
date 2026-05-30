@@ -124,6 +124,81 @@ func (r *Repository) GetByIDWithFullDetails(ctx context.Context, vehicleID uint6
 	return details, nil
 }
 
+func (r *Repository) GetVehicleShowroomID(ctx context.Context, vehicleID uint64) (uint64, error) {
+	var rel VehicleShowroom
+	err := r.db.WithContext(ctx).Where("vehicle_id = ? AND deleted_at IS NULL", vehicleID).First(&rel).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, ErrVehicleNotFound
+	}
+	if err != nil {
+		return 0, err
+	}
+	return rel.ShowroomID, nil
+}
+
+func (r *Repository) GetCurrentStatus(ctx context.Context, vehicleID uint64) (VehicleStatusType, error) {
+	var row struct {
+		Status VehicleStatusType `gorm:"column:status"`
+	}
+	result := r.db.WithContext(ctx).Raw(
+		"SELECT status FROM vehicle_statuses WHERE vehicle_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT 1",
+		vehicleID,
+	).Scan(&row)
+	if result.Error != nil {
+		return "", result.Error
+	}
+	if result.RowsAffected == 0 {
+		return "", ErrVehicleNotFound
+	}
+	return row.Status, nil
+}
+
+func (r *Repository) UpdateVehicleFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*Vehicle, error) {
+	result := r.db.WithContext(ctx).Model(&Vehicle{}).Where("id = ?", vehicleID).Updates(updates)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, ErrVehicleNotFound
+	}
+	var updated Vehicle
+	if err := r.db.WithContext(ctx).First(&updated, vehicleID).Error; err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+func (r *Repository) GetPricingByVehicleID(ctx context.Context, vehicleID uint64) (*VehiclePricing, error) {
+	var pricing VehiclePricing
+	err := r.db.WithContext(ctx).Where("vehicle_id = ? AND deleted_at IS NULL", vehicleID).First(&pricing).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &pricing, nil
+}
+
+func (r *Repository) CreatePricing(ctx context.Context, pricing *VehiclePricing) (*VehiclePricing, error) {
+	if err := r.db.WithContext(ctx).Create(pricing).Error; err != nil {
+		return nil, err
+	}
+	return pricing, nil
+}
+
+func (r *Repository) UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*VehiclePricing, error) {
+	result := r.db.WithContext(ctx).Model(&VehiclePricing{}).Where("vehicle_id = ?", vehicleID).Updates(updates)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	var updated VehiclePricing
+	if err := r.db.WithContext(ctx).Where("vehicle_id = ?", vehicleID).First(&updated).Error; err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
 func (r *Repository) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error) {
 	if err := r.db.WithContext(ctx).Create(vehicle).Error; err != nil {
 		return nil, err

@@ -11,10 +11,25 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "X-Platform", "value": "web", "description": "Required: web | ios_mobile | android_mobile | desktop" },
-          { "key": "X-Device-Id", "value": "device-001", "description": "Required: non-empty device identifier" },
-          { "key": "Authorization", "value": "Bearer {{access_token}}", "description": "Required: JWT access token" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Platform",
+            "value": "web",
+            "description": "Required: web | ios_mobile | android_mobile | desktop"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "device-001",
+            "description": "Required: non-empty device identifier"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "description": "Required: JWT access token"
+          }
         ],
         "body": {
           "mode": "raw",
@@ -22,8 +37,14 @@
         },
         "url": {
           "raw": "{{base_url}}/api/v1/vehicle",
-          "host": ["{{base_url}}"],
-          "path": ["api", "v1", "vehicle"]
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "vehicle"
+          ]
         },
         "description": "Create a new vehicle in inventory"
       },
@@ -47,21 +68,67 @@
       "request": {
         "method": "GET",
         "header": [
-          { "key": "X-Platform", "value": "web", "description": "Required: web | ios_mobile | android_mobile | desktop" },
-          { "key": "X-Device-Id", "value": "device-001", "description": "Required: non-empty device identifier" },
-          { "key": "Authorization", "value": "Bearer {{access_token}}", "description": "Required: JWT access token" }
+          {
+            "key": "X-Platform",
+            "value": "web",
+            "description": "Required: web | ios_mobile | android_mobile | desktop"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "device-001",
+            "description": "Required: non-empty device identifier"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "description": "Required: JWT access token"
+          }
         ],
         "url": {
           "raw": "{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20",
-          "host": ["{{base_url}}"],
-          "path": ["api", "v1", "vehicle", "listing"],
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "vehicle",
+            "listing"
+          ],
           "query": [
-            { "key": "status", "value": "ready_for_sale", "description": "Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: ready_for_sale" },
-            { "key": "type", "value": "", "description": "Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all", "disabled": true },
-            { "key": "min_price", "value": "", "description": "Minimum price_tag filter", "disabled": true },
-            { "key": "max_price", "value": "", "description": "Maximum price_tag filter", "disabled": true },
-            { "key": "page", "value": "1", "description": "Page number (min 1)" },
-            { "key": "limit", "value": "20", "description": "Items per page (1–100)" }
+            {
+              "key": "status",
+              "value": "ready_for_sale",
+              "description": "Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: ready_for_sale"
+            },
+            {
+              "key": "type",
+              "value": "",
+              "description": "Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all",
+              "disabled": true
+            },
+            {
+              "key": "min_price",
+              "value": "",
+              "description": "Minimum price_tag filter",
+              "disabled": true
+            },
+            {
+              "key": "max_price",
+              "value": "",
+              "description": "Maximum price_tag filter",
+              "disabled": true
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (min 1)"
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "description": "Items per page (1\u2013100)"
+            }
           ]
         },
         "description": "List vehicles grouped by category (cars, bikes, scooties). Supports filtering by status, type, and price range with pagination."
@@ -80,31 +147,76 @@
           "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
         }
       ]
-    }
-    ,
+    },
     {
       "name": "Public Showroom Vehicle Listing",
       "request": {
         "method": "GET",
         "header": [
-          { "key": "X-Platform", "value": "web", "description": "Required: web | ios_mobile | android_mobile | desktop" },
-          { "key": "X-Device-Id", "value": "device-001", "description": "Required: non-empty device identifier" }
+          {
+            "key": "X-Platform",
+            "value": "web",
+            "description": "Required: web | ios_mobile | android_mobile | desktop"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "device-001",
+            "description": "Required: non-empty device identifier"
+          }
         ],
         "url": {
           "raw": "{{base_url}}/api/v1/vehicle/public-listing?showroom_id=1&page=1&limit=20&sort_by=price_asc",
-          "host": ["{{base_url}}"],
-          "path": ["api", "v1", "vehicle", "public-listing"],
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "vehicle",
+            "public-listing"
+          ],
           "query": [
-            { "key": "showroom_id", "value": "1", "description": "Required: showroom ID to scope the listing" },
-            { "key": "type", "value": "", "description": "Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all", "disabled": true },
-            { "key": "min_price", "value": "", "description": "Minimum price_tag filter", "disabled": true },
-            { "key": "max_price", "value": "", "description": "Maximum price_tag filter", "disabled": true },
-            { "key": "sort_by", "value": "price_asc", "description": "Sort order. Values: price_asc, price_desc. Default: price_asc" },
-            { "key": "page", "value": "1", "description": "Page number (min 1)" },
-            { "key": "limit", "value": "20", "description": "Items per page (1–100)" }
+            {
+              "key": "showroom_id",
+              "value": "1",
+              "description": "Required: showroom ID to scope the listing"
+            },
+            {
+              "key": "type",
+              "value": "",
+              "description": "Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all",
+              "disabled": true
+            },
+            {
+              "key": "min_price",
+              "value": "",
+              "description": "Minimum price_tag filter",
+              "disabled": true
+            },
+            {
+              "key": "max_price",
+              "value": "",
+              "description": "Maximum price_tag filter",
+              "disabled": true
+            },
+            {
+              "key": "sort_by",
+              "value": "price_asc",
+              "description": "Sort order. Values: price_asc, price_desc. Default: price_asc"
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (min 1)"
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "description": "Items per page (1\u2013100)"
+            }
           ]
         },
-        "description": "Public endpoint — no auth required. Returns ready_for_sale vehicles in a specific showroom grouped by type (cars/bikes/scooties). Includes price_tag only (no buying details). Supports type filter, price range filter, sort by price, and pagination."
+        "description": "Public endpoint \u2014 no auth required. Returns ready_for_sale vehicles in a specific showroom grouped by type (cars/bikes/scooties). Includes price_tag only (no buying details). Supports type filter, price range filter, sort by price, and pagination."
       },
       "response": [
         {
@@ -115,6 +227,147 @@
         },
         {
           "name": "400 Bad Request - Missing showroom_id",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Vehicle (Core Fields)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Platform",
+            "value": "web",
+            "description": "Required: web | ios_mobile | android_mobile | desktop"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "device-001",
+            "description": "Required: non-empty device identifier"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "description": "Required: JWT access token"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"manufacturer\": \"Honda\",\n  \"model\": \"City\",\n  \"color\": \"White\",\n  \"usage_km\": 35000,\n  \"fuel_type\": \"petrol\",\n  \"transmission_type\": \"manual\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/vehicle/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "vehicle",
+            "1"
+          ]
+        },
+        "description": "Partially update core vehicle fields (registration_number is immutable). Requires showroom membership. Returns 422 if vehicle is sold."
+      },
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"vehicle updated\",\n  \"data\": {\n    \"id\": 1,\n    \"vehicle_type\": \"car\",\n    \"manufacturer\": \"Honda\",\n    \"model\": \"City\",\n    \"variant\": \"V\",\n    \"color\": \"White\",\n    \"year_of_manufacture\": 2021,\n    \"rto_code\": \"KA-01\",\n    \"registration_number\": \"KA01AB1234\",\n    \"registration_state\": \"Karnataka\",\n    \"usage_km\": 35000,\n    \"fuel_type\": \"petrol\",\n    \"transmission_type\": \"manual\",\n    \"updated_at\": \"2024-06-01T10:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+        },
+        {
+          "name": "422 Unprocessable Entity (vehicle sold)",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_UPDATE_FORBIDDEN\",\n    \"message\": \"vehicle is sold\"\n  }\n}"
+        },
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Vehicle Pricing",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Platform",
+            "value": "web",
+            "description": "Required: web | ios_mobile | android_mobile | desktop"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "device-001",
+            "description": "Required: non-empty device identifier"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "description": "Required: JWT access token"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"buying_price\": 200000,\n  \"buying_date\": \"2023-01-10\",\n  \"price_tag\": 350000,\n  \"tagged_at\": \"2023-06-01T08:00:00Z\",\n  \"currency\": \"inr\",\n  \"remarks\": \"Good condition\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/vehicle/1/pricing",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "vehicle",
+            "1",
+            "pricing"
+          ]
+        },
+        "description": "Create or update vehicle pricing. If no pricing record exists, buying_price and buying_date are required. Requires showroom membership. Returns 422 if vehicle is sold."
+      },
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"vehicle pricing updated\",\n  \"data\": {\n    \"vehicle_id\": 1,\n    \"buying_price\": 200000,\n    \"buying_date\": \"2023-01-10\",\n    \"price_tag\": 350000,\n    \"tagged_at\": \"2023-06-01T08:00:00Z\",\n    \"currency\": \"inr\",\n    \"remarks\": \"Good condition\",\n    \"updated_at\": \"2024-06-01T10:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+        },
+        {
+          "name": "422 Unprocessable Entity (vehicle sold)",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_UPDATE_FORBIDDEN\",\n    \"message\": \"vehicle is sold\"\n  }\n}"
+        },
+        {
+          "name": "400 Bad Request (missing required fields for new pricing)",
           "status": "Bad Request",
           "code": 400,
           "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"

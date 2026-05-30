@@ -256,6 +256,94 @@ func buildDocumentItems(docs []VehicleDocument) []VehicleDocumentItem {
 	return items
 }
 
+func (h *Handler) UpdateVehicle(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil || id == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	var req UpdateVehicleRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	showroomRolesVal, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+	showroomRoles, ok := showroomRolesVal.(map[uint64]string)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+
+	showroomID, err := h.service.GetVehicleShowroomID(c.Request.Context(), id)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	if _, isMember := showroomRoles[showroomID]; !isMember {
+		response.Error(c, http.StatusNotFound, apperrors.CodeVehicleNotFound, "vehicle not found")
+		return
+	}
+
+	resp, err := h.service.UpdateVehicle(c.Request.Context(), id, &req)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "vehicle updated", resp)
+}
+
+func (h *Handler) UpdateVehiclePricing(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil || id == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	var req UpdateVehiclePricingRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	showroomRolesVal, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+	showroomRoles, ok := showroomRolesVal.(map[uint64]string)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+
+	showroomID, err := h.service.GetVehicleShowroomID(c.Request.Context(), id)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	if _, isMember := showroomRoles[showroomID]; !isMember {
+		response.Error(c, http.StatusNotFound, apperrors.CodeVehicleNotFound, "vehicle not found")
+		return
+	}
+
+	resp, err := h.service.UpdateVehiclePricing(c.Request.Context(), id, &req)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "vehicle pricing updated", resp)
+}
+
 func buildImageItems(images []VehicleImage) []VehicleImageItem {
 	items := make([]VehicleImageItem, 0, len(images))
 	for _, img := range images {

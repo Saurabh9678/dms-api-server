@@ -15,3 +15,7 @@ func TestNewRepository(t *testing.T) {
 func TestErrVehicleNotFound(t *testing.T) {
 	assert.EqualError(t, vehicle.ErrVehicleNotFound, "vehicle not found")
 }
+
+func TestErrVehicleSold(t *testing.T) {
+	assert.EqualError(t, vehicle.ErrVehicleSold, "vehicle is sold")
+}

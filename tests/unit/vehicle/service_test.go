@@ -54,6 +54,48 @@ func (m *mockVehicleRepo) PublicList(ctx context.Context, f vehicle.PublicListFi
 	return args.Get(0).([]vehicle.VehicleWithDetails), args.Error(1)
 }
 
+func (m *mockVehicleRepo) GetVehicleShowroomID(ctx context.Context, vehicleID uint64) (uint64, error) {
+	args := m.Called(ctx, vehicleID)
+	return args.Get(0).(uint64), args.Error(1)
+}
+
+func (m *mockVehicleRepo) GetCurrentStatus(ctx context.Context, vehicleID uint64) (vehicle.VehicleStatusType, error) {
+	args := m.Called(ctx, vehicleID)
+	return args.Get(0).(vehicle.VehicleStatusType), args.Error(1)
+}
+
+func (m *mockVehicleRepo) UpdateVehicleFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*vehicle.Vehicle, error) {
+	args := m.Called(ctx, vehicleID, updates)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.Vehicle), args.Error(1)
+}
+
+func (m *mockVehicleRepo) GetPricingByVehicleID(ctx context.Context, vehicleID uint64) (*vehicle.VehiclePricing, error) {
+	args := m.Called(ctx, vehicleID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehiclePricing), args.Error(1)
+}
+
+func (m *mockVehicleRepo) CreatePricing(ctx context.Context, pricing *vehicle.VehiclePricing) (*vehicle.VehiclePricing, error) {
+	args := m.Called(ctx, pricing)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehiclePricing), args.Error(1)
+}
+
+func (m *mockVehicleRepo) UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*vehicle.VehiclePricing, error) {
+	args := m.Called(ctx, vehicleID, updates)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehiclePricing), args.Error(1)
+}
+
 func (m *mockVehicleRepo) PublicCountByType(ctx context.Context, f vehicle.PublicListFilter) (map[vehicle.VehicleType]int64, error) {
 	args := m.Called(ctx, f)
 	if args.Get(0) == nil {
@@ -1217,4 +1259,656 @@ func TestPublicListVehicles_NoPricingOnItem(t *testing.T) {
 	assert.Len(t, resp.Cars.Vehicles, 1)
 	assert.Equal(t, 0.0, resp.Cars.Vehicles[0].PriceTag)
 	assert.Equal(t, "", resp.Cars.Vehicles[0].Currency)
+}
+
+// ---- GetVehicleShowroomID ----
+
+func TestGetVehicleShowroomID_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(5)).Return(uint64(10), nil)
+	id, err := svc.GetVehicleShowroomID(context.Background(), 5)
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(10), id)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestGetVehicleShowroomID_NotFound(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(99)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	id, err := svc.GetVehicleShowroomID(context.Background(), 99)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+	assert.Equal(t, uint64(0), id)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestGetVehicleShowroomID_RepoError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), errors.New("db error"))
+	_, err := svc.GetVehicleShowroomID(context.Background(), 1)
+	assert.Error(t, err)
+	mockRepo.AssertExpectations(t)
+}
+
+// ---- UpdateVehicle ----
+
+func TestUpdateVehicle_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	manufacturer := "Honda"
+	color := "Red"
+	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer, Color: &color}
+
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	updatedVehicle := &vehicle.Vehicle{
+		ID: 1, VehicleType: vehicle.VehicleTypeCar, Manufacturer: "Honda", Color: "Red",
+		RegistrationNumber: "KA01AB1234",
+	}
+	mockRepo.On("UpdateVehicleFields", mock.Anything, uint64(1), mock.Anything).Return(updatedVehicle, nil)
+
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, uint64(1), resp.ID)
+	assert.Equal(t, "Honda", resp.Manufacturer)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehicle_NilRequest(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, nil)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "GetCurrentStatus")
+}
+
+func TestUpdateVehicle_GetCurrentStatusError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	manufacturer := "Honda"
+	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusType(""), errors.New("db error"))
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehicle_VehicleSold(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	manufacturer := "Honda"
+	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeSold, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleSold)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehicle_InvalidVehicleType(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	vt := vehicle.VehicleType("truck")
+	req := &vehicle.UpdateVehicleRequest{VehicleType: &vt}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyManufacturer(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := "  "
+	req := &vehicle.UpdateVehicleRequest{Manufacturer: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyModel(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := ""
+	req := &vehicle.UpdateVehicleRequest{Model: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyVariant(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := ""
+	req := &vehicle.UpdateVehicleRequest{Variant: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyColor(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := "  "
+	req := &vehicle.UpdateVehicleRequest{Color: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_YearTooLow(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	year := 1800
+	req := &vehicle.UpdateVehicleRequest{YearOfManufacture: &year}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_YearTooHigh(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	year := 2099
+	req := &vehicle.UpdateVehicleRequest{YearOfManufacture: &year}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyRTOCode(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := ""
+	req := &vehicle.UpdateVehicleRequest{RTOCode: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_EmptyRegistrationState(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	empty := ""
+	req := &vehicle.UpdateVehicleRequest{RegistrationState: &empty}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_NegativeUsageKM(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	km := -1
+	req := &vehicle.UpdateVehicleRequest{UsageKM: &km}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_InvalidFuelType(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	ft := vehicle.FuelType("cng")
+	req := &vehicle.UpdateVehicleRequest{FuelType: &ft}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_InvalidTransmissionType(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	tt := vehicle.TransmissionType("cvt")
+	req := &vehicle.UpdateVehicleRequest{TransmissionType: &tt}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehicle_AllFieldsNil(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	req := &vehicle.UpdateVehicleRequest{}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "UpdateVehicleFields")
+}
+
+func TestUpdateVehicle_UpdateFieldsError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	manufacturer := "Honda"
+	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("UpdateVehicleFields", mock.Anything, uint64(1), mock.Anything).Return(nil, errors.New("db error"))
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehicle_ValidUsageKMZero(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	km := 0
+	req := &vehicle.UpdateVehicleRequest{UsageKM: &km}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeReadyForSale, nil)
+	updatedVehicle := &vehicle.Vehicle{ID: 1}
+	mockRepo.On("UpdateVehicleFields", mock.Anything, uint64(1), mock.Anything).Return(updatedVehicle, nil)
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestUpdateVehicle_AllValidFields(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	vt := vehicle.VehicleTypeBike
+	mfr := "Yamaha"
+	model := "R15"
+	variant := "V4"
+	color := "Blue"
+	year := 2022
+	rto := "KA-02"
+	state := "Karnataka"
+	km := 5000
+	ft := vehicle.FuelTypePetrol
+	tt := vehicle.TransmissionTypeManual
+
+	req := &vehicle.UpdateVehicleRequest{
+		VehicleType: &vt, Manufacturer: &mfr, Model: &model, Variant: &variant,
+		Color: &color, YearOfManufacture: &year, RTOCode: &rto, RegistrationState: &state,
+		UsageKM: &km, FuelType: &ft, TransmissionType: &tt,
+	}
+
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeInspection, nil)
+	updatedVehicle := &vehicle.Vehicle{ID: 1, VehicleType: vt, Manufacturer: mfr}
+	mockRepo.On("UpdateVehicleFields", mock.Anything, uint64(1), mock.Anything).Return(updatedVehicle, nil)
+
+	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+// ---- UpdateVehiclePricing ----
+
+func TestUpdateVehiclePricing_NilRequest(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, nil)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "GetCurrentStatus")
+}
+
+func TestUpdateVehiclePricing_GetCurrentStatusError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusType(""), errors.New("db error"))
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_VehicleSold(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeSold, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleSold)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_GetPricingError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehiclePricing_CreateNew_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	bp := 100000.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	createdPricing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1, BuyingPrice: 100000, Currency: vehicle.CurrencyINR}
+	mockRepo.On("CreatePricing", mock.Anything, mock.Anything).Return(createdPricing, nil)
+
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, uint64(1), resp.VehicleID)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehiclePricing_CreateNew_AllFields(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	bp := 100000.0
+	bd := "2024-01-01"
+	pt := 150000.0
+	taggedAt := "2024-01-02T10:00:00Z"
+	cur := "usd"
+	remarks := "test"
+	req := &vehicle.UpdateVehiclePricingRequest{
+		BuyingPrice: &bp, BuyingDate: &bd, PriceTag: &pt, TaggedAt: &taggedAt, Currency: &cur, Remarks: &remarks,
+	}
+
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeReadyForSale, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	createdPricing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1, BuyingPrice: bp, PriceTag: pt, Currency: vehicle.CurrencyUSD, Remarks: remarks}
+	mockRepo.On("CreatePricing", mock.Anything, mock.Anything).Return(createdPricing, nil)
+
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehiclePricing_CreateNew_NilBuyingPrice(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_ZeroBuyingPrice(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 0.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_NilBuyingDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_InvalidBuyingDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "not-a-date"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_NegativePriceTag(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	pt := -1.0
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd, PriceTag: &pt}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_InvalidTaggedAt(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	ta := "not-a-timestamp"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd, TaggedAt: &ta}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_InvalidCurrency(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	cur := "eur"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd, Currency: &cur}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_CreateNew_CreatePricingError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := 100000.0
+	bd := "2024-01-01"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(nil, nil)
+	mockRepo.On("CreatePricing", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	pt := 200000.0
+	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
+
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1, BuyingPrice: 100000, Currency: vehicle.CurrencyINR}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeReadyForSale, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	updated := &vehicle.VehiclePricing{ID: 1, VehicleID: 1, BuyingPrice: 100000, PriceTag: 200000, Currency: vehicle.CurrencyINR}
+	mockRepo.On("UpdatePricingFields", mock.Anything, uint64(1), mock.Anything).Return(updated, nil)
+
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 200000.0, resp.PriceTag)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_AllFieldsNil(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	req := &vehicle.UpdateVehiclePricingRequest{}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "UpdatePricingFields")
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingPrice(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bp := -1.0
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	bd := "bad-date"
+	req := &vehicle.UpdateVehiclePricingRequest{BuyingDate: &bd}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_NegativePriceTag(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	pt := -1.0
+	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_InvalidTaggedAt(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	ta := "not-rfc3339"
+	req := &vehicle.UpdateVehiclePricingRequest{TaggedAt: &ta}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_InvalidCurrency(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	cur := "gbp"
+	req := &vehicle.UpdateVehiclePricingRequest{Currency: &cur}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_UpdateFieldsError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	pt := 200000.0
+	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	mockRepo.On("UpdatePricingFields", mock.Anything, uint64(1), mock.Anything).Return(nil, errors.New("db error"))
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_Remarks(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	remarks := "updated"
+	req := &vehicle.UpdateVehiclePricingRequest{Remarks: &remarks}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	updated := &vehicle.VehiclePricing{ID: 1, VehicleID: 1, Remarks: "updated", Currency: vehicle.CurrencyINR}
+	mockRepo.On("UpdatePricingFields", mock.Anything, uint64(1), mock.Anything).Return(updated, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, "updated", resp.Remarks)
+}
+
+func TestUpdateVehiclePricing_UpdateExisting_AllValidFields(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	bp := 150000.0
+	bd := "2023-06-15"
+	pt := 250000.0
+	ta := "2023-06-15T10:00:00Z"
+	cur := "usd"
+	remarks := "all fields"
+	req := &vehicle.UpdateVehiclePricingRequest{
+		BuyingPrice: &bp,
+		BuyingDate:  &bd,
+		PriceTag:    &pt,
+		TaggedAt:    &ta,
+		Currency:    &cur,
+		Remarks:     &remarks,
+	}
+	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
+	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
+	mockRepo.On("GetPricingByVehicleID", mock.Anything, uint64(1)).Return(existing, nil)
+	updated := &vehicle.VehiclePricing{
+		ID: 1, VehicleID: 1,
+		BuyingPrice: 150000, PriceTag: 250000,
+		Currency: vehicle.CurrencyUSD, Remarks: "all fields",
+	}
+	mockRepo.On("UpdatePricingFields", mock.Anything, uint64(1), mock.Anything).Return(updated, nil)
+	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 250000.0, resp.PriceTag)
+	mockRepo.AssertExpectations(t)
 }

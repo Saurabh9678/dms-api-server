@@ -211,6 +211,57 @@ type PublicListVehiclesResponse struct {
 	Scooties *PublicCategoryListing `json:"scooties,omitempty"`
 }
 
+type UpdateVehicleRequest struct {
+	VehicleType       *VehicleType      `json:"vehicle_type"`
+	Manufacturer      *string           `json:"manufacturer"`
+	Model             *string           `json:"model"`
+	Variant           *string           `json:"variant"`
+	Color             *string           `json:"color"`
+	YearOfManufacture *int              `json:"year_of_manufacture"`
+	RTOCode           *string           `json:"rto_code"`
+	RegistrationState *string           `json:"registration_state"`
+	UsageKM           *int              `json:"usage_km"`
+	FuelType          *FuelType         `json:"fuel_type"`
+	TransmissionType  *TransmissionType `json:"transmission_type"`
+}
+
+type UpdateVehicleResponse struct {
+	ID                 uint64 `json:"id"`
+	VehicleType        string `json:"vehicle_type"`
+	Manufacturer       string `json:"manufacturer"`
+	Model              string `json:"model"`
+	Variant            string `json:"variant"`
+	Color              string `json:"color"`
+	YearOfManufacture  int    `json:"year_of_manufacture"`
+	RTOCode            string `json:"rto_code"`
+	RegistrationNumber string `json:"registration_number"`
+	RegistrationState  string `json:"registration_state"`
+	UsageKM            int    `json:"usage_km"`
+	FuelType           string `json:"fuel_type"`
+	TransmissionType   string `json:"transmission_type"`
+	UpdatedAt          string `json:"updated_at"`
+}
+
+type UpdateVehiclePricingRequest struct {
+	BuyingPrice *float64 `json:"buying_price"`
+	BuyingDate  *string  `json:"buying_date"`
+	PriceTag    *float64 `json:"price_tag"`
+	TaggedAt    *string  `json:"tagged_at"`
+	Currency    *string  `json:"currency"`
+	Remarks     *string  `json:"remarks"`
+}
+
+type UpdateVehiclePricingResponse struct {
+	VehicleID   uint64  `json:"vehicle_id"`
+	BuyingPrice float64 `json:"buying_price"`
+	BuyingDate  string  `json:"buying_date"`
+	PriceTag    float64 `json:"price_tag"`
+	TaggedAt    string  `json:"tagged_at"`
+	Currency    string  `json:"currency"`
+	Remarks     string  `json:"remarks"`
+	UpdatedAt   string  `json:"updated_at"`
+}
+
 type CreateVehicleRequest struct {
 	VehicleType        VehicleType      `json:"vehicle_type" binding:"required"`
 	Manufacturer       string           `json:"manufacturer" binding:"required"`
