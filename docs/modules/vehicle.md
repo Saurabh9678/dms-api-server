@@ -72,6 +72,85 @@
 
 ---
 
+### GET /api/v1/vehicle/:id — Get Vehicle Details
+
+**Flow:**
+1. `GET /api/v1/vehicle/:id` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` middleware → `vehicle.Handler.GetVehicle`
+2. Handler: parse `:id` → calls `service.GetVehicleByID`
+3. Check `middleware.ContextKeyShowroomRoles` (map[uint64]string) — if vehicle's showroom not in map → 404
+4. Role `owner` → `buildAdminResponse` (full details including buying price, expenses, documents, images)
+5. Role `manager`/`employee` → `buildBasicResponse` (basic fields + price_tag only, no buying price)
+
+---
+
+### PATCH /api/v1/vehicle/:id — Update Vehicle Core Fields
+
+**Flow:**
+1. `PATCH /api/v1/vehicle/:id` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.UpdateVehicle`
+2. Handler:
+   - Parse `:id` (uint64, must be > 0)
+   - `ShouldBindJSON` → `UpdateVehicleRequest` (all pointer fields; nil = skip update)
+   - Extract `middleware.ContextKeyShowroomRoles` from context
+   - Call `service.GetVehicleShowroomID(ctx, id)` → `SELECT showroom_id FROM vehicle_showroom_relations`
+   - If showroom not in roles map → 404 `VEHICLE_NOT_FOUND`
+   - Call `service.UpdateVehicle(ctx, id, req)` → 200 on success
+3. Service:
+   - `GetCurrentStatus(ctx, id)` → `SELECT status FROM vehicle_statuses WHERE vehicle_id = ? ORDER BY id DESC LIMIT 1`
+   - If status == `sold` → 422 `VEHICLE_UPDATE_FORBIDDEN`
+   - `buildVehicleUpdates(req)` — validates each non-nil field, builds `map[string]interface{}`
+   - If map empty → 400 `INVALID_REQUEST`
+   - `repo.UpdateVehicleFields(ctx, id, updates)` → GORM `Model().Where().Updates(map)` + re-fetch
+4. Response: `200 OK` with `UpdateVehicleResponse` (vehicle fields, no `registration_number` in request — immutable)
+
+**Validation Rules:**
+| Field | Rule |
+|-------|------|
+| `vehicle_type` | `bike`, `car`, or `scooty` |
+| string fields | TrimSpace; must not be empty if provided |
+| `year_of_manufacture` | 1900–current year inclusive |
+| `usage_km` | ≥ 0 |
+| `fuel_type` | `petrol`, `diesel`, or `ev` |
+| `transmission_type` | `manual` or `automatic` |
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Vehicle not found | 404 | `VEHICLE_NOT_FOUND` |
+| Not showroom member | 404 | `VEHICLE_NOT_FOUND` |
+| Vehicle is sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
+| No fields / invalid value | 400 | `INVALID_REQUEST` |
+
+---
+
+### PATCH /api/v1/vehicle/:id/pricing — Update Vehicle Pricing
+
+**Flow:**
+1. `PATCH /api/v1/vehicle/:id/pricing` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.UpdateVehiclePricing`
+2. Handler:
+   - Same membership gate as UpdateVehicle (GetVehicleShowroomID + roles check)
+   - Call `service.UpdateVehiclePricing(ctx, id, req)` → 200 on success
+3. Service:
+   - `GetCurrentStatus` → sold check (422)
+   - `GetPricingByVehicleID(ctx, id)` → returns `*VehiclePricing` or nil (not-found treated as nil)
+   - **Create branch** (no pricing record): `buying_price` > 0 required, `buying_date` required; `tagged_at` defaults to now, `currency` defaults to `inr` → `CreatePricing`
+   - **Update branch** (pricing exists): `buildPricingUpdates(req)` → map; if empty → 400; `UpdatePricingFields`
+4. Response: `200 OK` with `UpdateVehiclePricingResponse`
+
+**Validation Rules:**
+| Field | Rule |
+|-------|------|
+| `buying_price` | > 0 if provided; **required** when no pricing record exists |
+| `buying_date` | valid `2006-01-02` format; **required** when no pricing record exists |
+| `price_tag` | ≥ 0 if provided |
+| `tagged_at` | valid RFC3339 if provided; defaults to `time.Now()` on create |
+| `currency` | `inr` or `usd`; defaults to `inr` on create |
+
+**DB Queries Per Call:**
+- 3 queries: showroom ID lookup, current status, create/update pricing
+- 4 queries when pricing record exists: showroom ID, current status, get pricing, update
+
+---
+
 ### GET /api/v1/vehicle/public-listing — Public Showroom Vehicle Listing
 
 **Flow:**

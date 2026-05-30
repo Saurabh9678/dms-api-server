@@ -425,6 +425,268 @@ func TestVehicleRepositoryPublicCountByType_Error(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestRepo_GetVehicleShowroomID_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	rows := sqlmock.NewRows([]string{"id", "vehicle_id", "showroom_id", "created_at", "updated_at", "deleted_at"}).
+		AddRow(uint64(1), uint64(10), uint64(5), now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_showroom_relations"`).WillReturnRows(rows)
+
+	showroomID, err := repo.GetVehicleShowroomID(context.Background(), 10)
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(5), showroomID)
+}
+
+func TestRepo_GetVehicleShowroomID_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	_, err := repo.GetVehicleShowroomID(context.Background(), 999)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_GetVehicleShowroomID_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_showroom_relations"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.GetVehicleShowroomID(context.Background(), 1)
+	assert.Error(t, err)
+	assert.NotErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_GetCurrentStatus_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"status"}).AddRow("ready_for_sale")
+	mock.ExpectQuery(`SELECT status FROM vehicle_statuses`).WillReturnRows(rows)
+
+	status, err := repo.GetCurrentStatus(context.Background(), 1)
+	assert.NoError(t, err)
+	assert.Equal(t, vehicle.VehicleStatusTypeReadyForSale, status)
+}
+
+func TestRepo_GetCurrentStatus_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"status"}))
+
+	_, err := repo.GetCurrentStatus(context.Background(), 999)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_GetCurrentStatus_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT status FROM vehicle_statuses`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.GetCurrentStatus(context.Background(), 1)
+	assert.Error(t, err)
+	assert.NotErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_UpdateVehicleFields_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicles"`).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	vehicleCols := []string{
+		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
+		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
+	}
+	mock.ExpectQuery(`SELECT \* FROM "vehicles"`).
+		WillReturnRows(sqlmock.NewRows(vehicleCols).AddRow(
+			uint64(1), "car", "Honda", "City", "V", "White", 2021, "KA-01", "KA01AB", "Karnataka", 30000, "petrol", "manual", now, now, nil,
+		))
+
+	result, err := repo.UpdateVehicleFields(context.Background(), 1, map[string]interface{}{"manufacturer": "Honda"})
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, "Honda", result.Manufacturer)
+}
+
+func TestRepo_UpdateVehicleFields_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicles"`).
+		WillReturnResult(sqlmock.NewResult(0, 0))
+	mock.ExpectCommit()
+
+	_, err := repo.UpdateVehicleFields(context.Background(), 999, map[string]interface{}{"manufacturer": "Honda"})
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_UpdateVehicleFields_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicles"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateVehicleFields(context.Background(), 1, map[string]interface{}{"manufacturer": "Honda"})
+	assert.Error(t, err)
+}
+
+func TestRepo_UpdateVehicleFields_FetchAfterUpdateError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicles"`).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	mock.ExpectQuery(`SELECT \* FROM "vehicles"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.UpdateVehicleFields(context.Background(), 1, map[string]interface{}{"manufacturer": "Honda"})
+	assert.Error(t, err)
+}
+
+func TestRepo_GetPricingByVehicleID_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	cols := []string{"id", "vehicle_id", "buying_price", "buying_date", "price_tag", "tagged_at", "currency", "remarks", "created_at", "updated_at", "deleted_at"}
+	rows := sqlmock.NewRows(cols).AddRow(uint64(1), uint64(10), 200000.0, now, 300000.0, now, "inr", "", now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).WillReturnRows(rows)
+
+	pricing, err := repo.GetPricingByVehicleID(context.Background(), 10)
+	assert.NoError(t, err)
+	assert.NotNil(t, pricing)
+	assert.Equal(t, 200000.0, pricing.BuyingPrice)
+}
+
+func TestRepo_GetPricingByVehicleID_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	pricing, err := repo.GetPricingByVehicleID(context.Background(), 999)
+	assert.NoError(t, err)
+	assert.Nil(t, pricing)
+}
+
+func TestRepo_GetPricingByVehicleID_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.GetPricingByVehicleID(context.Background(), 1)
+	assert.Error(t, err)
+}
+
+func TestRepo_CreatePricing_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_pricing"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectCommit()
+
+	now := time.Now()
+	pricing := &vehicle.VehiclePricing{
+		VehicleID:   10,
+		BuyingPrice: 200000.0,
+		BuyingDate:  now,
+		Currency:    vehicle.CurrencyINR,
+	}
+	result, err := repo.CreatePricing(context.Background(), pricing)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, 200000.0, result.BuyingPrice)
+}
+
+func TestRepo_CreatePricing_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_pricing"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.CreatePricing(context.Background(), &vehicle.VehiclePricing{})
+	assert.Error(t, err)
+}
+
+func TestRepo_UpdatePricingFields_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_pricing"`).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	pricingCols := []string{"id", "vehicle_id", "buying_price", "buying_date", "price_tag", "tagged_at", "currency", "remarks", "created_at", "updated_at", "deleted_at"}
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).
+		WillReturnRows(sqlmock.NewRows(pricingCols).AddRow(
+			uint64(1), uint64(5), 200000.0, now, 350000.0, now, "inr", "", now, now, nil,
+		))
+
+	result, err := repo.UpdatePricingFields(context.Background(), 5, map[string]interface{}{"price_tag": 350000.0})
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, 350000.0, result.PriceTag)
+}
+
+func TestRepo_UpdatePricingFields_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_pricing"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.UpdatePricingFields(context.Background(), 5, map[string]interface{}{"price_tag": 350000.0})
+	assert.Error(t, err)
+}
+
+func TestRepo_UpdatePricingFields_FetchAfterUpdateError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_pricing"`).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_pricing"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.UpdatePricingFields(context.Background(), 5, map[string]interface{}{"price_tag": 350000.0})
+	assert.Error(t, err)
+}
+
 func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)

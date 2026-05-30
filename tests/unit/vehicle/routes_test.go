@@ -47,6 +47,27 @@ func (m *mockRoutesService) PublicListVehicles(ctx context.Context, query *vehic
 	return args.Get(0).(*vehicle.PublicListVehiclesResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) GetVehicleShowroomID(ctx context.Context, vehicleID uint64) (uint64, error) {
+	args := m.Called(ctx, vehicleID)
+	return args.Get(0).(uint64), args.Error(1)
+}
+
+func (m *mockRoutesService) UpdateVehicle(ctx context.Context, vehicleID uint64, req *vehicle.UpdateVehicleRequest) (*vehicle.UpdateVehicleResponse, error) {
+	args := m.Called(ctx, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.UpdateVehicleResponse), args.Error(1)
+}
+
+func (m *mockRoutesService) UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *vehicle.UpdateVehiclePricingRequest) (*vehicle.UpdateVehiclePricingResponse, error) {
+	args := m.Called(ctx, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.UpdateVehiclePricingResponse), args.Error(1)
+}
+
 func noopMiddleware(c *gin.Context) { c.Next() }
 
 func TestRegisterRoutes(t *testing.T) {
@@ -70,6 +91,8 @@ func TestRegisterRoutes(t *testing.T) {
 	assert.True(t, routeMap["POST:/api/v1/vehicle"], "POST /api/v1/vehicle route should be registered")
 	assert.True(t, routeMap["GET:/api/v1/vehicle/listing"], "GET /api/v1/vehicle/listing route should be registered")
 	assert.True(t, routeMap["GET:/api/v1/vehicle/:id"], "GET /api/v1/vehicle/:id route should be registered")
+	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id"], "PATCH /api/v1/vehicle/:id route should be registered")
+	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id/pricing"], "PATCH /api/v1/vehicle/:id/pricing route should be registered")
 }
 
 func TestRegisterRoutes_NoopMiddlewareUsed(t *testing.T) {
