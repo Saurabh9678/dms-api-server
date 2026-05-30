@@ -79,6 +79,14 @@ resolve_test_targets() {
 			targets="./tests/unit/${module_name}/..."
 		fi
 		;;
+	internal/bootstrap)
+		# bootstrap has white-box tests inside the package itself as well as smoke tests
+		targets="./tests/... ./${pkg_dir}/..."
+		;;
+	pkg/middleware)
+		# middleware unit tests live in tests/unit/middleware/
+		targets="./tests/unit/middleware/..."
+		;;
 	esac
 
 	if [[ -z "$targets" ]]; then

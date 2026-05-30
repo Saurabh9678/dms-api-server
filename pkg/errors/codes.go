@@ -12,4 +12,5 @@ const (
 	CodeInvalidRefreshToken  = "INVALID_REFRESH_TOKEN"
 	CodeSessionRevoked       = "SESSION_REVOKED"
 	CodeUserNotFound         = "USER_NOT_FOUND"
+	CodeVehicleNotFound      = "VEHICLE_NOT_FOUND"
 )
