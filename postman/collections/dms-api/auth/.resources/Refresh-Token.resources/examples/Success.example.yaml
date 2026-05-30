@@ -1,0 +1,22 @@
+$kind: http-example
+name: Success
+order: 1000
+request:
+  url: '{{base_url}}/api/v1/auth/refresh-token'
+  method: POST
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Token refreshed successfully",
+        "data": {
+          "accessToken": "...",
+          "refreshToken": "...",
+          "expiresIn": 3600,
+          "tokenType": "Bearer"
+        }
+      }

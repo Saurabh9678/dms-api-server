@@ -1,0 +1,8 @@
+name: Local
+variables:
+  - key: base_url
+    value: 'http://localhost:8080'
+    type: default
+  - key: access_token
+    value: ''
+    type: secret

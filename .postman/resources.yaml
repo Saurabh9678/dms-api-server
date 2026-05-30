@@ -1,0 +1,10 @@
+# Use this workspace to collaborate
+workspace:
+  id: 28b869a1-650a-4c4c-8835-aea3ebca9606
+
+localResources:
+  collections:
+    - ../docs/api/auth.postman_collection.json
+    - ../docs/api/dashboard.postman_collection.json
+    - ../docs/api/user.postman_collection.json
+    - ../docs/api/vehicle.postman_collection.json

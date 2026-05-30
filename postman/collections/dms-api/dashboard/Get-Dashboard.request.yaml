@@ -1,0 +1,21 @@
+$kind: http-request
+order: 1000
+method: GET
+url: '{{base_url}}/api/v1/dashboard'
+description: 'Auth: Protected. Returns dealership health overview: sales performance, inventory state, expense summary, and top vehicle types. Duration filters sales and expenses; inventory reflects current state.'
+headers:
+  - key: Authorization
+    value: 'Bearer {{access_token}}'
+  - key: X-Platform
+    value: web
+  - key: X-Device-Id
+    value: '{{device_id}}'
+params:
+  - key: duration
+    value: 1m
+    description: '1w | 1m | 3m | 6m | 12m | lifetime (default: lifetime)'
+  - key: showroom_id
+    value: ''
+    description: 'Optional. Filter by showroom.'
+    disabled: true
+examples: './.resources/Get-Dashboard.resources/examples'
