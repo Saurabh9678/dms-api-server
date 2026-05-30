@@ -43,6 +43,14 @@ func (m *mockHandlerService) GetVehicleByID(ctx context.Context, vehicleID uint6
 	return args.Get(0).(*vehicle.VehicleFullDetails), args.Error(1)
 }
 
+func (m *mockHandlerService) PublicListVehicles(ctx context.Context, query *vehicle.PublicListVehiclesQuery) (*vehicle.PublicListVehiclesResponse, error) {
+	args := m.Called(ctx, query)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.PublicListVehiclesResponse), args.Error(1)
+}
+
 func TestHandler_CreateVehicle_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockSvc := new(mockHandlerService)
@@ -481,4 +489,105 @@ func TestHandler_GetVehicle_OwnerWithNonEmptyCollections(t *testing.T) {
 	assert.Len(t, documents, 1)
 	images := data["images"].([]interface{})
 	assert.Len(t, images, 1)
+}
+
+func TestHandler_PublicListVehicles_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	respData := &vehicle.PublicListVehiclesResponse{
+		Cars: &vehicle.PublicCategoryListing{
+			Total:    1,
+			Page:     1,
+			Limit:    20,
+			Vehicles: []vehicle.PublicVehicleListItem{{ID: 1, VehicleType: "car", PriceTag: 400000, Currency: "inr"}},
+		},
+	}
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "cars")
+}
+
+func TestHandler_PublicListVehicles_InvalidQueryParam(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?page=abc", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "PublicListVehicles")
+}
+
+func TestHandler_PublicListVehicles_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(nil, &mockError{})
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_PublicListVehicles_ResponseNoBuyingInfo(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	respData := &vehicle.PublicListVehiclesResponse{
+		Cars: &vehicle.PublicCategoryListing{
+			Total: 1,
+			Page:  1,
+			Limit: 20,
+			Vehicles: []vehicle.PublicVehicleListItem{
+				{ID: 1, VehicleType: "car", PriceTag: 500000, Currency: "inr"},
+			},
+		},
+	}
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	cars := data["cars"].(map[string]interface{})
+	vehicles := cars["vehicles"].([]interface{})
+	assert.Len(t, vehicles, 1)
+	v := vehicles[0].(map[string]interface{})
+	assert.Equal(t, 500000.0, v["price_tag"])
+	assert.Equal(t, "inr", v["currency"])
+	assert.NotContains(t, v, "buying_price")
 }

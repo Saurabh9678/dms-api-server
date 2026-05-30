@@ -72,6 +72,52 @@
 
 ---
 
+### GET /api/v1/vehicle/public-listing — Public Showroom Vehicle Listing
+
+**Flow:**
+1. `GET /api/v1/vehicle/public-listing` → `RequireDeviceContext` → `vehicle.Handler.PublicListVehicles`
+2. No `RequireAuth` — endpoint is publicly accessible.
+3. Handler: `ShouldBindQuery` → calls `service.PublicListVehicles`
+4. Service:
+   - Validates `showroom_id` > 0 (required), page ≥ 1, limit 1–100, sort_by ∈ {price_asc, price_desc}, valid type enums, min_price ≤ max_price
+   - Calls `repo.PublicCountByType` → per-category totals scoped to showroom
+   - Calls `repo.PublicList` → paginated vehicles with current status + pricing
+   - Groups results by vehicle_type; only requested types appear in response
+5. Repository:
+   - JOINs `vehicle_showroom_relations` on `showroom_id = ?` to scope to the showroom
+   - Uses LATERAL JOIN to get latest `vehicle_statuses` row — hardcoded to `ready_for_sale`
+   - Uses LATERAL JOIN (inner) to get latest `vehicle_pricing` row where `price_tag IS NOT NULL`
+   - Applies optional `vehicle_type`, `min_price`, `max_price` filters
+   - Orders by `vp.price_tag ASC` or `DESC` based on `sort_by`
+   - Paginates with `LIMIT/OFFSET`
+6. Response: `200 OK` — grouped as `cars`, `bikes`, `scooties`, each with `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `price_tag` and `currency` but **no buying price**.
+
+**Query Parameters:**
+| Param | Default | Notes |
+|---|---|---|
+| `showroom_id` | — | **Required**, must be > 0 |
+| `type` (repeatable) | all | car, bike, scooty |
+| `min_price` | — | filters on `price_tag` |
+| `max_price` | — | filters on `price_tag` |
+| `sort_by` | `price_asc` | price_asc, price_desc |
+| `page` | 1 | ≥ 1 |
+| `limit` | 20 | 1–100 |
+
+**Response Shape:**
+```json
+{
+  "success": true,
+  "message": "vehicle listing",
+  "data": {
+    "cars":     { "total": 2, "page": 1, "limit": 20, "vehicles": [{ "id": 1, "price_tag": 350000, "currency": "inr", ... }] },
+    "bikes":    { "total": 0, "page": 1, "limit": 20, "vehicles": [] },
+    "scooties": null
+  }
+}
+```
+
+---
+
 ## Documentation Update Checklist
 
 - Update this file when vehicle behavior, schema assumptions, or APIs change.

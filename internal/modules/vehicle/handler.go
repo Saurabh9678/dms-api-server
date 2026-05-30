@@ -19,6 +19,22 @@ func NewHandler(service Service) *Handler {
 	return &Handler{service: service}
 }
 
+func (h *Handler) PublicListVehicles(c *gin.Context) {
+	var query PublicListVehiclesQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	resp, err := h.service.PublicListVehicles(c.Request.Context(), &query)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "vehicle listing", resp)
+}
+
 func (h *Handler) CreateVehicle(c *gin.Context) {
 	var req CreateVehicleRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

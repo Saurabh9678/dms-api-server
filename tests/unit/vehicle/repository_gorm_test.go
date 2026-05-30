@@ -287,6 +287,144 @@ func TestGetByIDWithFullDetails_Success(t *testing.T) {
 	assert.Nil(t, details.SaleInfo)
 }
 
+func TestVehicleRepositoryPublicList_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	cols := []string{
+		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
+		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at",
+		"vs_status", "vs_started_at", "vp_buying_price", "vp_price_tag", "vp_currency", "vp_tagged_at",
+	}
+
+	rows := sqlmock.NewRows(cols).AddRow(
+		uint64(1), "car", "Toyota", "Camry", "LE", "Black",
+		2020, "KA-01", "KA01AB1234", "Karnataka",
+		50000, "petrol", "manual", now, now,
+		"ready_for_sale", now, 200000.0, 350000.0, "inr", now,
+	)
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	filter := vehicle.PublicListFilter{
+		ShowroomID: 1,
+		Page:       1,
+		Limit:      20,
+		SortBy:     "price_asc",
+	}
+
+	results, err := repo.PublicList(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Equal(t, uint64(1), results[0].ID)
+	assert.NotNil(t, results[0].CurrentPricing)
+	assert.Equal(t, 350000.0, results[0].CurrentPricing.PriceTag)
+}
+
+func TestVehicleRepositoryPublicList_NilStatusAndPricing(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	now := time.Now()
+	cols := []string{
+		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
+		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at",
+		"vs_status", "vs_started_at", "vp_buying_price", "vp_price_tag", "vp_currency", "vp_tagged_at",
+	}
+	rows := sqlmock.NewRows(cols).AddRow(
+		uint64(2), "bike", "Honda", "CB", "STD", "Red",
+		2021, "MH-01", "MH01CD5678", "Maharashtra",
+		10000, "petrol", "manual", now, now,
+		nil, nil, nil, nil, nil, nil,
+	)
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	filter := vehicle.PublicListFilter{ShowroomID: 1, Page: 1, Limit: 10, SortBy: "price_desc"}
+	results, err := repo.PublicList(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Nil(t, results[0].CurrentStatus)
+	assert.Nil(t, results[0].CurrentPricing)
+}
+
+func TestVehicleRepositoryPublicList_WithTypeFilter(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	filter := vehicle.PublicListFilter{
+		ShowroomID:   1,
+		VehicleTypes: []vehicle.VehicleType{vehicle.VehicleTypeCar},
+		Page:         1,
+		Limit:        20,
+		SortBy:       "price_asc",
+	}
+	results, err := repo.PublicList(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
+}
+
+func TestVehicleRepositoryPublicList_WithPriceFilter(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	minP, maxP := 100000.0, 500000.0
+	filter := vehicle.PublicListFilter{
+		ShowroomID: 1,
+		MinPrice:   &minP,
+		MaxPrice:   &maxP,
+		Page:       1,
+		Limit:      20,
+		SortBy:     "price_desc",
+	}
+	results, err := repo.PublicList(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
+}
+
+func TestVehicleRepositoryPublicList_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrInvalidData)
+
+	filter := vehicle.PublicListFilter{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	_, err := repo.PublicList(context.Background(), filter)
+	assert.Error(t, err)
+}
+
+func TestVehicleRepositoryPublicCountByType_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
+		AddRow("car", int64(3)).
+		AddRow("bike", int64(1))
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	filter := vehicle.PublicListFilter{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	counts, err := repo.PublicCountByType(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(3), counts[vehicle.VehicleTypeCar])
+	assert.Equal(t, int64(1), counts[vehicle.VehicleTypeBike])
+}
+
+func TestVehicleRepositoryPublicCountByType_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrInvalidData)
+
+	filter := vehicle.PublicListFilter{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	_, err := repo.PublicCountByType(context.Background(), filter)
+	assert.Error(t, err)
+}
+
 func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
