@@ -46,6 +46,22 @@ func (m *mockVehicleRepo) GetByIDWithFullDetails(ctx context.Context, vehicleID 
 	return args.Get(0).(*vehicle.VehicleFullDetails), args.Error(1)
 }
 
+func (m *mockVehicleRepo) PublicList(ctx context.Context, f vehicle.PublicListFilter) ([]vehicle.VehicleWithDetails, error) {
+	args := m.Called(ctx, f)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]vehicle.VehicleWithDetails), args.Error(1)
+}
+
+func (m *mockVehicleRepo) PublicCountByType(ctx context.Context, f vehicle.PublicListFilter) (map[vehicle.VehicleType]int64, error) {
+	args := m.Called(ctx, f)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(map[vehicle.VehicleType]int64), args.Error(1)
+}
+
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := vehicle.NewService(mockRepo)
@@ -986,4 +1002,219 @@ func TestListVehicles_Pagination(t *testing.T) {
 	assert.Equal(t, int64(25), resp.Cars.Total)
 	assert.Equal(t, 2, resp.Cars.Page)
 	assert.Equal(t, 10, resp.Cars.Limit)
+}
+
+func TestPublicListVehicles_NilQuery(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	resp, err := svc.PublicListVehicles(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_ZeroShowroomID(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 0, Page: 1, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_InvalidPage(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 0, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_InvalidLimit(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	tests := []struct{ limit int }{
+		{0}, {101}, {-1},
+	}
+	for _, tt := range tests {
+		q := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: tt.limit, SortBy: "price_asc"}
+		resp, err := svc.PublicListVehicles(context.Background(), q)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	}
+}
+
+func TestPublicListVehicles_InvalidSortBy(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "invalid_sort"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_InvalidTypeEnum(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, VehicleTypes: []string{"truck"}, Page: 1, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	min, max := 500000.0, 100000.0
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, MinPrice: &min, MaxPrice: &max, Page: 1, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_CountByTypeError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_ListError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
+	mockRepo.On("PublicList", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_Success_AllTypes(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+
+	pr := vehicle.VehiclePricing{PriceTag: 300000, Currency: vehicle.CurrencyINR}
+	vehicles := []vehicle.VehicleWithDetails{
+		{ID: 1, VehicleType: vehicle.VehicleTypeCar, CurrentPricing: &pr},
+		{ID: 2, VehicleType: vehicle.VehicleTypeBike},
+		{ID: 3, VehicleType: vehicle.VehicleTypeScooty},
+	}
+	counts := map[vehicle.VehicleType]int64{
+		vehicle.VehicleTypeCar:    1,
+		vehicle.VehicleTypeBike:   1,
+		vehicle.VehicleTypeScooty: 1,
+	}
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.ShowroomID == 1 && f.SortBy == "price_asc"
+	})).Return(counts, nil)
+	mockRepo.On("PublicList", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.ShowroomID == 1 && f.SortBy == "price_asc"
+	})).Return(vehicles, nil)
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.NotNil(t, resp.Cars)
+	assert.NotNil(t, resp.Bikes)
+	assert.NotNil(t, resp.Scooties)
+	assert.Len(t, resp.Cars.Vehicles, 1)
+	assert.Equal(t, 300000.0, resp.Cars.Vehicles[0].PriceTag)
+	assert.Equal(t, "inr", resp.Cars.Vehicles[0].Currency)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestPublicListVehicles_TypeFilter(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{
+		ShowroomID:   1,
+		VehicleTypes: []string{"car"},
+		Page:         1,
+		Limit:        20,
+		SortBy:       "price_desc",
+	}
+
+	counts := map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 2}
+	vehicles := []vehicle.VehicleWithDetails{
+		{ID: 1, VehicleType: vehicle.VehicleTypeCar},
+		{ID: 2, VehicleType: vehicle.VehicleTypeCar},
+	}
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.SortBy == "price_desc" && len(f.VehicleTypes) == 1
+	})).Return(counts, nil)
+	mockRepo.On("PublicList", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.SortBy == "price_desc" && len(f.VehicleTypes) == 1
+	})).Return(vehicles, nil)
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.NotNil(t, resp.Cars)
+	assert.Nil(t, resp.Bikes)
+	assert.Nil(t, resp.Scooties)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestPublicListVehicles_PriceRangeFilter(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	min, max := 100000.0, 500000.0
+	query := &vehicle.PublicListVehiclesQuery{
+		ShowroomID: 1, MinPrice: &min, MaxPrice: &max, Page: 1, Limit: 20, SortBy: "price_asc",
+	}
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.MinPrice != nil && *f.MinPrice == min && f.MaxPrice != nil && *f.MaxPrice == max
+	})).Return(map[vehicle.VehicleType]int64{}, nil)
+	mockRepo.On("PublicList", mock.Anything, mock.MatchedBy(func(f vehicle.PublicListFilter) bool {
+		return f.MinPrice != nil && f.MaxPrice != nil
+	})).Return([]vehicle.VehicleWithDetails{}, nil)
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestPublicListVehicles_NoPricingOnItem(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+
+	vehicles := []vehicle.VehicleWithDetails{
+		{ID: 1, VehicleType: vehicle.VehicleTypeCar, CurrentPricing: nil},
+	}
+	counts := map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}
+
+	mockRepo.On("PublicCountByType", mock.Anything, mock.Anything).Return(counts, nil)
+	mockRepo.On("PublicList", mock.Anything, mock.Anything).Return(vehicles, nil)
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Len(t, resp.Cars.Vehicles, 1)
+	assert.Equal(t, 0.0, resp.Cars.Vehicles[0].PriceTag)
+	assert.Equal(t, "", resp.Cars.Vehicles[0].Currency)
 }

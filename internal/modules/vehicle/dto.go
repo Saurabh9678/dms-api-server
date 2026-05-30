@@ -168,6 +168,49 @@ type GetVehicleBasicResponse struct {
 	Selling *VehicleSoldPriceOnly `json:"selling,omitempty"`
 }
 
+type PublicListVehiclesQuery struct {
+	ShowroomID   uint64   `form:"showroom_id"`
+	VehicleTypes []string `form:"type"`
+	MinPrice     *float64 `form:"min_price"`
+	MaxPrice     *float64 `form:"max_price"`
+	SortBy       string   `form:"sort_by,default=price_asc"`
+	Page         int      `form:"page,default=1"`
+	Limit        int      `form:"limit,default=20"`
+}
+
+type PublicVehicleListItem struct {
+	ID                 uint64  `json:"id"`
+	VehicleType        string  `json:"vehicle_type"`
+	Manufacturer       string  `json:"manufacturer"`
+	Model              string  `json:"model"`
+	Variant            string  `json:"variant"`
+	Color              string  `json:"color"`
+	YearOfManufacture  int     `json:"year_of_manufacture"`
+	RTOCode            string  `json:"rto_code"`
+	RegistrationNumber string  `json:"registration_number"`
+	RegistrationState  string  `json:"registration_state"`
+	UsageKM            int     `json:"usage_km"`
+	FuelType           string  `json:"fuel_type"`
+	TransmissionType   string  `json:"transmission_type"`
+	PriceTag           float64 `json:"price_tag"`
+	Currency           string  `json:"currency"`
+	CreatedAt          string  `json:"created_at"`
+	UpdatedAt          string  `json:"updated_at"`
+}
+
+type PublicCategoryListing struct {
+	Total    int64                   `json:"total"`
+	Page     int                     `json:"page"`
+	Limit    int                     `json:"limit"`
+	Vehicles []PublicVehicleListItem `json:"vehicles"`
+}
+
+type PublicListVehiclesResponse struct {
+	Cars     *PublicCategoryListing `json:"cars,omitempty"`
+	Bikes    *PublicCategoryListing `json:"bikes,omitempty"`
+	Scooties *PublicCategoryListing `json:"scooties,omitempty"`
+}
+
 type CreateVehicleRequest struct {
 	VehicleType        VehicleType      `json:"vehicle_type" binding:"required"`
 	Manufacturer       string           `json:"manufacturer" binding:"required"`

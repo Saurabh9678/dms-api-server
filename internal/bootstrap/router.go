@@ -38,6 +38,7 @@ func newRouter(cfg *config.Config, log *slog.Logger, deps *Dependencies, sqlDB *
 	api := engine.Group("/api/v1")
 	api.Use(middleware.RequireDeviceContext())
 	auth.RegisterRoutes(api, deps.AuthHandler)
+	vehicle.RegisterPublicRoutes(api, deps.VehicleHandler)
 
 	protected := api.Group("")
 	protected.Use(middleware.RequireAuth(deps.TokenProvider))

@@ -13,6 +13,7 @@ type Service interface {
 	CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error)
 	ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*ListVehiclesResponse, error)
 	GetVehicleByID(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
+	PublicListVehicles(ctx context.Context, query *PublicListVehiclesQuery) (*PublicListVehiclesResponse, error)
 }
 
 type vehicleRepo interface {
@@ -20,6 +21,8 @@ type vehicleRepo interface {
 	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
 	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]int64, error)
 	GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
+	PublicList(ctx context.Context, f PublicListFilter) ([]VehicleWithDetails, error)
+	PublicCountByType(ctx context.Context, f PublicListFilter) (map[VehicleType]int64, error)
 }
 
 type service struct {
@@ -219,6 +222,138 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 	}
 
 	return resp, nil
+}
+
+func (s *service) PublicListVehicles(ctx context.Context, query *PublicListVehiclesQuery) (*PublicListVehiclesResponse, error) {
+	if err := s.validatePublicListQuery(query); err != nil {
+		return nil, err
+	}
+
+	types := make([]VehicleType, 0, len(query.VehicleTypes))
+	for _, t := range query.VehicleTypes {
+		types = append(types, VehicleType(t))
+	}
+
+	filter := PublicListFilter{
+		ShowroomID:   query.ShowroomID,
+		VehicleTypes: types,
+		MinPrice:     query.MinPrice,
+		MaxPrice:     query.MaxPrice,
+		SortBy:       query.SortBy,
+		Page:         query.Page,
+		Limit:        query.Limit,
+	}
+
+	counts, err := s.repo.PublicCountByType(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	vehicles, err := s.repo.PublicList(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	grouped := map[VehicleType][]PublicVehicleListItem{
+		VehicleTypeCar:    {},
+		VehicleTypeBike:   {},
+		VehicleTypeScooty: {},
+	}
+	for _, v := range vehicles {
+		item := toPublicVehicleListItem(v)
+		grouped[v.VehicleType] = append(grouped[v.VehicleType], item)
+	}
+
+	wantType := map[VehicleType]bool{}
+	if len(types) == 0 {
+		wantType[VehicleTypeCar] = true
+		wantType[VehicleTypeBike] = true
+		wantType[VehicleTypeScooty] = true
+	} else {
+		for _, t := range types {
+			wantType[t] = true
+		}
+	}
+
+	resp := &PublicListVehiclesResponse{}
+	if wantType[VehicleTypeCar] {
+		resp.Cars = &PublicCategoryListing{
+			Total:    counts[VehicleTypeCar],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeCar],
+		}
+	}
+	if wantType[VehicleTypeBike] {
+		resp.Bikes = &PublicCategoryListing{
+			Total:    counts[VehicleTypeBike],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeBike],
+		}
+	}
+	if wantType[VehicleTypeScooty] {
+		resp.Scooties = &PublicCategoryListing{
+			Total:    counts[VehicleTypeScooty],
+			Page:     query.Page,
+			Limit:    query.Limit,
+			Vehicles: grouped[VehicleTypeScooty],
+		}
+	}
+
+	return resp, nil
+}
+
+func (s *service) validatePublicListQuery(query *PublicListVehiclesQuery) error {
+	if query == nil {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.ShowroomID == 0 {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.Page < 1 {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.Limit < 1 || query.Limit > 100 {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.SortBy != "price_asc" && query.SortBy != "price_desc" {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	for _, t := range query.VehicleTypes {
+		if !isValidVehicleType(VehicleType(t)) {
+			return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+	}
+	if query.MinPrice != nil && query.MaxPrice != nil && *query.MinPrice > *query.MaxPrice {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	return nil
+}
+
+func toPublicVehicleListItem(v VehicleWithDetails) PublicVehicleListItem {
+	item := PublicVehicleListItem{
+		ID:                 v.ID,
+		VehicleType:        string(v.VehicleType),
+		Manufacturer:       v.Manufacturer,
+		Model:              v.Model,
+		Variant:            v.Variant,
+		Color:              v.Color,
+		YearOfManufacture:  v.YearOfManufacture,
+		RTOCode:            v.RTOCode,
+		RegistrationNumber: v.RegistrationNumber,
+		RegistrationState:  v.RegistrationState,
+		UsageKM:            v.UsageKM,
+		FuelType:           string(v.FuelType),
+		TransmissionType:   string(v.TransmissionType),
+		CreatedAt:          v.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
+	}
+	if v.CurrentPricing != nil {
+		item.PriceTag = v.CurrentPricing.PriceTag
+		item.Currency = string(v.CurrentPricing.Currency)
+	}
+	return item
 }
 
 func toVehicleListItem(v VehicleWithDetails) VehicleListItem {

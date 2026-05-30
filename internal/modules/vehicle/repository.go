@@ -297,6 +297,148 @@ func (r *Repository) List(ctx context.Context, filter ListFilter) ([]VehicleWith
 	return results, nil
 }
 
+type PublicListFilter struct {
+	ShowroomID   uint64
+	VehicleTypes []VehicleType
+	MinPrice     *float64
+	MaxPrice     *float64
+	SortBy       string
+	Page         int
+	Limit        int
+}
+
+func buildPublicListQuery(filter PublicListFilter) (string, []interface{}) {
+	orderClause := "vp.price_tag ASC"
+	if filter.SortBy == "price_desc" {
+		orderClause = "vp.price_tag DESC"
+	}
+
+	types := make([]string, len(filter.VehicleTypes))
+	for i, t := range filter.VehicleTypes {
+		types[i] = string(t)
+	}
+	noTypeFilter := len(types) == 0
+
+	noMinPrice := filter.MinPrice == nil
+	noMaxPrice := filter.MaxPrice == nil
+
+	minPrice := 0.0
+	if filter.MinPrice != nil {
+		minPrice = *filter.MinPrice
+	}
+	maxPrice := 0.0
+	if filter.MaxPrice != nil {
+		maxPrice = *filter.MaxPrice
+	}
+
+	query := `
+SELECT v.id, v.vehicle_type, v.manufacturer, v.model, v.variant, v.color,
+       v.year_of_manufacture, v.rto_code, v.registration_number, v.registration_state,
+       v.usage_km, v.fuel_type, v.transmission_type, v.created_at, v.updated_at,
+       vs.status AS vs_status, vs.started_at AS vs_started_at,
+       vp.buying_price AS vp_buying_price, vp.price_tag AS vp_price_tag,
+       vp.currency AS vp_currency, vp.tagged_at AS vp_tagged_at
+FROM vehicles v
+JOIN vehicle_showroom_relations vsr ON vsr.vehicle_id = v.id
+  AND vsr.showroom_id = ?
+  AND vsr.deleted_at IS NULL
+JOIN LATERAL (
+  SELECT status, started_at FROM vehicle_statuses
+  WHERE vehicle_id = v.id AND deleted_at IS NULL
+  ORDER BY id DESC LIMIT 1
+) vs ON true
+JOIN LATERAL (
+  SELECT buying_price, price_tag, currency, tagged_at FROM vehicle_pricing
+  WHERE vehicle_id = v.id AND deleted_at IS NULL AND price_tag IS NOT NULL
+  ORDER BY id DESC LIMIT 1
+) vp ON true
+WHERE v.deleted_at IS NULL
+  AND vs.status = 'ready_for_sale'
+  AND (? OR v.vehicle_type = ANY(?))
+  AND (? OR vp.price_tag >= ?)
+  AND (? OR vp.price_tag <= ?)
+ORDER BY ` + orderClause
+
+	args := []interface{}{
+		filter.ShowroomID,
+		noTypeFilter, types,
+		noMinPrice, minPrice,
+		noMaxPrice, maxPrice,
+	}
+	return query, args
+}
+
+func (r *Repository) PublicList(ctx context.Context, filter PublicListFilter) ([]VehicleWithDetails, error) {
+	query, args := buildPublicListQuery(filter)
+	query += "\nLIMIT ? OFFSET ?"
+	offset := (filter.Page - 1) * filter.Limit
+	args = append(args, filter.Limit, offset)
+
+	var rows []vehicleRow
+	if err := r.db.WithContext(ctx).Raw(query, args...).Scan(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	results := make([]VehicleWithDetails, 0, len(rows))
+	for _, row := range rows {
+		v := VehicleWithDetails{
+			ID:                 row.ID,
+			VehicleType:        row.VehicleType,
+			Manufacturer:       row.Manufacturer,
+			Model:              row.Model,
+			Variant:            row.Variant,
+			Color:              row.Color,
+			YearOfManufacture:  row.YearOfManufacture,
+			RTOCode:            row.RTOCode,
+			RegistrationNumber: row.RegistrationNumber,
+			RegistrationState:  row.RegistrationState,
+			UsageKM:            row.UsageKM,
+			FuelType:           row.FuelType,
+			TransmissionType:   row.TransmissionType,
+			CreatedAt:          row.CreatedAt,
+			UpdatedAt:          row.UpdatedAt,
+		}
+		if row.VsStatus != nil {
+			st := VehicleStatus{Status: VehicleStatusType(*row.VsStatus)}
+			if row.VsStartedAt != nil {
+				st.StartedAt = *row.VsStartedAt
+			}
+			v.CurrentStatus = &st
+		}
+		if row.VpPriceTag != nil {
+			p := VehiclePricing{PriceTag: *row.VpPriceTag}
+			if row.VpBuyingPrice != nil {
+				p.BuyingPrice = *row.VpBuyingPrice
+			}
+			if row.VpCurrency != nil {
+				p.Currency = Currency(*row.VpCurrency)
+			}
+			if row.VpTaggedAt != nil {
+				p.TaggedAt = *row.VpTaggedAt
+			}
+			v.CurrentPricing = &p
+		}
+		results = append(results, v)
+	}
+	return results, nil
+}
+
+func (r *Repository) PublicCountByType(ctx context.Context, filter PublicListFilter) (map[VehicleType]int64, error) {
+	query, args := buildPublicListQuery(filter)
+	countQuery := "SELECT vq.vehicle_type, COUNT(*) AS count FROM (" + query + ") vq GROUP BY vq.vehicle_type"
+
+	var rows []vehicleTypeCount
+	if err := r.db.WithContext(ctx).Raw(countQuery, args...).Scan(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	result := make(map[VehicleType]int64)
+	for _, row := range rows {
+		result[row.VehicleType] = row.Count
+	}
+	return result, nil
+}
+
 type vehicleTypeCount struct {
 	VehicleType VehicleType `gorm:"column:vehicle_type"`
 	Count       int64       `gorm:"column:count"`
