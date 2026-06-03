@@ -35,6 +35,43 @@ func (m *mockHandlerService) ListVehicles(ctx context.Context, query *vehicle.Li
 	return args.Get(0).(*vehicle.ListVehiclesResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) GetVehicleByID(ctx context.Context, vehicleID uint64) (*vehicle.VehicleFullDetails, error) {
+	args := m.Called(ctx, vehicleID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleFullDetails), args.Error(1)
+}
+
+func (m *mockHandlerService) PublicListVehicles(ctx context.Context, query *vehicle.PublicListVehiclesQuery) (*vehicle.PublicListVehiclesResponse, error) {
+	args := m.Called(ctx, query)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.PublicListVehiclesResponse), args.Error(1)
+}
+
+func (m *mockHandlerService) GetVehicleShowroomID(ctx context.Context, vehicleID uint64) (uint64, error) {
+	args := m.Called(ctx, vehicleID)
+	return args.Get(0).(uint64), args.Error(1)
+}
+
+func (m *mockHandlerService) UpdateVehicle(ctx context.Context, vehicleID uint64, req *vehicle.UpdateVehicleRequest) (*vehicle.UpdateVehicleResponse, error) {
+	args := m.Called(ctx, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.UpdateVehicleResponse), args.Error(1)
+}
+
+func (m *mockHandlerService) UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *vehicle.UpdateVehiclePricingRequest) (*vehicle.UpdateVehiclePricingResponse, error) {
+	args := m.Called(ctx, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.UpdateVehiclePricingResponse), args.Error(1)
+}
+
 func TestHandler_CreateVehicle_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockSvc := new(mockHandlerService)
@@ -243,4 +280,576 @@ func TestHandler_ListVehicles_ServiceError(t *testing.T) {
 	handler.ListVehicles(ctx)
 
 	mockSvc.AssertExpectations(t)
+}
+
+func setupGetVehicleContext(t *testing.T, idParam string) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/"+idParam, nil)
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_GetVehicle_InvalidID(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "abc")
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleByID")
+}
+
+func TestHandler_GetVehicle_ZeroID(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "0")
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleByID")
+}
+
+func TestHandler_GetVehicle_NotFound(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "99")
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(99)).Return(nil, vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_GetVehicle_ServiceError(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(nil, &mockError{})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_GetVehicle_MissingShowroomRoles(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{Vehicle: vehicle.Vehicle{ID: 1}, ShowroomID: 5}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_GetVehicle_WrongShowroomRolesType(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{Vehicle: vehicle.Vehicle{ID: 1}, ShowroomID: 5}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_GetVehicle_UserNotInShowroom(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{Vehicle: vehicle.Vehicle{ID: 1}, ShowroomID: 5}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestHandler_GetVehicle_OwnerGetsAdminResponse(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 1, VehicleType: vehicle.VehicleTypeCar, Manufacturer: "Toyota"},
+		ShowroomID: 5,
+		Statuses:   []vehicle.VehicleStatus{},
+		Expenses:   []vehicle.VehicleExpenses{},
+		Documents:  []vehicle.VehicleDocument{},
+		Images:     []vehicle.VehicleImage{},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "basic")
+	assert.Contains(t, data, "status")
+	assert.Contains(t, data, "expenses")
+	assert.Contains(t, data, "documents")
+	assert.Contains(t, data, "images")
+}
+
+func TestHandler_GetVehicle_ManagerGetsBasicResponse(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 1, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Statuses:   []vehicle.VehicleStatus{},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "manager"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "basic")
+	assert.NotContains(t, data, "expenses")
+	assert.NotContains(t, data, "buying_details")
+}
+
+func TestHandler_GetVehicle_EmployeeGetsBasicResponse(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "1")
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 1, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Statuses:   []vehicle.VehicleStatus{},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(1)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "employee"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "basic")
+	assert.NotContains(t, data, "buying_details")
+}
+
+func TestHandler_GetVehicle_OwnerWithPricingAndSale(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "2")
+	now := "2024-01-01T00:00:00Z"
+	_ = now
+	pricing := &vehicle.VehiclePricing{BuyingPrice: 200000, PriceTag: 300000, Currency: vehicle.CurrencyINR}
+	saleInfo := &vehicle.VehicleSaleInfo{SalePrice: 280000, CustomerFirstName: "John", CustomerLastName: "Doe"}
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 2, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Statuses:   []vehicle.VehicleStatus{},
+		Expenses:   []vehicle.VehicleExpenses{},
+		Documents:  []vehicle.VehicleDocument{},
+		Images:     []vehicle.VehicleImage{},
+		Pricing:    pricing,
+		SaleInfo:   saleInfo,
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(2)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "buying_details")
+	assert.Contains(t, data, "pricing")
+	assert.Contains(t, data, "selling")
+}
+
+func TestHandler_GetVehicle_NonOwnerWithPricingAndSale(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "2")
+	pricing := &vehicle.VehiclePricing{PriceTag: 300000, Currency: vehicle.CurrencyINR}
+	saleInfo := &vehicle.VehicleSaleInfo{SalePrice: 280000}
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 2, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Statuses:   []vehicle.VehicleStatus{},
+		Pricing:    pricing,
+		SaleInfo:   saleInfo,
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(2)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "manager"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "pricing")
+	assert.Contains(t, data, "selling")
+	selling := data["selling"].(map[string]interface{})
+	assert.Equal(t, 280000.0, selling["sale_price"])
+}
+
+func TestHandler_GetVehicle_OwnerWithNonEmptyCollections(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "3")
+	status := vehicle.VehicleStatus{
+		ID:     1,
+		Status: vehicle.VehicleStatusTypeGarage,
+	}
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 3, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Statuses: []vehicle.VehicleStatus{
+			status,
+			{ID: 2, Status: vehicle.VehicleStatusTypeInspection},
+		},
+		Expenses: []vehicle.VehicleExpenses{
+			{ID: 1, Type: "repair", Amount: 5000, PaidTo: "garage", Description: "fix"},
+		},
+		Documents: []vehicle.VehicleDocument{
+			{ID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "http://example.com/doc"},
+		},
+		Images: []vehicle.VehicleImage{
+			{ID: 1, Label: vehicle.VehicleImageLabelFront, ImageURL: "http://example.com/img"},
+		},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(3)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "basic")
+	assert.Contains(t, data, "status")
+	assert.Contains(t, data, "expenses")
+	assert.Contains(t, data, "documents")
+	assert.Contains(t, data, "images")
+	expenses := data["expenses"].([]interface{})
+	assert.Len(t, expenses, 1)
+	documents := data["documents"].([]interface{})
+	assert.Len(t, documents, 1)
+	images := data["images"].([]interface{})
+	assert.Len(t, images, 1)
+}
+
+func TestHandler_PublicListVehicles_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	respData := &vehicle.PublicListVehiclesResponse{
+		Cars: &vehicle.PublicCategoryListing{
+			Total:    1,
+			Page:     1,
+			Limit:    20,
+			Vehicles: []vehicle.PublicVehicleListItem{{ID: 1, VehicleType: "car", PriceTag: 400000, Currency: "inr"}},
+		},
+	}
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	assert.Contains(t, data, "cars")
+}
+
+func TestHandler_PublicListVehicles_InvalidQueryParam(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?page=abc", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "PublicListVehicles")
+}
+
+func TestHandler_PublicListVehicles_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(nil, &mockError{})
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_PublicListVehicles_ResponseNoBuyingInfo(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	respData := &vehicle.PublicListVehiclesResponse{
+		Cars: &vehicle.PublicCategoryListing{
+			Total: 1,
+			Page:  1,
+			Limit: 20,
+			Vehicles: []vehicle.PublicVehicleListItem{
+				{ID: 1, VehicleType: "car", PriceTag: 500000, Currency: "inr"},
+			},
+		},
+	}
+	mockSvc.On("PublicListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/public-listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+
+	handler.PublicListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	data := resp["data"].(map[string]interface{})
+	cars := data["cars"].(map[string]interface{})
+	vehicles := cars["vehicles"].([]interface{})
+	assert.Len(t, vehicles, 1)
+	v := vehicles[0].(map[string]interface{})
+	assert.Equal(t, 500000.0, v["price_tag"])
+	assert.Equal(t, "inr", v["currency"])
+	assert.NotContains(t, v, "buying_price")
+}
+
+func setupPatchVehicleContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("PATCH", "/api/v1/vehicle/"+idParam, bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_UpdateVehicle_InvalidID(t *testing.T) {
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "abc", []byte(`{}`))
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehicle")
+}
+
+func TestHandler_UpdateVehicle_ZeroID(t *testing.T) {
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "0", []byte(`{}`))
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehicle")
+}
+
+func TestHandler_UpdateVehicle_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", []byte(`not-json`))
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehicle")
+}
+
+func TestHandler_UpdateVehicle_MissingShowroomRoles(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleShowroomID")
+}
+
+func TestHandler_UpdateVehicle_WrongShowroomRolesType(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleShowroomID")
+}
+
+func TestHandler_UpdateVehicle_GetShowroomIDNotFound(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehicle_NotShowroomMember(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehicle_VehicleSold(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehicle", mock.Anything, uint64(1), mock.Anything).Return(nil, vehicle.ErrVehicleSold)
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehicle_ServiceError(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehicle", mock.Anything, uint64(1), mock.Anything).Return(nil, &mockError{})
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehicle_Success(t *testing.T) {
+	manufacturer := "Toyota"
+	body, _ := json.Marshal(vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer})
+	ctx, w, mockSvc := setupPatchVehicleContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	respData := &vehicle.UpdateVehicleResponse{
+		ID:           1,
+		Manufacturer: "Toyota",
+		UpdatedAt:    "2024-01-01T00:00:00Z",
+	}
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehicle", mock.Anything, uint64(1), mock.Anything).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	assert.Equal(t, "vehicle updated", resp["message"])
+}
+
+func setupPatchPricingContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("PATCH", "/api/v1/vehicle/"+idParam+"/pricing", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_UpdateVehiclePricing_InvalidID(t *testing.T) {
+	ctx, w, mockSvc := setupPatchPricingContext(t, "abc", []byte(`{}`))
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehiclePricing")
+}
+
+func TestHandler_UpdateVehiclePricing_ZeroID(t *testing.T) {
+	ctx, w, mockSvc := setupPatchPricingContext(t, "0", []byte(`{}`))
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehiclePricing")
+}
+
+func TestHandler_UpdateVehiclePricing_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", []byte(`not-json`))
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehiclePricing")
+}
+
+func TestHandler_UpdateVehiclePricing_MissingShowroomRoles(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleShowroomID")
+}
+
+func TestHandler_UpdateVehiclePricing_WrongShowroomRolesType(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "GetVehicleShowroomID")
+}
+
+func TestHandler_UpdateVehiclePricing_GetShowroomIDNotFound(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehiclePricing_NotShowroomMember(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehiclePricing_VehicleSold(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehiclePricing", mock.Anything, uint64(1), mock.Anything).Return(nil, vehicle.ErrVehicleSold)
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehiclePricing_ServiceError(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehiclePricing", mock.Anything, uint64(1), mock.Anything).Return(nil, &mockError{})
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_UpdateVehiclePricing_Success(t *testing.T) {
+	priceTag := 300000.0
+	body, _ := json.Marshal(vehicle.UpdateVehiclePricingRequest{PriceTag: &priceTag})
+	ctx, w, mockSvc := setupPatchPricingContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	respData := &vehicle.UpdateVehiclePricingResponse{
+		VehicleID: 1,
+		PriceTag:  300000,
+		Currency:  "inr",
+		UpdatedAt: "2024-01-01T00:00:00Z",
+	}
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("UpdateVehiclePricing", mock.Anything, uint64(1), mock.Anything).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).UpdateVehiclePricing(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	assert.Equal(t, "vehicle pricing updated", resp["message"])
 }

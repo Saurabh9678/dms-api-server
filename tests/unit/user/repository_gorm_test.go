@@ -260,3 +260,57 @@ func TestRepositoryFindShowroomRolesByUserIDError(t *testing.T) {
 		t.Fatal("expected error")
 	}
 }
+
+func TestRepositoryLoadUserShowroomRolesSuccess(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}).
+		AddRow(uint64(1), "Showroom A", "owner").
+		AddRow(uint64(2), "Showroom B", "manager")
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnRows(rows)
+
+	result, err := repo.LoadUserShowroomRoles(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(result) != 2 {
+		t.Fatalf("expected 2 entries, got %d", len(result))
+	}
+	if result[1] != "owner" {
+		t.Fatalf("expected owner for showroom 1, got %s", result[1])
+	}
+	if result[2] != "manager" {
+		t.Fatalf("expected manager for showroom 2, got %s", result[2])
+	}
+}
+
+func TestRepositoryLoadUserShowroomRolesEmpty(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnRows(sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}))
+
+	result, err := repo.LoadUserShowroomRoles(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(result) != 0 {
+		t.Fatalf("expected empty map, got %d entries", len(result))
+	}
+}
+
+func TestRepositoryLoadUserShowroomRolesError(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.LoadUserShowroomRoles(context.Background(), 42)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}

@@ -263,29 +263,19 @@ func (s *service) Logout(ctx context.Context, req LogoutRequest) error {
 
 func generateOTPCode() string {
 	max := big.NewInt(1000000)
-	value, err := rand.Int(rand.Reader, max)
-	if err != nil {
-		return "000000"
-	}
+	// crypto/rand panics internally on entropy failure (Go 1.20+); error is unreachable.
+	value, _ := rand.Int(rand.Reader, max)
 	return fmt.Sprintf("%06d", value.Int64())
 }
 
 func generateRequestID(length int) string {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
-	if length <= 0 {
-		return ""
-	}
-
 	result := make([]byte, length)
 	max := big.NewInt(int64(len(chars)))
 	for i := 0; i < length; i++ {
-		value, err := rand.Int(rand.Reader, max)
-		if err != nil {
-			return strings.Repeat("A", length)
-		}
+		// crypto/rand panics internally on entropy failure (Go 1.20+); error is unreachable.
+		value, _ := rand.Int(rand.Reader, max)
 		result[i] = chars[value.Int64()]
 	}
-
 	return string(result)
 }

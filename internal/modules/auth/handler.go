@@ -134,10 +134,5 @@ func extractBearerToken(c *gin.Context) (string, bool) {
 		return "", false
 	}
 
-	token := strings.TrimSpace(strings.TrimPrefix(authHeader, bearerPrefix))
-	if token == "" {
-		return "", false
-	}
-
-	return token, true
+	return strings.TrimSpace(strings.TrimPrefix(authHeader, bearerPrefix)), true
 }

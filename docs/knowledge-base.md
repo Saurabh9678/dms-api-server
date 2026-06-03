@@ -56,6 +56,14 @@ This file is the living project memory for architecture, conventions, and implem
 
 - Vehicle listing endpoint `GET /api/v1/vehicle/listing` returns vehicles grouped by category (`cars`, `bikes`, `scooties`). Default status filter is `ready_for_sale`; accepts multiple statuses and types via repeated query params. Pagination (`page`/`limit`) applies uniformly across all categories. Repository uses LATERAL JOINs to resolve current status (latest `vehicle_statuses` row by `id DESC`) and current pricing (latest `vehicle_pricing` row by `id DESC`). Categories excluded by a type filter are omitted from the response (`omitempty`). Price range filters apply to `price_tag` field on `vehicle_pricing`.
 
+- **Vehicle update sold-check**: Both `PATCH /vehicle/:id` and `PATCH /vehicle/:id/pricing` block updates when the vehicle is in `sold` status. The check uses a lightweight `GetCurrentStatus` query (`SELECT status FROM vehicle_statuses WHERE vehicle_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT 1`) — it does **not** call `GetByIDWithFullDetails`. Returns 422 `VEHICLE_UPDATE_FORBIDDEN`.
+
+- **`registration_number` is immutable**: It is intentionally excluded from `UpdateVehicleRequest`. It cannot be changed via any update API. The field is still returned in `UpdateVehicleResponse`.
+
+- **Vehicle pricing upsert semantics**: `PATCH /vehicle/:id/pricing` acts as an upsert. If no pricing record exists (`GetPricingByVehicleID` returns nil), it creates one (`CreatePricing`) — `buying_price` > 0 and a valid `buying_date` are required in this case. If a record already exists, it calls `UpdatePricingFields` with only the provided fields. `tagged_at` defaults to `time.Now()` and `currency` defaults to `inr` on creation if omitted.
+
+- **Showroom membership check for vehicle updates**: `GetVehicleShowroomID` queries `vehicle_showroom_relations` directly (`SELECT showroom_id WHERE vehicle_id = ? AND deleted_at IS NULL`) — no JOIN needed since the table already holds both IDs. Returns `ErrVehicleNotFound` if no row. Handler then checks if `showroomID` is in the `ContextKeyShowroomRoles` map; missing → 404 `VEHICLE_NOT_FOUND` (no information leak).
+
 ## Known Caveats
 
 - Document pitfalls, limitations, and sharp edges.
