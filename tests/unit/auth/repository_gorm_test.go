@@ -55,14 +55,15 @@ func TestOTPRepositoryCreate_Success(t *testing.T) {
 
 	now := time.Now()
 	entity := &auth.UserOTP{
-		UserID:    1,
-		RequestID: "Ab12Cd34",
-		OTPCode:   "123456",
-		Platform:  auth.OTPPlatformWeb,
-		OTPFor:    auth.OTPForMobile,
-		DeviceID:  "device-1",
-		ExpiresAt: now.Add(5 * time.Minute),
-		CreatedAt: now,
+		CountryCode: "+91",
+		PhoneNumber: "9999999999",
+		RequestID:   "Ab12Cd34",
+		OTPCode:     "123456",
+		Platform:    auth.OTPPlatformWeb,
+		OTPFor:      auth.OTPForMobile,
+		DeviceID:    "device-1",
+		ExpiresAt:   now.Add(5 * time.Minute),
+		CreatedAt:   now,
 	}
 
 	result, err := repo.Create(context.Background(), entity)
@@ -90,10 +91,10 @@ func TestOTPRepositoryFindLatestActive_Success(t *testing.T) {
 
 	now := time.Now()
 	rows := sqlmock.NewRows([]string{
-		"id", "user_id", "request_id", "otp_code", "platform", "otp_for",
+		"id", "country_code", "phone_number", "request_id", "otp_code", "platform", "otp_for",
 		"device_id", "attempt_count", "resend_count", "is_used", "expires_at", "created_at", "verified_at",
 	}).AddRow(
-		uint64(10), uint64(1), "Ab12Cd34", "123456", "web", "mobile",
+		uint64(10), "+91", "9999999999", "Ab12Cd34", "123456", "web", "mobile",
 		"device-1", 0, 0, false, now.Add(5*time.Minute), now, nil,
 	)
 
@@ -176,6 +177,84 @@ func TestOTPRepositoryMarkUsed_DBError(t *testing.T) {
 
 	err := repo.MarkUsed(context.Background(), 10, time.Now())
 	assert.Error(t, err)
+}
+
+func TestOTPRepositoryFindLatestByPhone_Found(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	now := time.Now()
+	rows := sqlmock.NewRows([]string{
+		"id", "country_code", "phone_number", "request_id", "otp_code", "platform", "otp_for",
+		"device_id", "attempt_count", "resend_count", "is_used", "expires_at", "created_at", "verified_at",
+	}).AddRow(
+		uint64(20), "+91", "9999999999", "XyZ12345", "654321", "web", "mobile",
+		"device-2", 0, 0, false, now.Add(5*time.Minute), now, nil,
+	)
+
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	result, err := repo.FindLatestByPhone(context.Background(), "+91", "9999999999")
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, uint64(20), result.ID)
+}
+
+func TestOTPRepositoryFindLatestByPhone_NotFound(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrRecordNotFound)
+
+	result, err := repo.FindLatestByPhone(context.Background(), "+91", "0000000000")
+	assert.NoError(t, err)
+	assert.Nil(t, result)
+}
+
+func TestOTPRepositoryFindLatestByPhone_DBError(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(errors.New("connection error"))
+
+	result, err := repo.FindLatestByPhone(context.Background(), "+91", "9999999999")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+}
+
+func TestOTPRepositoryCountRecentByPhone_NonZero(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"count"}).AddRow(int64(3))
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	count, err := repo.CountRecentByPhone(context.Background(), "+91", "9999999999", time.Now().Add(-24*time.Hour))
+	assert.NoError(t, err)
+	assert.Equal(t, int64(3), count)
+}
+
+func TestOTPRepositoryCountRecentByPhone_Zero(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"count"}).AddRow(int64(0))
+	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
+
+	count, err := repo.CountRecentByPhone(context.Background(), "+91", "0000000000", time.Now().Add(-24*time.Hour))
+	assert.NoError(t, err)
+	assert.Equal(t, int64(0), count)
+}
+
+func TestOTPRepositoryCountRecentByPhone_DBError(t *testing.T) {
+	gormDB, mock := newAuthMockDB(t)
+	repo := auth.NewOTPRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT`).WillReturnError(errors.New("db error"))
+
+	count, err := repo.CountRecentByPhone(context.Background(), "+91", "9999999999", time.Now().Add(-24*time.Hour))
+	assert.Error(t, err)
+	assert.Equal(t, int64(0), count)
 }
 
 // ---------------------------------------------------------------------------

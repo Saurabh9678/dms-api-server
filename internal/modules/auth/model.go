@@ -1,10 +1,6 @@
 package auth
 
-import (
-	"time"
-
-	"infiour.local/dms-api-server/internal/modules/user"
-)
+import "time"
 
 type OTPPlatform string
 
@@ -24,7 +20,8 @@ const (
 
 type UserOTP struct {
 	ID           uint64      `gorm:"primaryKey;autoIncrement" json:"id"`
-	UserID       uint64      `gorm:"not null" json:"user_id"`
+	CountryCode  string      `gorm:"type:varchar;not null" json:"country_code"`
+	PhoneNumber  string      `gorm:"type:varchar;not null" json:"phone_number"`
 	RequestID    string      `gorm:"type:varchar(8);uniqueIndex;not null" json:"request_id"`
 	OTPCode      string      `gorm:"type:varchar(6);not null" json:"otp_code"`
 	Platform     OTPPlatform `gorm:"type:platform_type;not null" json:"platform"`
@@ -36,7 +33,6 @@ type UserOTP struct {
 	ExpiresAt    time.Time   `gorm:"type:timestamptz;not null" json:"expires_at"`
 	CreatedAt    time.Time   `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	VerifiedAt   *time.Time  `gorm:"type:timestamptz" json:"verified_at,omitempty"`
-	User         user.User   `gorm:"foreignKey:UserID;references:ID" json:"user"`
 }
 
 func (UserOTP) TableName() string {
@@ -56,7 +52,6 @@ type UserSession struct {
 	CreatedAt        time.Time   `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	LastUsedAt       time.Time   `gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP" json:"last_used_at"`
 	ExpiresAt        *time.Time  `gorm:"type:timestamptz" json:"expires_at,omitempty"`
-	User             user.User   `gorm:"foreignKey:UserID;references:ID" json:"user"`
 }
 
 func (UserSession) TableName() string {
