@@ -1,0 +1,37 @@
+$kind: http-request
+order: 2000
+method: GET
+url: '{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20'
+description: 'List vehicles grouped by category (cars, bikes, scooties). Supports filtering by status, type, and price range with pagination.'
+headers:
+  - key: X-Platform
+    value: web
+    description: 'Required: web | ios_mobile | android_mobile | desktop'
+  - key: X-Device-Id
+    value: device-001
+    description: 'Required: non-empty device identifier'
+  - key: Authorization
+    value: 'Bearer {{access_token}}'
+    description: 'Required: JWT access token'
+params:
+  - key: status
+    value: ready_for_sale
+    description: 'Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: ready_for_sale'
+  - key: type
+    value: ''
+    description: 'Filter by vehicle type (repeatable). Values: car, bike, scooty. Default: all'
+    disabled: true
+  - key: min_price
+    value: ''
+    description: Minimum price_tag filter
+    disabled: true
+  - key: max_price
+    value: ''
+    description: Maximum price_tag filter
+    disabled: true
+  - key: page
+    value: '1'
+    description: 'Page number (min 1)'
+  - key: limit
+    value: '20'
+    description: 'Items per page (1–100)'

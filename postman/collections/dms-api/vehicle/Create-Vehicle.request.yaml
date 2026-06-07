@@ -1,0 +1,34 @@
+$kind: http-request
+order: 1000
+method: POST
+url: '{{base_url}}/api/v1/vehicle'
+description: 'Create a new vehicle in inventory'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: X-Platform
+    value: web
+    description: 'Required: web | ios_mobile | android_mobile | desktop'
+  - key: X-Device-Id
+    value: device-001
+    description: 'Required: non-empty device identifier'
+  - key: Authorization
+    value: 'Bearer {{access_token}}'
+    description: 'Required: JWT access token'
+body:
+  type: json
+  content: |-
+    {
+      "vehicle_type": "car",
+      "manufacturer": "Toyota",
+      "model": "Camry",
+      "variant": "LE",
+      "color": "Black",
+      "year_of_manufacture": 2020,
+      "rto_code": "KA-01",
+      "registration_number": "KA01AB1234",
+      "registration_state": "Karnataka",
+      "usage_km": 50000,
+      "fuel_type": "petrol",
+      "transmission_type": "manual"
+    }

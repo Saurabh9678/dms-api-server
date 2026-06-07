@@ -1,0 +1,12 @@
+$kind: http-request
+order: 2000
+method: GET
+url: '{{base_url}}/api/v1/user/me'
+description: "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, phone number, and all showroom-role pairs. Fields are nullable."
+headers:
+  - key: Authorization
+    value: 'Bearer {{access_token}}'
+  - key: X-Platform
+    value: web
+  - key: X-Device-Id
+    value: browser-1
