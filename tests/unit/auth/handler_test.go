@@ -42,6 +42,10 @@ func (f *fakeHandlerAuthService) RefreshToken(_ context.Context, _ auth.RefreshT
 	}, nil
 }
 
+func (f *fakeHandlerAuthService) SendOTP(_ context.Context, _ auth.SendOTPRequest) (*auth.TriggerOTPResponse, error) {
+	return &auth.TriggerOTPResponse{Message: "OTP sent successfully"}, nil
+}
+
 func (f *fakeHandlerAuthService) Logout(_ context.Context, _ auth.LogoutRequest) error {
 	return nil
 }
@@ -176,8 +180,96 @@ func (f *fakeErrorAuthService) RefreshToken(_ context.Context, _ auth.RefreshTok
 	return nil, errFakeService
 }
 
+func (f *fakeErrorAuthService) SendOTP(_ context.Context, _ auth.SendOTPRequest) (*auth.TriggerOTPResponse, error) {
+	return nil, errFakeService
+}
+
 func (f *fakeErrorAuthService) Logout(_ context.Context, _ auth.LogoutRequest) error {
 	return errFakeService
+}
+
+// ---------------------------------------------------------------------------
+// SendOTP handler tests
+// ---------------------------------------------------------------------------
+
+func TestSendOTP_BadJSON(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/send-otp", h.SendOTP)
+
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_REQUEST"`) {
+		t.Fatalf("expected INVALID_REQUEST, got %s", resp.Body.String())
+	}
+}
+
+func TestSendOTP_MissingHeaders(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/send-otp", h.SendOTP)
+
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req.Header.Set("Content-Type", "application/json")
+	// No X-Platform or X-Device-Id headers
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", resp.Code)
+	}
+	if !strings.Contains(resp.Body.String(), `"code":"INVALID_DEVICE_CONTEXT"`) {
+		t.Fatalf("expected INVALID_DEVICE_CONTEXT, got %s", resp.Body.String())
+	}
+}
+
+func TestSendOTP_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeErrorAuthService{})
+	engine.POST("/send-otp", h.SendOTP)
+
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code == http.StatusOK {
+		t.Fatalf("expected non-200, got %d", resp.Code)
+	}
+}
+
+func TestSendOTP_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	h := auth.NewHandler(&fakeHandlerAuthService{})
+	engine.POST("/send-otp", h.SendOTP)
+
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Platform", "web")
+	req.Header.Set("X-Device-Id", "d-1")
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", resp.Code, resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"success":true`) {
+		t.Fatalf("expected success response, got %s", resp.Body.String())
+	}
 }
 
 // ---------------------------------------------------------------------------

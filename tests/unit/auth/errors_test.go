@@ -58,6 +58,18 @@ func TestAuthErrorMapper_AllCases(t *testing.T) {
 			expectedCode:   apperrors.CodeSessionRevoked,
 			expectedStatus: http.StatusUnauthorized,
 		},
+		{
+			name:           "ErrOTPCooldown",
+			err:            auth.ErrOTPCooldown,
+			expectedCode:   apperrors.CodeOTPCooldown,
+			expectedStatus: http.StatusTooManyRequests,
+		},
+		{
+			name:           "ErrOTPRateLimitExceeded",
+			err:            auth.ErrOTPRateLimitExceeded,
+			expectedCode:   apperrors.CodeOTPRateLimitExceeded,
+			expectedStatus: http.StatusTooManyRequests,
+		},
 	}
 
 	for _, tc := range cases {

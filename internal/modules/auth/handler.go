@@ -22,6 +22,26 @@ func NewHandler(service Service) *Handler {
 	return &Handler{service: service}
 }
 
+func (h *Handler) SendOTP(c *gin.Context) {
+	var req SendOTPRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+	headers, ok := bindAuthHeaders(c)
+	if !ok {
+		return
+	}
+	req.Platform = headers.Platform
+	req.DeviceID = headers.DeviceID
+	resp, err := h.service.SendOTP(c.Request.Context(), req)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+	response.OK(c, "OTP sent successfully", resp)
+}
+
 func (h *Handler) Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

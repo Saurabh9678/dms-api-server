@@ -8,13 +8,15 @@ import (
 )
 
 var (
-	ErrInvalidAccessToken  = stderrors.New("invalid access token")
-	ErrInvalidOTP          = stderrors.New("invalid otp")
-	ErrOTPExpired          = stderrors.New("otp expired")
-	ErrOTPAlreadyUsed      = stderrors.New("otp already used")
-	ErrOTPAttemptsExceeded = stderrors.New("otp attempts exceeded")
-	ErrInvalidRefreshToken = stderrors.New("invalid refresh token")
-	ErrSessionRevoked      = stderrors.New("session revoked")
+	ErrInvalidAccessToken   = stderrors.New("invalid access token")
+	ErrInvalidOTP           = stderrors.New("invalid otp")
+	ErrOTPExpired           = stderrors.New("otp expired")
+	ErrOTPAlreadyUsed       = stderrors.New("otp already used")
+	ErrOTPAttemptsExceeded  = stderrors.New("otp attempts exceeded")
+	ErrInvalidRefreshToken  = stderrors.New("invalid refresh token")
+	ErrSessionRevoked       = stderrors.New("session revoked")
+	ErrOTPCooldown          = stderrors.New("otp cooldown active")
+	ErrOTPRateLimitExceeded = stderrors.New("otp rate limit exceeded")
 )
 
 func init() {
@@ -34,6 +36,10 @@ func init() {
 			return apperrors.NewAppError(apperrors.CodeInvalidRefreshToken, "Invalid refresh token", http.StatusUnauthorized, err), true
 		case stderrors.Is(err, ErrSessionRevoked):
 			return apperrors.NewAppError(apperrors.CodeSessionRevoked, "Session revoked", http.StatusUnauthorized, err), true
+		case stderrors.Is(err, ErrOTPCooldown):
+			return apperrors.NewAppError(apperrors.CodeOTPCooldown, "please wait before requesting another OTP", http.StatusTooManyRequests, err), true
+		case stderrors.Is(err, ErrOTPRateLimitExceeded):
+			return apperrors.NewAppError(apperrors.CodeOTPRateLimitExceeded, "too many OTP requests, please try again later", http.StatusTooManyRequests, err), true
 		default:
 			return nil, false
 		}
