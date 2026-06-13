@@ -33,7 +33,7 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 
 	otpRepo := auth.NewOTPRepository(db)
 	sessionRepo := auth.NewSessionRepository(db)
-	authSvc := auth.NewService(userRepo, otpRepo, sessionRepo, otpProvider, tokenProvider, cfg.Auth, db)
+	authSvc := auth.NewService(userRepo, otpRepo, sessionRepo, otpProvider, tokenProvider, cfg.Auth, db, cfg.Env)
 	authHandler := auth.NewHandler(authSvc)
 
 	userSvc := user.NewService(userRepo)

@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/auth/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: browser-1
+  body:
+    type: text
+    content: |-
+      {
+        "countryCode": "+91",
+        "phoneNumber": "9999999999"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  body:
+    type: text
+    content: |-
+      {
+        "success": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "message": "invalid request"
+        }
+      }
+order: 2000

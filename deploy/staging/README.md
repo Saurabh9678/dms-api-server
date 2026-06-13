@@ -328,7 +328,7 @@ sudo systemctl status certbot.timer
 
 ### Deploy new API image
 
-Every push to `main` in GitHub Actions builds and pushes a new `staging` tag to GHCR. To deploy:
+Every push to `staging` in GitHub Actions builds and pushes a new `staging` tag to GHCR. To deploy:
 
 ```bash
 cd /opt/dms-api-server/deploy/staging

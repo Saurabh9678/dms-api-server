@@ -38,8 +38,9 @@ type LogoutRequest struct {
 }
 
 type TriggerOTPResponse struct {
-	Message   string `json:"message"`
-	RequestID string `json:"requestId"`
+	Message   string  `json:"message"`
+	RequestID string  `json:"requestId"`
+	OTPCode   *string `json:"otpCode,omitempty"`
 }
 
 type TokenResponse struct {
