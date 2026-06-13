@@ -35,7 +35,8 @@ The repository lives on the VM at `/opt/dms-api-server`. All deployment files ar
         ├── migrate.sh
         ├── restore.sh
         ├── setup-nginx.sh
-        └── setup-ssl.sh
+        ├── setup-ssl.sh
+        └── update-api-image.sh
 ```
 
 ---
@@ -363,9 +364,10 @@ cd /opt/dms-api-server/deploy/staging
 
 ```bash
 cd /opt/dms-api-server/deploy/staging
-docker compose pull api
-docker compose up -d --no-deps api
+./scripts/update-api-image.sh
 ```
+
+This runs `docker compose pull api`, `docker compose up -d --no-deps api`, prunes dangling images, and verifies `/health`.
 
 ### Restart a single service
 
