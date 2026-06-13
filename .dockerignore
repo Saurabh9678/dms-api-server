@@ -1,0 +1,61 @@
+# Git metadata
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+/api
+/bin/
+/dist/
+*.exe
+
+# Test artifacts
+*.test
+*.out
+coverage.html
+coverage.txt
+coverage.xml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+
+# Local PostgreSQL data
+postgres-data/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Go module cache
+vendor/
+
+# Staging deploy files (VM-specific, not needed in image)
+deploy/
