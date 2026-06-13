@@ -21,7 +21,7 @@
 
 1. Update tests.
 2. Update documentation sections impacted by the change.
-3. If APIs changed, update `docs/api/<module>.postman_collection.json` (Postman importable).
+3. If APIs changed, update `docs/api/<module>.postman_collection.json` and `postman/collections/DMS API/<module>/` in the same task (keep both in sync; follow Postman YAML conventions in `.cursor/rules/api-documentation.mdc`).
 4. Run:
    - `gofmt ./...`
    - `go vet ./...`

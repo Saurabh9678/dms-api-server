@@ -28,7 +28,7 @@ alwaysApply: true
 ## Post-task
 
 - Update tests and documentation for changed behavior.
-- If APIs changed, update `docs/api/<module>.postman_collection.json` in the same task.
+- If APIs changed, update `docs/api/<module>.postman_collection.json` and `postman/collections/DMS API/<module>/` in the same task (keep both in sync; follow Postman YAML conventions in `.cursor/rules/api-documentation.mdc`).
 - If module behavior changed, update module flow documentation in `docs/modules/<module>.md`.
 - If schema assumptions changed (or new tables/columns/constraints were added), update `docs/database/tables/*.md` with one file per impacted table.
 - Tests for changed code must reach **100% coverage** with cases for **all branches**.

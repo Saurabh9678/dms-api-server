@@ -1,0 +1,10 @@
+$kind: http-request
+description: "Protected. Returns dealership health overview: sales performance, inventory state, expense summary, and top vehicle types. Duration filters sales and expenses; inventory reflects current state."
+url: "{{base_url}}/api/v1/dashboard?duration=1m"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: {{device_id}}
+examples: ./.resources/Get Dashboard.resources/examples
+order: 1000

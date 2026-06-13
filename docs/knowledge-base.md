@@ -34,6 +34,9 @@ This file is the living project memory for architecture, conventions, and implem
 - Every `/api/v1/*` endpoint requires `X-Platform` and non-empty `X-Device-Id` headers.
 - Module docs must capture endpoint flow end-to-end: entry route, middleware behavior, handler mapping, service business logic, and response branches.
 - Schema docs are maintained as one file per table under `docs/database/tables/` and include columns, types, nullability, defaults, PK/FK, and index/unique constraints.
+- API documentation is maintained in two synchronized artifacts: `docs/api/<module>.postman_collection.json` (importable JSON) and `postman/collections/DMS API/<module>/` (Postman native YAML). Both must be updated in the same task when endpoints change. YAML layout conventions are defined in `.cursor/rules/api-documentation.mdc`.
+- Bulk re-sync from JSON to YAML: `python3 scripts/sync-postman-from-docs-api.py` (modules: auth, user, dashboard, vehicle).
+- Postman environments: `postman/environments/local.environment.yaml` (`base_url: http://localhost:8080`) and `postman/environments/staging.environment.yaml` (`base_url: https://stag-api.infiniour.com`). Collections use `{{base_url}}` and `{{access_token}}` variables.
 
 
 ## Important Implementation Details
@@ -79,5 +82,5 @@ This file is the living project memory for architecture, conventions, and implem
 - Document required implementation, testing, and release workflows.
 - `make verify` is the required validation entrypoint: lint (`scripts/verify-lint.sh`), tests, **100% function coverage on changed packages** (`scripts/verify-changed-coverage.sh` vs `origin/main`), build, and graphify update.
 - Local database setup workflow is documented in `docs/database/local-postgres.md`.
-- API behavior change workflow: update Postman collection + module endpoint-flow documentation in the same task.
+- API behavior change workflow: update `docs/api/<module>.postman_collection.json`, `postman/collections/DMS API/<module>/`, and module endpoint-flow documentation in the same task.
 - Schema change workflow: update relevant files in `docs/database/tables/` in the same task.

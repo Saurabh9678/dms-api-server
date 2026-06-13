@@ -1,22 +1,22 @@
 package auth
 
 type SendOTPRequest struct {
-	CountryCode string `json:"countryCode" binding:"required"`
-	PhoneNumber string `json:"phoneNumber" binding:"required"`
+	CountryCode string `json:"countryCode" binding:"required,digits"`
+	PhoneNumber string `json:"phoneNumber" binding:"required,digits"`
 	Platform    string `json:"-"`
 	DeviceID    string `json:"-"`
 }
 
 type RegisterRequest struct {
-	CountryCode string `json:"countryCode" binding:"required"`
-	PhoneNumber string `json:"phoneNumber" binding:"required"`
+	CountryCode string `json:"countryCode" binding:"required,digits"`
+	PhoneNumber string `json:"phoneNumber" binding:"required,digits"`
 	Platform    string `json:"-"`
 	DeviceID    string `json:"-"`
 }
 
 type LoginRequest struct {
-	CountryCode string `json:"countryCode" binding:"required"`
-	PhoneNumber string `json:"phoneNumber" binding:"required"`
+	CountryCode string `json:"countryCode" binding:"required,digits"`
+	PhoneNumber string `json:"phoneNumber" binding:"required,digits"`
 	Platform    string `json:"-"`
 	DeviceID    string `json:"-"`
 }

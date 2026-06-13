@@ -1,0 +1,28 @@
+$kind: http-request
+description: Create a new vehicle in inventory
+url: "{{base_url}}/api/v1/vehicle"
+method: POST
+headers:
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: device-001
+  Authorization: Bearer {{access_token}}
+body:
+  type: text
+  content: |-
+    {
+      "vehicle_type": "car",
+      "manufacturer": "Toyota",
+      "model": "Camry",
+      "variant": "LE",
+      "color": "Black",
+      "year_of_manufacture": 2020,
+      "rto_code": "KA-01",
+      "registration_number": "KA01AB1234",
+      "registration_state": "Karnataka",
+      "usage_km": 50000,
+      "fuel_type": "petrol",
+      "transmission_type": "manual"
+    }
+examples: ./.resources/Create Vehicle.resources/examples
+order: 1000

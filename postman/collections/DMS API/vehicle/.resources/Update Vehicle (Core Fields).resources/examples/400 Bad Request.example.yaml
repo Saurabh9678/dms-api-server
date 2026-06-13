@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1"
+  method: PATCH
+  headers:
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+    Authorization: Bearer {{access_token}}
+  body:
+    type: text
+    content: |-
+      {
+        "manufacturer": "Honda",
+        "model": "City",
+        "color": "White",
+        "usage_km": 35000,
+        "fuel_type": "petrol",
+        "transmission_type": "manual"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  body:
+    type: text
+    content: |-
+      {
+        "success": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "message": "invalid request"
+        }
+      }
+order: 4000

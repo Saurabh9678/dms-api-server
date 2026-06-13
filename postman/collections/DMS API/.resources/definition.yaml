@@ -1,5 +1,5 @@
 $kind: collection
-description: DMS API collection. Auth endpoints are grouped under the auth folder.
+description: DMS API collection. Modules: auth, user, dashboard, vehicle. Kept in sync with docs/api/*.postman_collection.json.
 variables:
   base_url: http://localhost:8080
   access_token: ""

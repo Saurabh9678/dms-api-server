@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/user/me"
+  method: GET
+  headers:
+    Authorization: Bearer {{access_token}}
+    X-Platform: web
+    X-Device-Id: browser-1
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "profile fetched",
+        "data": {
+          "name": null,
+          "phone_number": "+919999999999",
+          "showroom_roles": []
+        }
+      }
+order: 2000
