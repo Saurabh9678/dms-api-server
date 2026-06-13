@@ -32,6 +32,7 @@ The repository lives on the VM at `/opt/dms-api-server`. All deployment files ar
     └── scripts/
         ├── backup.sh
         ├── deploy.sh
+        ├── migrate.sh
         ├── restore.sh
         ├── setup-nginx.sh
         └── setup-ssl.sh
@@ -294,14 +295,26 @@ sudo systemctl reload nginx
 
 ## Step 5 — Initial Deployment
 
+Start Postgres, apply database migrations, then bring up the full stack:
+
 ```bash
 cd /opt/dms-api-server/deploy/staging
+docker compose up -d postgres
+./scripts/migrate.sh
 docker compose up -d
 
 # Verify
 docker compose ps
 curl http://127.0.0.1:8080/health
 curl http://stag-api.infiniour.com/health
+```
+
+`migrate.sh` runs pending SQL migrations from `migrations/` using the `migrate/migrate` Docker image on the Compose network. Re-run it after schema changes are merged — it only applies new migrations.
+
+Check current migration version:
+
+```bash
+./scripts/migrate.sh version
 ```
 
 ---
@@ -336,6 +349,15 @@ cd /opt/dms-api-server/deploy/staging
 ```
 
 This runs `docker compose pull`, `docker compose up -d`, and `docker image prune -f`.
+
+### Apply database migrations
+
+After pulling code that adds new migrations, or on a fresh VM after Postgres is running:
+
+```bash
+cd /opt/dms-api-server/deploy/staging
+./scripts/migrate.sh
+```
 
 ### Update API image only (no Postgres restart)
 
@@ -456,7 +478,7 @@ nmap -p 5432,8080 <VM_PUBLIC_IP>
    sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com /etc/nginx/sites-enabled/
    sudo systemctl enable --now nginx
    ```
-7. Start services: `cd /opt/dms-api-server/deploy/staging && docker compose up -d`
+7. Start services: `cd /opt/dms-api-server/deploy/staging && docker compose up -d postgres && ./scripts/migrate.sh && docker compose up -d`
 8. Restore database: `cd /opt/dms-api-server/deploy/staging && ./scripts/restore.sh backups/<latest>.sql.gz`
 9. Re-issue SSL cert: `sudo certbot --nginx -d stag-api.infiniour.com`
 10. Verify: `curl https://stag-api.infiniour.com/health`

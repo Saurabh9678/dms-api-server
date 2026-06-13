@@ -31,6 +31,24 @@
       "norm_label": "restore.sh"
     },
     {
+      "label": "migrate.sh",
+      "file_type": "code",
+      "source_file": "deploy/staging/scripts/migrate.sh",
+      "source_location": "L1",
+      "id": "deploy_staging_scripts_migrate_sh",
+      "community": 160,
+      "norm_label": "migrate.sh"
+    },
+    {
+      "label": "run_migrate()",
+      "file_type": "code",
+      "source_file": "deploy/staging/scripts/migrate.sh",
+      "source_location": "L29",
+      "id": "scripts_migrate_run_migrate",
+      "community": 160,
+      "norm_label": "run_migrate()"
+    },
+    {
       "label": "backup.sh",
       "file_type": "code",
       "source_file": "deploy/staging/scripts/backup.sh",
@@ -324,7 +342,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L99",
       "id": "middleware_middleware_test_testrequestid_withexistingheader",
-      "community": 165,
+      "community": 47,
       "norm_label": "testrequestid_withexistingheader()"
     },
     {
@@ -333,7 +351,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L111",
       "id": "middleware_middleware_test_testrequestid_generateswhenmissing",
-      "community": 165,
+      "community": 47,
       "norm_label": "testrequestid_generateswhenmissing()"
     },
     {
@@ -342,7 +360,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L122",
       "id": "middleware_middleware_test_testrequiredevicecontext_missingheaders",
-      "community": 143,
+      "community": 47,
       "norm_label": "testrequiredevicecontext_missingheaders()"
     },
     {
@@ -351,7 +369,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L132",
       "id": "middleware_middleware_test_testrequiredevicecontext_invalidplatform",
-      "community": 143,
+      "community": 47,
       "norm_label": "testrequiredevicecontext_invalidplatform()"
     },
     {
@@ -360,7 +378,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L144",
       "id": "middleware_middleware_test_testrequiredevicecontext_success",
-      "community": 143,
+      "community": 47,
       "norm_label": "testrequiredevicecontext_success()"
     },
     {
@@ -369,7 +387,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L156",
       "id": "middleware_middleware_test_testrequestlog",
-      "community": 165,
+      "community": 47,
       "norm_label": "testrequestlog()"
     },
     {
@@ -4257,7 +4275,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L1",
       "id": "tests_unit_user_routes_test_go",
-      "community": 143,
+      "community": 47,
       "norm_label": "routes_test.go"
     },
     {
@@ -4266,7 +4284,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L15",
       "id": "user_fakeroutesservice",
-      "community": 143,
+      "community": 47,
       "norm_label": "fakeroutesservice"
     },
     {
@@ -4275,7 +4293,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L17",
       "id": "user_fakeroutesservice_updateprofile",
-      "community": 143,
+      "community": 47,
       "norm_label": ".updateprofile()"
     },
     {
@@ -4284,7 +4302,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L21",
       "id": "user_fakeroutesservice_getprofile",
-      "community": 143,
+      "community": 47,
       "norm_label": ".getprofile()"
     },
     {
@@ -4293,7 +4311,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L27",
       "id": "user_routes_test_testregisterroutessuccessfulpatch",
-      "community": 143,
+      "community": 47,
       "norm_label": "testregisterroutessuccessfulpatch()"
     },
     {
@@ -4302,7 +4320,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L52",
       "id": "user_routes_test_testregisterroutesundefinedpath404",
-      "community": 143,
+      "community": 47,
       "norm_label": "testregisterroutesundefinedpath404()"
     },
     {
@@ -4311,7 +4329,7 @@
       "source_file": "tests/unit/user/routes_test.go",
       "source_location": "L76",
       "id": "user_routes_test_testregisterroutessuccessfulget",
-      "community": 143,
+      "community": 47,
       "norm_label": "testregisterroutessuccessfulget()"
     },
     {
@@ -5715,7 +5733,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L1",
       "id": "internal_bootstrap_router_go",
-      "community": 165,
+      "community": 47,
       "norm_label": "router.go"
     },
     {
@@ -5724,7 +5742,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L18",
       "id": "bootstrap_router_newrouter",
-      "community": 165,
+      "community": 47,
       "norm_label": "newrouter()"
     },
     {
@@ -8100,7 +8118,7 @@
       "source_file": "internal/modules/dashboard/service.go",
       "source_location": "L1",
       "id": "internal_modules_dashboard_service_go",
-      "community": 142,
+      "community": 47,
       "norm_label": "service.go"
     },
     {
@@ -8109,7 +8127,7 @@
       "source_file": "internal/modules/dashboard/service.go",
       "source_location": "L11",
       "id": "dashboard_service",
-      "community": 142,
+      "community": 47,
       "norm_label": "service"
     },
     {
@@ -8118,7 +8136,7 @@
       "source_file": "internal/modules/dashboard/service.go",
       "source_location": "L20",
       "id": "dashboard_service_newservice",
-      "community": 142,
+      "community": 47,
       "norm_label": "newservice()"
     },
     {
@@ -8127,7 +8145,7 @@
       "source_file": "internal/modules/dashboard/service.go",
       "source_location": "L33",
       "id": "dashboard_service_parseduration",
-      "community": 142,
+      "community": 47,
       "norm_label": ".parseduration()"
     },
     {
@@ -8136,7 +8154,7 @@
       "source_file": "internal/modules/dashboard/service.go",
       "source_location": "L45",
       "id": "dashboard_service_getdashboard",
-      "community": 142,
+      "community": 47,
       "norm_label": ".getdashboard()"
     },
     {
@@ -8280,7 +8298,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L1",
       "id": "internal_modules_dashboard_dto_go",
-      "community": 1,
+      "community": 47,
       "norm_label": "dto.go"
     },
     {
@@ -8289,7 +8307,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L3",
       "id": "dashboard_getdashboardrequest",
-      "community": 1,
+      "community": 47,
       "norm_label": "getdashboardrequest"
     },
     {
@@ -8298,7 +8316,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L8",
       "id": "dashboard_salessummary",
-      "community": 1,
+      "community": 47,
       "norm_label": "salessummary"
     },
     {
@@ -8307,7 +8325,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L15",
       "id": "dashboard_inventorysummary",
-      "community": 1,
+      "community": 47,
       "norm_label": "inventorysummary"
     },
     {
@@ -8316,7 +8334,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L22",
       "id": "dashboard_expensesummary",
-      "community": 1,
+      "community": 47,
       "norm_label": "expensesummary"
     },
     {
@@ -8325,7 +8343,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L27",
       "id": "dashboard_vehicletypemetrics",
-      "community": 142,
+      "community": 47,
       "norm_label": "vehicletypemetrics"
     },
     {
@@ -8334,7 +8352,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L33",
       "id": "dashboard_dashboardresponse",
-      "community": 1,
+      "community": 47,
       "norm_label": "dashboardresponse"
     },
     {
@@ -9414,7 +9432,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 165,
+      "community": 47,
       "norm_label": "request_id.go"
     },
     {
@@ -9423,7 +9441,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 165,
+      "community": 47,
       "norm_label": "requestid()"
     },
     {
@@ -9432,7 +9450,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 165,
+      "community": 47,
       "norm_label": "newrequestid()"
     },
     {
@@ -9441,7 +9459,7 @@
       "source_file": "pkg/middleware/device_context.go",
       "source_location": "L1",
       "id": "pkg_middleware_device_context_go",
-      "community": 143,
+      "community": 47,
       "norm_label": "device_context.go"
     },
     {
@@ -9450,7 +9468,7 @@
       "source_file": "pkg/middleware/device_context.go",
       "source_location": "L24",
       "id": "middleware_device_context_requiredevicecontext",
-      "community": 143,
+      "community": 47,
       "norm_label": "requiredevicecontext()"
     },
     {
@@ -9459,7 +9477,7 @@
       "source_file": "pkg/middleware/request_log.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_log_go",
-      "community": 165,
+      "community": 47,
       "norm_label": "request_log.go"
     },
     {
@@ -9468,7 +9486,7 @@
       "source_file": "pkg/middleware/request_log.go",
       "source_location": "L11",
       "id": "middleware_request_log_requestlog",
-      "community": 165,
+      "community": 47,
       "norm_label": "requestlog()"
     },
     {
@@ -9594,7 +9612,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L1",
       "id": "pkg_logger_logger_go",
-      "community": 142,
+      "community": 47,
       "norm_label": "logger.go"
     },
     {
@@ -9603,7 +9621,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L9",
       "id": "logger_contextkey",
-      "community": 142,
+      "community": 47,
       "norm_label": "contextkey"
     },
     {
@@ -9612,7 +9630,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L13",
       "id": "logger_logger_new",
-      "community": 142,
+      "community": 47,
       "norm_label": "new()"
     },
     {
@@ -9621,7 +9639,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L21",
       "id": "logger_logger_withcontext",
-      "community": 142,
+      "community": 47,
       "norm_label": "withcontext()"
     },
     {
@@ -9630,7 +9648,7 @@
       "source_file": "pkg/logger/logger.go",
       "source_location": "L25",
       "id": "logger_logger_fromcontext",
-      "community": 142,
+      "community": 47,
       "norm_label": "fromcontext()"
     },
     {
@@ -10006,7 +10024,7 @@
       "label": "Prerequisites",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L42",
+      "source_location": "L43",
       "id": "staging_readme_prerequisites",
       "community": 166,
       "norm_label": "prerequisites"
@@ -10015,7 +10033,7 @@
       "label": "Install Docker",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L49",
+      "source_location": "L50",
       "id": "staging_readme_install_docker",
       "community": 166,
       "norm_label": "install docker"
@@ -10024,7 +10042,7 @@
       "label": "code:bash (curl -fsSL https://get.docker.com | sudo sh)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L51",
+      "source_location": "L52",
       "id": "staging_readme_codeblock_3",
       "community": 166,
       "norm_label": "code:bash (curl -fssl https://get.docker.com | sudo sh)"
@@ -10033,7 +10051,7 @@
       "label": "Install Nginx",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L57",
+      "source_location": "L58",
       "id": "staging_readme_install_nginx",
       "community": 166,
       "norm_label": "install nginx"
@@ -10042,7 +10060,7 @@
       "label": "code:bash (sudo apt update && sudo apt install -y nginx)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L59",
+      "source_location": "L60",
       "id": "staging_readme_codeblock_4",
       "community": 166,
       "norm_label": "code:bash (sudo apt update && sudo apt install -y nginx)"
@@ -10051,25 +10069,25 @@
       "label": "Step 1 \u2014 Authenticate with GHCR",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L66",
+      "source_location": "L67",
       "id": "staging_readme_step_1_authenticate_with_ghcr",
-      "community": 179,
+      "community": 125,
       "norm_label": "step 1 \u2014 authenticate with ghcr"
     },
     {
       "label": "code:bash (# Store token securely)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L73",
+      "source_location": "L74",
       "id": "staging_readme_codeblock_5",
-      "community": 179,
+      "community": 125,
       "norm_label": "code:bash (# store token securely)"
     },
     {
       "label": "Step 2 \u2014 Clone Repository on VM",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L100",
+      "source_location": "L101",
       "id": "staging_readme_step_2_clone_repository_on_vm",
       "community": 175,
       "norm_label": "step 2 \u2014 clone repository on vm"
@@ -10078,7 +10096,7 @@
       "label": "code:bash (sudo mkdir -p /opt)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L102",
+      "source_location": "L103",
       "id": "staging_readme_codeblock_6",
       "community": 175,
       "norm_label": "code:bash (sudo mkdir -p /opt)"
@@ -10087,7 +10105,7 @@
       "label": "code:bash (cd /opt/dms-api-server)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L114",
+      "source_location": "L115",
       "id": "staging_readme_codeblock_7",
       "community": 175,
       "norm_label": "code:bash (cd /opt/dms-api-server)"
@@ -10096,34 +10114,34 @@
       "label": "Step 3 \u2014 Configure Environment",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L121",
+      "source_location": "L122",
       "id": "staging_readme_step_3_configure_environment",
-      "community": 125,
+      "community": 143,
       "norm_label": "step 3 \u2014 configure environment"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L125",
+      "source_location": "L126",
       "id": "staging_readme_codeblock_8",
-      "community": 125,
+      "community": 143,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "code:bash (openssl rand -hex 32)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L134",
+      "source_location": "L135",
       "id": "staging_readme_codeblock_9",
-      "community": 125,
+      "community": 143,
       "norm_label": "code:bash (openssl rand -hex 32)"
     },
     {
       "label": "Bootstrap Scripts",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L140",
+      "source_location": "L141",
       "id": "staging_readme_bootstrap_scripts",
       "community": 173,
       "norm_label": "bootstrap scripts"
@@ -10132,7 +10150,7 @@
       "label": "code:bash (# Installs nginx if missing, copies nginx.conf, enables site)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L145",
+      "source_location": "L146",
       "id": "staging_readme_codeblock_10",
       "community": 173,
       "norm_label": "code:bash (# installs nginx if missing, copies nginx.conf, enables site)"
@@ -10141,7 +10159,7 @@
       "label": "code:bash (# Installs certbot, obtains Let's Encrypt cert, tests renewa)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L151",
+      "source_location": "L152",
       "id": "staging_readme_codeblock_11",
       "community": 173,
       "norm_label": "code:bash (# installs certbot, obtains let's encrypt cert, tests renewa)"
@@ -10150,7 +10168,7 @@
       "label": "Step 4 \u2014 Configure Host Nginx",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L160",
+      "source_location": "L161",
       "id": "staging_readme_step_4_configure_host_nginx",
       "community": 162,
       "norm_label": "step 4 \u2014 configure host nginx"
@@ -10159,7 +10177,7 @@
       "label": "Main config",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L162",
+      "source_location": "L163",
       "id": "staging_readme_main_config",
       "community": 162,
       "norm_label": "main config"
@@ -10168,7 +10186,7 @@
       "label": "code:nginx (user www-data;)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L166",
+      "source_location": "L167",
       "id": "staging_readme_codeblock_12",
       "community": 162,
       "norm_label": "code:nginx (user www-data;)"
@@ -10177,7 +10195,7 @@
       "label": "Site config",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L213",
+      "source_location": "L214",
       "id": "staging_readme_site_config",
       "community": 162,
       "norm_label": "site config"
@@ -10186,7 +10204,7 @@
       "label": "code:nginx (server {)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L217",
+      "source_location": "L218",
       "id": "staging_readme_codeblock_13",
       "community": 162,
       "norm_label": "code:nginx (server {)"
@@ -10195,7 +10213,7 @@
       "label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L285",
+      "source_location": "L286",
       "id": "staging_readme_codeblock_14",
       "community": 162,
       "norm_label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)"
@@ -10204,43 +10222,52 @@
       "label": "Step 5 \u2014 Initial Deployment",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L295",
+      "source_location": "L296",
       "id": "staging_readme_step_5_initial_deployment",
-      "community": 125,
+      "community": 1,
       "norm_label": "step 5 \u2014 initial deployment"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L297",
+      "source_location": "L300",
       "id": "staging_readme_codeblock_15",
-      "community": 125,
+      "community": 1,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
+    },
+    {
+      "label": "code:bash (./scripts/migrate.sh version)",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L316",
+      "id": "staging_readme_codeblock_16",
+      "community": 1,
+      "norm_label": "code:bash (./scripts/migrate.sh version)"
     },
     {
       "label": "Step 6 \u2014 Configure SSL (After DNS is Live)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L309",
+      "source_location": "L322",
       "id": "staging_readme_step_6_configure_ssl_after_dns_is_live",
-      "community": 125,
+      "community": 1,
       "norm_label": "step 6 \u2014 configure ssl (after dns is live)"
     },
     {
       "label": "code:bash (sudo apt install -y certbot python3-certbot-nginx)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L311",
-      "id": "staging_readme_codeblock_16",
-      "community": 125,
+      "source_location": "L324",
+      "id": "staging_readme_codeblock_17",
+      "community": 1,
       "norm_label": "code:bash (sudo apt install -y certbot python3-certbot-nginx)"
     },
     {
       "label": "Operational Runbook",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L327",
+      "source_location": "L340",
       "id": "staging_readme_operational_runbook",
       "community": 136,
       "norm_label": "operational runbook"
@@ -10249,17 +10276,35 @@
       "label": "Deploy new API image",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L329",
+      "source_location": "L342",
       "id": "staging_readme_deploy_new_api_image",
-      "community": 136,
+      "community": 1,
       "norm_label": "deploy new api image"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L333",
-      "id": "staging_readme_codeblock_17",
+      "source_location": "L346",
+      "id": "staging_readme_codeblock_18",
+      "community": 174,
+      "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
+    },
+    {
+      "label": "Apply database migrations",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L353",
+      "id": "staging_readme_apply_database_migrations",
+      "community": 136,
+      "norm_label": "apply database migrations"
+    },
+    {
+      "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L357",
+      "id": "staging_readme_codeblock_19",
       "community": 136,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
@@ -10267,25 +10312,25 @@
       "label": "Update API image only (no Postgres restart)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L340",
+      "source_location": "L362",
       "id": "staging_readme_update_api_image_only_no_postgres_restart",
-      "community": 136,
+      "community": 174,
       "norm_label": "update api image only (no postgres restart)"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L342",
-      "id": "staging_readme_codeblock_18",
-      "community": 136,
+      "source_location": "L364",
+      "id": "staging_readme_codeblock_20",
+      "community": 174,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Restart a single service",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L348",
+      "source_location": "L370",
       "id": "staging_readme_restart_a_single_service",
       "community": 136,
       "norm_label": "restart a single service"
@@ -10294,8 +10339,8 @@
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L350",
-      "id": "staging_readme_codeblock_19",
+      "source_location": "L372",
+      "id": "staging_readme_codeblock_21",
       "community": 136,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
@@ -10303,25 +10348,25 @@
       "label": "View logs",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L356",
+      "source_location": "L378",
       "id": "staging_readme_view_logs",
-      "community": 136,
+      "community": 174,
       "norm_label": "view logs"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L358",
-      "id": "staging_readme_codeblock_20",
-      "community": 136,
+      "source_location": "L380",
+      "id": "staging_readme_codeblock_22",
+      "community": 174,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Manage Nginx",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L377",
+      "source_location": "L399",
       "id": "staging_readme_manage_nginx",
       "community": 136,
       "norm_label": "manage nginx"
@@ -10330,8 +10375,8 @@
       "label": "code:bash (sudo nginx -t                    # validate config)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L379",
-      "id": "staging_readme_codeblock_21",
+      "source_location": "L401",
+      "id": "staging_readme_codeblock_23",
       "community": 136,
       "norm_label": "code:bash (sudo nginx -t                    # validate config)"
     },
@@ -10339,34 +10384,34 @@
       "label": "Database backup",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L386",
+      "source_location": "L408",
       "id": "staging_readme_database_backup",
-      "community": 174,
+      "community": 136,
       "norm_label": "database backup"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L388",
-      "id": "staging_readme_codeblock_22",
-      "community": 174,
+      "source_location": "L410",
+      "id": "staging_readme_codeblock_24",
+      "community": 136,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "code:bash (sudo crontab -e)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L397",
-      "id": "staging_readme_codeblock_23",
-      "community": 174,
+      "source_location": "L419",
+      "id": "staging_readme_codeblock_25",
+      "community": 142,
       "norm_label": "code:bash (sudo crontab -e)"
     },
     {
       "label": "Database restore",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L403",
+      "source_location": "L425",
       "id": "staging_readme_database_restore",
       "community": 136,
       "norm_label": "database restore"
@@ -10375,34 +10420,34 @@
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L405",
-      "id": "staging_readme_codeblock_24",
-      "community": 136,
+      "source_location": "L427",
+      "id": "staging_readme_codeblock_26",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Health check",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L410",
+      "source_location": "L432",
       "id": "staging_readme_health_check",
-      "community": 136,
+      "community": 142,
       "norm_label": "health check"
     },
     {
       "label": "code:bash (curl http://stag-api.infiniour.com/health   # via Nginx)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L412",
-      "id": "staging_readme_codeblock_25",
-      "community": 136,
+      "source_location": "L434",
+      "id": "staging_readme_codeblock_27",
+      "community": 142,
       "norm_label": "code:bash (curl http://stag-api.infiniour.com/health   # via nginx)"
     },
     {
       "label": "Security: Exposed Ports",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L421",
+      "source_location": "L443",
       "id": "staging_readme_security_exposed_ports",
       "community": 125,
       "norm_label": "security: exposed ports"
@@ -10411,8 +10456,8 @@
       "label": "code:bash (# From an external machine:)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L439",
-      "id": "staging_readme_codeblock_26",
+      "source_location": "L461",
+      "id": "staging_readme_codeblock_28",
       "community": 125,
       "norm_label": "code:bash (# from an external machine:)"
     },
@@ -10420,18 +10465,18 @@
       "label": "Disaster Recovery After VM Recreation",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L447",
+      "source_location": "L469",
       "id": "staging_readme_disaster_recovery_after_vm_recreation",
-      "community": 125,
+      "community": 142,
       "norm_label": "disaster recovery after vm recreation"
     },
     {
       "label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L455",
-      "id": "staging_readme_codeblock_27",
-      "community": 125,
+      "source_location": "L477",
+      "id": "staging_readme_codeblock_29",
+      "community": 142,
       "norm_label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)"
     },
     {
@@ -15635,6 +15680,16 @@
       "target": "wire_server_buildserver"
     },
     {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/scripts/migrate.sh",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "deploy_staging_scripts_migrate_sh",
+      "target": "scripts_migrate_run_migrate",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/smoke/bootstrap/bootstrap_smoke_test.go",
@@ -20107,9 +20162,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L343",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_newsvcwithenv",
-      "confidence_score": 1.0
+      "target": "auth_service_test_newsvcwithenv"
     },
     {
       "relation": "contains",
@@ -20157,9 +20212,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L430",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testtriggerotp_otpcodeinresponsefordevelopment",
-      "confidence_score": 1.0
+      "target": "auth_service_test_testtriggerotp_otpcodeinresponsefordevelopment"
     },
     {
       "relation": "contains",
@@ -20167,9 +20222,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L449",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testtriggerotp_otpcodeinresponseforstaging",
-      "confidence_score": 1.0
+      "target": "auth_service_test_testtriggerotp_otpcodeinresponseforstaging"
     },
     {
       "relation": "contains",
@@ -20177,9 +20232,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L468",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_auth_service_test_go",
-      "target": "auth_service_test_testtriggerotp_otpcodeabsentinresponseforproduction",
-      "confidence_score": 1.0
+      "target": "auth_service_test_testtriggerotp_otpcodeabsentinresponseforproduction"
     },
     {
       "relation": "contains",
@@ -21309,9 +21364,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L433",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_service_test_testtriggerotp_otpcodeinresponsefordevelopment",
-      "target": "auth_service_test_newsvcwithenv",
-      "confidence_score": 1.0
+      "target": "auth_service_test_newsvcwithenv"
     },
     {
       "relation": "calls",
@@ -21320,9 +21375,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L452",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_service_test_testtriggerotp_otpcodeinresponseforstaging",
-      "target": "auth_service_test_newsvcwithenv",
-      "confidence_score": 1.0
+      "target": "auth_service_test_newsvcwithenv"
     },
     {
       "relation": "calls",
@@ -21331,9 +21386,9 @@
       "source_file": "tests/unit/auth/service_test.go",
       "source_location": "L471",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "auth_service_test_testtriggerotp_otpcodeabsentinresponseforproduction",
-      "target": "auth_service_test_newsvcwithenv",
-      "confidence_score": 1.0
+      "target": "auth_service_test_newsvcwithenv"
     },
     {
       "relation": "calls",
@@ -32435,6 +32490,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L316",
+      "weight": 1.0,
+      "source": "staging_readme_step_5_initial_deployment",
+      "target": "staging_readme_codeblock_16",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L311",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -32445,11 +32510,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L324",
+      "weight": 1.0,
+      "source": "staging_readme_step_6_configure_ssl_after_dns_is_live",
+      "target": "staging_readme_codeblock_17",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L333",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_deploy_new_api_image",
+      "target": "staging_readme_codeblock_17"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L329",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_operational_runbook",
       "target": "staging_readme_deploy_new_api_image"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "staging_readme_operational_runbook",
+      "target": "staging_readme_apply_database_migrations",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32525,11 +32620,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L333",
+      "source_location": "L346",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "staging_readme_deploy_new_api_image",
-      "target": "staging_readme_codeblock_17"
+      "target": "staging_readme_codeblock_18",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32545,11 +32640,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L357",
+      "weight": 1.0,
+      "source": "staging_readme_apply_database_migrations",
+      "target": "staging_readme_codeblock_19",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L350",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_restart_a_single_service",
       "target": "staging_readme_codeblock_19"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "staging_readme_update_api_image_only_no_postgres_restart",
+      "target": "staging_readme_codeblock_20",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32565,11 +32680,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "staging_readme_restart_a_single_service",
+      "target": "staging_readme_codeblock_21",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L379",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_manage_nginx",
       "target": "staging_readme_codeblock_21"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "staging_readme_view_logs",
+      "target": "staging_readme_codeblock_22",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32585,11 +32720,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L401",
+      "weight": 1.0,
+      "source": "staging_readme_manage_nginx",
+      "target": "staging_readme_codeblock_23",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L397",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_database_backup",
       "target": "staging_readme_codeblock_23"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L410",
+      "weight": 1.0,
+      "source": "staging_readme_database_backup",
+      "target": "staging_readme_codeblock_24",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "staging_readme_database_backup",
+      "target": "staging_readme_codeblock_25",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32615,6 +32780,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L427",
+      "weight": 1.0,
+      "source": "staging_readme_database_restore",
+      "target": "staging_readme_codeblock_26",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L439",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -32625,11 +32800,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L434",
+      "weight": 1.0,
+      "source": "staging_readme_health_check",
+      "target": "staging_readme_codeblock_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L455",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_disaster_recovery_after_vm_recreation",
       "target": "staging_readme_codeblock_27"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L461",
+      "weight": 1.0,
+      "source": "staging_readme_security_exposed_ports",
+      "target": "staging_readme_codeblock_28",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L477",
+      "weight": 1.0,
+      "source": "staging_readme_disaster_recovery_after_vm_recreation",
+      "target": "staging_readme_codeblock_29",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -37550,5 +37755,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "70808ba6d59f06deee8b351d71b14d90766cd5fc"
+  "built_at_commit": "f24c023ccec16913c4332b34ccefba9a8187cba9"
 }

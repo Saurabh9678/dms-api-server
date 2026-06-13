@@ -1,16 +1,16 @@
 # Graph Report - dms-api-server  (2026-06-13)
 
 ## Corpus Check
-- 203 files · ~59,565 words
+- 204 files · ~59,277 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1733 nodes · 2136 edges · 190 communities (147 shown, 43 thin omitted)
+- 1738 nodes · 2152 edges · 189 communities (147 shown, 42 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 222 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70808ba6`
+- Built from commit: `f24c023c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -150,14 +150,12 @@
 - [[_COMMUNITY_Community 162|Community 162]]
 - [[_COMMUNITY_Community 163|Community 163]]
 - [[_COMMUNITY_Community 164|Community 164]]
-- [[_COMMUNITY_Community 165|Community 165]]
 - [[_COMMUNITY_Community 166|Community 166]]
 - [[_COMMUNITY_Community 169|Community 169]]
 - [[_COMMUNITY_Community 172|Community 172]]
 - [[_COMMUNITY_Community 173|Community 173]]
 - [[_COMMUNITY_Community 174|Community 174]]
 - [[_COMMUNITY_Community 175|Community 175]]
-- [[_COMMUNITY_Community 179|Community 179]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `newSvc()` - 42 edges
@@ -183,7 +181,7 @@
 - `TestAuthLoginMissingDeviceContextHeaders()` --calls--> `NewHandler()`  [INFERRED]
   tests/smoke/auth/auth_routes_smoke_test.go → internal/modules/auth/handler.go
 
-## Communities (190 total, 43 thin omitted)
+## Communities (189 total, 42 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -191,7 +189,7 @@ Nodes (5): fakeOTPRepo, fakeOTPSender, fakeSessionRepo, fakeTokenService, fakeUs
 
 ### Community 1 - "Community 1"
 Cohesion: 0.33
-Nodes (5): DashboardResponse, ExpenseSummary, GetDashboardRequest, InventorySummary, SalesSummary
+Nodes (6): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (./scripts/migrate.sh version), code:bash (sudo apt install -y certbot python3-certbot-nginx), Deploy new API image, Step 5 — Initial Deployment, Step 6 — Configure SSL (After DNS is Live)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
@@ -270,8 +268,8 @@ Cohesion: 0.1
 Nodes (38): newVehicleMockDB(), TestGetByIDWithFullDetails_DBError(), TestGetByIDWithFullDetails_NotFound(), TestGetByIDWithFullDetails_Success(), TestGetByIDWithFullDetails_WithSaleInfo(), TestRepo_CreatePricing_DBError(), TestRepo_CreatePricing_Success(), TestRepo_GetCurrentStatus_DBError() (+30 more)
 
 ### Community 47 - "Community 47"
-Cohesion: 0.18
-Nodes (11): extractBearerToken(), RequireAuth(), TestRecovery_NoPanic(), TestRecovery_PanicReturns500(), TestRequireAuth_InvalidBearerFormat(), TestRequireAuth_NoAuthHeader(), TestRequireAuth_ParseError(), TestRequireAuth_Success() (+3 more)
+Cohesion: 0.05
+Nodes (35): newRouter(), DashboardResponse, ExpenseSummary, GetDashboardRequest, InventorySummary, SalesSummary, Service, VehicleTypeMetrics (+27 more)
 
 ### Community 72 - "Community 72"
 Cohesion: 0.4
@@ -438,8 +436,8 @@ Cohesion: 0.29
 Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_statuses` Table
 
 ### Community 125 - "Community 125"
-Cohesion: 0.12
-Nodes (15): code:block1 (Internet), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (sudo apt install -y certbot python3-certbot-nginx), code:block2 (/opt/dms-api-server/), code:bash (# From an external machine:), code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (openssl rand -hex 32) (+7 more)
+Cohesion: 0.2
+Nodes (9): code:block1 (Internet), code:block2 (/opt/dms-api-server/), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (# From an external machine:), code:bash (# Store token securely), Folder Structure, Infiniour Staging Deployment, Security: Exposed Ports (+1 more)
 
 ### Community 126 - "Community 126"
 Cohesion: 0.33
@@ -482,8 +480,8 @@ Cohesion: 0.13
 Nodes (14): artifacts, base_branch, current_step_id, modified_files, created, deleted, modified, plan_sha256 (+6 more)
 
 ### Community 136 - "Community 136"
-Cohesion: 0.13
-Nodes (15): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (sudo nginx -t                    # validate config), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (curl http://stag-api.infiniour.com/health   # via Nginx), Database restore (+7 more)
+Cohesion: 0.29
+Nodes (10): Apply database migrations, code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (sudo nginx -t                    # validate config), code:bash (cd /opt/dms-api-server/deploy/staging), Database backup, Database restore, Manage Nginx (+2 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.27
@@ -502,12 +500,12 @@ Cohesion: 0.15
 Nodes (12): Business rules, code:json ({), Dashboard Module, Endpoint, Error responses, `GET /api/v1/dashboard`, Handler flow, Purpose (+4 more)
 
 ### Community 142 - "Community 142"
-Cohesion: 0.2
-Nodes (4): Service, VehicleTypeMetrics, contextKey, WithContext()
+Cohesion: 0.4
+Nodes (5): code:bash (sudo crontab -e), code:bash (curl http://stag-api.infiniour.com/health   # via Nginx), code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com), Disaster Recovery After VM Recreation, Health check
 
 ### Community 143 - "Community 143"
-Cohesion: 0.2
-Nodes (8): RequireDeviceContext(), TestRequireDeviceContext_InvalidPlatform(), TestRequireDeviceContext_MissingHeaders(), TestRequireDeviceContext_Success(), fakeRoutesService, TestRegisterRoutesSuccessfulGet(), TestRegisterRoutesSuccessfulPatch(), TestRegisterRoutesUndefinedPath404()
+Cohesion: 0.67
+Nodes (3): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (openssl rand -hex 32), Step 3 — Configure Environment
 
 ### Community 144 - "Community 144"
 Cohesion: 0.31
@@ -561,10 +559,6 @@ Nodes (4): info, name, schema, item
 Cohesion: 0.7
 Nodes (4): newMockGormDB(), TestBootstrap_BuildDependencies(), TestBootstrap_NewRouter_DevelopmentMode(), TestBootstrap_NewRouter_ProductionMode()
 
-### Community 165 - "Community 165"
-Cohesion: 0.22
-Nodes (7): newRouter(), TestRequestID_GeneratesWhenMissing(), TestRequestID_WithExistingHeader(), TestRequestLog(), newRequestID(), RequestID(), RequestLog()
-
 ### Community 166 - "Community 166"
 Cohesion: 0.4
 Nodes (5): code:bash (curl -fsSL https://get.docker.com | sudo sh), code:bash (sudo apt update && sudo apt install -y nginx), Install Docker, Install Nginx, Prerequisites
@@ -578,29 +572,29 @@ Cohesion: 0.67
 Nodes (3): Bootstrap Scripts, code:bash (# Installs nginx if missing, copies nginx.conf, enables site), code:bash (# Installs certbot, obtains Let's Encrypt cert, tests renewa)
 
 ### Community 174 - "Community 174"
-Cohesion: 0.67
-Nodes (3): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (sudo crontab -e), Database backup
+Cohesion: 0.4
+Nodes (5): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (cd /opt/dms-api-server/deploy/staging), Update API image only (no Postgres restart), View logs
 
 ### Community 175 - "Community 175"
 Cohesion: 0.67
 Nodes (3): code:bash (sudo mkdir -p /opt), code:bash (cd /opt/dms-api-server), Step 2 — Clone Repository on VM
 
 ## Knowledge Gaps
-- **439 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+434 more)
+- **429 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+424 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ToAppError()` connect `Community 31` to `Community 29`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
+  _High betweenness centrality (0.078) - this node is a cross-community bridge._
 - **Why does `FromError()` connect `Community 29` to `Community 31`?**
-  _High betweenness centrality (0.083) - this node is a cross-community bridge._
+  _High betweenness centrality (0.077) - this node is a cross-community bridge._
 - **Are the 18 inferred relationships involving `NewOTPRepository()` (e.g. with `TestNewOTPRepository()` and `TestOTPRepositoryWithTx()`) actually correct?**
   _`NewOTPRepository()` has 18 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Dependencies`, `Provider`, `TokenPair` to the rest of the system?**
-  _439 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _429 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.09 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
