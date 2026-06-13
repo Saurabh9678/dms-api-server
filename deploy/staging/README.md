@@ -18,17 +18,23 @@ Images are built in GitHub Actions and pushed to GHCR. The VM only pulls and run
 
 ## Folder Structure
 
+The repository lives on the VM at `/opt/dms-api-server`. All deployment files are under `deploy/staging/`:
+
 ```
-deploy/staging/
-├── README.md
-├── docker-compose.yml
-├── nginx.conf
-└── scripts/
-    ├── backup.sh
-    ├── deploy.sh
-    ├── restore.sh
-    ├── setup-nginx.sh
-    └── setup-ssl.sh
+/opt/dms-api-server/
+└── deploy/staging/
+    ├── README.md
+    ├── docker-compose.yml
+    ├── .env                 # created on server (not committed)
+    ├── .env.example
+    ├── nginx.conf
+    ├── backups/             # created on server
+    └── scripts/
+        ├── backup.sh
+        ├── deploy.sh
+        ├── restore.sh
+        ├── setup-nginx.sh
+        └── setup-ssl.sh
 ```
 
 ---
@@ -91,23 +97,36 @@ docker pull ghcr.io/saurabh9678/dms-api-server:staging
 
 ---
 
-## Step 2 — Copy Files to VM
+## Step 2 — Clone Repository on VM
 
 ```bash
-sudo mkdir -p /opt/infiniour/scripts /opt/infiniour/backups
-sudo cp docker-compose.yml .env.example /opt/infiniour/
-sudo cp scripts/deploy.sh scripts/backup.sh scripts/restore.sh /opt/infiniour/scripts/
-sudo chmod +x /opt/infiniour/scripts/*.sh
+sudo mkdir -p /opt
+sudo git clone https://github.com/saurabh9678/dms-api-server.git /opt/dms-api-server
+cd /opt/dms-api-server
+git checkout staging
+
+sudo mkdir -p deploy/staging/backups
+sudo chmod +x deploy/staging/scripts/*.sh
+```
+
+If the repo is already present, pull the latest changes instead:
+
+```bash
+cd /opt/dms-api-server
+git pull
 ```
 
 ---
 
 ## Step 3 — Configure Environment
 
+Create `.env` next to `docker-compose.yml`:
+
 ```bash
-cd /opt/infiniour
+cd /opt/dms-api-server/deploy/staging
 sudo cp .env.example .env
 sudo nano .env   # fill in real passwords and secrets
+sudo chmod 600 .env
 ```
 
 Generate a strong secret for `AUTH_ACCESS_TOKEN_SECRET`:
@@ -125,13 +144,13 @@ Two scripts automate the manual Nginx and SSL steps below.
 **Step 4 automated:**
 ```bash
 # Installs nginx if missing, copies nginx.conf, enables site, validates, reloads
-./deploy/staging/scripts/setup-nginx.sh
+/opt/dms-api-server/deploy/staging/scripts/setup-nginx.sh
 ```
 
 **Step 6 automated:**
 ```bash
 # Installs certbot, obtains Let's Encrypt cert, tests renewal
-./deploy/staging/scripts/setup-ssl.sh
+/opt/dms-api-server/deploy/staging/scripts/setup-ssl.sh
 ```
 
 Run `setup-nginx.sh` first (Step 4), then `setup-ssl.sh` after DNS is live (Step 6). The manual steps below remain for reference.
@@ -276,7 +295,7 @@ sudo systemctl reload nginx
 ## Step 5 — Initial Deployment
 
 ```bash
-cd /opt/infiniour
+cd /opt/dms-api-server/deploy/staging
 docker compose up -d
 
 # Verify
@@ -312,14 +331,16 @@ sudo systemctl status certbot.timer
 Every push to `main` in GitHub Actions builds and pushes a new `staging` tag to GHCR. To deploy:
 
 ```bash
+cd /opt/dms-api-server/deploy/staging
 ./scripts/deploy.sh
 ```
 
-This runs `docker compose pull`, `docker compose up -d`, and `docker image prune -af`.
+This runs `docker compose pull`, `docker compose up -d`, and `docker image prune -f`.
 
 ### Update API image only (no Postgres restart)
 
 ```bash
+cd /opt/dms-api-server/deploy/staging
 docker compose pull api
 docker compose up -d --no-deps api
 ```
@@ -327,6 +348,7 @@ docker compose up -d --no-deps api
 ### Restart a single service
 
 ```bash
+cd /opt/dms-api-server/deploy/staging
 docker compose restart api
 docker compose restart postgres
 ```
@@ -334,6 +356,8 @@ docker compose restart postgres
 ### View logs
 
 ```bash
+cd /opt/dms-api-server/deploy/staging
+
 # API logs
 docker compose logs -f api
 
@@ -362,8 +386,9 @@ sudo systemctl status nginx      # check status
 ### Database backup
 
 ```bash
+cd /opt/dms-api-server/deploy/staging
 ./scripts/backup.sh
-# Backups saved to /opt/infiniour/backups/
+# Backups saved to /opt/dms-api-server/deploy/staging/backups/
 # Files older than 14 days are pruned automatically
 ```
 
@@ -372,13 +397,14 @@ Add to cron for nightly automated backups:
 ```bash
 sudo crontab -e
 # Add:
-0 2 * * * /opt/infiniour/scripts/backup.sh >> /var/log/infiniour-backup.log 2>&1
+0 2 * * * /opt/dms-api-server/deploy/staging/scripts/backup.sh >> /var/log/infiniour-backup.log 2>&1
 ```
 
 ### Database restore
 
 ```bash
-./scripts/restore.sh /opt/infiniour/backups/dms_20260613_020000.sql.gz
+cd /opt/dms-api-server/deploy/staging
+./scripts/restore.sh /opt/dms-api-server/deploy/staging/backups/dms_20260613_020000.sql.gz
 ```
 
 ### Health check
@@ -386,7 +412,7 @@ sudo crontab -e
 ```bash
 curl http://stag-api.infiniour.com/health   # via Nginx
 curl http://127.0.0.1:8080/health           # direct to API (from VM only)
-docker compose ps                            # service status
+cd /opt/dms-api-server/deploy/staging && docker compose ps   # service status
 docker exec infiniour-postgres pg_isready -U infiniour -d dms
 ```
 
@@ -423,14 +449,14 @@ nmap -p 5432,8080 <VM_PUBLIC_IP>
 1. Provision a new Ubuntu 24.04 VM on Azure
 2. Install Docker: `curl -fsSL https://get.docker.com | sudo sh`
 3. Install Nginx: `sudo apt install -y nginx`
-4. Copy `/opt/infiniour/` contents (all config files, `.env`, backup files) to the new VM
+4. Clone or copy `/opt/dms-api-server/` to the new VM (include `.env` and `deploy/staging/backups/`)
 5. Authenticate with GHCR: `cat ~/.ghcr_token | docker login ghcr.io -u saurabh9678 --password-stdin`
 6. Copy and enable Nginx site config:
    ```bash
    sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com /etc/nginx/sites-enabled/
    sudo systemctl enable --now nginx
    ```
-7. Start services: `cd /opt/infiniour && docker compose up -d`
-8. Restore database: `./scripts/restore.sh /opt/infiniour/backups/<latest>.sql.gz`
+7. Start services: `cd /opt/dms-api-server/deploy/staging && docker compose up -d`
+8. Restore database: `cd /opt/dms-api-server/deploy/staging && ./scripts/restore.sh backups/<latest>.sql.gz`
 9. Re-issue SSL cert: `sudo certbot --nginx -d stag-api.infiniour.com`
 10. Verify: `curl https://stag-api.infiniour.com/health`

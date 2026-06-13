@@ -11,7 +11,10 @@ BACKUP_FILE="$1"
 
 [ -f "$BACKUP_FILE" ] || { echo "Error: file not found: $BACKUP_FILE"; exit 1; }
 
-set -a; source /opt/infiniour/.env; set +a
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEPLOY_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+set -a; source "$DEPLOY_DIR/.env"; set +a
 
 echo "Restoring from: $BACKUP_FILE"
 echo "WARNING: This will overwrite the current database. Ctrl+C to cancel. Proceeding in 5s..."

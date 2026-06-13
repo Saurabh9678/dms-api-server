@@ -2,7 +2,10 @@
 
 set -euo pipefail
 
-cd /opt/infiniour
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEPLOY_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+cd "$DEPLOY_DIR"
 
 echo "[deploy] Pulling latest images..."
 docker compose pull
