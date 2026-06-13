@@ -14,4 +14,6 @@ const (
 	CodeUserNotFound           = "USER_NOT_FOUND"
 	CodeVehicleNotFound        = "VEHICLE_NOT_FOUND"
 	CodeVehicleUpdateForbidden = "VEHICLE_UPDATE_FORBIDDEN"
+	CodeOTPCooldown            = "OTP_COOLDOWN"
+	CodeOTPRateLimitExceeded   = "OTP_RATE_LIMIT_EXCEEDED"
 )

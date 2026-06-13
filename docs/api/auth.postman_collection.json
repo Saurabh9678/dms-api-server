@@ -10,6 +10,93 @@
       "name": "auth",
       "item": [
         {
+          "name": "Send OTP",
+          "id": "auth-send-otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/send-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "send-otp"
+              ]
+            },
+            "description": "Auth: Public. Unified OTP trigger endpoint. Sends OTP to the provided phone number. Rate-limited: phone-wide cooldown and daily cap."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" },
+                  { "key": "X-Platform", "value": "web" },
+                  { "key": "X-Device-Id", "value": "browser-1" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"countryCode\": \"+91\",\n  \"phoneNumber\": \"9999999999\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/auth/send-otp",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "auth", "send-otp"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"message\": \"OTP sent successfully\",\n    \"requestId\": \"Ab12Cd34\"\n  }\n}"
+            },
+            {
+              "name": "Cooldown Active",
+              "status": "Too Many Requests",
+              "code": 429,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"OTP_COOLDOWN\",\n    \"message\": \"please wait before requesting another OTP\"\n  }\n}"
+            },
+            {
+              "name": "Daily Cap Exceeded",
+              "status": "Too Many Requests",
+              "code": 429,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"OTP_RATE_LIMIT_EXCEEDED\",\n    \"message\": \"too many OTP requests, please try again later\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Register",
           "id": "auth-register",
           "request": {

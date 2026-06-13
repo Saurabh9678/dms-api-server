@@ -30,6 +30,10 @@ func (f *contractService) RefreshToken(_ context.Context, _ auth.RefreshTokenReq
 	return &auth.TokenResponse{AccessToken: "a2", RefreshToken: "r2", ExpiresIn: 900, TokenType: "Bearer"}, nil
 }
 
+func (f *contractService) SendOTP(_ context.Context, _ auth.SendOTPRequest) (*auth.TriggerOTPResponse, error) {
+	return &auth.TriggerOTPResponse{Message: "OTP sent successfully"}, nil
+}
+
 func (f *contractService) Logout(_ context.Context, _ auth.LogoutRequest) error {
 	return nil
 }
@@ -50,6 +54,7 @@ func TestAuthRouteContracts(t *testing.T) {
 		authHeader string
 		statusCode int
 	}{
+		{name: "send-otp", path: "/api/v1/auth/send-otp", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "verify-otp", path: "/api/v1/auth/verify-otp", body: `{"requestId":"Ab12Cd34","otpCode":"123456"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},

@@ -31,6 +31,10 @@ func (s *smokeAuthService) RefreshToken(_ context.Context, _ auth.RefreshTokenRe
 	return &auth.TokenResponse{AccessToken: "a2", RefreshToken: "r2", ExpiresIn: 900, TokenType: "Bearer"}, nil
 }
 
+func (s *smokeAuthService) SendOTP(_ context.Context, _ auth.SendOTPRequest) (*auth.TriggerOTPResponse, error) {
+	return &auth.TriggerOTPResponse{Message: "OTP sent successfully"}, nil
+}
+
 func (s *smokeAuthService) Logout(_ context.Context, _ auth.LogoutRequest) error {
 	return nil
 }

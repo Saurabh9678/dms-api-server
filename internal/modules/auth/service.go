@@ -19,6 +19,7 @@ import (
 type Service interface {
 	Register(ctx context.Context, req RegisterRequest) (*TriggerOTPResponse, error)
 	Login(ctx context.Context, req LoginRequest) (*TriggerOTPResponse, error)
+	SendOTP(ctx context.Context, req SendOTPRequest) (*TriggerOTPResponse, error)
 	VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyOTPResponse, error)
 	RefreshToken(ctx context.Context, req RefreshTokenRequest) (*TokenResponse, error)
 	Logout(ctx context.Context, req LogoutRequest) error
@@ -27,7 +28,6 @@ type Service interface {
 type userRepo interface {
 	FindByPhone(ctx context.Context, countryCode string, phoneNumber string) (*user.User, error)
 	Create(ctx context.Context, record *user.User) (*user.User, error)
-	FindByID(ctx context.Context, userID uint64) (*user.User, error)
 }
 
 type otpRepo interface {
@@ -35,6 +35,8 @@ type otpRepo interface {
 	FindLatestActiveByRequestIDAndPlatform(ctx context.Context, requestID string, platform OTPPlatform, otpFor OTPFor) (*UserOTP, error)
 	IncrementAttempt(ctx context.Context, otpID uint64) error
 	MarkUsed(ctx context.Context, otpID uint64, verifiedAt time.Time) error
+	FindLatestByPhone(ctx context.Context, countryCode string, phoneNumber string) (*UserOTP, error)
+	CountRecentByPhone(ctx context.Context, countryCode string, phoneNumber string, since time.Time) (int64, error)
 }
 
 type sessionRepo interface {
@@ -76,6 +78,12 @@ func NewService(
 	if cfg.OTPMaxAttempts <= 0 {
 		cfg.OTPMaxAttempts = 5
 	}
+	if cfg.OTPCooldownSeconds <= 0 {
+		cfg.OTPCooldownSeconds = 60
+	}
+	if cfg.OTPMaxDailySends <= 0 {
+		cfg.OTPMaxDailySends = 10
+	}
 	return &service{
 		users:         users,
 		otps:          otps,
@@ -96,39 +104,47 @@ func (s *service) Login(ctx context.Context, req LoginRequest) (*TriggerOTPRespo
 	return s.triggerOTP(ctx, req.CountryCode, req.PhoneNumber, req.Platform, req.DeviceID)
 }
 
+func (s *service) SendOTP(ctx context.Context, req SendOTPRequest) (*TriggerOTPResponse, error) {
+	return s.triggerOTP(ctx, req.CountryCode, req.PhoneNumber, req.Platform, req.DeviceID)
+}
+
 func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumber string, platformValue string, deviceID string) (*TriggerOTPResponse, error) {
 	normalizedCountryCode := strings.TrimSpace(countryCode)
 	normalizedPhoneNumber := strings.TrimSpace(phoneNumber)
 	platform := OTPPlatform(platformValue)
+	now := s.nowFn()
 
-	foundUser, err := s.users.FindByPhone(ctx, normalizedCountryCode, normalizedPhoneNumber)
-	if err != nil && !errors.Is(err, user.ErrUserNotFound) {
+	// Rate limiting by phone — no user lookup required
+	latest, err := s.otps.FindLatestByPhone(ctx, normalizedCountryCode, normalizedPhoneNumber)
+	if err != nil {
 		return nil, err
 	}
-	if foundUser == nil {
-		foundUser, err = s.users.Create(ctx, &user.User{
-			CountryCode: normalizedCountryCode,
-			PhoneNumber: normalizedPhoneNumber,
-		})
-		if err != nil {
-			return nil, err
-		}
+	if latest != nil && now.Sub(latest.CreatedAt) < time.Duration(s.config.OTPCooldownSeconds)*time.Second {
+		return nil, ErrOTPCooldown
+	}
+
+	count, err := s.otps.CountRecentByPhone(ctx, normalizedCountryCode, normalizedPhoneNumber, now.Add(-24*time.Hour))
+	if err != nil {
+		return nil, err
+	}
+	if count >= int64(s.config.OTPMaxDailySends) {
+		return nil, ErrOTPRateLimitExceeded
 	}
 
 	code := generateOTPCode()
-	now := s.nowFn()
 	requestID := ""
 	for attempt := 0; attempt < requestIDGenerateRetries; attempt++ {
 		requestID = generateRequestID(requestIDLength)
 		_, err = s.otps.Create(ctx, &UserOTP{
-			UserID:    foundUser.ID,
-			RequestID: requestID,
-			OTPCode:   code,
-			Platform:  platform,
-			OTPFor:    OTPForMobile,
-			DeviceID:  strings.TrimSpace(deviceID),
-			ExpiresAt: now.Add(s.config.OTPTTL),
-			CreatedAt: now,
+			CountryCode: normalizedCountryCode,
+			PhoneNumber: normalizedPhoneNumber,
+			RequestID:   requestID,
+			OTPCode:     code,
+			Platform:    platform,
+			OTPFor:      OTPForMobile,
+			DeviceID:    strings.TrimSpace(deviceID),
+			ExpiresAt:   now.Add(s.config.OTPTTL),
+			CreatedAt:   now,
 		})
 		if err == nil {
 			break
@@ -147,7 +163,7 @@ func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumbe
 	}
 
 	return &TriggerOTPResponse{
-		Message:   "If the account is valid, an OTP has been sent",
+		Message:   "OTP sent successfully",
 		RequestID: requestID,
 	}, nil
 }
@@ -177,16 +193,39 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyO
 		return nil, err
 	}
 
-	pair, err := s.tokenProvider.Issue(otpRecord.UserID)
+	// Find or create user — users table is the canonical identity source.
+	// The OTP record provides the phone snapshot; the resulting user is authoritative.
+	foundUser, err := s.users.FindByPhone(ctx, otpRecord.CountryCode, otpRecord.PhoneNumber)
+	if errors.Is(err, user.ErrUserNotFound) {
+		foundUser, err = s.users.Create(ctx, &user.User{
+			CountryCode: otpRecord.CountryCode,
+			PhoneNumber: otpRecord.PhoneNumber,
+		})
+		if err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+				// Concurrent request won the race — re-fetch the surviving record
+				foundUser, err = s.users.FindByPhone(ctx, otpRecord.CountryCode, otpRecord.PhoneNumber)
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				return nil, err
+			}
+		}
+	} else if err != nil {
+		return nil, err
+	}
+
+	pair, err := s.tokenProvider.Issue(foundUser.ID)
 	if err != nil {
 		return nil, err
 	}
 	refreshExpiry := now.Add(time.Duration(pair.RefreshTokenTTL) * time.Second)
-	if err := s.sessions.RevokeAllByUserIDAndPlatform(ctx, otpRecord.UserID, platform, "new session issued for platform", false, now); err != nil {
+	if err := s.sessions.RevokeAllByUserIDAndPlatform(ctx, foundUser.ID, platform, "new session issued for platform", false, now); err != nil {
 		return nil, err
 	}
 	_, err = s.sessions.Create(ctx, &UserSession{
-		UserID:           otpRecord.UserID,
+		UserID:           foundUser.ID,
 		Platform:         platform,
 		DeviceID:         strings.TrimSpace(req.DeviceID),
 		RefreshTokenHash: pair.RefreshTokenHash,
@@ -194,11 +233,6 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyO
 		CreatedAt:        now,
 		ExpiresAt:        &refreshExpiry,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	foundUser, err := s.users.FindByID(ctx, otpRecord.UserID)
 	if err != nil {
 		return nil, err
 	}

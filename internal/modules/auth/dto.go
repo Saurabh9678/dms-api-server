@@ -1,5 +1,12 @@
 package auth
 
+type SendOTPRequest struct {
+	CountryCode string `json:"countryCode" binding:"required"`
+	PhoneNumber string `json:"phoneNumber" binding:"required"`
+	Platform    string `json:"-"`
+	DeviceID    string `json:"-"`
+}
+
 type RegisterRequest struct {
 	CountryCode string `json:"countryCode" binding:"required"`
 	PhoneNumber string `json:"phoneNumber" binding:"required"`

@@ -57,6 +57,33 @@ func (r *OTPRepository) MarkUsed(ctx context.Context, otpID uint64, verifiedAt t
 		}).Error
 }
 
+func (r *OTPRepository) FindLatestByPhone(ctx context.Context, countryCode string, phoneNumber string) (*UserOTP, error) {
+	var model UserOTP
+	err := r.db.WithContext(ctx).
+		Where("country_code = ? AND phone_number = ?", countryCode, phoneNumber).
+		Order("created_at DESC").
+		Limit(1).
+		First(&model).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &model, nil
+}
+
+func (r *OTPRepository) CountRecentByPhone(ctx context.Context, countryCode string, phoneNumber string, since time.Time) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&UserOTP{}).
+		Where("country_code = ? AND phone_number = ? AND created_at >= ?", countryCode, phoneNumber, since).
+		Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 type SessionRepository struct {
 	db *gorm.DB
 }
