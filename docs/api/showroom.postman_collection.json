@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "DMS API - Showroom",
+    "_postman_id": "dms-api-showroom-collection",
+    "description": "Showroom API endpoints for DMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "showroom",
+      "item": [
+        {
+          "name": "Create Showroom",
+          "id": "showroom-create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "My Showroom",
+                  "type": "text",
+                  "description": "Required. Showroom display name."
+                },
+                {
+                  "key": "geolocation",
+                  "value": "{\"address\":\"123 Main St\",\"city\":\"Bengaluru\",\"state\":\"Karnataka\",\"pincode\":\"560001\",\"lat\":12.9716,\"lng\":77.5946}",
+                  "type": "text",
+                  "description": "Optional. JSON string with address, city, state, pincode, lat, lng."
+                },
+                {
+                  "key": "showroom_logo",
+                  "type": "file",
+                  "description": "Optional. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                },
+                {
+                  "key": "showroom_banner",
+                  "type": "file",
+                  "description": "Optional. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom"]
+            },
+            "description": "Protected. Creates a new showroom and assigns the authenticated user as the owner in a single transaction. Accepts multipart/form-data with optional logo and banner images (jpg/jpeg/png, max 10 MB each). Files are stored locally at {STORAGE_BASE_PATH}/{userID}/{showroomID}/{datetime}.{ext}."
+          },
+          "response": [
+            {
+              "name": "Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom created\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"My Showroom\",\n    \"showroom_logo\": \"1/1/20240101120000.jpg\",\n    \"showroom_banner\": null,\n    \"geolocation\": {\"address\":\"123 Main St\",\"city\":\"Bengaluru\",\"state\":\"Karnataka\",\"pincode\":\"560001\",\"lat\":12.9716,\"lng\":77.5946}\n  }\n}"
+            },
+            {
+              "name": "Missing Name",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Geolocation JSON",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "File Too Large",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FILE_TOO_LARGE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid File Type",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_FILE_TYPE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ]
+}

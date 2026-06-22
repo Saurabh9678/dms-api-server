@@ -7,6 +7,9 @@
   },
   "item": [
     {
+      "name": "vehicle",
+      "item": [
+    {
       "name": "Create Vehicle",
       "request": {
         "method": "POST",
@@ -372,6 +375,8 @@
           "code": 400,
           "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
         }
+      ]
+    }
       ]
     }
   ],

@@ -70,6 +70,12 @@ This file is the living project memory for architecture, conventions, and implem
 
 - **Showroom membership check for vehicle updates**: `GetVehicleShowroomID` queries `vehicle_showroom_relations` directly (`SELECT showroom_id WHERE vehicle_id = ? AND deleted_at IS NULL`) — no JOIN needed since the table already holds both IDs. Returns `ErrVehicleNotFound` if no row. Handler then checks if `showroomID` is in the `ContextKeyShowroomRoles` map; missing → 404 `VEHICLE_NOT_FOUND` (no information leak).
 
+- **Showroom creation**: `POST /api/v1/showroom` (protected). Accepts `multipart/form-data` with `name` (required), `geolocation` (optional JSON string), `showroom_logo` (optional file), `showroom_banner` (optional file). Creates showroom and assigns creator as `owner` in a single DB transaction via `showroom.Repository.CreateWithOwner`. File upload is best-effort and happens AFTER transaction commit — upload failure does not roll back or fail the request. Files stored at `{STORAGE_BASE_PATH}/{userID}/{showroomID}/{datetime}.{ext}`. Storage is abstracted via `internal/providers/storage.Provider`; current implementation is `internal/infra/storage.LocalProvider`. Accepted file types: `.jpg`, `.jpeg`, `.png`; max 10 MB.
+- **Showroom cross-module isolation**: The showroom repository inserts into `user_showroom_relations` using an unexported `ownerRelation` struct with an explicit `TableName()`. The user module is NOT imported. The `owner` role is looked up by `type = 'owner'` in `user_roles`; if not found, `ErrOwnerRoleNotFound` is returned and the transaction is rolled back.
+- **`showroom_banner` migration**: `000020_add_showroom_banner_to_showrooms` adds `showroom_banner TEXT` to `showrooms`. Run migrations before deploying this feature.
+- **`STORAGE_BASE_PATH` config**: Defaults to `./uploads`. Set via environment variable to configure local file storage base directory.
+- **Postman collection folder pattern**: All API collections now use named folder wrappers matching the `auth` collection pattern (`{ "name": "<module>", "item": [...] }`). Applies to `auth`, `user`, `vehicle`, `dashboard`, and `showroom` collections.
+
 ## Known Caveats
 
 - Document pitfalls, limitations, and sharp edges.
