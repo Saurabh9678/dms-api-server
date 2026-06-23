@@ -16,6 +16,8 @@ import (
 	"infiour.local/dms-api-server/internal/modules/showroom"
 )
 
+// ─── Mocks ───────────────────────────────────────────────────────────────────
+
 // mockShowroomRepo satisfies showroom's internal showroomRepo interface via its exported methods.
 type mockShowroomRepo struct {
 	mock.Mock
@@ -34,6 +36,31 @@ func (m *mockShowroomRepo) UpdateFilePaths(ctx context.Context, showroomID uint6
 	return args.Error(0)
 }
 
+func (m *mockShowroomRepo) AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error {
+	args := m.Called(ctx, showroomID, targetUserID, roleType)
+	return args.Error(0)
+}
+
+func (m *mockShowroomRepo) ListMembers(ctx context.Context, showroomID uint64, page, limit int) ([]showroom.MemberRecord, int64, error) {
+	args := m.Called(ctx, showroomID, page, limit)
+	return args.Get(0).([]showroom.MemberRecord), args.Get(1).(int64), args.Error(2)
+}
+
+func (m *mockShowroomRepo) GetMemberRole(ctx context.Context, showroomID, targetUserID uint64) (string, error) {
+	args := m.Called(ctx, showroomID, targetUserID)
+	return args.String(0), args.Error(1)
+}
+
+func (m *mockShowroomRepo) RemoveMember(ctx context.Context, showroomID, targetUserID uint64) error {
+	args := m.Called(ctx, showroomID, targetUserID)
+	return args.Error(0)
+}
+
+func (m *mockShowroomRepo) UpdateMemberRole(ctx context.Context, showroomID, targetUserID uint64, newRoleType string) error {
+	args := m.Called(ctx, showroomID, targetUserID, newRoleType)
+	return args.Error(0)
+}
+
 // mockStorageProvider satisfies storage.Provider.
 type mockStorageProvider struct {
 	mock.Mock
@@ -44,7 +71,8 @@ func (m *mockStorageProvider) Upload(ctx context.Context, key string, data []byt
 	return args.String(0), args.Error(1)
 }
 
-// makeFileHeader builds a minimal multipart.FileHeader for tests.
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 func makeFileHeader(filename string, size int64) *multipart.FileHeader {
 	h := make(textproto.MIMEHeader)
 	h.Set("Content-Disposition", `form-data; name="file"; filename="`+filename+`"`)
@@ -56,19 +84,36 @@ func makeFileHeader(filename string, size int64) *multipart.FileHeader {
 	}
 }
 
-// inMemoryOpener returns a WithFileOpener that serves fixed content.
 func inMemoryOpener(content []byte) func(*multipart.FileHeader) (io.ReadCloser, error) {
 	return func(_ *multipart.FileHeader) (io.ReadCloser, error) {
 		return io.NopCloser(bytes.NewReader(content)), nil
 	}
 }
 
-// errorOpener always returns an error on Open.
 func errorOpener(err error) func(*multipart.FileHeader) (io.ReadCloser, error) {
 	return func(_ *multipart.FileHeader) (io.ReadCloser, error) {
 		return nil, err
 	}
 }
+
+func parsedFileHeader(t *testing.T, fieldName, filename string, content []byte) *multipart.FileHeader {
+	t.Helper()
+	var body bytes.Buffer
+	w := multipart.NewWriter(&body)
+	part, err := w.CreateFormFile(fieldName, filename)
+	require.NoError(t, err)
+	_, err = part.Write(content)
+	require.NoError(t, err)
+	require.NoError(t, w.Close())
+
+	req, err := http.NewRequest(http.MethodPost, "/", &body)
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	require.NoError(t, req.ParseMultipartForm(10<<20))
+	return req.MultipartForm.File[fieldName][0]
+}
+
+// ─── CreateShowroom ───────────────────────────────────────────────────────────
 
 func TestCreateShowroom_EmptyName(t *testing.T) {
 	repo := new(mockShowroomRepo)
@@ -271,29 +316,9 @@ func TestCreateShowroom_LogoOnlyUploadSuccess_UpdateFilePaths(t *testing.T) {
 	repo.AssertExpectations(t)
 }
 
-// parsedFileHeader creates a real multipart.FileHeader by parsing a multipart form,
-// exercising the default h.Open() code path in NewService.
-func parsedFileHeader(t *testing.T, fieldName, filename string, content []byte) *multipart.FileHeader {
-	t.Helper()
-	var body bytes.Buffer
-	w := multipart.NewWriter(&body)
-	part, err := w.CreateFormFile(fieldName, filename)
-	require.NoError(t, err)
-	_, err = part.Write(content)
-	require.NoError(t, err)
-	require.NoError(t, w.Close())
-
-	req, err := http.NewRequest(http.MethodPost, "/", &body)
-	require.NoError(t, err)
-	req.Header.Set("Content-Type", w.FormDataContentType())
-	require.NoError(t, req.ParseMultipartForm(10<<20))
-	return req.MultipartForm.File[fieldName][0]
-}
-
 func TestCreateShowroom_DefaultOpenFile_UploadSuccess(t *testing.T) {
 	repo := new(mockShowroomRepo)
 	storage := new(mockStorageProvider)
-	// No WithFileOpener — exercises the default h.Open() code path in NewService
 	svc := showroom.NewService(repo, storage)
 
 	created := &showroom.Showroom{ID: 20, Name: "Default"}
@@ -324,7 +349,6 @@ func TestCreateShowroom_EmptyContentType_UsesOctetStream(t *testing.T) {
 		Return("1/10/logo.jpg", nil)
 	repo.On("UpdateFilePaths", mock.Anything, uint64(10), mock.Anything, (*string)(nil)).Return(nil)
 
-	// header with no Content-Type
 	fh := &multipart.FileHeader{
 		Filename: "logo.jpg",
 		Header:   make(textproto.MIMEHeader),
@@ -334,4 +358,371 @@ func TestCreateShowroom_EmptyContentType_UsesOctetStream(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	storage.AssertExpectations(t)
+}
+
+// ─── AddMember ────────────────────────────────────────────────────────────────
+
+func ownerRoles(showroomID uint64) map[uint64]string {
+	return map[uint64]string{showroomID: "owner"}
+}
+
+func managerRoles(showroomID uint64) map[uint64]string {
+	return map[uint64]string{showroomID: "manager"}
+}
+
+func employeeRoles(showroomID uint64) map[uint64]string {
+	return map[uint64]string{showroomID: "employee"}
+}
+
+func TestAddMember_CallerNotMember_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.AddMember(context.Background(), map[uint64]string{}, uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestAddMember_CallerIsEmployee_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.AddMember(context.Background(), employeeRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestAddMember_InvalidRole(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "owner"})
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "AddMember")
+}
+
+func TestAddMember_ManagerTriesToAddManager_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.AddMember(context.Background(), managerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "manager"})
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "AddMember")
+}
+
+func TestAddMember_TargetUserNotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
+		Return(showroom.ErrTargetUserNotFound)
+
+	_, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestAddMember_AlreadyAMember(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
+		Return(showroom.ErrDuplicateMember)
+
+	_, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestAddMember_RepoError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
+		Return(errors.New("db error"))
+
+	_, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestAddMember_OwnerAddsEmployee_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").Return(nil)
+
+	resp, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(1), resp.ShowroomID)
+	assert.Equal(t, uint64(99), resp.UserID)
+	assert.Equal(t, "employee", resp.Role)
+}
+
+func TestAddMember_OwnerAddsManager_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "manager").Return(nil)
+
+	resp, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "manager"})
+	assert.NoError(t, err)
+	assert.Equal(t, "manager", resp.Role)
+}
+
+func TestAddMember_ManagerAddsEmployee_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").Return(nil)
+
+	resp, err := svc.AddMember(context.Background(), managerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
+	assert.NoError(t, err)
+	assert.Equal(t, "employee", resp.Role)
+}
+
+// ─── ListMembers ──────────────────────────────────────────────────────────────
+
+func TestListMembers_CallerNotMember_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.ListMembers(context.Background(), map[uint64]string{}, uint64(1), 1, 20)
+	assert.Error(t, err)
+}
+
+func TestListMembers_CallerIsEmployee_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.ListMembers(context.Background(), employeeRoles(1), uint64(1), 1, 20)
+	assert.Error(t, err)
+}
+
+func TestListMembers_RepoError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
+		Return([]showroom.MemberRecord{}, int64(0), errors.New("db error"))
+
+	_, err := svc.ListMembers(context.Background(), ownerRoles(1), uint64(1), 1, 20)
+	assert.Error(t, err)
+}
+
+func TestListMembers_EmptyList(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
+		Return([]showroom.MemberRecord{}, int64(0), nil)
+
+	resp, err := svc.ListMembers(context.Background(), ownerRoles(1), uint64(1), 1, 20)
+	assert.NoError(t, err)
+	assert.Empty(t, resp.Members)
+	assert.Equal(t, int64(0), resp.Total)
+}
+
+func TestListMembers_WithNameAndPhone_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	records := []showroom.MemberRecord{
+		{UserID: 10, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999", Role: "manager"},
+	}
+	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
+		Return(records, int64(1), nil)
+
+	resp, err := svc.ListMembers(context.Background(), ownerRoles(1), uint64(1), 1, 20)
+	assert.NoError(t, err)
+	require.Len(t, resp.Members, 1)
+	assert.NotNil(t, resp.Members[0].Name)
+	assert.Equal(t, "Alice", *resp.Members[0].Name)
+	assert.NotNil(t, resp.Members[0].PhoneNumber)
+	assert.Equal(t, "+919999999999", *resp.Members[0].PhoneNumber)
+}
+
+func TestListMembers_EmptyNameAndPhone_NilFields(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	records := []showroom.MemberRecord{
+		{UserID: 11, Name: "", CountryCode: "", PhoneNumber: "", Role: "employee"},
+	}
+	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
+		Return(records, int64(1), nil)
+
+	resp, err := svc.ListMembers(context.Background(), managerRoles(1), uint64(1), 1, 20)
+	assert.NoError(t, err)
+	require.Len(t, resp.Members, 1)
+	assert.Nil(t, resp.Members[0].Name)
+	assert.Nil(t, resp.Members[0].PhoneNumber)
+}
+
+// ─── RemoveMember ─────────────────────────────────────────────────────────────
+
+func TestRemoveMember_NotMemberAndNotSelf_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	err := svc.RemoveMember(context.Background(), uint64(1), map[uint64]string{}, uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_SelfRemoval_NotMemberAtAll_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	// callerUserID == targetUserID but no role in showroom
+	err := svc.RemoveMember(context.Background(), uint64(99), map[uint64]string{}, uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_SelfRemoval_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
+
+	err := svc.RemoveMember(context.Background(), uint64(99), managerRoles(1), uint64(1), uint64(99))
+	assert.NoError(t, err)
+}
+
+func TestRemoveMember_OwnerRemovesManager_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99))
+	assert.NoError(t, err)
+}
+
+func TestRemoveMember_ManagerRemovesEmployee_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("employee", nil)
+	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99))
+	assert.NoError(t, err)
+}
+
+func TestRemoveMember_ManagerTriesToRemoveManager_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("manager", nil)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_ManagerTriesToRemoveOwner_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("owner", nil)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_GetMemberRole_NotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("", showroom.ErrMemberNotFound)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_GetMemberRole_DBError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("", errors.New("db error"))
+
+	err := svc.RemoveMember(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_MemberNotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(showroom.ErrMemberNotFound)
+
+	err := svc.RemoveMember(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+func TestRemoveMember_RepoError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(errors.New("db error"))
+
+	err := svc.RemoveMember(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99))
+	assert.Error(t, err)
+}
+
+// ─── UpdateMemberRole ─────────────────────────────────────────────────────────
+
+func TestUpdateMemberRole_CallerNotOwner_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestUpdateMemberRole_SelfRoleChange_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	// callerUserID == targetUserID
+	_, err := svc.UpdateMemberRole(context.Background(), uint64(99), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "employee"})
+	assert.Error(t, err)
+}
+
+func TestUpdateMemberRole_InvalidRole(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "owner"})
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "UpdateMemberRole")
+}
+
+func TestServiceUpdateMemberRole_MemberNotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").
+		Return(showroom.ErrMemberNotFound)
+
+	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "manager"})
+	assert.Error(t, err)
+}
+
+func TestUpdateMemberRole_RepoError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").
+		Return(errors.New("db error"))
+
+	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "manager"})
+	assert.Error(t, err)
+}
+
+func TestServiceUpdateMemberRole_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").Return(nil)
+
+	resp, err := svc.UpdateMemberRole(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "manager"})
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(1), resp.ShowroomID)
+	assert.Equal(t, uint64(99), resp.UserID)
+	assert.Equal(t, "manager", resp.Role)
 }

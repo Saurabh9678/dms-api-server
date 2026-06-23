@@ -14,3 +14,32 @@ type CreateShowroomResponse struct {
 	ShowroomBanner *string         `json:"showroom_banner"`
 	Geolocation    json.RawMessage `json:"geolocation,omitempty"`
 }
+
+type AddMemberRequest struct {
+	UserID uint64 `json:"user_id" binding:"required"`
+	Role   string `json:"role" binding:"required"`
+}
+
+type AddMemberResponse struct {
+	ShowroomID uint64 `json:"showroom_id"`
+	UserID     uint64 `json:"user_id"`
+	Role       string `json:"role"`
+}
+
+type MemberItem struct {
+	UserID      uint64  `json:"user_id"`
+	Name        *string `json:"name"`
+	PhoneNumber *string `json:"phone_number"`
+	Role        string  `json:"role"`
+}
+
+type ListMembersResponse struct {
+	Members []MemberItem `json:"members"`
+	Total   int64        `json:"total"`
+	Page    int          `json:"page"`
+	Limit   int          `json:"limit"`
+}
+
+type UpdateMemberRoleRequest struct {
+	Role string `json:"role" binding:"required"`
+}

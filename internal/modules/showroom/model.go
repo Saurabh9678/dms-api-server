@@ -18,3 +18,12 @@ type Showroom struct {
 func (Showroom) TableName() string {
 	return "showrooms"
 }
+
+// MemberRecord is the raw result of a list-members query joining user_showroom_relations, users, and user_roles.
+type MemberRecord struct {
+	UserID      uint64 `gorm:"column:user_id"`
+	Name        string `gorm:"column:name"`
+	CountryCode string `gorm:"column:country_code"`
+	PhoneNumber string `gorm:"column:phone_number"`
+	Role        string `gorm:"column:role"`
+}

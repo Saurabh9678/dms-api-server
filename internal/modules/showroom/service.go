@@ -3,6 +3,7 @@ package showroom
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -33,11 +34,20 @@ func WithFileOpener(fn func(*multipart.FileHeader) (io.ReadCloser, error)) Servi
 
 type Service interface {
 	CreateShowroom(ctx context.Context, userID uint64, req *CreateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
+	AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *AddMemberRequest) (*AddMemberResponse, error)
+	ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error)
+	RemoveMember(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID, targetUserID uint64) error
+	UpdateMemberRole(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID, targetUserID uint64, req *UpdateMemberRoleRequest) (*AddMemberResponse, error)
 }
 
 type showroomRepo interface {
 	CreateWithOwner(ctx context.Context, userID uint64, s *Showroom) (*Showroom, error)
 	UpdateFilePaths(ctx context.Context, showroomID uint64, logoPath, bannerPath *string) error
+	AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error
+	ListMembers(ctx context.Context, showroomID uint64, page, limit int) ([]MemberRecord, int64, error)
+	GetMemberRole(ctx context.Context, showroomID, targetUserID uint64) (string, error)
+	RemoveMember(ctx context.Context, showroomID, targetUserID uint64) error
+	UpdateMemberRole(ctx context.Context, showroomID, targetUserID uint64, newRoleType string) error
 }
 
 type service struct {
@@ -107,6 +117,106 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 	}, nil
 }
 
+func (s *service) AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *AddMemberRequest) (*AddMemberResponse, error) {
+	callerRole := callerRoles[showroomID]
+	if callerRole != "owner" && callerRole != "manager" {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	if req.Role != "manager" && req.Role != "employee" {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	// managers can only assign the employee role
+	if callerRole == "manager" && req.Role != "employee" {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	if err := s.repo.AddMember(ctx, showroomID, req.UserID, req.Role); err != nil {
+		return nil, mapMemberRepoError(err)
+	}
+
+	return &AddMemberResponse{ShowroomID: showroomID, UserID: req.UserID, Role: req.Role}, nil
+}
+
+func (s *service) ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error) {
+	callerRole := callerRoles[showroomID]
+	if callerRole != "owner" && callerRole != "manager" {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	records, total, err := s.repo.ListMembers(ctx, showroomID, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	members := make([]MemberItem, 0, len(records))
+	for _, r := range records {
+		item := MemberItem{UserID: r.UserID, Role: r.Role}
+		if r.Name != "" {
+			name := r.Name
+			item.Name = &name
+		}
+		if r.CountryCode != "" || r.PhoneNumber != "" {
+			combined := r.CountryCode + r.PhoneNumber
+			item.PhoneNumber = &combined
+		}
+		members = append(members, item)
+	}
+
+	return &ListMembersResponse{Members: members, Total: total, Page: page, Limit: limit}, nil
+}
+
+func (s *service) RemoveMember(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID, targetUserID uint64) error {
+	callerRole := callerRoles[showroomID]
+
+	// Self-removal is allowed for any member of the showroom.
+	if callerUserID == targetUserID {
+		if callerRole == "" {
+			return apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+		}
+		return mapMemberRepoError(s.repo.RemoveMember(ctx, showroomID, targetUserID))
+	}
+
+	if callerRole != "owner" && callerRole != "manager" {
+		return apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	// Managers may only remove employees, not other managers or owners.
+	if callerRole == "manager" {
+		targetRole, err := s.repo.GetMemberRole(ctx, showroomID, targetUserID)
+		if err != nil {
+			return mapMemberRepoError(err)
+		}
+		if targetRole != "employee" {
+			return apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+		}
+	}
+
+	return mapMemberRepoError(s.repo.RemoveMember(ctx, showroomID, targetUserID))
+}
+
+func (s *service) UpdateMemberRole(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID, targetUserID uint64, req *UpdateMemberRoleRequest) (*AddMemberResponse, error) {
+	callerRole := callerRoles[showroomID]
+	if callerRole != "owner" {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	if callerUserID == targetUserID {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	if req.Role != "manager" && req.Role != "employee" {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	if err := s.repo.UpdateMemberRole(ctx, showroomID, targetUserID, req.Role); err != nil {
+		return nil, mapMemberRepoError(err)
+	}
+
+	return &AddMemberResponse{ShowroomID: showroomID, UserID: targetUserID, Role: req.Role}, nil
+}
+
 func (s *service) maybeUpload(ctx context.Context, userID, showroomID uint64, header *multipart.FileHeader) *string {
 	if header == nil {
 		return nil
@@ -146,4 +256,20 @@ func validateFile(header *multipart.FileHeader) error {
 		return apperrors.NewAppError(apperrors.CodeInvalidFileType, "invalid request", http.StatusBadRequest, nil)
 	}
 	return nil
+}
+
+func mapMemberRepoError(err error) error {
+	if err == nil {
+		return nil
+	}
+	switch {
+	case errors.Is(err, ErrTargetUserNotFound):
+		return apperrors.NewAppError(apperrors.CodeTargetUserNotFound, "invalid request", http.StatusUnprocessableEntity, nil)
+	case errors.Is(err, ErrDuplicateMember):
+		return apperrors.NewAppError(apperrors.CodeAlreadyAMember, "invalid request", http.StatusConflict, nil)
+	case errors.Is(err, ErrMemberNotFound):
+		return apperrors.NewAppError(apperrors.CodeMemberNotFound, "invalid request", http.StatusNotFound, nil)
+	default:
+		return err
+	}
 }
