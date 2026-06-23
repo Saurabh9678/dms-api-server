@@ -64,6 +64,7 @@ func TestBootstrap_NewRouter_DevelopmentMode(t *testing.T) {
 	assert.True(t, routeMap["POST:/api/v1/vehicle"])
 	assert.True(t, routeMap["GET:/api/v1/vehicle/listing"])
 	assert.True(t, routeMap["GET:/api/v1/vehicle/:id"])
+	assert.True(t, routeMap["POST:/api/v1/showroom"])
 }
 
 func TestBootstrap_NewRouter_ProductionMode(t *testing.T) {

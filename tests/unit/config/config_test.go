@@ -16,6 +16,7 @@ func TestLoad_Defaults(t *testing.T) {
 		"AUTH_ACCESS_TOKEN_SECRET", "AUTH_ACCESS_TOKEN_TTL_SECONDS",
 		"AUTH_REFRESH_TOKEN_TTL_SECONDS", "AUTH_OTP_TTL_SECONDS",
 		"AUTH_OTP_MAX_ATTEMPTS", "AUTH_OTP_COOLDOWN_SECONDS", "AUTH_OTP_MAX_DAILY_SENDS",
+		"STORAGE_BASE_PATH",
 	}
 	for _, v := range vars {
 		t.Setenv(v, "")
@@ -33,6 +34,7 @@ func TestLoad_Defaults(t *testing.T) {
 	assert.Equal(t, 5, cfg.Auth.OTPMaxAttempts)
 	assert.Equal(t, 60, cfg.Auth.OTPCooldownSeconds)
 	assert.Equal(t, 10, cfg.Auth.OTPMaxDailySends)
+	assert.Equal(t, "./uploads", cfg.Storage.BasePath)
 }
 
 func TestLoad_EnvOverrides(t *testing.T) {
@@ -73,4 +75,13 @@ func TestLoad_EnvVarPresent(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "test-secret", cfg.Auth.AccessTokenSecret)
+}
+
+func TestLoad_StorageBasePathOverride(t *testing.T) {
+	t.Setenv("STORAGE_BASE_PATH", "/var/uploads")
+
+	cfg, err := config.Load()
+	require.NoError(t, err)
+
+	assert.Equal(t, "/var/uploads", cfg.Storage.BasePath)
 }

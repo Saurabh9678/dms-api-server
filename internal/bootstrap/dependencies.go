@@ -6,9 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	infraotp "infiour.local/dms-api-server/internal/infra/otp"
+	infrastorage "infiour.local/dms-api-server/internal/infra/storage"
 	infratoken "infiour.local/dms-api-server/internal/infra/token"
 	"infiour.local/dms-api-server/internal/modules/auth"
 	"infiour.local/dms-api-server/internal/modules/dashboard"
+	"infiour.local/dms-api-server/internal/modules/showroom"
 	"infiour.local/dms-api-server/internal/modules/user"
 	"infiour.local/dms-api-server/internal/modules/vehicle"
 	tokenprovider "infiour.local/dms-api-server/internal/providers/token"
@@ -21,6 +23,7 @@ type Dependencies struct {
 	UserHandler             *user.Handler
 	VehicleHandler          *vehicle.Handler
 	DashboardHandler        *dashboard.Handler
+	ShowroomHandler         *showroom.Handler
 	TokenProvider           tokenprovider.Provider
 	ShowroomRolesMiddleware gin.HandlerFunc
 }
@@ -47,11 +50,17 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	dashboardSvc := dashboard.NewService(dashboardRepo)
 	dashboardHandler := dashboard.NewHandler(dashboardSvc)
 
+	storageProvider := infrastorage.NewLocalProvider(cfg.Storage.BasePath)
+	showroomRepo := showroom.NewRepository(db)
+	showroomSvc := showroom.NewService(showroomRepo, storageProvider)
+	showroomHandler := showroom.NewHandler(showroomSvc)
+
 	return &Dependencies{
 		AuthHandler:             authHandler,
 		UserHandler:             userHandler,
 		VehicleHandler:          vehicleHandler,
 		DashboardHandler:        dashboardHandler,
+		ShowroomHandler:         showroomHandler,
 		TokenProvider:           tokenProvider,
 		ShowroomRolesMiddleware: middleware.RequireShowroomRoles(userRepo),
 	}

@@ -7,6 +7,11 @@ type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
 	Auth     AuthConfig
+	Storage  StorageConfig
+}
+
+type StorageConfig struct {
+	BasePath string
 }
 
 type ServerConfig struct {
@@ -51,6 +56,9 @@ func defaultLoad() (*Config, error) {
 			OTPMaxAttempts:     getInt("AUTH_OTP_MAX_ATTEMPTS", 5),
 			OTPCooldownSeconds: getInt("AUTH_OTP_COOLDOWN_SECONDS", 60),
 			OTPMaxDailySends:   getInt("AUTH_OTP_MAX_DAILY_SENDS", 10),
+		},
+		Storage: StorageConfig{
+			BasePath: getEnv("STORAGE_BASE_PATH", "./uploads"),
 		},
 	}
 	return cfg, nil

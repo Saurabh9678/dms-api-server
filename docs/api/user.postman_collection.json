@@ -7,6 +7,9 @@
   },
   "item": [
     {
+      "name": "user",
+      "item": [
+    {
       "name": "Update Profile",
       "id": "user-update-profile",
       "request": {
@@ -133,6 +136,8 @@
           "code": 401,
           "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
         }
+      ]
+    }
       ]
     }
   ],

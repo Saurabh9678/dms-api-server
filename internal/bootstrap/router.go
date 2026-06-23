@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"infiour.local/dms-api-server/internal/modules/auth"
 	"infiour.local/dms-api-server/internal/modules/dashboard"
+	"infiour.local/dms-api-server/internal/modules/showroom"
 	"infiour.local/dms-api-server/internal/modules/user"
 	"infiour.local/dms-api-server/internal/modules/vehicle"
 	"infiour.local/dms-api-server/pkg/config"
@@ -45,6 +46,7 @@ func newRouter(cfg *config.Config, log *slog.Logger, deps *Dependencies, sqlDB *
 	user.RegisterRoutes(protected, deps.UserHandler)
 	vehicle.RegisterRoutes(protected, deps.VehicleHandler, deps.ShowroomRolesMiddleware)
 	dashboard.RegisterRoutes(protected, deps.DashboardHandler)
+	showroom.RegisterRoutes(protected, deps.ShowroomHandler)
 
 	return engine
 }

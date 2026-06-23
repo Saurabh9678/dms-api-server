@@ -5,6 +5,9 @@
   },
   "item": [
     {
+      "name": "dashboard",
+      "item": [
+    {
       "name": "Get Dashboard",
       "request": {
         "method": "GET",
@@ -49,6 +52,8 @@
           "code": 401,
           "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
         }
+      ]
+    }
       ]
     }
   ]

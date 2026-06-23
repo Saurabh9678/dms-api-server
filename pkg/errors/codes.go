@@ -16,4 +16,6 @@ const (
 	CodeVehicleUpdateForbidden = "VEHICLE_UPDATE_FORBIDDEN"
 	CodeOTPCooldown            = "OTP_COOLDOWN"
 	CodeOTPRateLimitExceeded   = "OTP_RATE_LIMIT_EXCEEDED"
+	CodeInvalidFileType        = "INVALID_FILE_TYPE"
+	CodeFileTooLarge           = "FILE_TOO_LARGE"
 )
