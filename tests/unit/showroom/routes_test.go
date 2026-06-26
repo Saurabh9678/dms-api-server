@@ -15,13 +15,19 @@ func TestRegisterShowroomRoutes(t *testing.T) {
 
 	mockSvc := new(mockShowroomService)
 	handler := showroom.NewHandler(mockSvc)
+	nopMW := func(c *gin.Context) { c.Next() }
 
-	showroom.RegisterRoutes(router, handler)
+	showroom.RegisterRoutes(router, handler, nopMW)
 
 	routeMap := map[string]bool{}
 	for _, r := range engine.Routes() {
 		routeMap[r.Method+":"+r.Path] = true
 	}
 
-	assert.True(t, routeMap["POST:/api/v1/showroom"], "POST /api/v1/showroom route should be registered")
+	assert.True(t, routeMap["POST:/api/v1/showroom"], "POST /api/v1/showroom should be registered")
+	assert.True(t, routeMap["PATCH:/api/v1/showroom/:id"], "PATCH /api/v1/showroom/:id should be registered")
+	assert.True(t, routeMap["POST:/api/v1/showroom/:id/member"], "POST /api/v1/showroom/:id/member should be registered")
+	assert.True(t, routeMap["GET:/api/v1/showroom/:id/member"], "GET /api/v1/showroom/:id/member should be registered")
+	assert.True(t, routeMap["DELETE:/api/v1/showroom/:id/member/:user_id"], "DELETE /api/v1/showroom/:id/member/:user_id should be registered")
+	assert.True(t, routeMap["PATCH:/api/v1/showroom/:id/member/:user_id"], "PATCH /api/v1/showroom/:id/member/:user_id should be registered")
 }

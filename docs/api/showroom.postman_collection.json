@@ -108,6 +108,475 @@
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "Update Showroom",
+          "id": "showroom-update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Showroom Name",
+                  "type": "text",
+                  "description": "Optional. New display name. Skipped if blank."
+                },
+                {
+                  "key": "geolocation",
+                  "value": "{\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}",
+                  "type": "text",
+                  "description": "Optional. JSON string replacing existing geolocation."
+                },
+                {
+                  "key": "showroom_logo",
+                  "type": "file",
+                  "description": "Optional. New logo. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                },
+                {
+                  "key": "showroom_banner",
+                  "type": "file",
+                  "description": "Optional. New banner. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                },
+                {
+                  "key": "remove_logo",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Optional. Set to 'true' to clear the logo. Ignored if a new logo file is also uploaded.",
+                  "disabled": true
+                },
+                {
+                  "key": "remove_banner",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Optional. Set to 'true' to clear the banner. Ignored if a new banner file is also uploaded.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                }
+              ]
+            },
+            "description": "Protected. Updates showroom details. Caller must be owner or manager. All fields are optional — only provided fields are updated. File upload is best-effort; upload failure leaves the existing file unchanged."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom updated\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Updated Showroom Name\",\n    \"showroom_logo\": null,\n    \"showroom_banner\": \"1/1/20240101120000.jpg\",\n    \"geolocation\": {\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}\n  }\n}"
+            },
+            {
+              "name": "Invalid Geolocation JSON",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "File Too Large",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FILE_TOO_LARGE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid File Type",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_FILE_TYPE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Showroom Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"SHOWROOM_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add Showroom Member",
+          "id": "showroom-add-member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 42,\n  \"role\": \"employee\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id/member",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id", "member"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                }
+              ]
+            },
+            "description": "Protected. Adds a user as a member of the showroom. Caller must be the showroom owner or manager. Owner can assign role 'manager' or 'employee'. Manager can only assign role 'employee'. Role must be one of: manager, employee."
+          },
+          "response": [
+            {
+              "name": "Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"member added\",\n  \"data\": {\n    \"showroom_id\": 1,\n    \"user_id\": 42,\n    \"role\": \"employee\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Body",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Role",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Target User Not Found",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"TARGET_USER_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Already a Member",
+              "status": "Conflict",
+              "code": 409,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"ALREADY_A_MEMBER\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Showroom Members",
+          "id": "showroom-list-members",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id/member?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id", "member"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                }
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1, min: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page (default: 20, min: 1, max: 100)"
+                }
+              ]
+            },
+            "description": "Protected. Lists all members of the showroom. Caller must be the showroom owner or manager. Returns paginated list with user_id, name (null if empty), phone_number (null if empty), and role. Defaults: page=1, limit=20, max limit=100."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"members retrieved\",\n  \"data\": {\n    \"members\": [\n      {\n        \"user_id\": 42,\n        \"name\": \"John Doe\",\n        \"phone_number\": \"+91-9876543210\",\n        \"role\": \"employee\"\n      },\n      {\n        \"user_id\": 7,\n        \"name\": null,\n        \"phone_number\": null,\n        \"role\": \"manager\"\n      }\n    ],\n    \"total\": 2,\n    \"page\": 1,\n    \"limit\": 20\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Remove Showroom Member",
+          "id": "showroom-remove-member",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id/member/:user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id", "member", ":user_id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                },
+                {
+                  "key": "user_id",
+                  "value": "42",
+                  "description": "User ID of the member to remove"
+                }
+              ]
+            },
+            "description": "Protected. Removes a member from the showroom (soft-delete). Caller must be owner, manager, or the member themselves. Owner can remove any member. Manager can only remove employees. Any member can remove themselves (self-removal). Owner cannot be removed."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"member removed\",\n  \"data\": null\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Member Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"MEMBER_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Showroom ID",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Member Role",
+          "id": "showroom-update-member-role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"manager\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id/member/:user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id", "member", ":user_id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                },
+                {
+                  "key": "user_id",
+                  "value": "42",
+                  "description": "User ID of the member whose role to update"
+                }
+              ]
+            },
+            "description": "Protected. Updates the role of a showroom member. Caller must be the showroom owner. Owner cannot change their own role. New role must be one of: manager, employee."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"member role updated\",\n  \"data\": null\n}"
+            },
+            {
+              "name": "Invalid Body",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Role",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden (not owner or self-role-change)",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Member Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"MEMBER_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
         }
       ]
     }

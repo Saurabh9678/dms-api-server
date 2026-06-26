@@ -18,4 +18,9 @@ const (
 	CodeOTPRateLimitExceeded   = "OTP_RATE_LIMIT_EXCEEDED"
 	CodeInvalidFileType        = "INVALID_FILE_TYPE"
 	CodeFileTooLarge           = "FILE_TOO_LARGE"
+	CodeForbidden              = "FORBIDDEN"
+	CodeTargetUserNotFound     = "TARGET_USER_NOT_FOUND"
+	CodeAlreadyAMember         = "ALREADY_A_MEMBER"
+	CodeMemberNotFound         = "MEMBER_NOT_FOUND"
+	CodeShowroomNotFound       = "SHOWROOM_NOT_FOUND"
 )
