@@ -72,6 +72,14 @@ func (m *mockHandlerService) UpdateVehiclePricing(ctx context.Context, vehicleID
 	return args.Get(0).(*vehicle.UpdateVehiclePricingResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) AddExpense(ctx context.Context, vehicleID uint64, req *vehicle.AddExpenseRequest) (*vehicle.AddExpenseResponse, error) {
+	args := m.Called(ctx, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AddExpenseResponse), args.Error(1)
+}
+
 func TestHandler_CreateVehicle_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockSvc := new(mockHandlerService)
@@ -852,4 +860,112 @@ func TestHandler_UpdateVehiclePricing_Success(t *testing.T) {
 	var resp map[string]interface{}
 	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
 	assert.Equal(t, "vehicle pricing updated", resp["message"])
+}
+
+func setupAddExpenseContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("POST", "/api/v1/vehicle/"+idParam+"/expense", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_AddExpense_InvalidID(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "abc", body)
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AddExpense")
+}
+
+func TestHandler_AddExpense_ZeroID(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "0", body)
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AddExpense")
+}
+
+func TestHandler_AddExpense_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", []byte("bad json"))
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AddExpense")
+}
+
+func TestHandler_AddExpense_MissingShowroomRoles(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "AddExpense")
+}
+
+func TestHandler_AddExpense_InvalidShowroomRolesType(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "AddExpense")
+}
+
+func TestHandler_AddExpense_GetShowroomIDError(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), &mockError{})
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.NotEqual(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AddExpense_NotMember(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AddExpense_ServiceError(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddExpense", mock.Anything, uint64(1), mock.Anything).Return(nil, &mockError{})
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.NotEqual(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AddExpense_Success(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AddExpenseRequest{Type: "repair", Amount: 1000, Description: "Engine fix"})
+	ctx, w, mockSvc := setupAddExpenseContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	respData := &vehicle.AddExpenseResponse{
+		ID:          1,
+		VehicleID:   1,
+		Type:        "repair",
+		Amount:      1000,
+		Description: "Engine fix",
+		Date:        "2024-01-01T00:00:00Z",
+		CreatedAt:   "2024-01-01T00:00:00Z",
+	}
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddExpense", mock.Anything, uint64(1), mock.Anything).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).AddExpense(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	assert.Equal(t, "expense added", resp["message"])
 }

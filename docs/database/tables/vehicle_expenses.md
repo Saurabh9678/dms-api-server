@@ -31,3 +31,9 @@
 
 - `idx_vehicle_expenses_vehicle_id` on `vehicle_id`.
 - `idx_vehicle_expenses_status_id` on `status_id`.
+
+## Caveats
+
+- `status_id` is nullable in the DB and is always NULL when created via the API — it exists for potential future use only.
+- `type` is a free-form VARCHAR in the DB but the API enforces an enum: `repair`, `service`, `insurance`, `tax`, `inspection`, `cleaning`, `documentation`, `other`.
+- `paid_to`, `description`, and `date` are all optional; `date` defaults to the time of the API call when not provided.

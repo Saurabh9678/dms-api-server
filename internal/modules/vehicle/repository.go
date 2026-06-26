@@ -206,6 +206,13 @@ func (r *Repository) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, er
 	return vehicle, nil
 }
 
+func (r *Repository) CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error) {
+	if err := r.db.WithContext(ctx).Create(expense).Error; err != nil {
+		return nil, err
+	}
+	return expense, nil
+}
+
 type ListFilter struct {
 	Statuses     []VehicleStatusType
 	VehicleTypes []VehicleType

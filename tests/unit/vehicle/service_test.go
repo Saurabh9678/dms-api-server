@@ -104,6 +104,14 @@ func (m *mockVehicleRepo) PublicCountByType(ctx context.Context, f vehicle.Publi
 	return args.Get(0).(map[vehicle.VehicleType]int64), args.Error(1)
 }
 
+func (m *mockVehicleRepo) CreateExpense(ctx context.Context, expense *vehicle.VehicleExpenses) (*vehicle.VehicleExpenses, error) {
+	args := m.Called(ctx, expense)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleExpenses), args.Error(1)
+}
+
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := vehicle.NewService(mockRepo)
@@ -1911,4 +1919,124 @@ func TestUpdateVehiclePricing_UpdateExisting_AllValidFields(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Equal(t, 250000.0, resp.PriceTag)
 	mockRepo.AssertExpectations(t)
+}
+
+func TestAddExpense_NilRequest(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	resp, err := svc.AddExpense(context.Background(), 1, nil)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CreateExpense")
+}
+
+func TestAddExpense_InvalidType(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	req := &vehicle.AddExpenseRequest{Type: "invalid_type", Amount: 1000}
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CreateExpense")
+}
+
+func TestAddExpense_ZeroAmount(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 0}
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CreateExpense")
+}
+
+func TestAddExpense_NegativeAmount(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: -500}
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CreateExpense")
+}
+
+func TestAddExpense_InvalidDateFormat(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	badDate := "not-a-date"
+	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 1000, Date: &badDate}
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CreateExpense")
+}
+
+func TestAddExpense_WithValidDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	date := "2024-03-15T10:00:00Z"
+	req := &vehicle.AddExpenseRequest{Type: "service", Amount: 2500, PaidTo: "Mechanic", Description: "Routine service", Date: &date}
+	created := &vehicle.VehicleExpenses{ID: 1, VehicleID: 1, Type: vehicle.VehicleExpensesTypeService, Amount: 2500}
+	mockRepo.On("CreateExpense", mock.Anything, mock.Anything).Return(created, nil)
+
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, uint64(1), resp.ID)
+	assert.Equal(t, "service", resp.Type)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAddExpense_WithoutDate_UsesNow(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 3000}
+	created := &vehicle.VehicleExpenses{ID: 2, VehicleID: 1, Type: vehicle.VehicleExpensesTypeRepair, Amount: 3000}
+	mockRepo.On("CreateExpense", mock.Anything, mock.Anything).Return(created, nil)
+
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, uint64(2), resp.ID)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAddExpense_RepoError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+
+	req := &vehicle.AddExpenseRequest{Type: "insurance", Amount: 5000}
+	mockRepo.On("CreateExpense", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+
+	resp, err := svc.AddExpense(context.Background(), 1, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Equal(t, "db error", err.Error())
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAddExpense_AllValidTypes(t *testing.T) {
+	types := []string{"repair", "service", "insurance", "tax", "inspection", "cleaning", "documentation", "other"}
+	for _, expType := range types {
+		t.Run(expType, func(t *testing.T) {
+			mockRepo := new(mockVehicleRepo)
+			svc := vehicle.NewService(mockRepo)
+
+			req := &vehicle.AddExpenseRequest{Type: expType, Amount: 1000}
+			created := &vehicle.VehicleExpenses{ID: 1, VehicleID: 1, Type: vehicle.VehicleExpensesType(expType), Amount: 1000}
+			mockRepo.On("CreateExpense", mock.Anything, mock.Anything).Return(created, nil)
+
+			resp, err := svc.AddExpense(context.Background(), 1, req)
+			assert.NoError(t, err)
+			assert.NotNil(t, resp)
+			assert.Equal(t, expType, resp.Type)
+		})
+	}
 }

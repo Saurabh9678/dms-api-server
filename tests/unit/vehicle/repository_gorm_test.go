@@ -735,3 +735,38 @@ func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
 	assert.Equal(t, 500000.0, details.SaleInfo.SalePrice)
 	assert.Equal(t, "John", details.SaleInfo.CustomerFirstName)
 }
+
+func TestVehicleRepositoryCreateExpense_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_expenses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectCommit()
+
+	expense := &vehicle.VehicleExpenses{
+		VehicleID:   1,
+		Type:        vehicle.VehicleExpensesTypeRepair,
+		Amount:      1500,
+		PaidTo:      "Mechanic",
+		Description: "Brake repair",
+	}
+	result, err := repo.CreateExpense(context.Background(), expense)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+}
+
+func TestVehicleRepositoryCreateExpense_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_expenses"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	expense := &vehicle.VehicleExpenses{VehicleID: 1, Type: vehicle.VehicleExpensesTypeService, Amount: 500}
+	_, err := repo.CreateExpense(context.Background(), expense)
+	assert.Error(t, err)
+}
