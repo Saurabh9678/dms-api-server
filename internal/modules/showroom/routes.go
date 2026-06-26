@@ -8,6 +8,7 @@ func RegisterRoutes(group *gin.RouterGroup, h *Handler, showroomRolesMW gin.Hand
 
 	mg := sg.Group("")
 	mg.Use(showroomRolesMW)
+	mg.PATCH("/:id", h.UpdateShowroom)
 	mg.POST("/:id/member", h.AddMember)
 	mg.GET("/:id/member", h.ListMembers)
 	mg.DELETE("/:id/member/:user_id", h.RemoveMember)

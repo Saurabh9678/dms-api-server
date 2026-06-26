@@ -34,6 +34,7 @@ func WithFileOpener(fn func(*multipart.FileHeader) (io.ReadCloser, error)) Servi
 
 type Service interface {
 	CreateShowroom(ctx context.Context, userID uint64, req *CreateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
+	UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
 	AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *AddMemberRequest) (*AddMemberResponse, error)
 	ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error)
 	RemoveMember(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID, targetUserID uint64) error
@@ -43,6 +44,8 @@ type Service interface {
 type showroomRepo interface {
 	CreateWithOwner(ctx context.Context, userID uint64, s *Showroom) (*Showroom, error)
 	UpdateFilePaths(ctx context.Context, showroomID uint64, logoPath, bannerPath *string) error
+	GetByID(ctx context.Context, showroomID uint64) (*Showroom, error)
+	UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error
 	AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error
 	ListMembers(ctx context.Context, showroomID uint64, page, limit int) ([]MemberRecord, int64, error)
 	GetMemberRole(ctx context.Context, showroomID, targetUserID uint64) (string, error)
@@ -114,6 +117,79 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 		ShowroomLogo:   created.ShowroomLogo,
 		ShowroomBanner: created.ShowroomBanner,
 		Geolocation:    created.ShowroomGeolocation,
+	}, nil
+}
+
+func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error) {
+	callerRole := callerRoles[showroomID]
+	if callerRole != "owner" && callerRole != "manager" {
+		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
+	}
+
+	existing, err := s.repo.GetByID(ctx, showroomID)
+	if err != nil {
+		if errors.Is(err, ErrShowroomNotFound) {
+			return nil, apperrors.NewAppError(apperrors.CodeShowroomNotFound, "invalid request", http.StatusNotFound, nil)
+		}
+		return nil, err
+	}
+
+	updates := map[string]any{}
+
+	if name := strings.TrimSpace(req.Name); name != "" {
+		updates["name"] = name
+		existing.Name = name
+	}
+
+	if req.Geolocation != "" {
+		if !json.Valid([]byte(req.Geolocation)) {
+			return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+		geoRaw := json.RawMessage(req.Geolocation)
+		updates["showroom_geolocation"] = geoRaw
+		existing.ShowroomGeolocation = geoRaw
+	}
+
+	if req.RemoveLogo == "true" {
+		updates["showroom_logo"] = nil
+		existing.ShowroomLogo = nil
+	}
+	if logo != nil {
+		if err := validateFile(logo); err != nil {
+			return nil, err
+		}
+		if path := s.maybeUpload(ctx, callerUserID, showroomID, logo); path != nil {
+			updates["showroom_logo"] = *path
+			existing.ShowroomLogo = path
+		}
+	}
+
+	if req.RemoveBanner == "true" {
+		updates["showroom_banner"] = nil
+		existing.ShowroomBanner = nil
+	}
+	if banner != nil {
+		if err := validateFile(banner); err != nil {
+			return nil, err
+		}
+		if path := s.maybeUpload(ctx, callerUserID, showroomID, banner); path != nil {
+			updates["showroom_banner"] = *path
+			existing.ShowroomBanner = path
+		}
+	}
+
+	if len(updates) > 0 {
+		if err := s.repo.UpdateShowroomFields(ctx, showroomID, updates); err != nil {
+			return nil, err
+		}
+	}
+
+	return &CreateShowroomResponse{
+		ID:             existing.ID,
+		Name:           existing.Name,
+		ShowroomLogo:   existing.ShowroomLogo,
+		ShowroomBanner: existing.ShowroomBanner,
+		Geolocation:    existing.ShowroomGeolocation,
 	}, nil
 }
 

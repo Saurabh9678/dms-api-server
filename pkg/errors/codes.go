@@ -22,4 +22,5 @@ const (
 	CodeTargetUserNotFound     = "TARGET_USER_NOT_FOUND"
 	CodeAlreadyAMember         = "ALREADY_A_MEMBER"
 	CodeMemberNotFound         = "MEMBER_NOT_FOUND"
+	CodeShowroomNotFound       = "SHOWROOM_NOT_FOUND"
 )

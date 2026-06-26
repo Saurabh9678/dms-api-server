@@ -43,3 +43,10 @@ type ListMembersResponse struct {
 type UpdateMemberRoleRequest struct {
 	Role string `json:"role" binding:"required"`
 }
+
+type UpdateShowroomRequest struct {
+	Name         string `form:"name"`
+	Geolocation  string `form:"geolocation"`
+	RemoveLogo   string `form:"remove_logo"`
+	RemoveBanner string `form:"remove_banner"`
+}

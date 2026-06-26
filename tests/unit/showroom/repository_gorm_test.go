@@ -532,3 +532,70 @@ func TestUpdateMemberRole_UpdateDBError(t *testing.T) {
 	assert.Error(t, err)
 	assert.NotErrorIs(t, err, showroom.ErrMemberNotFound)
 }
+
+// ─── GetByID ──────────────────────────────────────────────────────────────────
+
+func TestGetByID_Success(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "showrooms"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name"}).AddRow(uint64(1), "Test Showroom"))
+
+	result, err := repo.GetByID(context.Background(), uint64(1))
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, uint64(1), result.ID)
+	assert.Equal(t, "Test Showroom", result.Name)
+}
+
+func TestGetByID_NotFound(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "showrooms"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name"}))
+
+	_, err := repo.GetByID(context.Background(), uint64(99))
+	assert.ErrorIs(t, err, showroom.ErrShowroomNotFound)
+}
+
+func TestGetByID_DBError(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "showrooms"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.GetByID(context.Background(), uint64(1))
+	assert.Error(t, err)
+	assert.NotErrorIs(t, err, showroom.ErrShowroomNotFound)
+}
+
+// ─── UpdateShowroomFields ─────────────────────────────────────────────────────
+
+func TestUpdateShowroomFields_Success(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "showrooms"`).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	err := repo.UpdateShowroomFields(context.Background(), uint64(1), map[string]any{"name": "New Name"})
+	assert.NoError(t, err)
+}
+
+func TestUpdateShowroomFields_DBError(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "showrooms"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	err := repo.UpdateShowroomFields(context.Background(), uint64(1), map[string]any{"name": "X"})
+	assert.Error(t, err)
+}

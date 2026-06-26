@@ -59,6 +59,52 @@ func (h *Handler) CreateShowroom(c *gin.Context) {
 	response.Created(c, "showroom created", resp)
 }
 
+func (h *Handler) UpdateShowroom(c *gin.Context) {
+	callerUserID, ok := h.extractUserID(c)
+	if !ok {
+		return
+	}
+
+	showroomID, ok := h.parseShowroomID(c)
+	if !ok {
+		return
+	}
+
+	callerRoles, ok := h.extractShowroomRoles(c)
+	if !ok {
+		return
+	}
+
+	if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	req := &UpdateShowroomRequest{
+		Name:         c.Request.FormValue("name"),
+		Geolocation:  c.Request.FormValue("geolocation"),
+		RemoveLogo:   c.Request.FormValue("remove_logo"),
+		RemoveBanner: c.Request.FormValue("remove_banner"),
+	}
+
+	var logo, banner *multipart.FileHeader
+	form := c.Request.MultipartForm
+	if logoFiles := form.File["showroom_logo"]; len(logoFiles) > 0 {
+		logo = logoFiles[0]
+	}
+	if bannerFiles := form.File["showroom_banner"]; len(bannerFiles) > 0 {
+		banner = bannerFiles[0]
+	}
+
+	resp, err := h.service.UpdateShowroom(c.Request.Context(), callerUserID, callerRoles, showroomID, req, logo, banner)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "showroom updated", resp)
+}
+
 func (h *Handler) AddMember(c *gin.Context) {
 	showroomID, ok := h.parseShowroomID(c)
 	if !ok {

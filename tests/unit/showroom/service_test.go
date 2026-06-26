@@ -61,6 +61,19 @@ func (m *mockShowroomRepo) UpdateMemberRole(ctx context.Context, showroomID, tar
 	return args.Error(0)
 }
 
+func (m *mockShowroomRepo) GetByID(ctx context.Context, showroomID uint64) (*showroom.Showroom, error) {
+	args := m.Called(ctx, showroomID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*showroom.Showroom), args.Error(1)
+}
+
+func (m *mockShowroomRepo) UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error {
+	args := m.Called(ctx, showroomID, updates)
+	return args.Error(0)
+}
+
 // mockStorageProvider satisfies storage.Provider.
 type mockStorageProvider struct {
 	mock.Mock
@@ -725,4 +738,242 @@ func TestServiceUpdateMemberRole_Success(t *testing.T) {
 	assert.Equal(t, uint64(1), resp.ShowroomID)
 	assert.Equal(t, uint64(99), resp.UserID)
 	assert.Equal(t, "manager", resp.Role)
+}
+
+// ─── UpdateShowroom ───────────────────────────────────────────────────────────
+
+func existingShowroom() *showroom.Showroom {
+	logo := "old/logo.jpg"
+	banner := "old/banner.jpg"
+	return &showroom.Showroom{ID: 1, Name: "Old Name", ShowroomLogo: &logo, ShowroomBanner: &banner}
+}
+
+func TestUpdateShowroom_Forbidden(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), employeeRoles(1), uint64(1), &showroom.UpdateShowroomRequest{}, nil, nil)
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "GetByID")
+}
+
+func TestUpdateShowroom_ShowroomNotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, showroom.ErrShowroomNotFound)
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1), &showroom.UpdateShowroomRequest{}, nil, nil)
+	assert.Error(t, err)
+}
+
+func TestUpdateShowroom_GetByIDDBError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1), &showroom.UpdateShowroomRequest{}, nil, nil)
+	assert.Error(t, err)
+}
+
+func TestUpdateShowroom_InvalidGeolocationJSON(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{Name: "New", Geolocation: "not-json"}, nil, nil)
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_LogoFileTooLarge(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	logo := makeFileHeader("logo.jpg", 11*1024*1024)
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, logo, nil)
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_BannerInvalidExt(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	banner := makeFileHeader("banner.gif", 100)
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, banner)
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_NoChanges_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	existing := existingShowroom()
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existing, nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "Old Name", resp.Name)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_UpdateNameAndGeo_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{Name: "New Name", Geolocation: `{"city":"Delhi"}`}, nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "New Name", resp.Name)
+	assert.NotNil(t, resp.Geolocation)
+}
+
+func TestUpdateShowroom_RemoveLogo_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{RemoveLogo: "true"}, nil, nil)
+	assert.NoError(t, err)
+	assert.Nil(t, resp.ShowroomLogo)
+}
+
+func TestUpdateShowroom_RemoveBanner_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{RemoveBanner: "true"}, nil, nil)
+	assert.NoError(t, err)
+	assert.Nil(t, resp.ShowroomBanner)
+}
+
+func TestUpdateShowroom_LogoUploadSuccess(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("new/logo.jpg", nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	logo := makeFileHeader("logo.jpg", 100)
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, logo, nil)
+	assert.NoError(t, err)
+	require.NotNil(t, resp.ShowroomLogo)
+	assert.Equal(t, "new/logo.jpg", *resp.ShowroomLogo)
+}
+
+func TestUpdateShowroom_LogoUploadFails_LogoUnchanged(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(errorOpener(errors.New("open fail"))))
+
+	existing := existingShowroom()
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existing, nil)
+
+	logo := makeFileHeader("logo.jpg", 100)
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, logo, nil)
+	assert.NoError(t, err)
+	// logo unchanged — existing logo still set
+	assert.Equal(t, existing.ShowroomLogo, resp.ShowroomLogo)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_LogoUploadOverridesRemoveLogo(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("new/logo.jpg", nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	logo := makeFileHeader("logo.jpg", 100)
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{RemoveLogo: "true"}, logo, nil)
+	assert.NoError(t, err)
+	require.NotNil(t, resp.ShowroomLogo)
+	assert.Equal(t, "new/logo.jpg", *resp.ShowroomLogo)
+}
+
+func TestUpdateShowroom_BannerUploadSuccess(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("new/banner.jpg", nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	banner := makeFileHeader("banner.jpg", 100)
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, banner)
+	assert.NoError(t, err)
+	require.NotNil(t, resp.ShowroomBanner)
+	assert.Equal(t, "new/banner.jpg", *resp.ShowroomBanner)
+}
+
+func TestUpdateShowroom_BannerUploadFails_BannerUnchanged(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(errorOpener(errors.New("open fail"))))
+
+	existing := existingShowroom()
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existing, nil)
+
+	banner := makeFileHeader("banner.jpg", 100)
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, banner)
+	assert.NoError(t, err)
+	assert.Equal(t, existing.ShowroomBanner, resp.ShowroomBanner)
+	repo.AssertNotCalled(t, "UpdateShowroomFields")
+}
+
+func TestUpdateShowroom_UpdateShowroomFieldsError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(errors.New("db error"))
+
+	_, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{Name: "New"}, nil, nil)
+	assert.Error(t, err)
+}
+
+func TestUpdateShowroom_ManagerCanUpdate_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(7), managerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{Name: "Updated By Manager", Geolocation: `{"city":"Mumbai"}`}, nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "Updated By Manager", resp.Name)
 }

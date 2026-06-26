@@ -15,6 +15,7 @@ var (
 	ErrDuplicateMember    = errors.New("user already a member")
 	ErrMemberNotFound     = errors.New("member not found")
 	ErrMemberRoleNotFound = errors.New("role not found")
+	ErrShowroomNotFound   = errors.New("showroom not found")
 )
 
 type userRole struct {
@@ -76,6 +77,27 @@ func (r *Repository) CreateWithOwner(ctx context.Context, userID uint64, s *Show
 		return nil, err
 	}
 	return &created, nil
+}
+
+// GetByID returns an active (non-deleted) showroom by ID, or ErrShowroomNotFound.
+func (r *Repository) GetByID(ctx context.Context, showroomID uint64) (*Showroom, error) {
+	var s Showroom
+	if err := r.db.WithContext(ctx).First(&s, showroomID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrShowroomNotFound
+		}
+		return nil, err
+	}
+	return &s, nil
+}
+
+// UpdateShowroomFields applies a partial update to an active showroom using a field map.
+// Nil values in the map are written as SQL NULL. GORM automatically sets updated_at.
+func (r *Repository) UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error {
+	return r.db.WithContext(ctx).
+		Model(&Showroom{}).
+		Where("id = ?", showroomID).
+		Updates(updates).Error
 }
 
 // UpdateFilePaths sets logo and/or banner paths on an existing showroom record.

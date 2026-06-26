@@ -110,6 +110,133 @@
           ]
         },
         {
+          "name": "Update Showroom",
+          "id": "showroom-update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Showroom Name",
+                  "type": "text",
+                  "description": "Optional. New display name. Skipped if blank."
+                },
+                {
+                  "key": "geolocation",
+                  "value": "{\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}",
+                  "type": "text",
+                  "description": "Optional. JSON string replacing existing geolocation."
+                },
+                {
+                  "key": "showroom_logo",
+                  "type": "file",
+                  "description": "Optional. New logo. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                },
+                {
+                  "key": "showroom_banner",
+                  "type": "file",
+                  "description": "Optional. New banner. jpg/jpeg/png, max 10 MB.",
+                  "disabled": true
+                },
+                {
+                  "key": "remove_logo",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Optional. Set to 'true' to clear the logo. Ignored if a new logo file is also uploaded.",
+                  "disabled": true
+                },
+                {
+                  "key": "remove_banner",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Optional. Set to 'true' to clear the banner. Ignored if a new banner file is also uploaded.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Showroom ID"
+                }
+              ]
+            },
+            "description": "Protected. Updates showroom details. Caller must be owner or manager. All fields are optional — only provided fields are updated. File upload is best-effort; upload failure leaves the existing file unchanged."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom updated\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Updated Showroom Name\",\n    \"showroom_logo\": null,\n    \"showroom_banner\": \"1/1/20240101120000.jpg\",\n    \"geolocation\": {\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}\n  }\n}"
+            },
+            {
+              "name": "Invalid Geolocation JSON",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "File Too Large",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FILE_TOO_LARGE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid File Type",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_FILE_TYPE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Showroom Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"SHOWROOM_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Add Showroom Member",
           "id": "showroom-add-member",
           "request": {

@@ -51,6 +51,43 @@
 - Current implementation: `internal/infra/storage.LocalProvider` — writes to `{STORAGE_BASE_PATH}/{userID}/{showroomID}/{datetime}.{ext}`.
 - Provider is injected via DI in `bootstrap/dependencies.go`.
 
+## Endpoint: PATCH /api/v1/showroom/:id
+
+**Auth:** Required (Bearer token + device context headers + showroom membership).
+
+**Request:** `multipart/form-data` — all fields optional
+- `name` (string, optional) — new display name; skipped if blank.
+- `geolocation` (string, optional) — JSON object replacing existing geolocation.
+- `showroom_logo` (file, optional) — new logo; replaces existing (jpg/jpeg/png, max 10 MB).
+- `showroom_banner` (file, optional) — new banner; replaces existing (jpg/jpeg/png, max 10 MB).
+- `remove_logo` (string `"true"`, optional) — clears logo to null. Ignored if a new logo file is also uploaded.
+- `remove_banner` (string `"true"`, optional) — clears banner to null. Ignored if a new banner file is also uploaded.
+
+**Flow:**
+1. `middleware.RequireDeviceContext` — validates `X-Platform` and `X-Device-Id`.
+2. `middleware.RequireAuth` — validates Bearer token, sets `userID` in context.
+3. `middleware.RequireShowroomRoles` — loads `map[showroomID → role]` into context.
+4. `Handler.UpdateShowroom` — extracts caller userID, parses showroom ID from path, reads showroom roles, delegates to service.
+5. `service.UpdateShowroom`:
+   a. Validates caller role is `owner` or `manager` (403 `FORBIDDEN` otherwise).
+   b. Fetches current showroom via `repo.GetByID` (404 `SHOWROOM_NOT_FOUND` if absent).
+   c. Builds an updates map; missing/empty fields are skipped.
+   d. Validates geolocation JSON if provided.
+   e. Validates and uploads logo/banner files if provided (best-effort — upload failure leaves the field unchanged).
+   f. `remove_*` flags clear the respective path to NULL; a new file upload overrides the remove.
+   g. Calls `repo.UpdateShowroomFields` only if the updates map is non-empty.
+   h. Merges updates into the fetched record in memory and returns the full showroom.
+6. Returns 200 with full showroom object (same shape as `CreateShowroomResponse`).
+
+**Response branches:**
+- `200 OK` — showroom updated (or no change if nothing was provided).
+- `400 INVALID_REQUEST` — bad multipart body, blank name value, or invalid geolocation JSON.
+- `400 FILE_TOO_LARGE` — file exceeds 10 MB.
+- `400 INVALID_FILE_TYPE` — file extension not jpg/jpeg/png.
+- `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token.
+- `403 FORBIDDEN` — caller not owner or manager.
+- `404 SHOWROOM_NOT_FOUND` — showroom does not exist or is soft-deleted.
+
 ## Endpoint: POST /api/v1/showroom/:id/member
 
 **Auth:** Required (Bearer token + device context headers + showroom membership).
