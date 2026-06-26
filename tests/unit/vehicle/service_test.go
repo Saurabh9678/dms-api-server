@@ -112,6 +112,19 @@ func (m *mockVehicleRepo) CreateExpense(ctx context.Context, expense *vehicle.Ve
 	return args.Get(0).(*vehicle.VehicleExpenses), args.Error(1)
 }
 
+func (m *mockVehicleRepo) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
+	args := m.Called(ctx, vehicleID)
+	return args.Bool(0), args.Error(1)
+}
+
+func (m *mockVehicleRepo) AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.VehicleShowroom, error) {
+	args := m.Called(ctx, vehicleID, showroomID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleShowroom), args.Error(1)
+}
+
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := vehicle.NewService(mockRepo)
@@ -2039,4 +2052,75 @@ func TestAddExpense_AllValidTypes(t *testing.T) {
 			assert.Equal(t, expType, resp.Type)
 		})
 	}
+}
+
+// ---- AssignVehicleToShowroom ----
+
+func TestAssignVehicleToShowroom_VehicleNotFound(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(false, nil)
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAssignVehicleToShowroom_VehicleExistsError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(false, errors.New("db error"))
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAssignVehicleToShowroom_AlreadyAssigned(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleAlreadyInShowroom)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAssignVehicleToShowroom_GetShowroomIDUnexpectedError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), errors.New("db error"))
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAssignVehicleToShowroom_AssignShowroomError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	mockRepo.On("AssignShowroom", mock.Anything, uint64(1), uint64(10)).Return(nil, errors.New("db error"))
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestAssignVehicleToShowroom_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := vehicle.NewService(mockRepo)
+	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
+	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	rel := &vehicle.VehicleShowroom{VehicleID: 1, ShowroomID: 10}
+	mockRepo.On("AssignShowroom", mock.Anything, uint64(1), uint64(10)).Return(rel, nil)
+	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, uint64(1), resp.VehicleID)
+	assert.Equal(t, uint64(10), resp.ShowroomID)
+	mockRepo.AssertExpectations(t)
 }

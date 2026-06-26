@@ -2,6 +2,7 @@ package vehicle
 
 import (
 	"context"
+	stderrors "errors"
 	"net/http"
 	"strings"
 	"time"
@@ -18,6 +19,7 @@ type Service interface {
 	UpdateVehicle(ctx context.Context, vehicleID uint64, req *UpdateVehicleRequest) (*UpdateVehicleResponse, error)
 	UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *UpdateVehiclePricingRequest) (*UpdateVehiclePricingResponse, error)
 	AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error)
+	AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error)
 }
 
 type vehicleRepo interface {
@@ -34,6 +36,8 @@ type vehicleRepo interface {
 	CreatePricing(ctx context.Context, pricing *VehiclePricing) (*VehiclePricing, error)
 	UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*VehiclePricing, error)
 	CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error)
+	VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error)
+	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
 }
 
 type service struct {
@@ -793,4 +797,33 @@ func toPricingResponse(p *VehiclePricing) *UpdateVehiclePricingResponse {
 		Remarks:     p.Remarks,
 		UpdatedAt:   p.UpdatedAt.Format(time.RFC3339),
 	}
+}
+
+func (s *service) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error) {
+	exists, err := s.repo.VehicleExistsByID(ctx, vehicleID)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, ErrVehicleNotFound
+	}
+
+	_, err = s.repo.GetVehicleShowroomID(ctx, vehicleID)
+	if err == nil {
+		return nil, ErrVehicleAlreadyInShowroom
+	}
+	if !stderrors.Is(err, ErrVehicleNotFound) {
+		return nil, err
+	}
+
+	rel, err := s.repo.AssignShowroom(ctx, vehicleID, showroomID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &AssignShowroomResponse{
+		VehicleID:  rel.VehicleID,
+		ShowroomID: rel.ShowroomID,
+		AssignedAt: rel.CreatedAt.Format(time.RFC3339),
+	}, nil
 }

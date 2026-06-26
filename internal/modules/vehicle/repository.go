@@ -213,6 +213,26 @@ func (r *Repository) CreateExpense(ctx context.Context, expense *VehicleExpenses
 	return expense, nil
 }
 
+func (r *Repository) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&Vehicle{}).Where("id = ? AND deleted_at IS NULL", vehicleID).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (r *Repository) AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error) {
+	rel := &VehicleShowroom{
+		VehicleID:  vehicleID,
+		ShowroomID: showroomID,
+	}
+	if err := r.db.WithContext(ctx).Create(rel).Error; err != nil {
+		return nil, err
+	}
+	return rel, nil
+}
+
 type ListFilter struct {
 	Statuses     []VehicleStatusType
 	VehicleTypes []VehicleType

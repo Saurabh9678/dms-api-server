@@ -76,6 +76,14 @@ func (m *mockRoutesService) AddExpense(ctx context.Context, vehicleID uint64, re
 	return args.Get(0).(*vehicle.AddExpenseResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.AssignShowroomResponse, error) {
+	args := m.Called(ctx, vehicleID, showroomID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AssignShowroomResponse), args.Error(1)
+}
+
 func noopMiddleware(c *gin.Context) { c.Next() }
 
 func TestRegisterRoutes(t *testing.T) {
@@ -102,6 +110,7 @@ func TestRegisterRoutes(t *testing.T) {
 	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id"], "PATCH /api/v1/vehicle/:id route should be registered")
 	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id/pricing"], "PATCH /api/v1/vehicle/:id/pricing route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/expense"], "POST /api/v1/vehicle/:id/expense route should be registered")
+	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/showroom"], "POST /api/v1/vehicle/:id/showroom route should be registered")
 }
 
 func TestRegisterRoutes_NoopMiddlewareUsed(t *testing.T) {
