@@ -294,3 +294,22 @@ type CreateVehicleResponse struct {
 	CreatedAt          string `json:"created_at"`
 	UpdatedAt          string `json:"updated_at"`
 }
+
+type AddExpenseRequest struct {
+	Type        string  `json:"type" binding:"required"`
+	Amount      float64 `json:"amount" binding:"required"`
+	PaidTo      string  `json:"paid_to"`
+	Description string  `json:"description"`
+	Date        *string `json:"date"`
+}
+
+type AddExpenseResponse struct {
+	ID          uint64  `json:"id"`
+	VehicleID   uint64  `json:"vehicle_id"`
+	Type        string  `json:"type"`
+	Amount      float64 `json:"amount"`
+	PaidTo      string  `json:"paid_to"`
+	Description string  `json:"description"`
+	Date        string  `json:"date"`
+	CreatedAt   string  `json:"created_at"`
+}

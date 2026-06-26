@@ -17,6 +17,7 @@ type Service interface {
 	GetVehicleShowroomID(ctx context.Context, vehicleID uint64) (uint64, error)
 	UpdateVehicle(ctx context.Context, vehicleID uint64, req *UpdateVehicleRequest) (*UpdateVehicleResponse, error)
 	UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *UpdateVehiclePricingRequest) (*UpdateVehiclePricingResponse, error)
+	AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error)
 }
 
 type vehicleRepo interface {
@@ -32,6 +33,7 @@ type vehicleRepo interface {
 	GetPricingByVehicleID(ctx context.Context, vehicleID uint64) (*VehiclePricing, error)
 	CreatePricing(ctx context.Context, pricing *VehiclePricing) (*VehiclePricing, error)
 	UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*VehiclePricing, error)
+	CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error)
 }
 
 type service struct {
@@ -719,6 +721,65 @@ func (s *service) buildPricingUpdates(req *UpdateVehiclePricingRequest) (map[str
 	}
 
 	return updates, nil
+}
+
+func (s *service) AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error) {
+	if req == nil {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	if !isValidExpenseType(VehicleExpensesType(req.Type)) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	if req.Amount <= 0 {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	date := time.Now()
+	if req.Date != nil {
+		parsed, err := time.Parse(time.RFC3339, *req.Date)
+		if err != nil {
+			return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+		date = parsed
+	}
+
+	expense := &VehicleExpenses{
+		VehicleID:   vehicleID,
+		Type:        VehicleExpensesType(req.Type),
+		Amount:      req.Amount,
+		PaidTo:      strings.TrimSpace(req.PaidTo),
+		Description: strings.TrimSpace(req.Description),
+		Date:        date,
+	}
+
+	created, err := s.repo.CreateExpense(ctx, expense)
+	if err != nil {
+		return nil, err
+	}
+
+	return &AddExpenseResponse{
+		ID:          created.ID,
+		VehicleID:   created.VehicleID,
+		Type:        string(created.Type),
+		Amount:      created.Amount,
+		PaidTo:      created.PaidTo,
+		Description: created.Description,
+		Date:        created.Date.Format(time.RFC3339),
+		CreatedAt:   created.CreatedAt.Format(time.RFC3339),
+	}, nil
+}
+
+func isValidExpenseType(t VehicleExpensesType) bool {
+	return t == VehicleExpensesTypeRepair ||
+		t == VehicleExpensesTypeService ||
+		t == VehicleExpensesTypeInsurance ||
+		t == VehicleExpensesTypeTax ||
+		t == VehicleExpensesTypeInspection ||
+		t == VehicleExpensesTypeCleaning ||
+		t == VehicleExpensesTypeDocumentation ||
+		t == VehicleExpensesTypeOther
 }
 
 func toPricingResponse(p *VehiclePricing) *UpdateVehiclePricingResponse {

@@ -197,6 +197,44 @@
 
 ---
 
+### POST /api/v1/vehicle/:id/expense — Add Vehicle Expense
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/expense` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.AddExpense`
+2. Handler:
+   - Parse `:id` (uint64, must be > 0)
+   - `ShouldBindJSON` → `AddExpenseRequest` (`type` and `amount` are required)
+   - Extract `middleware.ContextKeyShowroomRoles` from context
+   - Call `service.GetVehicleShowroomID(ctx, id)` → `SELECT showroom_id FROM vehicle_showroom_relations`
+   - If showroom not in roles map → 404 `VEHICLE_NOT_FOUND`
+   - Call `service.AddExpense(ctx, id, req)` → 201 on success
+3. Service:
+   - Validates `type` against known expense types
+   - Validates `amount` > 0
+   - If `date` provided: parses RFC3339; if invalid → 400
+   - If `date` not provided: defaults to `time.Now()`
+   - `repo.CreateExpense(ctx, &VehicleExpenses{...})` → GORM `Create` on `vehicle_expenses` table
+4. Response: `201 Created` with `AddExpenseResponse`
+
+**Request Body:**
+| Field | Required | Type | Notes |
+|-------|----------|------|-------|
+| `type` | Yes | string | `repair`, `service`, `insurance`, `tax`, `inspection`, `cleaning`, `documentation`, `other` |
+| `amount` | Yes | float64 | Must be > 0 |
+| `paid_to` | No | string | Recipient of payment |
+| `description` | No | string | Reason/why the expense was made |
+| `date` | No | string | RFC3339 format; defaults to current time |
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Vehicle not found | 404 | `VEHICLE_NOT_FOUND` |
+| Not showroom member | 404 | `VEHICLE_NOT_FOUND` |
+| Invalid/missing type or amount | 400 | `INVALID_REQUEST` |
+| Invalid date format | 400 | `INVALID_REQUEST` |
+
+---
+
 ## Documentation Update Checklist
 
 - Update this file when vehicle behavior, schema assumptions, or APIs change.
