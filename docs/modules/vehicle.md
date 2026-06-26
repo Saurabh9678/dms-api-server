@@ -235,6 +235,44 @@
 
 ---
 
+### POST /api/v1/vehicle/:id/showroom — Assign Vehicle to Showroom
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/showroom` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.AssignShowroom`
+2. Handler:
+   - Parse `:id` (uint64, must be > 0)
+   - `ShouldBindJSON` → `AssignShowroomRequest` (`showroom_id` is required, must be > 0)
+   - Extract `middleware.ContextKeyShowroomRoles` from context
+   - Authorisation: caller must be a member of `req.ShowroomID` **and** must not be `employee` role → 403 `FORBIDDEN` otherwise
+   - Call `service.AssignVehicleToShowroom(ctx, id, req.ShowroomID)` → 201 on success
+3. Service:
+   - `repo.VehicleExistsByID(ctx, vehicleID)` — `SELECT COUNT(*) FROM vehicles WHERE id = ? AND deleted_at IS NULL`; if 0 → `ErrVehicleNotFound`
+   - `repo.GetVehicleShowroomID(ctx, vehicleID)` — if it returns `nil` error the vehicle already has a showroom → `ErrVehicleAlreadyInShowroom`; if it returns `ErrVehicleNotFound` proceed; any other error propagates
+   - `repo.AssignShowroom(ctx, vehicleID, showroomID)` — GORM `Create` on `vehicle_showroom_relations`
+4. Response: `201 Created` with `AssignShowroomResponse`
+
+**Authorization:**
+- Only `owner` and `manager` roles can assign a vehicle to their showroom.
+- `employee` role → 403 `FORBIDDEN`.
+- User must be a member of the target showroom (not any showroom).
+
+**Request Body:**
+| Field | Required | Type | Notes |
+|-------|----------|------|-------|
+| `showroom_id` | Yes | uint64 | Must be > 0; user must be owner/manager of this showroom |
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Zero or invalid vehicle ID | 400 | `INVALID_REQUEST` |
+| Zero `showroom_id` | 400 | `INVALID_REQUEST` |
+| Caller not a member of target showroom | 403 | `FORBIDDEN` |
+| Caller is `employee` role | 403 | `FORBIDDEN` |
+| Vehicle does not exist | 404 | `VEHICLE_NOT_FOUND` |
+| Vehicle already assigned to a showroom | 409 | `VEHICLE_ALREADY_IN_SHOWROOM` |
+
+---
+
 ## Documentation Update Checklist
 
 - Update this file when vehicle behavior, schema assumptions, or APIs change.

@@ -80,6 +80,14 @@ func (m *mockHandlerService) AddExpense(ctx context.Context, vehicleID uint64, r
 	return args.Get(0).(*vehicle.AddExpenseResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.AssignShowroomResponse, error) {
+	args := m.Called(ctx, vehicleID, showroomID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AssignShowroomResponse), args.Error(1)
+}
+
 func TestHandler_CreateVehicle_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockSvc := new(mockHandlerService)
@@ -968,4 +976,119 @@ func TestHandler_AddExpense_Success(t *testing.T) {
 	var resp map[string]interface{}
 	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
 	assert.Equal(t, "expense added", resp["message"])
+}
+
+func setupAssignShowroomContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("POST", "/api/v1/vehicle/"+idParam+"/showroom", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_AssignShowroom_InvalidID(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "abc", body)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_ZeroID(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "0", body)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", []byte("bad json"))
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_ZeroShowroomID(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 0})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_MissingShowroomRoles(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_InvalidShowroomRolesType(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_NotMember(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusForbidden, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_EmployeeForbidden(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "employee"})
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusForbidden, w.Code)
+	mockSvc.AssertNotCalled(t, "AssignVehicleToShowroom")
+}
+
+func TestHandler_AssignShowroom_ServiceError(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("AssignVehicleToShowroom", mock.Anything, uint64(1), uint64(5)).Return(nil, &mockError{})
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.NotEqual(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AssignShowroom_Success_Owner(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	respData := &vehicle.AssignShowroomResponse{VehicleID: 1, ShowroomID: 5, AssignedAt: "2024-01-01T00:00:00Z"}
+	mockSvc.On("AssignVehicleToShowroom", mock.Anything, uint64(1), uint64(5)).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	assert.Equal(t, "vehicle assigned to showroom", resp["message"])
+}
+
+func TestHandler_AssignShowroom_Success_Manager(t *testing.T) {
+	body, _ := json.Marshal(vehicle.AssignShowroomRequest{ShowroomID: 5})
+	ctx, w, mockSvc := setupAssignShowroomContext(t, "1", body)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "manager"})
+	respData := &vehicle.AssignShowroomResponse{VehicleID: 1, ShowroomID: 5, AssignedAt: "2024-01-01T00:00:00Z"}
+	mockSvc.On("AssignVehicleToShowroom", mock.Anything, uint64(1), uint64(5)).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
 }

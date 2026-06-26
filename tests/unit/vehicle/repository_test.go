@@ -19,3 +19,7 @@ func TestErrVehicleNotFound(t *testing.T) {
 func TestErrVehicleSold(t *testing.T) {
 	assert.EqualError(t, vehicle.ErrVehicleSold, "vehicle is sold")
 }
+
+func TestErrVehicleAlreadyInShowroom(t *testing.T) {
+	assert.EqualError(t, vehicle.ErrVehicleAlreadyInShowroom, "vehicle already assigned to a showroom")
+}

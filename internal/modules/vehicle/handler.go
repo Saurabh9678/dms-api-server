@@ -399,3 +399,52 @@ func buildImageItems(images []VehicleImage) []VehicleImageItem {
 	}
 	return items
 }
+
+func (h *Handler) AssignShowroom(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil || id == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	var req AssignShowroomRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	if req.ShowroomID == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	showroomRolesVal, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+	showroomRoles, ok := showroomRolesVal.(map[uint64]string)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+
+	role, isMember := showroomRoles[req.ShowroomID]
+	if !isMember {
+		response.Error(c, http.StatusForbidden, apperrors.CodeForbidden, "forbidden")
+		return
+	}
+
+	if role == "employee" {
+		response.Error(c, http.StatusForbidden, apperrors.CodeForbidden, "forbidden")
+		return
+	}
+
+	resp, err := h.service.AssignVehicleToShowroom(c.Request.Context(), id, req.ShowroomID)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.Created(c, "vehicle assigned to showroom", resp)
+}

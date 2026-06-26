@@ -770,3 +770,67 @@ func TestVehicleRepositoryCreateExpense_Error(t *testing.T) {
 	_, err := repo.CreateExpense(context.Background(), expense)
 	assert.Error(t, err)
 }
+
+func TestRepo_VehicleExistsByID_Exists(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "vehicles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(1)))
+
+	exists, err := repo.VehicleExistsByID(context.Background(), 1)
+	assert.NoError(t, err)
+	assert.True(t, exists)
+}
+
+func TestRepo_VehicleExistsByID_NotExists(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "vehicles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(0)))
+
+	exists, err := repo.VehicleExistsByID(context.Background(), 999)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+}
+
+func TestRepo_VehicleExistsByID_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "vehicles"`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.VehicleExistsByID(context.Background(), 1)
+	assert.Error(t, err)
+}
+
+func TestRepo_AssignShowroom_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectCommit()
+
+	rel, err := repo.AssignShowroom(context.Background(), 1, 10)
+	assert.NoError(t, err)
+	assert.NotNil(t, rel)
+	assert.Equal(t, uint64(1), rel.VehicleID)
+	assert.Equal(t, uint64(10), rel.ShowroomID)
+}
+
+func TestRepo_AssignShowroom_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_showroom_relations"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.AssignShowroom(context.Background(), 1, 10)
+	assert.Error(t, err)
+}

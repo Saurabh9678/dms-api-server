@@ -313,3 +313,13 @@ type AddExpenseResponse struct {
 	Date        string  `json:"date"`
 	CreatedAt   string  `json:"created_at"`
 }
+
+type AssignShowroomRequest struct {
+	ShowroomID uint64 `json:"showroom_id"`
+}
+
+type AssignShowroomResponse struct {
+	VehicleID  uint64 `json:"vehicle_id"`
+	ShowroomID uint64 `json:"showroom_id"`
+	AssignedAt string `json:"assigned_at"`
+}
