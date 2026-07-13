@@ -5,8 +5,18 @@ alwaysApply: true
 
 # API Documentation Discipline
 
-- Any API endpoint created, modified, or removed must update `docs/api/<module>.postman_collection.json`.
-- API docs must be valid Postman Collection v2.1 JSON (importable in Postman).
+- Any API endpoint created, modified, or removed must update **both** artifacts in the same task:
+  - `docs/api/<module>.postman_collection.json` (Postman Collection v2.1 JSON, importable)
+  - `postman/collections/DMS API/<module>/` (Postman native YAML workspace collection)
+- Do not merge API changes with only one side updated.
+- Contract fields must match across both artifacts: path, method, auth, headers, request body, success/error examples, and descriptions.
+- For every `/api/v1/*` endpoint, document `X-Platform` and `X-Device-Id` as mandatory request headers.
+- Saved API test cases and documented success/invalid-format examples must exactly match the response envelope actually returned by handlers.
+- Keep `docs/modules/<module>.md` synchronized with endpoint flow details (middleware -> handler -> service -> business outcomes -> response mapping).
+
+## JSON collection (`docs/api/<module>.postman_collection.json`)
+
+- Must be valid Postman Collection v2.1 JSON (importable in Postman).
 - Collection entries must include:
   - endpoint path
   - HTTP method
@@ -16,7 +26,46 @@ alwaysApply: true
   - error responses
   - example request
   - example response
-- For every `/api/v1/*` endpoint, document `X-Platform` and `X-Device-Id` as mandatory request headers.
-- Saved API test cases and documented success/invalid-format examples must exactly match the response envelope actually returned by handlers.
-- Do not merge API changes without synchronized API documentation.
-- Keep `docs/modules/<module>.md` synchronized with endpoint flow details (middleware -> handler -> service -> business outcomes -> response mapping).
+
+## Postman YAML collection (`postman/collections/DMS API/`)
+
+Strictly follow the existing Postman native YAML layout and conventions.
+
+**Collection root** (`postman/collections/DMS API/.resources/definition.yaml`):
+- `$kind: collection`, description, optional `variables` (defaults only; prefer environment `base_url`).
+
+**Module folder** (e.g. `auth/.resources/definition.yaml`):
+- `$kind: collection`, `order` for folder ordering.
+
+**Request file** (e.g. `auth/Login.request.yaml`):
+- `$kind: http-request`
+- `description`, `url: "{{base_url}}/api/v1/..."`, `method`, `headers`, optional `body` (`type: text`, YAML block scalar)
+- `examples: ./.resources/<RequestName>.resources/examples` (relative path)
+- `order` for request ordering within folder
+- Auth: `Authorization: Bearer {{access_token}}` when required
+- Device context: `X-Platform: web`, `X-Device-Id: browser-1` on all `/api/v1/*` requests
+
+**Example files** (e.g. `auth/.resources/Login.resources/examples/Success.example.yaml`):
+- `$kind: http-example`
+- Nested `request` (url, method, headers, body) and `response` (`statusCode`, `statusText`, `body.type: text`)
+- File naming: `<Scenario Name>.example.yaml` (spaces allowed, matching existing convention)
+- `order` for example ordering
+
+**Folder layout for new endpoints:**
+```
+postman/collections/DMS API/<module>/
+  <Request Name>.request.yaml
+  .resources/
+    definition.yaml
+    <Request Name>.resources/
+      examples/
+        Success.example.yaml
+        Invalid Request.example.yaml
+        ...
+```
+
+## Postman environments (`postman/environments/`)
+
+- Use `{{base_url}}` and `{{access_token}}` in requests; do not hardcode host URLs in collection files.
+- Local: `postman/environments/local.environment.yaml` (`base_url: http://localhost:8080`)
+- Staging: `postman/environments/staging.environment.yaml` (`base_url: https://stag-api.infiniour.com`)

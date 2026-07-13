@@ -56,6 +56,7 @@ type service struct {
 	config        config.AuthConfig
 	db            *gorm.DB
 	nowFn         func() time.Time
+	env           string
 }
 
 const (
@@ -71,6 +72,7 @@ func NewService(
 	tokenProvider tokenprovider.Provider,
 	cfg config.AuthConfig,
 	db *gorm.DB,
+	env string,
 ) Service {
 	if cfg.OTPTTL <= 0 {
 		cfg.OTPTTL = 5 * time.Minute
@@ -93,6 +95,7 @@ func NewService(
 		config:        cfg,
 		db:            db,
 		nowFn:         time.Now,
+		env:           env,
 	}
 }
 
@@ -162,10 +165,14 @@ func (s *service) triggerOTP(ctx context.Context, countryCode string, phoneNumbe
 		return nil, err
 	}
 
-	return &TriggerOTPResponse{
+	resp := &TriggerOTPResponse{
 		Message:   "OTP sent successfully",
 		RequestID: requestID,
-	}, nil
+	}
+	if s.env == "development" || s.env == "staging" {
+		resp.OTPCode = &code
+	}
+	return resp, nil
 }
 
 func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyOTPResponse, error) {

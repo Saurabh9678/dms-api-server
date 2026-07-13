@@ -8,3 +8,7 @@ localResources:
     - ../docs/api/dashboard.postman_collection.json
     - ../docs/api/user.postman_collection.json
     - ../docs/api/vehicle.postman_collection.json
+
+cloudResources:
+  collections:
+    ../postman/collections/DMS API: ac55cb5f-be4a-4be8-811f-9626a7a76232

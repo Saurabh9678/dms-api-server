@@ -1,0 +1,8 @@
+name: Staging
+variables:
+  - key: base_url
+    value: 'https://stag-api.infiniour.com'
+    type: default
+  - key: access_token
+    value: ''
+    type: secret

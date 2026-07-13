@@ -1,0 +1,22 @@
+$kind: http-request
+description: Create or update vehicle pricing. If no pricing record exists, buying_price and buying_date are required. Requires showroom membership. Returns 422 if vehicle is sold.
+url: "{{base_url}}/api/v1/vehicle/1/pricing"
+method: PATCH
+headers:
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: device-001
+  Authorization: Bearer {{access_token}}
+body:
+  type: text
+  content: |-
+    {
+      "buying_price": 200000,
+      "buying_date": "2023-01-10",
+      "price_tag": 350000,
+      "tagged_at": "2023-06-01T08:00:00Z",
+      "currency": "inr",
+      "remarks": "Good condition"
+    }
+examples: ./.resources/Update Vehicle Pricing.resources/examples
+order: 5000

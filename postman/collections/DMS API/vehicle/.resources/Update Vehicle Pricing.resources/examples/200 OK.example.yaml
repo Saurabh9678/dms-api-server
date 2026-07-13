@@ -1,0 +1,41 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/pricing"
+  method: PATCH
+  headers:
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+    Authorization: Bearer {{access_token}}
+  body:
+    type: text
+    content: |-
+      {
+        "buying_price": 200000,
+        "buying_date": "2023-01-10",
+        "price_tag": 350000,
+        "tagged_at": "2023-06-01T08:00:00Z",
+        "currency": "inr",
+        "remarks": "Good condition"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle pricing updated",
+        "data": {
+          "vehicle_id": 1,
+          "buying_price": 200000,
+          "buying_date": "2023-01-10",
+          "price_tag": 350000,
+          "tagged_at": "2023-06-01T08:00:00Z",
+          "currency": "inr",
+          "remarks": "Good condition",
+          "updated_at": "2024-06-01T10:00:00Z"
+        }
+      }
+order: 1000

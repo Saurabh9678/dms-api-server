@@ -1,0 +1,48 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/public-listing?showroom_id=1&page=1&limit=20&sort_by=price_asc"
+  method: GET
+  headers:
+    X-Platform: web
+    X-Device-Id: device-001
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle listing",
+        "data": {
+          "cars": {
+            "total": 1,
+            "page": 1,
+            "limit": 20,
+            "vehicles": [
+              {
+                "id": 1,
+                "vehicle_type": "car",
+                "manufacturer": "Toyota",
+                "model": "Camry",
+                "variant": "LE",
+                "color": "Black",
+                "year_of_manufacture": 2020,
+                "rto_code": "KA-01",
+                "registration_number": "KA01AB1234",
+                "registration_state": "Karnataka",
+                "usage_km": 50000,
+                "fuel_type": "petrol",
+                "transmission_type": "manual",
+                "price_tag": 350000,
+                "currency": "inr",
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+              }
+            ]
+          },
+          "bikes": null,
+          "scooties": null
+        }
+      }
+order: 1000

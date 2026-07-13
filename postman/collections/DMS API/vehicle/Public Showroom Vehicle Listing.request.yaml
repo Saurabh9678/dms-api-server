@@ -1,0 +1,9 @@
+$kind: http-request
+description: Public endpoint — no auth required. Returns ready_for_sale vehicles in a specific showroom grouped by type (cars/bikes/scooties). Includes price_tag only (no buying details). Supports type filter, price range filter, sort by price, and pagination.
+url: "{{base_url}}/api/v1/vehicle/public-listing?showroom_id=1&page=1&limit=20&sort_by=price_asc"
+method: GET
+headers:
+  X-Platform: web
+  X-Device-Id: device-001
+examples: ./.resources/Public Showroom Vehicle Listing.resources/examples
+order: 3000

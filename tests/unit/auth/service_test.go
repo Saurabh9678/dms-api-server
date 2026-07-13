@@ -337,7 +337,11 @@ func (f *fakeTokenProviderWithError) ParseAccessToken(token string) (uint64, err
 // ---------------------------------------------------------------------------
 
 func newSvc(userR *fakeUserRepo, otpR *fakeOTPRepo, sesR *fakeSessionRepo, sender *fakeOTPProvider, tokens tokenprovider.Provider, cfg config.AuthConfig) auth.Service {
-	return auth.NewService(userR, otpR, sesR, sender, tokens, cfg, &gorm.DB{})
+	return auth.NewService(userR, otpR, sesR, sender, tokens, cfg, &gorm.DB{}, "production")
+}
+
+func newSvcWithEnv(userR *fakeUserRepo, otpR *fakeOTPRepo, sesR *fakeSessionRepo, sender *fakeOTPProvider, tokens tokenprovider.Provider, cfg config.AuthConfig, env string) auth.Service {
+	return auth.NewService(userR, otpR, sesR, sender, tokens, cfg, &gorm.DB{}, env)
 }
 
 func otpRecord(requestID string, code string, platform auth.OTPPlatform) *auth.UserOTP {
@@ -420,6 +424,60 @@ func TestSendOTPDelegatesToTriggerOTP(t *testing.T) {
 	}
 	if sender.lastDestination != "+917777777777" {
 		t.Fatalf("expected destination +917777777777, got %q", sender.lastDestination)
+	}
+}
+
+func TestTriggerOTP_OTPCodeInResponseForDevelopment(t *testing.T) {
+	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
+	sender := &fakeOTPProvider{}
+	svc := newSvcWithEnv(&fakeUserRepo{records: map[string]*user.User{}}, otpRepo, &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}, sender, &fakeTokenProvider{}, config.AuthConfig{OTPTTL: 5 * time.Minute}, "development")
+
+	resp, err := svc.SendOTP(context.Background(), auth.SendOTPRequest{
+		CountryCode: "+91", PhoneNumber: "9000000001", Platform: "web", DeviceID: "d",
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.OTPCode == nil {
+		t.Fatal("expected OTPCode in response for development env")
+	}
+	if *resp.OTPCode != sender.lastCode {
+		t.Fatalf("expected OTPCode %q to match sent code %q", *resp.OTPCode, sender.lastCode)
+	}
+}
+
+func TestTriggerOTP_OTPCodeInResponseForStaging(t *testing.T) {
+	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
+	sender := &fakeOTPProvider{}
+	svc := newSvcWithEnv(&fakeUserRepo{records: map[string]*user.User{}}, otpRepo, &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}, sender, &fakeTokenProvider{}, config.AuthConfig{OTPTTL: 5 * time.Minute}, "staging")
+
+	resp, err := svc.SendOTP(context.Background(), auth.SendOTPRequest{
+		CountryCode: "+91", PhoneNumber: "9000000002", Platform: "web", DeviceID: "d",
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.OTPCode == nil {
+		t.Fatal("expected OTPCode in response for staging env")
+	}
+	if *resp.OTPCode != sender.lastCode {
+		t.Fatalf("expected OTPCode %q to match sent code %q", *resp.OTPCode, sender.lastCode)
+	}
+}
+
+func TestTriggerOTP_OTPCodeAbsentInResponseForProduction(t *testing.T) {
+	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{}}
+	sender := &fakeOTPProvider{}
+	svc := newSvcWithEnv(&fakeUserRepo{records: map[string]*user.User{}}, otpRepo, &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}, sender, &fakeTokenProvider{}, config.AuthConfig{OTPTTL: 5 * time.Minute}, "production")
+
+	resp, err := svc.SendOTP(context.Background(), auth.SendOTPRequest{
+		CountryCode: "+91", PhoneNumber: "9000000003", Platform: "web", DeviceID: "d",
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.OTPCode != nil {
+		t.Fatalf("expected OTPCode to be absent in production, got %q", *resp.OTPCode)
 	}
 }
 

@@ -1,0 +1,22 @@
+$kind: http-request
+description: Partially update core vehicle fields (registration_number is immutable). Requires showroom membership. Returns 422 if vehicle is sold.
+url: "{{base_url}}/api/v1/vehicle/1"
+method: PATCH
+headers:
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: device-001
+  Authorization: Bearer {{access_token}}
+body:
+  type: text
+  content: |-
+    {
+      "manufacturer": "Honda",
+      "model": "City",
+      "color": "White",
+      "usage_km": 35000,
+      "fuel_type": "petrol",
+      "transmission_type": "manual"
+    }
+examples: ./.resources/Update Vehicle (Core Fields).resources/examples
+order: 4000

@@ -1,0 +1,11 @@
+$kind: http-request
+description: "Auth: Access token, X-Platform, and X-Device-Id headers required. Revokes active sessions for the authenticated user only on the requested platform."
+url: "{{base_url}}/api/v1/auth/logout"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: browser-1
+examples: ./.resources/Logout.resources/examples
+order: 6000

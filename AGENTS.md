@@ -136,9 +136,14 @@ Knowledge base must track:
 
 ## 6) API Documentation Rule
 
-Whenever any API endpoint is created, modified, or removed, update `docs/api/<module>.postman_collection.json`.
+Whenever any API endpoint is created, modified, or removed, update **both** artifacts in the same task:
 
-API documentation must be written as Postman-importable JSON (Collection v2.1) and include:
+- `docs/api/<module>.postman_collection.json` (Postman Collection v2.1 JSON, importable)
+- `postman/collections/DMS API/<module>/` (Postman native YAML workspace collection)
+
+Do not merge API changes with only one side updated. Contract fields must match across both: path, method, auth, headers, request body, success/error examples, and descriptions.
+
+JSON collection entries must include:
 
 - endpoint path
 - method
@@ -148,6 +153,10 @@ API documentation must be written as Postman-importable JSON (Collection v2.1) a
 - error responses
 - example request
 - example response
+
+Postman YAML files must strictly follow the layout and conventions documented in `.cursor/rules/api-documentation.mdc` (request files, example files, folder structure, `{{base_url}}` / `{{access_token}}` variables).
+
+Postman environments: `postman/environments/local.environment.yaml` (local) and `postman/environments/staging.environment.yaml` (staging: `https://stag-api.infiniour.com`).
 
 ## 7) Graphify Rule
 

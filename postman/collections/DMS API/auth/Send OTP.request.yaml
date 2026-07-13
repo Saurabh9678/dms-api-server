@@ -1,0 +1,17 @@
+$kind: http-request
+description: "Auth: Public. Unified OTP trigger endpoint. Sends OTP to the provided phone number. Rate-limited: phone-wide cooldown and daily cap."
+url: "{{base_url}}/api/v1/auth/send-otp"
+method: POST
+headers:
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: browser-1
+body:
+  type: text
+  content: |-
+    {
+      "countryCode": "+91",
+      "phoneNumber": "9999999999"
+    }
+examples: ./.resources/Send OTP.resources/examples
+order: 1000

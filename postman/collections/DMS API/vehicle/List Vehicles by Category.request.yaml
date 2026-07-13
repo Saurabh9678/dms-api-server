@@ -1,0 +1,10 @@
+$kind: http-request
+description: List vehicles grouped by category (cars, bikes, scooties). Supports filtering by status, type, and price range with pagination.
+url: "{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20"
+method: GET
+headers:
+  X-Platform: web
+  X-Device-Id: device-001
+  Authorization: Bearer {{access_token}}
+examples: ./.resources/List Vehicles by Category.resources/examples
+order: 2000

@@ -1,8 +1,0 @@
-$kind: collection
-name: DMS API
-description: 'DMS API collection. Auth endpoints are grouped under the auth folder.'
-variables:
-  - key: base_url
-    value: 'http://localhost:8080'
-  - key: access_token
-    value: ''

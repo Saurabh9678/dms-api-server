@@ -42,9 +42,21 @@ Primary documentation entrypoint. Start here, then open only task-relevant docs.
 
 ## API Collections
 
+Importable JSON (per module):
+
 - `docs/api/auth.postman_collection.json`
 - `docs/api/user.postman_collection.json`
 - `docs/api/vehicle.postman_collection.json`
+- `docs/api/dashboard.postman_collection.json`
+
+Postman workspace YAML collection (cloud-synced; keep in sync with JSON collections above):
+
+- `postman/collections/DMS API/`
+
+Postman environments:
+
+- `postman/environments/local.environment.yaml` (`base_url: http://localhost:8080`)
+- `postman/environments/staging.environment.yaml` (`base_url: https://stag-api.infiniour.com`)
 
 ## Knowledge Base
 

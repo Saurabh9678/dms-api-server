@@ -1,0 +1,40 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle"
+  method: POST
+  headers:
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+    Authorization: Bearer {{access_token}}
+  body:
+    type: text
+    content: |-
+      {
+        "vehicle_type": "car",
+        "manufacturer": "Toyota",
+        "model": "Camry",
+        "variant": "LE",
+        "color": "Black",
+        "year_of_manufacture": 2020,
+        "rto_code": "KA-01",
+        "registration_number": "KA01AB1234",
+        "registration_state": "Karnataka",
+        "usage_km": 50000,
+        "fuel_type": "petrol",
+        "transmission_type": "manual"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  body:
+    type: text
+    content: |-
+      {
+        "success": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "message": "invalid request"
+        }
+      }
+order: 2000

@@ -9,7 +9,7 @@ alwaysApply: true
 - Keep docs synchronized with implementation in the same task.
 - Update the correct documentation scope:
   - Architecture changes -> `docs/architecture/`
-  - API changes -> `docs/api/*.postman_collection.json`
+  - API changes -> `docs/api/*.postman_collection.json` and `postman/collections/DMS API/` (keep both in sync)
   - Module changes -> `docs/modules/` (include endpoint flow details: route entry, middleware chain, handler, service path, and business-logic response branches)
   - Provider changes -> `docs/providers/`
   - Database changes -> `docs/database/` and `docs/database/tables/*.md` (one file per table with columns, types, nullability, defaults, PK/FK, unique/index details)
