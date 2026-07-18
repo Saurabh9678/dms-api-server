@@ -1,8 +1,9 @@
 package dashboard
 
 type GetDashboardRequest struct {
-	Duration   string
-	ShowroomID *uint64
+	Duration      string
+	ShowroomID    *uint64
+	ShowroomRoles map[uint64]string
 }
 
 type SalesSummary struct {
@@ -35,4 +36,6 @@ type DashboardResponse struct {
 	InventorySummary InventorySummary     `json:"inventory_summary"`
 	ExpenseSummary   ExpenseSummary       `json:"expense_summary"`
 	TopVehicleTypes  []VehicleTypeMetrics `json:"top_vehicle_types"`
+	HasVehicles      bool                 `json:"has_vehicles"`
+	HasShowrooms     bool                 `json:"has_showrooms"`
 }

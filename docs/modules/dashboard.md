@@ -13,7 +13,7 @@ Executive overview dashboard for dealership health metrics.
 
 ### `GET /api/v1/dashboard`
 
-Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`, and `X-Device-Id` headers.
+Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`, and `X-Device-Id` headers. The route also loads the authenticated user's showroom roles to derive membership flags.
 
 #### Query Parameters
 
@@ -28,11 +28,14 @@ Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`
 
 #### Handler flow
 
-1. Handler reads `duration` (default `lifetime`) and `showroom_id` (optional) from query params
-2. If `showroom_id` is non-empty but unparseable → 400 `INVALID_REQUEST`
-3. Handler calls `service.GetDashboard(ctx, GetDashboardRequest{Duration, ShowroomID})`
-4. On success → 200 with envelope message `"dashboard data fetched"`
-5. On error → `response.FromError` (400 for invalid duration, 500 for internal errors)
+1. `RequireDeviceContext` validates `X-Platform` and `X-Device-Id`.
+2. `RequireAuth` validates the bearer token and sets user ID in context.
+3. `RequireShowroomRoles` loads all active showroom roles for the authenticated user.
+4. Handler reads `duration` (default `lifetime`) and `showroom_id` (optional) from query params.
+5. If `showroom_id` is non-empty but unparseable → 400 `INVALID_REQUEST`.
+6. Handler calls `service.GetDashboard(ctx, GetDashboardRequest{Duration, ShowroomID, ShowroomRoles})`.
+7. On success → 200 with envelope message `"dashboard data fetched"`.
+8. On error → `response.FromError` (400 for invalid duration, 500 for internal errors).
 
 #### Service flow
 
@@ -46,6 +49,8 @@ Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`
    - `FetchTopVehicleTypes`: per-type vehicles sold and net profit (duration-filtered by `sale_date`)
 5. Computes `average_profit_per_sale = net_profit / vehicles_sold` (0 if no sales)
 6. Computes `average_expense_per_vehicle = total_expenses / inventory_count` (0 if no inventory)
+7. Sets `has_vehicles = inventory_count > 0`.
+8. Sets `has_showrooms = true` only when the authenticated user is an active member of at least one showroom.
 
 #### Business rules
 
@@ -90,7 +95,9 @@ Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`
     "top_vehicle_types": [
       { "vehicle_type": "car",   "vehicles_sold": 8, "net_profit": 500000 },
       { "vehicle_type": "bike",  "vehicles_sold": 5, "net_profit": 300000 }
-    ]
+    ],
+    "has_vehicles": true,
+    "has_showrooms": true
   }
 }
 ```

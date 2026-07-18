@@ -16,6 +16,7 @@ type ShowroomRole struct {
 
 type GetProfileResponse struct {
 	Name          *string        `json:"name"`
+	CountryCode   *string        `json:"country_code"`
 	PhoneNumber   *string        `json:"phone_number"`
 	ShowroomRoles []ShowroomRole `json:"showroom_roles"`
 }

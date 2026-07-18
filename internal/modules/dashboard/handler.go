@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	apperrors "infiour.local/dms-api-server/pkg/errors"
+	"infiour.local/dms-api-server/pkg/middleware"
 	"infiour.local/dms-api-server/pkg/response"
 )
 
@@ -30,13 +31,29 @@ func (h *Handler) GetDashboard(c *gin.Context) {
 		showroomID = &id
 	}
 
+	showroomRoles, ok := dashboardShowroomRoles(c)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+
 	resp, err := h.service.GetDashboard(c.Request.Context(), GetDashboardRequest{
-		Duration:   duration,
-		ShowroomID: showroomID,
+		Duration:      duration,
+		ShowroomID:    showroomID,
+		ShowroomRoles: showroomRoles,
 	})
 	if err != nil {
 		response.FromError(c, err)
 		return
 	}
 	response.OK(c, "dashboard data fetched", resp)
+}
+
+func dashboardShowroomRoles(c *gin.Context) (map[uint64]string, bool) {
+	val, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		return nil, true
+	}
+	roles, ok := val.(map[uint64]string)
+	return roles, ok
 }

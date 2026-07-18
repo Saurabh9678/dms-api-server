@@ -143,7 +143,7 @@ func (r *Repository) FetchExpenseSummary(ctx context.Context, params QueryParams
 func (r *Repository) FetchTopVehicleTypes(ctx context.Context, params QueryParams) ([]VehicleTypeQueryResult, error) {
 	q := `
 		SELECT
-			v.vehicle_type,
+			v.type AS vehicle_type,
 			COUNT(cvs.id) AS vehicles_sold,
 			COALESCE(SUM(cvs.sale_price - COALESCE(vp.buying_price, 0) - COALESCE(exp_totals.total_exp, 0)), 0) AS net_profit
 		FROM customer_vehicle_sales cvs
@@ -167,7 +167,7 @@ func (r *Repository) FetchTopVehicleTypes(ctx context.Context, params QueryParam
 		args = append(args, *params.ShowroomID)
 	}
 
-	q += ` GROUP BY v.vehicle_type ORDER BY vehicles_sold DESC`
+	q += ` GROUP BY v.type ORDER BY vehicles_sold DESC`
 
 	var results []VehicleTypeQueryResult
 	if err := r.db.WithContext(ctx).Raw(q, args...).Scan(&results).Error; err != nil {

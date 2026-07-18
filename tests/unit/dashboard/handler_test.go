@@ -10,14 +10,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"infiour.local/dms-api-server/internal/modules/dashboard"
+	"infiour.local/dms-api-server/pkg/middleware"
 )
 
 type fakeDashboardService struct {
-	resp *dashboard.DashboardResponse
-	err  error
+	resp        *dashboard.DashboardResponse
+	err         error
+	capturedReq dashboard.GetDashboardRequest
 }
 
-func (f *fakeDashboardService) GetDashboard(_ context.Context, _ dashboard.GetDashboardRequest) (*dashboard.DashboardResponse, error) {
+func (f *fakeDashboardService) GetDashboard(_ context.Context, req dashboard.GetDashboardRequest) (*dashboard.DashboardResponse, error) {
+	f.capturedReq = req
 	if f.err != nil {
 		return nil, f.err
 	}
@@ -61,6 +64,27 @@ func TestGetDashboardSuccess(t *testing.T) {
 	}
 	if !strings.Contains(resp.Body.String(), `"top_vehicle_types"`) {
 		t.Fatalf("expected top_vehicle_types in response, got %s", resp.Body.String())
+	}
+}
+
+func TestGetDashboardPassesShowroomRoles(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	svc := &fakeDashboardService{}
+	engine := gin.New()
+	engine.Use(func(c *gin.Context) {
+		c.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{7: "manager"})
+	})
+	dashboard.RegisterRoutes(engine.Group("/api/v1"), dashboard.NewHandler(svc))
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/dashboard", nil)
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", resp.Code, resp.Body.String())
+	}
+	if svc.capturedReq.ShowroomRoles[7] != "manager" {
+		t.Fatalf("expected showroom role to be passed to service, got %#v", svc.capturedReq.ShowroomRoles)
 	}
 }
 

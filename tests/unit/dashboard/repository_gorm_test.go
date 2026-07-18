@@ -118,7 +118,7 @@ func TestFetchTopVehicleTypesSuccess(t *testing.T) {
 	gormDB, mock := newDashboardMockDB(t)
 	repo := dashboard.NewRepository(gormDB)
 
-	mock.ExpectQuery(`vehicle_type`).
+	mock.ExpectQuery(`v\.type AS vehicle_type`).
 		WillReturnRows(sqlmock.NewRows([]string{"vehicle_type", "vehicles_sold", "net_profit"}).
 			AddRow("car", int64(3), float64(150000)))
 
@@ -135,7 +135,7 @@ func TestFetchTopVehicleTypesError(t *testing.T) {
 	gormDB, mock := newDashboardMockDB(t)
 	repo := dashboard.NewRepository(gormDB)
 
-	mock.ExpectQuery(`vehicle_type`).WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectQuery(`v\.type AS vehicle_type`).WillReturnError(gorm.ErrInvalidData)
 
 	_, err := repo.FetchTopVehicleTypes(context.Background(), dashboard.QueryParams{})
 	if err == nil {
@@ -205,7 +205,7 @@ func TestFetchTopVehicleTypesWithFilters(t *testing.T) {
 
 	now := time.Now()
 	showroomID := uint64(5)
-	mock.ExpectQuery(`vehicle_type`).
+	mock.ExpectQuery(`v\.type AS vehicle_type`).
 		WillReturnRows(sqlmock.NewRows([]string{"vehicle_type", "vehicles_sold", "net_profit"}).
 			AddRow("bike", int64(1), float64(50000)))
 

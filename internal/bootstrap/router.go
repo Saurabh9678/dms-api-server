@@ -45,7 +45,9 @@ func newRouter(cfg *config.Config, log *slog.Logger, deps *Dependencies, sqlDB *
 	protected.Use(middleware.RequireAuth(deps.TokenProvider))
 	user.RegisterRoutes(protected, deps.UserHandler)
 	vehicle.RegisterRoutes(protected, deps.VehicleHandler, deps.ShowroomRolesMiddleware)
-	dashboard.RegisterRoutes(protected, deps.DashboardHandler)
+	dashboardGroup := protected.Group("")
+	dashboardGroup.Use(deps.ShowroomRolesMiddleware)
+	dashboard.RegisterRoutes(dashboardGroup, deps.DashboardHandler)
 	showroom.RegisterRoutes(protected, deps.ShowroomHandler, deps.ShowroomRolesMiddleware)
 
 	return engine
