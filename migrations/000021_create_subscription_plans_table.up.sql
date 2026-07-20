@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS subscription_plans (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    is_free BOOLEAN NOT NULL DEFAULT FALSE,
+    is_global BOOLEAN NOT NULL DEFAULT TRUE,
+    customer_id UUID,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

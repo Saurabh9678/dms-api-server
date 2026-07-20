@@ -17,6 +17,7 @@ This file is the living project memory for architecture, conventions, and implem
 ## Module Responsibilities
 
 - Summarize each module's ownership and boundaries.
+- **Subscription module** (`internal/modules/subscription/`): owns subscription catalog (plans, features, pricing, plan-feature mappings) and dealer subscription records. Repository-only for now — no HTTP endpoints. `dealer_id` maps to `users.id` (`BIGINT`). See `docs/modules/subscription.md`.
 
 ## Provider Responsibilities
 

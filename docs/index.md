@@ -16,6 +16,7 @@ Primary documentation entrypoint. Start here, then open only task-relevant docs.
 - `docs/modules/showroom.md`
 - `docs/modules/vehicle.md`
 - `docs/modules/customer.md`
+- `docs/modules/subscription.md`
 
 ## Database
 
