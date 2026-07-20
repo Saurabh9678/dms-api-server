@@ -13,11 +13,14 @@ This file is the living project memory for architecture, conventions, and implem
 ## Architecture Decisions
 
 - Record approved architecture decisions and rationale.
+- **CMS portal boundary**: The CMS portal lives in top-level `CMS-portal/`, is ignored by the Go repo, and is an independent Next.js app that connects directly to the shared Postgres database. Backend app auth endpoints remain unchanged.
+- **CMS moderator identity**: CMS moderators are standalone records in `moderators`; they are not linked to app `users`. Login uses an 8-character alphanumeric `login_id` plus TOTP from an authenticator app.
 
 ## Module Responsibilities
 
 - Summarize each module's ownership and boundaries.
 - **Subscription module** (`internal/modules/subscription/`): owns subscription catalog (plans, features, pricing, plan-feature mappings) and dealer subscription records. Repository-only for now — no HTTP endpoints. `dealer_id` maps to `users.id` (`BIGINT`). See `docs/modules/subscription.md`.
+- **CMS portal** (`CMS-portal/`, ignored): owns moderator login UI, direct Prisma DB access, TOTP verification, HTTP-only CMS sessions, and future app-management screens.
 
 ## Provider Responsibilities
 
@@ -32,6 +35,7 @@ This file is the living project memory for architecture, conventions, and implem
 - Track naming, folder placement, and implementation conventions.
 - Local development environment variables are documented in `.env.example`.
 - Database connection should be configured through `DB_URL`.
+- CMS portal database access uses `DATABASE_URL` inside `CMS-portal/.env`; TOTP/session secrets use `CMS_TOTP_ENCRYPTION_KEY` and `CMS_SESSION_SECRET`.
 - Every `/api/v1/*` endpoint requires `X-Platform` and non-empty `X-Device-Id` headers.
 - Module docs must capture endpoint flow end-to-end: entry route, middleware behavior, handler mapping, service business logic, and response branches.
 - Schema docs are maintained as one file per table under `docs/database/tables/` and include columns, types, nullability, defaults, PK/FK, and index/unique constraints.
@@ -45,6 +49,13 @@ This file is the living project memory for architecture, conventions, and implem
 - Capture non-obvious design details needed for future work.
 - Local Postgres Docker setup is defined in `docker-compose.yml` and uses database `dms` on `localhost:5432`.
 - Local DB start/stop/log commands are exposed via `make docker-postgres-up`, `make docker-postgres-down`, and `make docker-postgres-logs`.
+- Migration `000026`: replaces the old user-linked `moderators` table with CMS-owned `moderator_roles` and standalone `moderators`. Default roles are `super_admin` and `admin`. `moderators.login_id` must be exactly 8 alphanumeric characters.
+- Migration `000027`: makes `totp_secret_encrypted` nullable until first-login setup and adds `totp_enabled_at`, which is set only after the first authenticator code is verified.
+- Migration `000028`: adds nullable `moderators.profile_photo_url` for CMS header/profile avatar display. CMS profile editing stores uploaded moderator images locally under `CMS-portal/public/uploads/moderators/` and saves the public `/uploads/moderators/...` path. All moderators can edit their own name, email, and profile photo; email is format-validated and unique among active/non-deleted moderators. Only `super_admin` can edit their own unique 8-character login ID.
+- CMS dashboard metrics are rendered in `CMS-portal/src/app/(portal)/dashboard/page.tsx` and read through `CMS-portal/src/lib/dashboard-metrics.ts` using Prisma raw SQL against the shared DB. Counts: non-deleted `users` (moderators excluded because they live in `moderators`), non-deleted `showrooms`, non-deleted `vehicles`, and distinct app users with `user_sessions.last_used_at` in the last 24 hours / last 7 days.
+- CMS users/showrooms listings live at `/users` and `/showrooms` in `CMS-portal/`, with left-nav links and dashboard metric-card links. Both pages are protected by `requireModerator()`, use server-side `q` name search and paginated raw SQL helpers (`CMS-portal/src/lib/users.ts`, `CMS-portal/src/lib/showrooms.ts`), and only read non-deleted platform records. Add buttons are visible but disabled/coming soon; no direct create flows are implemented for these CMS pages yet.
+- CMS first super admin workflow: migration `000027` seeds one active `super_admin` moderator with a generated login ID and no TOTP secret. Retrieve it with `SELECT m.login_id FROM moderators m JOIN moderator_roles r ON r.id = m.role_id WHERE r.code = 'super_admin' AND m.deleted_at IS NULL ORDER BY m.created_at LIMIT 1;`. The first CMS login asks for login ID, shows a QR/manual setup key when TOTP is not enabled, then stores/enables TOTP after code verification.
+- CMS moderator bootstrap script: after applying migrations and configuring `CMS-portal/.env`, `npm run moderator:create -- --name "..." --role admin` from `CMS-portal/` creates additional moderator records without TOTP; their QR setup is also completed on first browser login.
 - Auth trigger endpoints (`/auth/send-otp`, `/auth/register`, `/auth/login`) all share the same `triggerOTP` flow. `/auth/send-otp` is the unified canonical endpoint; `/auth/register` and `/auth/login` are deprecated functional aliases. All return `requestId` in payload.
 - `triggerOTP` does NOT touch the `users` table. Users are created only in `VerifyOTP` after successful OTP verification.
 - OTP rate limiting is enforced by `triggerOTP` before any user lookup: phone-wide cooldown (default 60s, `AUTH_OTP_COOLDOWN_SECONDS`) and phone-wide daily cap (default 10, `AUTH_OTP_MAX_DAILY_SENDS`). Implemented with `FindLatestByPhone` (cooldown) and `CountRecentByPhone` (daily cap) on the `user_otps` table. No Redis required.

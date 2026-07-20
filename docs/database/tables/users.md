@@ -23,7 +23,6 @@
 
 ## Foreign Keys Referencing This Table
 
-- `moderators.user_id -> users.id`.
 - `user_showroom_relations.user_id -> users.id`.
 - `vehicle_images.uploaded_by -> users.id`.
 - `vehicle_documents.uploaded_by -> users.id`.

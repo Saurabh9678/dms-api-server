@@ -12,6 +12,7 @@
 bin/
 dist/
 build/
+CMS-portal/
 
 # Go workspace/cache
 .gomodcache/

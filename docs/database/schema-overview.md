@@ -8,7 +8,8 @@
 ## Module Ownership
 
 - `auth`: `user_otps`, `user_sessions`
-- `user`: `users`, `user_roles`, `moderators`, `user_showroom_relations`
+- `user`: `users`, `user_roles`, `user_showroom_relations`
+- `cms`: `moderators`, `moderator_roles`
 - `showroom`: `showrooms`, `vehicle_showroom_relations`
 - `vehicle`: `vehicles`, `vehicle_images`, `vehicle_documents`, `vehicle_pricing`, `vehicle_statuses`, `vehicle_expenses`
 - `customer`: `customers`, `customer_vehicle_sales`
@@ -23,6 +24,7 @@
 - `docs/database/tables/showrooms.md`
 - `docs/database/tables/user_roles.md`
 - `docs/database/tables/moderators.md`
+- `docs/database/tables/moderator_roles.md`
 - `docs/database/tables/user_showroom_relations.md`
 - `docs/database/tables/vehicles.md`
 - `docs/database/tables/vehicle_showroom_relations.md`
