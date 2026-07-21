@@ -130,7 +130,7 @@
 3. `service.ListMembers`:
    a. Checks caller's role (403 `FORBIDDEN` if not owner or manager).
    b. Calls `repo.ListMembers`: JOIN `user_showroom_relations` + `users` + `user_roles`; returns `MemberRecord` slice and total count.
-   c. Maps results to `MemberItem` (null for empty name/phone_number).
+   c. Maps results to `MemberItem` (null for empty name, country_code, or phone_number). `phone_number` is local-only and does not include `country_code`.
 4. Returns 200 with `ListMembersResponse` (members array, total, page, limit).
 
 **Response branches:**

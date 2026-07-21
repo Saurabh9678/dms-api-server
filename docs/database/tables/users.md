@@ -19,7 +19,7 @@
 ## Keys And Constraints
 
 - Primary key: `id`.
-- Unique index: `idx_users_country_code_phone_number` on `(country_code, phone_number)` (added in migration `000018`). Enforces one account per phone number across country codes.
+- Unique partial index: `idx_users_country_code_phone_number` on `(country_code, phone_number) WHERE deleted_at IS NULL` (created globally in migration `000018`, changed to active-only in migration `000029`). Enforces one active account per phone number across country codes while allowing deleted users' phone numbers to be reused.
 
 ## Foreign Keys Referencing This Table
 

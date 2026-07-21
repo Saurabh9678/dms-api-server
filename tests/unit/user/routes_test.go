@@ -5,6 +5,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +21,17 @@ func (f *fakeRoutesService) UpdateProfile(_ context.Context, _ uint64, _ user.Up
 
 func (f *fakeRoutesService) GetProfile(_ context.Context, _ uint64) (*user.GetProfileResponse, error) {
 	name := "Alice"
-	phone := "+919999999999"
-	return &user.GetProfileResponse{Name: &name, PhoneNumber: &phone, ShowroomRoles: []user.ShowroomRole{}}, nil
+	countryCode := "+91"
+	phone := "9999999999"
+	return &user.GetProfileResponse{
+		Name:          &name,
+		CountryCode:   &countryCode,
+		PhoneNumber:   &phone,
+		ShowroomRoles: []user.ShowroomRole{},
+		RequiredName:  false,
+		HasShowrooms:  true,
+		HasVehicles:   false,
+	}, nil
 }
 
 func TestRegisterRoutesSuccessfulPatch(t *testing.T) {
@@ -94,5 +104,14 @@ func TestRegisterRoutesSuccessfulGet(t *testing.T) {
 
 	if resp.Code != http.StatusOK {
 		t.Fatalf("expected 200, got %d: %s", resp.Code, resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"has_showrooms":true`) {
+		t.Fatalf("expected has_showrooms in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"country_code":"+91"`) {
+		t.Fatalf("expected separate country_code in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"phone_number":"9999999999"`) {
+		t.Fatalf("expected local phone_number in response, got %s", resp.Body.String())
 	}
 }

@@ -178,14 +178,19 @@ func TestGetProfileHandlerSuccess(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
 	name := "Alice"
-	phone := "+919999999999"
+	countryCode := "+91"
+	phone := "9999999999"
 	service := &fakeHandlerUpdateService{
 		profileResult: &user.GetProfileResponse{
 			Name:        &name,
+			CountryCode: &countryCode,
 			PhoneNumber: &phone,
 			ShowroomRoles: []user.ShowroomRole{
 				{ShowroomID: 1, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
 			},
+			RequiredName: false,
+			HasShowrooms: true,
+			HasVehicles:  true,
 		},
 	}
 	h := user.NewHandler(service)
@@ -207,8 +212,23 @@ func TestGetProfileHandlerSuccess(t *testing.T) {
 	if !strings.Contains(resp.Body.String(), `"Alice"`) {
 		t.Fatalf("expected name in response, got %s", resp.Body.String())
 	}
+	if !strings.Contains(resp.Body.String(), `"country_code":"+91"`) {
+		t.Fatalf("expected separate country_code in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"phone_number":"9999999999"`) {
+		t.Fatalf("expected local phone_number in response, got %s", resp.Body.String())
+	}
 	if !strings.Contains(resp.Body.String(), `"showroom_roles"`) {
 		t.Fatalf("expected showroom_roles in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"required_name":false`) {
+		t.Fatalf("expected required_name in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"has_showrooms":true`) {
+		t.Fatalf("expected has_showrooms in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"has_vehicles":true`) {
+		t.Fatalf("expected has_vehicles in response, got %s", resp.Body.String())
 	}
 }
 

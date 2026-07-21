@@ -546,8 +546,10 @@ func TestListMembers_WithNameAndPhone_Success(t *testing.T) {
 	require.Len(t, resp.Members, 1)
 	assert.NotNil(t, resp.Members[0].Name)
 	assert.Equal(t, "Alice", *resp.Members[0].Name)
+	assert.NotNil(t, resp.Members[0].CountryCode)
+	assert.Equal(t, "+91", *resp.Members[0].CountryCode)
 	assert.NotNil(t, resp.Members[0].PhoneNumber)
-	assert.Equal(t, "+919999999999", *resp.Members[0].PhoneNumber)
+	assert.Equal(t, "9999999999", *resp.Members[0].PhoneNumber)
 }
 
 func TestListMembers_EmptyNameAndPhone_NilFields(t *testing.T) {
@@ -564,6 +566,7 @@ func TestListMembers_EmptyNameAndPhone_NilFields(t *testing.T) {
 	assert.NoError(t, err)
 	require.Len(t, resp.Members, 1)
 	assert.Nil(t, resp.Members[0].Name)
+	assert.Nil(t, resp.Members[0].CountryCode)
 	assert.Nil(t, resp.Members[0].PhoneNumber)
 }
 

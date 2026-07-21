@@ -17,6 +17,7 @@ type Service interface {
 type profileRepo interface {
 	FindByID(ctx context.Context, userID uint64) (*User, error)
 	FindShowroomRolesByUserID(ctx context.Context, userID uint64) ([]ShowroomRole, error)
+	LoadOnboardingFlags(ctx context.Context, userID uint64) (hasShowrooms bool, hasVehicles bool, err error)
 	UpdateName(ctx context.Context, userID uint64, name string) error
 }
 
@@ -59,6 +60,11 @@ func (s *service) GetProfile(ctx context.Context, userID uint64) (*GetProfileRes
 		return nil, err
 	}
 
+	hasShowrooms, hasVehicles, err := s.repo.LoadOnboardingFlags(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
 	var name *string
 	if u.Name != "" {
 		n := u.Name
@@ -68,7 +74,7 @@ func (s *service) GetProfile(ctx context.Context, userID uint64) (*GetProfileRes
 	var phoneNumber *string
 	var countryCode *string
 	if u.CountryCode != "" || u.PhoneNumber != "" {
-		phone := u.CountryCode + u.PhoneNumber
+		phone := u.PhoneNumber
 		phoneNumber = &phone
 		code := u.CountryCode
 		countryCode = &code
@@ -79,5 +85,8 @@ func (s *service) GetProfile(ctx context.Context, userID uint64) (*GetProfileRes
 		PhoneNumber:   phoneNumber,
 		CountryCode:   countryCode,
 		ShowroomRoles: showroomRoles,
+		RequiredName:  u.Name == "",
+		HasShowrooms:  hasShowrooms,
+		HasVehicles:   hasVehicles,
 	}, nil
 }

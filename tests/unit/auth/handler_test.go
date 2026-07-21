@@ -29,9 +29,6 @@ func (f *fakeHandlerAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRe
 		RefreshToken: "r",
 		ExpiresIn:    900,
 		TokenType:    "Bearer",
-		RequiredName: false,
-		HasShowrooms: true,
-		HasVehicles:  true,
 	}, nil
 }
 
@@ -95,11 +92,8 @@ func TestVerifyOTPSuccess(t *testing.T) {
 	if !strings.Contains(resp.Body.String(), `"success":true`) {
 		t.Fatalf("expected success response envelope, got %s", resp.Body.String())
 	}
-	if !strings.Contains(resp.Body.String(), `"has_showrooms":true`) {
-		t.Fatalf("expected has_showrooms in response, got %s", resp.Body.String())
-	}
-	if !strings.Contains(resp.Body.String(), `"has_vehicles":true`) {
-		t.Fatalf("expected has_vehicles in response, got %s", resp.Body.String())
+	if strings.Contains(resp.Body.String(), `"has_showrooms"`) || strings.Contains(resp.Body.String(), `"has_vehicles"`) || strings.Contains(resp.Body.String(), `"required_name"`) {
+		t.Fatalf("expected verify response to omit onboarding flags, got %s", resp.Body.String())
 	}
 }
 

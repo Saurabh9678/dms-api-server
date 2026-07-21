@@ -17,11 +17,15 @@ response:
         "message": "profile fetched",
         "data": {
           "name": "John Doe",
-          "phone_number": "+919999999999",
+          "country_code": "+91",
+          "phone_number": "9999999999",
           "showroom_roles": [
             {"showroom_id": 1, "showroom_name": "Showroom A", "role": "owner"},
             {"showroom_id": 2, "showroom_name": "Showroom B", "role": "manager"}
-          ]
+          ],
+          "required_name": false,
+          "has_showrooms": true,
+          "has_vehicles": true
         }
       }
 order: 1000

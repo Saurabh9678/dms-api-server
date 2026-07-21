@@ -376,14 +376,14 @@
                 }
               ]
             },
-            "description": "Protected. Lists all members of the showroom. Caller must be the showroom owner or manager. Returns paginated list with user_id, name (null if empty), phone_number (null if empty), and role. Defaults: page=1, limit=20, max limit=100."
+            "description": "Protected. Lists all members of the showroom. Caller must be the showroom owner or manager. Returns paginated list with user_id, name (null if empty), country_code (null if empty), local phone_number (null if empty), and role. Defaults: page=1, limit=20, max limit=100."
           },
           "response": [
             {
               "name": "OK",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"members retrieved\",\n  \"data\": {\n    \"members\": [\n      {\n        \"user_id\": 42,\n        \"name\": \"John Doe\",\n        \"phone_number\": \"+91-9876543210\",\n        \"role\": \"employee\"\n      },\n      {\n        \"user_id\": 7,\n        \"name\": null,\n        \"phone_number\": null,\n        \"role\": \"manager\"\n      }\n    ],\n    \"total\": 2,\n    \"page\": 1,\n    \"limit\": 20\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"members retrieved\",\n  \"data\": {\n    \"members\": [\n      {\n        \"user_id\": 42,\n        \"name\": \"John Doe\",\n        \"country_code\": \"+91\",\n        \"phone_number\": \"9876543210\",\n        \"role\": \"employee\"\n      },\n      {\n        \"user_id\": 7,\n        \"name\": null,\n        \"country_code\": null,\n        \"phone_number\": null,\n        \"role\": \"manager\"\n      }\n    ],\n    \"total\": 2,\n    \"page\": 1,\n    \"limit\": 20\n  }\n}"
             },
             {
               "name": "Unauthorized",

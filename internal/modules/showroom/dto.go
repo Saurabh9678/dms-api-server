@@ -29,6 +29,7 @@ type AddMemberResponse struct {
 type MemberItem struct {
 	UserID      uint64  `json:"user_id"`
 	Name        *string `json:"name"`
+	CountryCode *string `json:"country_code"`
 	PhoneNumber *string `json:"phone_number"`
 	Role        string  `json:"role"`
 }

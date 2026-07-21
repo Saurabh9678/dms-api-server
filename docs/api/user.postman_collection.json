@@ -109,20 +109,20 @@
             "me"
           ]
         },
-        "description": "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, phone number, and all showroom-role pairs. Fields are nullable."
+        "description": "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, separate country code and local phone number, showroom-role pairs, and onboarding flags. Fields are nullable where documented."
       },
       "response": [
         {
           "name": "Success",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": \"John Doe\",\n    \"phone_number\": \"+919999999999\",\n    \"showroom_roles\": [\n      {\"showroom_id\": 1, \"showroom_name\": \"Showroom A\", \"role\": \"owner\"},\n      {\"showroom_id\": 2, \"showroom_name\": \"Showroom B\", \"role\": \"manager\"}\n    ]\n  }\n}"
+          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": \"John Doe\",\n    \"country_code\": \"+91\",\n    \"phone_number\": \"9999999999\",\n    \"showroom_roles\": [\n      {\"showroom_id\": 1, \"showroom_name\": \"Showroom A\", \"role\": \"owner\"},\n      {\"showroom_id\": 2, \"showroom_name\": \"Showroom B\", \"role\": \"manager\"}\n    ],\n    \"required_name\": false,\n    \"has_showrooms\": true,\n    \"has_vehicles\": true\n  }\n}"
         },
         {
           "name": "Success (no name set)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": null,\n    \"phone_number\": \"+919999999999\",\n    \"showroom_roles\": []\n  }\n}"
+          "body": "{\n  \"success\": true,\n  \"message\": \"profile fetched\",\n  \"data\": {\n    \"name\": null,\n    \"country_code\": \"+91\",\n    \"phone_number\": \"9999999999\",\n    \"showroom_roles\": [],\n    \"required_name\": true,\n    \"has_showrooms\": false,\n    \"has_vehicles\": false\n  }\n}"
         },
         {
           "name": "Invalid Device Context",

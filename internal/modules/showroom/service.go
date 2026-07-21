@@ -233,9 +233,13 @@ func (s *service) ListMembers(ctx context.Context, callerRoles map[uint64]string
 			name := r.Name
 			item.Name = &name
 		}
-		if r.CountryCode != "" || r.PhoneNumber != "" {
-			combined := r.CountryCode + r.PhoneNumber
-			item.PhoneNumber = &combined
+		if r.CountryCode != "" {
+			countryCode := r.CountryCode
+			item.CountryCode = &countryCode
+		}
+		if r.PhoneNumber != "" {
+			phoneNumber := r.PhoneNumber
+			item.PhoneNumber = &phoneNumber
 		}
 		members = append(members, item)
 	}

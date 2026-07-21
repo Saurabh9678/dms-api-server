@@ -23,9 +23,6 @@ type fakeUserRepo struct {
 	nextID        uint64
 	findPhoneErr  error // non-nil: always return this error on FindByPhone
 	createUserErr error // non-nil: return this error from Create
-	hasShowrooms  bool
-	hasVehicles   bool
-	onboardingErr error
 
 	// findPhoneNotFoundFirstTime: if true, the first FindByPhone call returns
 	// ErrUserNotFound regardless of records content. Used to simulate concurrent
@@ -35,7 +32,6 @@ type fakeUserRepo struct {
 	// findPhoneErrOnSecondCall: if non-nil, returned as the error on the 2nd FindByPhone call.
 	// Used to cover the re-fetch-after-ErrDuplicatedKey error path.
 	findPhoneErrOnSecondCall error
-	onboardingCallCount      int
 }
 
 func (f *fakeUserRepo) FindByPhone(_ context.Context, countryCode string, phoneNumber string) (*user.User, error) {
@@ -67,14 +63,6 @@ func (f *fakeUserRepo) Create(_ context.Context, entity *user.User) (*user.User,
 	key := cp.CountryCode + "|" + cp.PhoneNumber
 	f.records[key] = &cp
 	return &cp, nil
-}
-
-func (f *fakeUserRepo) LoadOnboardingFlags(_ context.Context, _ uint64) (bool, bool, error) {
-	f.onboardingCallCount++
-	if f.onboardingErr != nil {
-		return false, false, f.onboardingErr
-	}
-	return f.hasShowrooms, f.hasVehicles, nil
 }
 
 // ---------------------------------------------------------------------------
@@ -827,9 +815,7 @@ func TestVerifyOTP_ExistingUser(t *testing.T) {
 	// Phone already exists in users table → user found, not created
 	u := &user.User{ID: 1, CountryCode: "+91", PhoneNumber: "9999999999", Name: "Alice"}
 	userRepo := &fakeUserRepo{
-		records:      map[string]*user.User{"+91|9999999999": u},
-		hasShowrooms: true,
-		hasVehicles:  true,
+		records: map[string]*user.User{"+91|9999999999": u},
 	}
 	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{"Exist001": otpRecord("Exist001", "123456", auth.OTPPlatformWeb)}}
 	sesRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
@@ -841,20 +827,11 @@ func TestVerifyOTP_ExistingUser(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
-	if resp.RequiredName {
-		t.Fatal("expected required_name false for user with name set")
-	}
-	if !resp.HasShowrooms {
-		t.Fatal("expected has_showrooms true for user with showroom membership")
-	}
-	if !resp.HasVehicles {
-		t.Fatal("expected has_vehicles true for user with showroom vehicles")
+	if resp.AccessToken == "" || resp.RefreshToken == "" {
+		t.Fatal("expected token pair")
 	}
 	if userRepo.findPhoneCallCount != 1 {
 		t.Fatalf("expected 1 FindByPhone call, got %d", userRepo.findPhoneCallCount)
-	}
-	if userRepo.onboardingCallCount != 1 {
-		t.Fatalf("expected 1 LoadOnboardingFlags call, got %d", userRepo.onboardingCallCount)
 	}
 }
 
@@ -871,14 +848,8 @@ func TestVerifyOTP_NewUserCreated(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
-	if !resp.RequiredName {
-		t.Fatal("expected required_name true for newly created user (no name)")
-	}
-	if resp.HasShowrooms {
-		t.Fatal("expected has_showrooms false for newly created user")
-	}
-	if resp.HasVehicles {
-		t.Fatal("expected has_vehicles false for newly created user")
+	if resp.AccessToken == "" || resp.RefreshToken == "" {
+		t.Fatal("expected token pair")
 	}
 	if userRepo.nextID != 1 {
 		t.Fatalf("expected user to have been created, nextID=%d", userRepo.nextID)
@@ -961,66 +932,6 @@ func TestVerifyOTP_RaceRefetchError(t *testing.T) {
 	}
 	if userRepo.findPhoneCallCount != 2 {
 		t.Fatalf("expected 2 FindByPhone calls, got %d", userRepo.findPhoneCallCount)
-	}
-}
-
-func TestVerifyOTP_RequiredNameTrueForNewUser(t *testing.T) {
-	userRepo := &fakeUserRepo{records: map[string]*user.User{}}
-	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{"NewName1": otpRecord("NewName1", "555666", auth.OTPPlatformWeb)}}
-	svc := newSvc(userRepo, otpRepo, &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{})
-
-	resp, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
-		RequestID: "NewName1", OTPCode: "555666", Platform: "web", DeviceID: "d",
-	})
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-	if !resp.RequiredName {
-		t.Fatal("expected required_name true for new user (no name)")
-	}
-}
-
-func TestVerifyOTP_RequiredNameFalseWhenNameSet(t *testing.T) {
-	u := &user.User{ID: 2, CountryCode: "+91", PhoneNumber: "8888888888", Name: "Bob"}
-	userRepo := &fakeUserRepo{records: map[string]*user.User{"+91|8888888888": u}}
-	rec := &auth.UserOTP{
-		ID: 100, CountryCode: "+91", PhoneNumber: "8888888888",
-		RequestID: "Named001", OTPCode: "222222", Platform: auth.OTPPlatformWeb,
-		OTPFor: auth.OTPForMobile, ExpiresAt: time.Now().Add(2 * time.Minute),
-	}
-	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{"Named001": rec}}
-	svc := newSvc(userRepo, otpRepo, &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{})
-
-	resp, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
-		RequestID: "Named001", OTPCode: "222222", Platform: "web", DeviceID: "d",
-	})
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-	if resp.RequiredName {
-		t.Fatal("expected required_name false for user with name set")
-	}
-}
-
-func TestVerifyOTP_OnboardingFlagsError(t *testing.T) {
-	onboardingErr := errors.New("onboarding lookup failed")
-	u := &user.User{ID: 3, CountryCode: "+91", PhoneNumber: "9999999999", Name: "Alice"}
-	userRepo := &fakeUserRepo{
-		records:       map[string]*user.User{"+91|9999999999": u},
-		onboardingErr: onboardingErr,
-	}
-	otpRepo := &fakeOTPRepo{activeByRequestID: map[string]*auth.UserOTP{"FlagErr1": otpRecord("FlagErr1", "123456", auth.OTPPlatformWeb)}}
-	sesRepo := &fakeSessionRepo{sessionByHash: map[string]*auth.UserSession{}}
-	svc := newSvc(userRepo, otpRepo, sesRepo, &fakeOTPProvider{}, &fakeTokenProvider{}, config.AuthConfig{})
-
-	_, err := svc.VerifyOTP(context.Background(), auth.VerifyOTPRequest{
-		RequestID: "FlagErr1", OTPCode: "123456", Platform: "web", DeviceID: "d",
-	})
-	if !errors.Is(err, onboardingErr) {
-		t.Fatalf("expected onboardingErr, got %v", err)
-	}
-	if userRepo.onboardingCallCount != 1 {
-		t.Fatalf("expected 1 LoadOnboardingFlags call, got %d", userRepo.onboardingCallCount)
 	}
 }
 
@@ -1142,9 +1053,6 @@ func TestRefreshAndLogout(t *testing.T) {
 	}
 	if verifyResp.RefreshToken == "" {
 		t.Fatal("expected refresh token")
-	}
-	if verifyResp.RequiredName {
-		t.Fatal("expected required_name false for user with name set")
 	}
 
 	refreshResp, err := svc.RefreshToken(context.Background(), auth.RefreshTokenRequest{RefreshToken: "refresh-token"})

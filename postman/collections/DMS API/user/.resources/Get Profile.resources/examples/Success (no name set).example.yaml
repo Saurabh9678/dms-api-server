@@ -17,8 +17,12 @@ response:
         "message": "profile fetched",
         "data": {
           "name": null,
-          "phone_number": "+919999999999",
-          "showroom_roles": []
+          "country_code": "+91",
+          "phone_number": "9999999999",
+          "showroom_roles": [],
+          "required_name": true,
+          "has_showrooms": false,
+          "has_vehicles": false
         }
       }
 order: 2000

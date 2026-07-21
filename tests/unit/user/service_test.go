@@ -18,6 +18,9 @@ type fakeServiceRepo struct {
 	showroomRoles []user.ShowroomRole
 	findErr       error
 	rolesErr      error
+	hasShowrooms  bool
+	hasVehicles   bool
+	onboardingErr error
 }
 
 func (f *fakeServiceRepo) FindByID(_ context.Context, _ uint64) (*user.User, error) {
@@ -26,6 +29,13 @@ func (f *fakeServiceRepo) FindByID(_ context.Context, _ uint64) (*user.User, err
 
 func (f *fakeServiceRepo) FindShowroomRolesByUserID(_ context.Context, _ uint64) ([]user.ShowroomRole, error) {
 	return f.showroomRoles, f.rolesErr
+}
+
+func (f *fakeServiceRepo) LoadOnboardingFlags(_ context.Context, _ uint64) (bool, bool, error) {
+	if f.onboardingErr != nil {
+		return false, false, f.onboardingErr
+	}
+	return f.hasShowrooms, f.hasVehicles, nil
 }
 
 func (f *fakeServiceRepo) UpdateName(ctx context.Context, userID uint64, name string) error {
@@ -242,6 +252,8 @@ func TestGetProfileSuccess(t *testing.T) {
 		showroomRoles: []user.ShowroomRole{
 			{ShowroomID: 10, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
 		},
+		hasShowrooms: true,
+		hasVehicles:  true,
 	}
 	svc := user.NewService(repo)
 
@@ -252,11 +264,23 @@ func TestGetProfileSuccess(t *testing.T) {
 	if resp.Name == nil || *resp.Name != "Alice" {
 		t.Fatalf("expected name Alice, got %v", resp.Name)
 	}
-	if resp.PhoneNumber == nil || *resp.PhoneNumber != "+919999999999" {
-		t.Fatalf("expected phone +919999999999, got %v", resp.PhoneNumber)
+	if resp.PhoneNumber == nil || *resp.PhoneNumber != "9999999999" {
+		t.Fatalf("expected phone 9999999999, got %v", resp.PhoneNumber)
+	}
+	if resp.CountryCode == nil || *resp.CountryCode != "+91" {
+		t.Fatalf("expected country code +91, got %v", resp.CountryCode)
 	}
 	if len(resp.ShowroomRoles) != 1 || resp.ShowroomRoles[0].ShowroomID != 10 {
 		t.Fatalf("unexpected showroom roles: %+v", resp.ShowroomRoles)
+	}
+	if resp.RequiredName {
+		t.Fatal("expected required_name false for profile with name set")
+	}
+	if !resp.HasShowrooms {
+		t.Fatal("expected has_showrooms true")
+	}
+	if !resp.HasVehicles {
+		t.Fatal("expected has_vehicles true")
 	}
 }
 
@@ -276,6 +300,15 @@ func TestGetProfileNullName(t *testing.T) {
 	}
 	if resp.ShowroomRoles == nil {
 		t.Fatalf("expected empty slice, got nil")
+	}
+	if !resp.RequiredName {
+		t.Fatal("expected required_name true for profile with no name")
+	}
+	if resp.HasShowrooms {
+		t.Fatal("expected has_showrooms false")
+	}
+	if resp.HasVehicles {
+		t.Fatal("expected has_vehicles false")
 	}
 }
 
@@ -302,6 +335,21 @@ func TestGetProfileRolesRepoError(t *testing.T) {
 	_, err := svc.GetProfile(context.Background(), 1)
 	if err == nil {
 		t.Fatalf("expected error from roles repo")
+	}
+}
+
+func TestGetProfileOnboardingFlagsError(t *testing.T) {
+	onboardingErr := errors.New("onboarding lookup failed")
+	repo := &fakeServiceRepo{
+		user:          &user.User{ID: 1, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999"},
+		showroomRoles: []user.ShowroomRole{},
+		onboardingErr: onboardingErr,
+	}
+	svc := user.NewService(repo)
+
+	_, err := svc.GetProfile(context.Background(), 1)
+	if !errors.Is(err, onboardingErr) {
+		t.Fatalf("expected onboardingErr, got %v", err)
 	}
 }
 

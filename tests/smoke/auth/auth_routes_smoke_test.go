@@ -29,9 +29,6 @@ func (s *smokeAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest)
 		RefreshToken: "r",
 		ExpiresIn:    900,
 		TokenType:    "Bearer",
-		RequiredName: false,
-		HasShowrooms: true,
-		HasVehicles:  true,
 	}, nil
 }
 

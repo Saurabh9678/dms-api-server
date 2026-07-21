@@ -84,17 +84,11 @@
      - If not found: `Create(&User{CountryCode, PhoneNumber})`.
      - If create returns `ErrDuplicatedKey` (concurrent race): re-fetches winning record from `users` via `FindByPhone`.
      - The resulting `users.User` is the authoritative identity; OTP record phone fields are discarded after lookup.
-   - Loads onboarding flags for the verified user:
-     - `has_showrooms`: true when the user has at least one active, non-deleted showroom membership.
-     - `has_vehicles`: true when any non-deleted vehicle is assigned to any active, non-deleted showroom the user belongs to.
    - Issues access/refresh token pair via token provider using `foundUser.ID`.
    - Revokes all active sessions for same user+platform.
    - Creates new session row in `user_sessions`.
-   - Sets `required_name: true` if `foundUser.Name == ""`, `false` otherwise.
-4. Success response: `200` with envelope message `OTP verified successfully` and payload `{ accessToken, refreshToken, expiresIn, tokenType, required_name, has_showrooms, has_vehicles }`.
-   - `required_name: true` means the user has not yet set their profile name; the client should prompt via `PATCH /api/v1/user/me`.
-   - `required_name: false` means the user already has a name set.
-   - `has_showrooms` and `has_vehicles` help the client decide the next onboarding step immediately after OTP verification.
+4. Success response: `200` with envelope message `OTP verified successfully` and payload `{ accessToken, refreshToken, expiresIn, tokenType }`.
+   - Profile/onboarding state is returned by `GET /api/v1/user/me` after authentication.
 5. Failure responses:
    - Validation/device context errors -> `400`.
    - OTP/token/session business errors -> mapped auth error codes, generally `401`.
