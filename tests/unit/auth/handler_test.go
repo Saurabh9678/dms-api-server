@@ -30,6 +30,8 @@ func (f *fakeHandlerAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRe
 		ExpiresIn:    900,
 		TokenType:    "Bearer",
 		RequiredName: false,
+		HasShowrooms: true,
+		HasVehicles:  true,
 	}, nil
 }
 
@@ -56,7 +58,7 @@ func TestLoginBadRequest(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/login", h.Login)
 
-	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"+91"}`))
+	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"91"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -92,6 +94,12 @@ func TestVerifyOTPSuccess(t *testing.T) {
 	}
 	if !strings.Contains(resp.Body.String(), `"success":true`) {
 		t.Fatalf("expected success response envelope, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"has_showrooms":true`) {
+		t.Fatalf("expected has_showrooms in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"has_vehicles":true`) {
+		t.Fatalf("expected has_vehicles in response, got %s", resp.Body.String())
 	}
 }
 
@@ -198,7 +206,7 @@ func TestSendOTP_BadJSON(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/send-otp", h.SendOTP)
 
-	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91"}`))
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"91"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -219,7 +227,7 @@ func TestSendOTP_MissingHeaders(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/send-otp", h.SendOTP)
 
-	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	// No X-Platform or X-Device-Id headers
 	resp := httptest.NewRecorder()
@@ -239,7 +247,7 @@ func TestSendOTP_ServiceError(t *testing.T) {
 	h := auth.NewHandler(&fakeErrorAuthService{})
 	engine.POST("/send-otp", h.SendOTP)
 
-	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -257,7 +265,7 @@ func TestSendOTP_Success(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/send-otp", h.SendOTP)
 
-	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/send-otp", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -283,7 +291,7 @@ func TestRegister_BadJSON(t *testing.T) {
 	engine.POST("/register", h.Register)
 
 	// Missing required phoneNumber field
-	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"+91"}`))
+	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"91"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -304,7 +312,7 @@ func TestRegister_MissingHeaders(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/register", h.Register)
 
-	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	// No X-Platform header
 	resp := httptest.NewRecorder()
@@ -324,7 +332,7 @@ func TestRegister_ServiceError(t *testing.T) {
 	h := auth.NewHandler(&fakeErrorAuthService{})
 	engine.POST("/register", h.Register)
 
-	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -342,7 +350,7 @@ func TestRegister_Success(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/register", h.Register)
 
-	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -367,7 +375,7 @@ func TestLogin_ServiceError(t *testing.T) {
 	h := auth.NewHandler(&fakeErrorAuthService{})
 	engine.POST("/login", h.Login)
 
-	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")
@@ -562,7 +570,7 @@ func TestLogin_MissingHeaders(t *testing.T) {
 	h := auth.NewHandler(&fakeHandlerAuthService{})
 	engine.POST("/login", h.Login)
 
-	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	// Missing X-Platform and X-Device-Id
 	resp := httptest.NewRecorder()

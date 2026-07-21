@@ -13,7 +13,7 @@ Executive overview dashboard for dealership health metrics.
 
 ### `GET /api/v1/dashboard`
 
-Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`, and `X-Device-Id` headers. The route also loads the authenticated user's showroom roles to derive membership flags.
+Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`, and `X-Device-Id` headers.
 
 #### Query Parameters
 
@@ -49,8 +49,6 @@ Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`
    - `FetchTopVehicleTypes`: per-type vehicles sold and net profit (duration-filtered by `sale_date`)
 5. Computes `average_profit_per_sale = net_profit / vehicles_sold` (0 if no sales)
 6. Computes `average_expense_per_vehicle = total_expenses / inventory_count` (0 if no inventory)
-7. Sets `has_vehicles = inventory_count > 0`.
-8. Sets `has_showrooms = true` only when the authenticated user is an active member of at least one showroom.
 
 #### Business rules
 
@@ -95,9 +93,7 @@ Protected endpoint. Requires `Authorization: Bearer <accessToken>`, `X-Platform`
     "top_vehicle_types": [
       { "vehicle_type": "car",   "vehicles_sold": 8, "net_profit": 500000 },
       { "vehicle_type": "bike",  "vehicles_sold": 5, "net_profit": 300000 }
-    ],
-    "has_vehicles": true,
-    "has_showrooms": true
+    ]
   }
 }
 ```

@@ -23,7 +23,15 @@ func (f *contractService) Login(_ context.Context, _ auth.LoginRequest) (*auth.T
 }
 
 func (f *contractService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.VerifyOTPResponse, error) {
-	return &auth.VerifyOTPResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer", RequiredName: false}, nil
+	return &auth.VerifyOTPResponse{
+		AccessToken:  "a",
+		RefreshToken: "r",
+		ExpiresIn:    900,
+		TokenType:    "Bearer",
+		RequiredName: false,
+		HasShowrooms: true,
+		HasVehicles:  true,
+	}, nil
 }
 
 func (f *contractService) RefreshToken(_ context.Context, _ auth.RefreshTokenRequest) (*auth.TokenResponse, error) {
@@ -54,9 +62,9 @@ func TestAuthRouteContracts(t *testing.T) {
 		authHeader string
 		statusCode int
 	}{
-		{name: "send-otp", path: "/api/v1/auth/send-otp", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
-		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
-		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"+91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "send-otp", path: "/api/v1/auth/send-otp", body: `{"countryCode":"91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "register", path: "/api/v1/auth/register", body: `{"countryCode":"91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
+		{name: "login", path: "/api/v1/auth/login", body: `{"countryCode":"91","phoneNumber":"9999999999"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "verify-otp", path: "/api/v1/auth/verify-otp", body: `{"requestId":"Ab12Cd34","otpCode":"123456"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "refresh-token", path: "/api/v1/auth/refresh-token", body: `{"refreshToken":"r"}`, platform: "web", deviceID: "d-1", statusCode: http.StatusOK},
 		{name: "logout", path: "/api/v1/auth/logout", body: "", platform: "web", deviceID: "d-1", authHeader: "Bearer access-token", statusCode: http.StatusOK},

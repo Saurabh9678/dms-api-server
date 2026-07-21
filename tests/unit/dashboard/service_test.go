@@ -239,9 +239,6 @@ func TestGetDashboardAverageExpensePerVehicle(t *testing.T) {
 	if resp.ExpenseSummary.AverageExpensePerVehicle != 10000 {
 		t.Fatalf("expected 10000, got %v", resp.ExpenseSummary.AverageExpensePerVehicle)
 	}
-	if !resp.HasVehicles {
-		t.Fatalf("expected HasVehicles true")
-	}
 }
 
 func TestGetDashboardAverageExpensePerVehicleZeroWhenNoInventory(t *testing.T) {
@@ -257,38 +254,6 @@ func TestGetDashboardAverageExpensePerVehicleZeroWhenNoInventory(t *testing.T) {
 	}
 	if resp.ExpenseSummary.AverageExpensePerVehicle != 0 {
 		t.Fatalf("expected 0, got %v", resp.ExpenseSummary.AverageExpensePerVehicle)
-	}
-	if resp.HasVehicles {
-		t.Fatalf("expected HasVehicles false")
-	}
-}
-
-func TestGetDashboardHasShowroomsFromRequestRoles(t *testing.T) {
-	repo := &fakeRepo{}
-	svc := newService(repo)
-
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{
-		Duration:      "lifetime",
-		ShowroomRoles: map[uint64]string{1: "owner"},
-	})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !resp.HasShowrooms {
-		t.Fatalf("expected HasShowrooms true")
-	}
-}
-
-func TestGetDashboardHasShowroomsFalseWithoutRoles(t *testing.T) {
-	repo := &fakeRepo{}
-	svc := newService(repo)
-
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if resp.HasShowrooms {
-		t.Fatalf("expected HasShowrooms false")
 	}
 }
 

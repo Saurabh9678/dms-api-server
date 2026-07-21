@@ -121,7 +121,5 @@ func (s *service) GetDashboard(ctx context.Context, req GetDashboardRequest) (*D
 			AverageExpensePerVehicle: avgExpensePerVehicle,
 		},
 		TopVehicleTypes: vehicleTypeMetrics,
-		HasVehicles:     inventory.InventoryCount > 0,
-		HasShowrooms:    len(req.ShowroomRoles) > 0,
 	}, nil
 }

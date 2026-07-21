@@ -36,6 +36,4 @@ type DashboardResponse struct {
 	InventorySummary InventorySummary     `json:"inventory_summary"`
 	ExpenseSummary   ExpenseSummary       `json:"expense_summary"`
 	TopVehicleTypes  []VehicleTypeMetrics `json:"top_vehicle_types"`
-	HasVehicles      bool                 `json:"has_vehicles"`
-	HasShowrooms     bool                 `json:"has_showrooms"`
 }

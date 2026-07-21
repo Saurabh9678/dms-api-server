@@ -28,6 +28,7 @@ type Service interface {
 type userRepo interface {
 	FindByPhone(ctx context.Context, countryCode string, phoneNumber string) (*user.User, error)
 	Create(ctx context.Context, record *user.User) (*user.User, error)
+	LoadOnboardingFlags(ctx context.Context, userID uint64) (hasShowrooms bool, hasVehicles bool, err error)
 }
 
 type otpRepo interface {
@@ -223,6 +224,11 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyO
 		return nil, err
 	}
 
+	hasShowrooms, hasVehicles, err := s.users.LoadOnboardingFlags(ctx, foundUser.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	pair, err := s.tokenProvider.Issue(foundUser.ID)
 	if err != nil {
 		return nil, err
@@ -250,6 +256,8 @@ func (s *service) VerifyOTP(ctx context.Context, req VerifyOTPRequest) (*VerifyO
 		ExpiresIn:    pair.AccessTokenTTL,
 		TokenType:    "Bearer",
 		RequiredName: foundUser.Name == "",
+		HasShowrooms: hasShowrooms,
+		HasVehicles:  hasVehicles,
 	}, nil
 }
 

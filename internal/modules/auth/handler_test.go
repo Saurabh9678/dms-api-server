@@ -311,7 +311,7 @@ func TestLogin_ServiceError(t *testing.T) {
 func TestVerifyOTP_Valid(t *testing.T) {
 	svc := &mockService{
 		verifyOTPFn: func(_ context.Context, _ VerifyOTPRequest) (*VerifyOTPResponse, error) {
-			return &VerifyOTPResponse{AccessToken: "at", RefreshToken: "rt", TokenType: "Bearer"}, nil
+			return &VerifyOTPResponse{AccessToken: "at", RefreshToken: "rt", TokenType: "Bearer", HasShowrooms: true, HasVehicles: true}, nil
 		},
 	}
 	e := newTestEngine(NewHandler(svc))
@@ -325,6 +325,8 @@ func TestVerifyOTP_Valid(t *testing.T) {
 	e.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Contains(t, w.Body.String(), `"has_showrooms":true`)
+	assert.Contains(t, w.Body.String(), `"has_vehicles":true`)
 }
 
 func TestVerifyOTP_InvalidBinding(t *testing.T) {

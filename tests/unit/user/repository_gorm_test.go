@@ -314,3 +314,71 @@ func TestRepositoryLoadUserShowroomRolesError(t *testing.T) {
 		t.Fatal("expected error")
 	}
 }
+
+func TestRepositoryLoadOnboardingFlagsWithShowroomsAndVehicles(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(2)))
+	mock.ExpectQuery(`vehicle_showroom_relations`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(1)))
+
+	hasShowrooms, hasVehicles, err := repo.LoadOnboardingFlags(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if !hasShowrooms {
+		t.Fatal("expected hasShowrooms true")
+	}
+	if !hasVehicles {
+		t.Fatal("expected hasVehicles true")
+	}
+}
+
+func TestRepositoryLoadOnboardingFlagsNoShowroomsSkipsVehicleLookup(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(0)))
+
+	hasShowrooms, hasVehicles, err := repo.LoadOnboardingFlags(context.Background(), 42)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if hasShowrooms {
+		t.Fatal("expected hasShowrooms false")
+	}
+	if hasVehicles {
+		t.Fatal("expected hasVehicles false")
+	}
+}
+
+func TestRepositoryLoadOnboardingFlagsShowroomCountError(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, _, err := repo.LoadOnboardingFlags(context.Background(), 42)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestRepositoryLoadOnboardingFlagsVehicleCountError(t *testing.T) {
+	gormDB, mock := newMockDB(t)
+	repo := user.NewRepository(gormDB)
+
+	mock.ExpectQuery(`user_showroom_relations`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(int64(1)))
+	mock.ExpectQuery(`vehicle_showroom_relations`).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, _, err := repo.LoadOnboardingFlags(context.Background(), 42)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}

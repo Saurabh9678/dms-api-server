@@ -88,6 +88,23 @@ func TestGetDashboardPassesShowroomRoles(t *testing.T) {
 	}
 }
 
+func TestGetDashboardInvalidShowroomRolesContextReturns500(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	engine.Use(func(c *gin.Context) {
+		c.Set(middleware.ContextKeyShowroomRoles, "invalid")
+	})
+	dashboard.RegisterRoutes(engine.Group("/api/v1"), dashboard.NewHandler(&fakeDashboardService{}))
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/dashboard", nil)
+	resp := httptest.NewRecorder()
+	engine.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusInternalServerError {
+		t.Fatalf("expected 500, got %d: %s", resp.Code, resp.Body.String())
+	}
+}
+
 func TestGetDashboardDefaultDurationLifetime(t *testing.T) {
 	engine := newTestEngine(&fakeDashboardService{})
 

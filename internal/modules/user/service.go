@@ -65,17 +65,19 @@ func (s *service) GetProfile(ctx context.Context, userID uint64) (*GetProfileRes
 		name = &n
 	}
 
-	phoneNumber := ""
-	countryCode := ""
+	var phoneNumber *string
+	var countryCode *string
 	if u.CountryCode != "" || u.PhoneNumber != "" {
-		phoneNumber = u.PhoneNumber
-		countryCode = u.CountryCode
+		phone := u.CountryCode + u.PhoneNumber
+		phoneNumber = &phone
+		code := u.CountryCode
+		countryCode = &code
 	}
 
 	return &GetProfileResponse{
 		Name:          name,
-		PhoneNumber:   &phoneNumber,
-		CountryCode:   &countryCode,
+		PhoneNumber:   phoneNumber,
+		CountryCode:   countryCode,
 		ShowroomRoles: showroomRoles,
 	}, nil
 }

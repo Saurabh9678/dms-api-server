@@ -24,7 +24,15 @@ func (s *smokeAuthService) Login(_ context.Context, _ auth.LoginRequest) (*auth.
 }
 
 func (s *smokeAuthService) VerifyOTP(_ context.Context, _ auth.VerifyOTPRequest) (*auth.VerifyOTPResponse, error) {
-	return &auth.VerifyOTPResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 900, TokenType: "Bearer", RequiredName: false}, nil
+	return &auth.VerifyOTPResponse{
+		AccessToken:  "a",
+		RefreshToken: "r",
+		ExpiresIn:    900,
+		TokenType:    "Bearer",
+		RequiredName: false,
+		HasShowrooms: true,
+		HasVehicles:  true,
+	}, nil
 }
 
 func (s *smokeAuthService) RefreshToken(_ context.Context, _ auth.RefreshTokenRequest) (*auth.TokenResponse, error) {
@@ -46,7 +54,7 @@ func TestAuthLoginRouteShape(t *testing.T) {
 	api.Use(middleware.RequireDeviceContext())
 	auth.RegisterRoutes(api, auth.NewHandler(&smokeAuthService{}))
 
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"+91","phoneNumber":"9999999999"}`))
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/login", bytes.NewBufferString(`{"countryCode":"91","phoneNumber":"9999999999"}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Platform", "web")
 	req.Header.Set("X-Device-Id", "d-1")

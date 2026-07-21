@@ -56,4 +56,6 @@ type VerifyOTPResponse struct {
 	ExpiresIn    int64  `json:"expiresIn"`
 	TokenType    string `json:"tokenType"`
 	RequiredName bool   `json:"required_name"`
+	HasShowrooms bool   `json:"has_showrooms"`
+	HasVehicles  bool   `json:"has_vehicles"`
 }

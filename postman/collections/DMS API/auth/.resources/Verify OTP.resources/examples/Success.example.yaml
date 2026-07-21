@@ -27,7 +27,9 @@ response:
           "refreshToken": "...",
           "expiresIn": 3600,
           "tokenType": "Bearer",
-          "required_name": true
+          "required_name": true,
+          "has_showrooms": true,
+          "has_vehicles": true
         }
       }
 order: 1000

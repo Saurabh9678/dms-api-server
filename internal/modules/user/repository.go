@@ -80,6 +80,36 @@ func (r *Repository) LoadUserShowroomRoles(ctx context.Context, userID uint64) (
 	return result, nil
 }
 
+func (r *Repository) LoadOnboardingFlags(ctx context.Context, userID uint64) (bool, bool, error) {
+	var showroomCount int64
+	err := r.db.WithContext(ctx).
+		Table("user_showroom_relations usr").
+		Joins("JOIN showrooms s ON s.id = usr.showroom_id AND s.deleted_at IS NULL").
+		Where("usr.user_id = ? AND usr.deleted_at IS NULL", userID).
+		Count(&showroomCount).Error
+	if err != nil {
+		return false, false, err
+	}
+	if showroomCount == 0 {
+		return false, false, nil
+	}
+
+	var vehicleCount int64
+	err = r.db.WithContext(ctx).
+		Table("vehicle_showroom_relations vsr").
+		Joins("JOIN vehicles v ON v.id = vsr.vehicle_id AND v.deleted_at IS NULL").
+		Joins("JOIN user_showroom_relations usr ON usr.showroom_id = vsr.showroom_id AND usr.deleted_at IS NULL").
+		Joins("JOIN showrooms s ON s.id = usr.showroom_id AND s.deleted_at IS NULL").
+		Where("usr.user_id = ? AND vsr.deleted_at IS NULL", userID).
+		Distinct("v.id").
+		Count(&vehicleCount).Error
+	if err != nil {
+		return false, false, err
+	}
+
+	return true, vehicleCount > 0, nil
+}
+
 func (r *Repository) UpdateName(ctx context.Context, userID uint64, name string) error {
 	result := r.db.WithContext(ctx).Model(&User{}).Where("id = ?", userID).Update("name", name)
 	if result.Error != nil {
