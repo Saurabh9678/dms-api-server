@@ -514,7 +514,7 @@ func (s *service) buildVehicleUpdates(req *UpdateVehicleRequest) (map[string]int
 		if !isValidVehicleType(*req.VehicleType) {
 			return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
 		}
-		updates["vehicle_type"] = *req.VehicleType
+		updates["type"] = *req.VehicleType
 	}
 	if req.Manufacturer != nil {
 		trimmed := strings.TrimSpace(*req.Manufacturer)

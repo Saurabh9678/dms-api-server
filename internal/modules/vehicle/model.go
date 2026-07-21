@@ -4,7 +4,7 @@ import "infiour.local/dms-api-server/pkg/database"
 
 type Vehicle struct {
 	ID                 uint64           `gorm:"primaryKey;autoIncrement" json:"id"`
-	VehicleType        VehicleType      `gorm:"type:varchar(255);not null" json:"vehicle_type"`
+	VehicleType        VehicleType      `gorm:"column:type;type:varchar(255);not null" json:"vehicle_type"`
 	Manufacturer       string           `gorm:"type:varchar(255);not null" json:"manufacturer"`
 	Model              string           `gorm:"type:varchar(255);not null" json:"model"`
 	Variant            string           `gorm:"type:varchar(255);not null" json:"variant"`

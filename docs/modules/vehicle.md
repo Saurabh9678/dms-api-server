@@ -43,7 +43,7 @@
 4. Repository:
    - Uses LATERAL JOIN to get latest `vehicle_statuses` row (by `id DESC`) as current status
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
-   - Applies filters: `vs.status = ANY(statuses)`, `v.vehicle_type = ANY(types)`, price range on `price_tag`
+   - Applies filters: `vs.status = ANY(statuses)`, `v.type = ANY(types)` (aliased as `vehicle_type` in responses), price range on `price_tag`
    - Paginates with `LIMIT/OFFSET`
 5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`
 

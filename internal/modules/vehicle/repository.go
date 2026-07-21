@@ -288,7 +288,7 @@ type VehicleWithDetails struct {
 
 func buildListQuery(filter ListFilter) (string, []interface{}) {
 	query := `
-SELECT v.id, v.vehicle_type, v.manufacturer, v.model, v.variant, v.color,
+SELECT v.id, v.type AS vehicle_type, v.manufacturer, v.model, v.variant, v.color,
        v.year_of_manufacture, v.rto_code, v.registration_number, v.registration_state,
        v.usage_km, v.fuel_type, v.transmission_type, v.created_at, v.updated_at,
        vs.status AS vs_status, vs.started_at AS vs_started_at,
@@ -307,7 +307,7 @@ LEFT JOIN LATERAL (
 ) vp ON true
 WHERE v.deleted_at IS NULL
   AND vs.status = ANY(?)
-  AND (? OR v.vehicle_type = ANY(?))
+  AND (? OR v.type = ANY(?))
   AND (? OR vp.price_tag >= ?)
   AND (? OR vp.price_tag <= ?)
 ORDER BY v.id DESC`
@@ -434,7 +434,7 @@ func buildPublicListQuery(filter PublicListFilter) (string, []interface{}) {
 	}
 
 	query := `
-SELECT v.id, v.vehicle_type, v.manufacturer, v.model, v.variant, v.color,
+SELECT v.id, v.type AS vehicle_type, v.manufacturer, v.model, v.variant, v.color,
        v.year_of_manufacture, v.rto_code, v.registration_number, v.registration_state,
        v.usage_km, v.fuel_type, v.transmission_type, v.created_at, v.updated_at,
        vs.status AS vs_status, vs.started_at AS vs_started_at,
@@ -456,7 +456,7 @@ JOIN LATERAL (
 ) vp ON true
 WHERE v.deleted_at IS NULL
   AND vs.status = 'ready_for_sale'
-  AND (? OR v.vehicle_type = ANY(?))
+  AND (? OR v.type = ANY(?))
   AND (? OR vp.price_tag >= ?)
   AND (? OR vp.price_tag <= ?)
 ORDER BY ` + orderClause

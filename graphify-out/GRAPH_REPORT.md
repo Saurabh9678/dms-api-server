@@ -1,16 +1,16 @@
 # Graph Report - dms-api-server  (2026-07-21)
 
 ## Corpus Check
-- 299 files · ~188,423 words
+- 299 files · ~208,175 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2991 nodes · 4183 edges · 249 communities (200 shown, 49 thin omitted)
+- 2993 nodes · 4187 edges · 256 communities (204 shown, 52 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 307 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1d9c8f55`
+- Built from commit: `578cb535`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -211,6 +211,13 @@
 - [[_COMMUNITY_Community 246|Community 246]]
 - [[_COMMUNITY_Community 247|Community 247]]
 - [[_COMMUNITY_Community 248|Community 248]]
+- [[_COMMUNITY_Community 249|Community 249]]
+- [[_COMMUNITY_Community 250|Community 250]]
+- [[_COMMUNITY_Community 251|Community 251]]
+- [[_COMMUNITY_Community 252|Community 252]]
+- [[_COMMUNITY_Community 253|Community 253]]
+- [[_COMMUNITY_Community 254|Community 254]]
+- [[_COMMUNITY_Community 255|Community 255]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `ownerRoles()` - 60 edges
@@ -236,7 +243,7 @@
 - `main()` --calls--> `NewApp()`  [INFERRED]
   cmd/server/main.go → internal/bootstrap/app.go
 
-## Communities (249 total, 49 thin omitted)
+## Communities (256 total, 52 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -251,8 +258,8 @@ Cohesion: 0.05
 Nodes (24): getDurationFromSeconds(), getEnv(), getInt(), LoadAuthConfig(), LoadDBConfig(), DBConfig, Connect(), NewPostgresProvider() (+16 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.05
-Nodes (55): fakeOTPProvider, fakeOTPRepo, fakeSessionRepo, fakeTokenProvider, fakeTokenProviderWithError, fakeUserRepo, NewService(), newSvc() (+47 more)
+Cohesion: 0.1
+Nodes (43): newSvc(), newSvcWithEnv(), otpRecord(), TestLoginTriggersOTP(), TestRefreshToken_ExpiredSession(), TestRefreshToken_NilExpiresAt(), TestRefreshToken_RevokedSession(), TestRefreshToken_RotateRefreshTokenError() (+35 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.08
@@ -291,8 +298,8 @@ Cohesion: 0.06
 Nodes (26): authHeaders, Handler, bindAuthHeaders(), extractBearerToken(), Handler, dashboardShowroomRoles(), TestHealthRouteShape(), Created() (+18 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.05
-Nodes (27): Config, OTPFor, OTPPlatform, otpRepo, Service, generateOTPCode(), generateRequestID(), sessionRepo (+19 more)
+Cohesion: 0.07
+Nodes (16): OTPForType, PlatformType, Repository, toDomain(), UserOTP, OTPFor, OTPPlatform, Repository (+8 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.15
@@ -623,12 +630,12 @@ Cohesion: 0.11
 Nodes (31): mockStorageProvider, errorOpener(), existingShowroom(), inMemoryOpener(), makeFileHeader(), parsedFileHeader(), TestCreateShowroom_BannerInvalidExtension(), TestCreateShowroom_BannerStorageError_SkipsUpload() (+23 more)
 
 ### Community 158 - "Community 158"
-Cohesion: 0.08
-Nodes (42): addUserMembershipAction(), AddUserMembershipFields, buildGeolocation(), CountRow, createShowroomAction(), CreateShowroomFields, createUserAction(), CreateUserFields (+34 more)
+Cohesion: 0.09
+Nodes (39): addUserMembershipAction(), AddUserMembershipFields, buildGeolocation(), CountRow, createShowroomAction(), CreateShowroomFields, createUserAction(), CreateUserFields (+31 more)
 
 ### Community 159 - "Community 159"
-Cohesion: 0.06
-Nodes (31): AddUserMembershipState, CreateShowroomState, CreateUserState, RemoveUserMembershipState, UpdateUserMembershipRoleState, geistMono, geistSans, metadata (+23 more)
+Cohesion: 0.08
+Nodes (25): AddUserMembershipState, CreateUserState, RemoveUserMembershipState, UpdateUserMembershipRoleState, useNotification(), initialState, UserCreateForm(), UserCreateFormProps (+17 more)
 
 ### Community 162 - "Community 162"
 Cohesion: 0.33
@@ -691,8 +698,8 @@ Cohesion: 0.32
 Nodes (13): body_content(), build_url(), extract_items(), headers_dict(), indent_block(), main(), render_example_file(), render_headers() (+5 more)
 
 ### Community 199 - "Community 199"
-Cohesion: 0.13
-Nodes (20): createModeratorAction(), CreateModeratorFields, CreateModeratorState, removeModeratorAction(), initialState, ModeratorCreateForm(), ModeratorCreateFormProps, Boolean (+12 more)
+Cohesion: 0.11
+Nodes (22): createModeratorAction(), CreateModeratorFields, CreateModeratorState, removeModeratorAction(), CopyLoginIDButton(), CopyLoginIDButtonProps, initialState, ModeratorCreateForm() (+14 more)
 
 ### Community 200 - "Community 200"
 Cohesion: 0.17
@@ -719,8 +726,8 @@ Cohesion: 0.32
 Nodes (5): NewLocalProvider(), TestLocalProvider_Upload_MkdirAllError(), TestLocalProvider_Upload_Success(), TestLocalProvider_Upload_WriteFileError(), LocalProvider
 
 ### Community 206 - "Community 206"
-Cohesion: 0.13
-Nodes (16): CountRow, listShowrooms(), normalizePage(), ShowroomListItem, ShowroomListResult, ShowroomOption, ShowroomOptionRow, ShowroomRow (+8 more)
+Cohesion: 0.15
+Nodes (12): CreateShowroomState, initialState, ShowroomCreateForm(), ShowroomCreateFormProps, listUserOptions(), UserOption, dateFormatter, getStringParam() (+4 more)
 
 ### Community 207 - "Community 207"
 Cohesion: 0.29
@@ -743,8 +750,8 @@ Cohesion: 0.33
 Nodes (5): Columns, Foreign Keys Referencing This Table, Keys And Constraints, Purpose, `subscription_plans` Table
 
 ### Community 213 - "Community 213"
-Cohesion: 0.16
-Nodes (10): iconSizeClass, ModeratorAvatar(), ModeratorAvatarProps, sizeClass, PortalModerator, PortalShell(), PortalShellProps, PortalLayout() (+2 more)
+Cohesion: 0.2
+Nodes (8): iconSizeClass, ModeratorAvatar(), ModeratorAvatarProps, sizeClass, PortalModerator, PortalShellProps, Moderator, ModeratorRole
 
 ### Community 215 - "Community 215"
 Cohesion: 0.07
@@ -826,20 +833,36 @@ Nodes (3): Bootstrap Scripts, code:bash (# Installs nginx if missing, copies ngi
 Cohesion: 0.67
 Nodes (3): code:bash (cd /opt/dms-api-server/deploy/staging), code:bash (openssl rand -hex 32), Step 3 — Configure Environment
 
+### Community 249 - "Community 249"
+Cohesion: 0.11
+Nodes (15): updateProfileAction(), geistMono, geistSans, metadata, Notification, NotificationContext, NotificationContextValue, NotificationProvider() (+7 more)
+
+### Community 250 - "Community 250"
+Cohesion: 0.1
+Nodes (9): fakeOTPProvider, fakeOTPRepo, fakeUserRepo, NewService(), TestLogoutRejectsInvalidAccessToken(), TestRefreshAndLogout(), TestRegisterTriggersOTP(), TestVerifyOTPRejectsInvalidCode() (+1 more)
+
+### Community 251 - "Community 251"
+Cohesion: 0.23
+Nodes (7): Config, otpRepo, Service, generateOTPCode(), generateRequestID(), sessionRepo, userRepo
+
+### Community 252 - "Community 252"
+Cohesion: 0.31
+Nodes (4): OTPFor, OTPPlatform, UserOTP, UserSession
+
 ## Knowledge Gaps
 - **953 isolated node(s):** `Dependencies`, `Provider`, `TokenPair`, `Provider`, `SendRequest` (+948 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **52 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `NewAppError()` connect `Community 197` to `Community 39`, `Community 173`, `Community 143`, `Community 179`, `Community 212`, `Community 214`, `Community 31`?**
-  _High betweenness centrality (0.140) - this node is a cross-community bridge._
-- **Why does `True` connect `Community 132` to `Community 146`, `Community 42`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
-- **Why does `FromError()` connect `Community 29` to `Community 179`?**
   _High betweenness centrality (0.133) - this node is a cross-community bridge._
+- **Why does `True` connect `Community 132` to `Community 146`, `Community 42`?**
+  _High betweenness centrality (0.132) - this node is a cross-community bridge._
+- **Why does `FromError()` connect `Community 29` to `Community 179`?**
+  _High betweenness centrality (0.131) - this node is a cross-community bridge._
 - **Are the 27 inferred relationships involving `ownerRoles()` (e.g. with `TestHandler_AddMember_InvalidShowroomID()` and `TestHandler_AddMember_InvalidBody()`) actually correct?**
   _`ownerRoles()` has 27 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Dependencies`, `Provider`, `TokenPair` to the rest of the system?**
