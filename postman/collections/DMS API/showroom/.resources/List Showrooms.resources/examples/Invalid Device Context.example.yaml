@@ -1,0 +1,20 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/showroom"
+  method: GET
+  headers:
+    Authorization: Bearer {{access_token}}
+response:
+  statusCode: 400
+  statusText: Bad Request
+  body:
+    type: text
+    content: |-
+      {
+        "success": false,
+        "error": {
+          "code": "INVALID_DEVICE_CONTEXT",
+          "message": "invalid request"
+        }
+      }
+order: 4000

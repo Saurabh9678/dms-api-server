@@ -28,3 +28,11 @@ type MemberRecord struct {
 	PhoneNumber string `gorm:"column:phone_number"`
 	Role        string `gorm:"column:role"`
 }
+
+// ShowroomListRecord is the raw result for user-scoped showroom listing.
+type ShowroomListRecord struct {
+	ID         uint64 `gorm:"column:id"`
+	ShowroomID string `gorm:"column:showroom_id"`
+	Name       string `gorm:"column:name"`
+	Role       string `gorm:"column:role"`
+}

@@ -4,17 +4,18 @@
 
 - Own showroom domain models and showroom-specific business behaviors.
 - Create showrooms and atomically assign the creating user as owner.
+- List active showroom memberships for the authenticated user.
 - Generate and expose a unique 8-character uppercase alphanumeric showroom identifier for external display.
 - Store and manage showroom logo and banner images via the storage provider.
 
 ## Key Components
 
 - `model.go` — `Showroom` struct mapping to the `showrooms` table.
-- `dto.go` — `CreateShowroomRequest` and `CreateShowroomResponse`.
-- `repository.go` — GORM-backed `Repository` with `CreateWithOwner` (transactional) and `UpdateFilePaths`.
-- `service.go` — Business logic: name validation, geolocation JSON validation, file type/size validation, upload orchestration.
-- `handler.go` — Parses `multipart/form-data`, extracts userID from context, delegates to service.
-- `routes.go` — Registers `POST /showroom` under the protected group.
+- `dto.go` — Showroom request/response DTOs for create, list, update, and member management.
+- `repository.go` — GORM-backed `Repository` with transactional create, user-scoped list, update, and member queries.
+- `service.go` — Business logic: name validation, geolocation JSON validation, file type/size validation, upload orchestration, and response mapping.
+- `handler.go` — Parses request data, extracts userID from context, delegates to service.
+- `routes.go` — Registers `/showroom` routes under the protected group.
 
 ## Endpoint: POST /api/v1/showroom
 
@@ -44,6 +45,24 @@
 - `400 INVALID_REQUEST` — empty name, invalid geolocation JSON, or multipart parse failure.
 - `400 FILE_TOO_LARGE` — file exceeds 10 MB.
 - `400 INVALID_FILE_TYPE` — file extension not jpg/jpeg/png.
+- `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token.
+
+## Endpoint: GET /api/v1/showroom
+
+**Auth:** Required (Bearer token + device context headers).
+
+**Flow:**
+1. `middleware.RequireDeviceContext` — validates `X-Platform` and `X-Device-Id`.
+2. `middleware.RequireAuth` — validates Bearer token, sets `userID` in context.
+3. `Handler.ListShowrooms` — extracts userID and delegates to service.
+4. `service.ListShowrooms` — calls `repo.ListByUserID` and maps records to response DTOs.
+5. `repo.ListByUserID` — joins active `user_showroom_relations`, active `showrooms`, and `user_roles` for the authenticated user.
+6. Returns 200 with `showrooms` array containing numeric `id`, generated `showroom_id`, `name`, and the user's `role` in that showroom.
+
+**Response branches:**
+- `200 OK` — showrooms listed.
+- `200 OK` — no active showroom memberships; returns `showrooms: []`.
+- `400 INVALID_DEVICE_CONTEXT` — missing or invalid device-context headers.
 - `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token.
 
 ## File Storage

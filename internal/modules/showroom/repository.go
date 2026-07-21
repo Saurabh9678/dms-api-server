@@ -91,6 +91,22 @@ func (r *Repository) GetByID(ctx context.Context, showroomID uint64) (*Showroom,
 	return &s, nil
 }
 
+// ListByUserID returns active showrooms where the user has an active membership.
+func (r *Repository) ListByUserID(ctx context.Context, userID uint64) ([]ShowroomListRecord, error) {
+	var records []ShowroomListRecord
+	err := r.db.WithContext(ctx).
+		Table("user_showroom_relations usr").
+		Select("s.id, s.showroom_id, s.name, ur.type AS role").
+		Joins("JOIN showrooms s ON s.id = usr.showroom_id AND s.deleted_at IS NULL").
+		Joins("JOIN user_roles ur ON ur.id = usr.role_id").
+		Where("usr.user_id = ? AND usr.deleted_at IS NULL", userID).
+		Scan(&records).Error
+	if err != nil {
+		return nil, err
+	}
+	return records, nil
+}
+
 // UpdateShowroomFields applies a partial update to an active showroom using a field map.
 // Nil values in the map are written as SQL NULL. GORM automatically sets updated_at.
 func (r *Repository) UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error {

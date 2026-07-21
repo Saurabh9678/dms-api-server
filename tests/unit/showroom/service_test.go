@@ -38,6 +38,11 @@ func (m *mockShowroomRepo) UpdateFilePaths(ctx context.Context, showroomID uint6
 	return args.Error(0)
 }
 
+func (m *mockShowroomRepo) ListByUserID(ctx context.Context, userID uint64) ([]showroom.ShowroomListRecord, error) {
+	args := m.Called(ctx, userID)
+	return args.Get(0).([]showroom.ShowroomListRecord), args.Error(1)
+}
+
 func (m *mockShowroomRepo) AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error {
 	args := m.Called(ctx, showroomID, targetUserID, roleType)
 	return args.Error(0)
@@ -222,6 +227,54 @@ func TestCreateShowroom_DuplicateShowroomIDRetrySuccess(t *testing.T) {
 	resp, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "Retry"}, nil, nil)
 	assert.NoError(t, err)
 	assert.Equal(t, "RETRY123", resp.ShowroomID)
+	repo.AssertExpectations(t)
+}
+
+// ─── ListShowrooms ────────────────────────────────────────────────────────────
+
+func TestListShowrooms_RepoError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("ListByUserID", mock.Anything, uint64(1)).
+		Return([]showroom.ShowroomListRecord{}, errors.New("db error"))
+
+	_, err := svc.ListShowrooms(context.Background(), uint64(1))
+	assert.Error(t, err)
+	repo.AssertExpectations(t)
+}
+
+func TestListShowrooms_EmptyList(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("ListByUserID", mock.Anything, uint64(1)).
+		Return([]showroom.ShowroomListRecord{}, nil)
+
+	resp, err := svc.ListShowrooms(context.Background(), uint64(1))
+	assert.NoError(t, err)
+	assert.Empty(t, resp.Showrooms)
+	repo.AssertExpectations(t)
+}
+
+func TestListShowrooms_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, new(mockStorageProvider))
+
+	repo.On("ListByUserID", mock.Anything, uint64(1)).
+		Return([]showroom.ShowroomListRecord{
+			{ID: 1, ShowroomID: "SHOP0001", Name: "Main Showroom", Role: "owner"},
+			{ID: 2, ShowroomID: "SHOP0002", Name: "Second Showroom", Role: "manager"},
+		}, nil)
+
+	resp, err := svc.ListShowrooms(context.Background(), uint64(1))
+	assert.NoError(t, err)
+	require.Len(t, resp.Showrooms, 2)
+	assert.Equal(t, uint64(1), resp.Showrooms[0].ID)
+	assert.Equal(t, "SHOP0001", resp.Showrooms[0].ShowroomID)
+	assert.Equal(t, "Main Showroom", resp.Showrooms[0].Name)
+	assert.Equal(t, "owner", resp.Showrooms[0].Role)
+	assert.Equal(t, "manager", resp.Showrooms[1].Role)
 	repo.AssertExpectations(t)
 }
 

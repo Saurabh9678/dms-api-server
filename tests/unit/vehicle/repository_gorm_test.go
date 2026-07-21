@@ -44,7 +44,7 @@ func TestVehicleRepositoryCreateSuccess(t *testing.T) {
 	repo := vehicle.NewRepository(gormDB)
 
 	mock.ExpectBegin()
-	mock.ExpectQuery(`INSERT INTO "vehicles"`).
+	mock.ExpectQuery(`INSERT INTO "vehicles" \("type"`).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
 	mock.ExpectCommit()
 
@@ -239,7 +239,7 @@ func TestGetByIDWithFullDetails_Success(t *testing.T) {
 
 	now := time.Now()
 	vehicleCols := []string{
-		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"id", "type", "manufacturer", "model", "variant", "color",
 		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
 		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
 	}
@@ -508,7 +508,7 @@ func TestRepo_UpdateVehicleFields_Success(t *testing.T) {
 	mock.ExpectCommit()
 
 	vehicleCols := []string{
-		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"id", "type", "manufacturer", "model", "variant", "color",
 		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
 		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
 	}
@@ -693,7 +693,7 @@ func TestGetByIDWithFullDetails_WithSaleInfo(t *testing.T) {
 
 	now := time.Now()
 	vehicleCols := []string{
-		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
+		"id", "type", "manufacturer", "model", "variant", "color",
 		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
 		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at", "deleted_at",
 	}

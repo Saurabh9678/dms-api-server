@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 func RegisterRoutes(group *gin.RouterGroup, h *Handler, showroomRolesMW gin.HandlerFunc) {
 	sg := group.Group("/showroom")
 	sg.POST("", h.CreateShowroom)
+	sg.GET("", h.ListShowrooms)
 
 	mg := sg.Group("")
 	mg.Use(showroomRolesMW)

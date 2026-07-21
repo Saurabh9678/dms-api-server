@@ -59,6 +59,21 @@ func (h *Handler) CreateShowroom(c *gin.Context) {
 	response.Created(c, "showroom created", resp)
 }
 
+func (h *Handler) ListShowrooms(c *gin.Context) {
+	userID, ok := h.extractUserID(c)
+	if !ok {
+		return
+	}
+
+	resp, err := h.service.ListShowrooms(c.Request.Context(), userID)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "showrooms fetched", resp)
+}
+
 func (h *Handler) UpdateShowroom(c *gin.Context) {
 	callerUserID, ok := h.extractUserID(c)
 	if !ok {

@@ -42,6 +42,7 @@ func WithFileOpener(fn func(*multipart.FileHeader) (io.ReadCloser, error)) Servi
 
 type Service interface {
 	CreateShowroom(ctx context.Context, userID uint64, req *CreateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
+	ListShowrooms(ctx context.Context, userID uint64) (*ListShowroomsResponse, error)
 	UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
 	AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *AddMemberRequest) (*AddMemberResponse, error)
 	ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error)
@@ -52,6 +53,7 @@ type Service interface {
 type showroomRepo interface {
 	CreateWithOwner(ctx context.Context, userID uint64, s *Showroom) (*Showroom, error)
 	UpdateFilePaths(ctx context.Context, showroomID uint64, logoPath, bannerPath *string) error
+	ListByUserID(ctx context.Context, userID uint64) ([]ShowroomListRecord, error)
 	GetByID(ctx context.Context, showroomID uint64) (*Showroom, error)
 	UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error
 	AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error
@@ -138,6 +140,25 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 		ShowroomBanner: created.ShowroomBanner,
 		Geolocation:    created.ShowroomGeolocation,
 	}, nil
+}
+
+func (s *service) ListShowrooms(ctx context.Context, userID uint64) (*ListShowroomsResponse, error) {
+	records, err := s.repo.ListByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]ShowroomListItem, 0, len(records))
+	for _, r := range records {
+		items = append(items, ShowroomListItem{
+			ID:         r.ID,
+			ShowroomID: r.ShowroomID,
+			Name:       r.Name,
+			Role:       r.Role,
+		})
+	}
+
+	return &ListShowroomsResponse{Showrooms: items}, nil
 }
 
 func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error) {

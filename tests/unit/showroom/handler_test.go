@@ -32,6 +32,14 @@ func (m *mockShowroomService) CreateShowroom(ctx context.Context, userID uint64,
 	return args.Get(0).(*showroom.CreateShowroomResponse), args.Error(1)
 }
 
+func (m *mockShowroomService) ListShowrooms(ctx context.Context, userID uint64) (*showroom.ListShowroomsResponse, error) {
+	args := m.Called(ctx, userID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*showroom.ListShowroomsResponse), args.Error(1)
+}
+
 func (m *mockShowroomService) AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *showroom.AddMemberRequest) (*showroom.AddMemberResponse, error) {
 	args := m.Called(ctx, callerRoles, showroomID, req)
 	if args.Get(0) == nil {
@@ -83,6 +91,7 @@ func setupShowroomEngine(h *showroom.Handler, userID uint64, roles map[uint64]st
 		}
 	})
 	engine.POST("/showroom", h.CreateShowroom)
+	engine.GET("/showroom", h.ListShowrooms)
 	engine.PATCH("/showroom/:id", h.UpdateShowroom)
 	engine.POST("/showroom/:id/member", h.AddMember)
 	engine.GET("/showroom/:id/member", h.ListMembers)
@@ -244,6 +253,87 @@ func TestHandler_CreateShowroom_WithFiles(t *testing.T) {
 	engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+// ─── ListShowrooms ────────────────────────────────────────────────────────────
+
+func TestHandler_ListShowrooms_NoUserID(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 0, nil)
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	mockSvc.AssertNotCalled(t, "ListShowrooms")
+}
+
+func TestHandler_ListShowrooms_BadUserIDType(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockShowroomService)
+	engine := gin.New()
+	engine.GET("/showroom", func(c *gin.Context) {
+		c.Set(middleware.ContextKeyUserID, "not-a-uint64")
+		showroom.NewHandler(mockSvc).ListShowrooms(c)
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	mockSvc.AssertNotCalled(t, "ListShowrooms")
+}
+
+func TestHandler_ListShowrooms_ServiceError(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, nil)
+
+	mockSvc.On("ListShowrooms", mock.Anything, uint64(1)).
+		Return(nil, errors.New("service error"))
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_ListShowrooms_EmptySuccess(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, nil)
+
+	mockSvc.On("ListShowrooms", mock.Anything, uint64(1)).
+		Return(&showroom.ListShowroomsResponse{Showrooms: []showroom.ShowroomListItem{}}, nil)
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Contains(t, w.Body.String(), `"showrooms":[]`)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_ListShowrooms_Success(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, nil)
+
+	mockSvc.On("ListShowrooms", mock.Anything, uint64(1)).
+		Return(&showroom.ListShowroomsResponse{Showrooms: []showroom.ShowroomListItem{
+			{ID: 1, ShowroomID: "SHOP0001", Name: "Main Showroom", Role: "owner"},
+		}}, nil)
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Contains(t, w.Body.String(), `"showroom_id":"SHOP0001"`)
+	assert.Contains(t, w.Body.String(), `"role":"owner"`)
 	mockSvc.AssertExpectations(t)
 }
 

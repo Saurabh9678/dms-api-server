@@ -1,0 +1,10 @@
+$kind: http-request
+description: "Protected. Lists active showrooms for the authenticated user, including the user's role in each showroom. Returns an empty showrooms array when no showroom memberships exist."
+url: "{{base_url}}/api/v1/showroom"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: browser-1
+examples: ./.resources/List Showrooms.resources/examples
+order: 1500

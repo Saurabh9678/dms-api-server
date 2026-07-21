@@ -574,6 +574,52 @@ func TestGetByID_DBError(t *testing.T) {
 	assert.NotErrorIs(t, err, showroom.ErrShowroomNotFound)
 }
 
+// ─── ListByUserID ─────────────────────────────────────────────────────────────
+
+func TestListByUserID_Success(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT s\.id, s\.showroom_id, s\.name, ur\.type AS role`).
+		WithArgs(uint64(10)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "showroom_id", "name", "role"}).
+			AddRow(uint64(1), "SHOP0001", "Main Showroom", "owner").
+			AddRow(uint64(2), "SHOP0002", "Second Showroom", "manager"))
+
+	records, err := repo.ListByUserID(context.Background(), uint64(10))
+	assert.NoError(t, err)
+	assert.Len(t, records, 2)
+	assert.Equal(t, uint64(1), records[0].ID)
+	assert.Equal(t, "SHOP0001", records[0].ShowroomID)
+	assert.Equal(t, "Main Showroom", records[0].Name)
+	assert.Equal(t, "owner", records[0].Role)
+}
+
+func TestListByUserID_Empty(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT s\.id, s\.showroom_id, s\.name, ur\.type AS role`).
+		WithArgs(uint64(10)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "showroom_id", "name", "role"}))
+
+	records, err := repo.ListByUserID(context.Background(), uint64(10))
+	assert.NoError(t, err)
+	assert.Empty(t, records)
+}
+
+func TestListByUserID_DBError(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT s\.id, s\.showroom_id, s\.name, ur\.type AS role`).
+		WithArgs(uint64(10)).
+		WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.ListByUserID(context.Background(), uint64(10))
+	assert.Error(t, err)
+}
+
 // ─── UpdateShowroomFields ─────────────────────────────────────────────────────
 
 func TestUpdateShowroomFields_Success(t *testing.T) {

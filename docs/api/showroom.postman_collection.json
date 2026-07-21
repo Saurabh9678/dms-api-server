@@ -110,6 +110,59 @@
           ]
         },
         {
+          "name": "List Showrooms",
+          "id": "showroom-list",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom"]
+            },
+            "description": "Protected. Lists active showrooms for the authenticated user. Returns every active showroom membership with numeric id, generated showroom_id, name, and the user's role in that showroom. If the user has no active showroom memberships, returns success true with an empty showrooms array."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showrooms fetched\",\n  \"data\": {\n    \"showrooms\": [\n      {\n        \"id\": 1,\n        \"showroom_id\": \"SHOP0001\",\n        \"name\": \"Main Showroom\",\n        \"role\": \"owner\"\n      },\n      {\n        \"id\": 2,\n        \"showroom_id\": \"SHOP0002\",\n        \"name\": \"Second Showroom\",\n        \"role\": \"manager\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "Empty List",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showrooms fetched\",\n  \"data\": {\n    \"showrooms\": []\n  }\n}"
+            },
+            {
+              "name": "Invalid Device Context",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_DEVICE_CONTEXT\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Update Showroom",
           "id": "showroom-update",
           "request": {

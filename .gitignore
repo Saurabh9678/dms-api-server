@@ -13,6 +13,7 @@ bin/
 dist/
 build/
 CMS-portal/
+uploads/
 
 # Go workspace/cache
 .gomodcache/

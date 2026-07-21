@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/showroom"
+  method: GET
+  headers:
+    Authorization: Bearer {{access_token}}
+    X-Platform: web
+    X-Device-Id: browser-1
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "showrooms fetched",
+        "data": {
+          "showrooms": [
+            {
+              "id": 1,
+              "showroom_id": "SHOP0001",
+              "name": "Main Showroom",
+              "role": "owner"
+            },
+            {
+              "id": 2,
+              "showroom_id": "SHOP0002",
+              "name": "Second Showroom",
+              "role": "manager"
+            }
+          ]
+        }
+      }
+order: 1000
