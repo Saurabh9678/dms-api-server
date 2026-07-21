@@ -7,6 +7,7 @@
 ## Columns
 
 - `id`: `BIGSERIAL`, primary key, auto-increment, not null.
+- `showroom_id`: `VARCHAR(8)`, not null. Unique external showroom identifier, generated internally as uppercase alphanumeric (`A-Z`, `0-9`).
 - `name`: `VARCHAR`, not null.
 - `showroom_logo`: `TEXT`, nullable. Relative storage path set after upload.
 - `showroom_banner`: `TEXT`, nullable. Added via migration `000020_add_showroom_banner_to_showrooms`. Relative storage path set after upload.
@@ -18,6 +19,8 @@
 ## Keys And Constraints
 
 - Primary key: `id`.
+- Unique index: `idx_showrooms_showroom_id` on `showroom_id`.
+- Check constraint: `chk_showrooms_showroom_id_format` enforces exactly 8 uppercase alphanumeric characters.
 
 ## Foreign Keys Referencing This Table
 
@@ -28,3 +31,5 @@
 
 - `000020_add_showroom_banner_to_showrooms.up.sql`: `ALTER TABLE showrooms ADD COLUMN showroom_banner TEXT;`
 - `000020_add_showroom_banner_to_showrooms.down.sql`: `ALTER TABLE showrooms DROP COLUMN showroom_banner;`
+- `000030_add_showroom_id_to_showrooms.up.sql`: adds `showroom_id`, backfills existing rows from numeric `id` using left-padded base36, enforces format, sets not null, and adds a unique index.
+- `000030_add_showroom_id_to_showrooms.down.sql`: drops the unique index, check constraint, and `showroom_id` column.

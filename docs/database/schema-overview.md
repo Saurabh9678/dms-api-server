@@ -18,6 +18,10 @@
 
 - `user_otps.request_id` is an 8-character unique, non-null identifier used by OTP verification APIs.
 
+## Showroom Schema Notes
+
+- `showrooms.showroom_id` is an 8-character unique, non-null uppercase alphanumeric identifier generated internally for external display and API responses.
+
 ## Table Documentation Index
 
 - `docs/database/tables/users.md`

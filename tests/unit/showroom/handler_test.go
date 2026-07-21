@@ -193,6 +193,7 @@ func TestHandler_CreateShowroom_Success(t *testing.T) {
 	mockSvc.On("CreateShowroom", mock.Anything, uint64(1), mock.Anything, (*multipart.FileHeader)(nil), (*multipart.FileHeader)(nil)).
 		Return(&showroom.CreateShowroomResponse{
 			ID:           1,
+			ShowroomID:   "SHOP0001",
 			Name:         "Test",
 			ShowroomLogo: &logoPath,
 		}, nil)
@@ -208,6 +209,7 @@ func TestHandler_CreateShowroom_Success(t *testing.T) {
 	engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Contains(t, w.Body.String(), `"showroom_id":"SHOP0001"`)
 	mockSvc.AssertExpectations(t)
 }
 

@@ -1,0 +1,15 @@
+$kind: http-request
+description: "Protected. Updates showroom details for owner or manager. Returns both the numeric id and generated 8-character showroom_id."
+url: "{{base_url}}/api/v1/showroom/1"
+method: PATCH
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: browser-1
+body:
+  type: text
+  content: |-
+    name=Updated Showroom Name
+    geolocation={"address":"456 New St","city":"Mumbai","state":"Maharashtra","pincode":"400001","lat":19.076,"lng":72.8777}
+examples: ./.resources/Update Showroom.resources/examples
+order: 2000

@@ -4,6 +4,7 @@
 
 - Own showroom domain models and showroom-specific business behaviors.
 - Create showrooms and atomically assign the creating user as owner.
+- Generate and expose a unique 8-character uppercase alphanumeric showroom identifier for external display.
 - Store and manage showroom logo and banner images via the storage provider.
 
 ## Key Components
@@ -33,10 +34,10 @@
    a. Validates name (non-empty after trim).
    b. Validates geolocation JSON if present.
    c. Validates files: size ≤ 10 MB, extension `.jpg`/`.jpeg`/`.png`.
-   d. Calls `repo.CreateWithOwner` in a single DB transaction: inserts showroom, looks up `owner` role, inserts `user_showroom_relations` row.
+  d. Generates an internal `showroom_id` (`A-Z`, `0-9`, 8 chars) and calls `repo.CreateWithOwner` in a single DB transaction: inserts showroom, looks up `owner` role, inserts `user_showroom_relations` row. Rare duplicate `showroom_id` collisions are retried.
    e. Uploads logo and banner via `storage.Provider` (best-effort; upload failure does not fail the request).
    f. Calls `repo.UpdateFilePaths` if any upload succeeded.
-5. Returns 201 with `CreateShowroomResponse`.
+5. Returns 201 with `CreateShowroomResponse`, including numeric `id` and external string `showroom_id`.
 
 **Response branches:**
 - `201 Created` — showroom created successfully.
@@ -77,7 +78,7 @@
    f. `remove_*` flags clear the respective path to NULL; a new file upload overrides the remove.
    g. Calls `repo.UpdateShowroomFields` only if the updates map is non-empty.
    h. Merges updates into the fetched record in memory and returns the full showroom.
-6. Returns 200 with full showroom object (same shape as `CreateShowroomResponse`).
+6. Returns 200 with full showroom object (same shape as `CreateShowroomResponse`, including `showroom_id`).
 
 **Response branches:**
 - `200 OK` — showroom updated (or no change if nothing was provided).

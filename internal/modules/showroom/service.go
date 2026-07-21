@@ -2,21 +2,29 @@ package showroom
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"math/big"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"gorm.io/gorm"
 	storageprovider "infiour.local/dms-api-server/internal/providers/storage"
 	apperrors "infiour.local/dms-api-server/pkg/errors"
 )
 
 const maxFileSize = 10 * 1024 * 1024 // 10 MB
+
+const (
+	showroomIDLength          = 8
+	showroomIDGenerateRetries = 5
+)
 
 var allowedExtensions = map[string]bool{
 	".jpg":  true,
@@ -94,10 +102,21 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 		return nil, err
 	}
 
-	created, err := s.repo.CreateWithOwner(ctx, userID, &Showroom{
-		Name:                name,
-		ShowroomGeolocation: geolocationRaw,
-	})
+	var created *Showroom
+	var err error
+	for attempt := 0; attempt < showroomIDGenerateRetries; attempt++ {
+		created, err = s.repo.CreateWithOwner(ctx, userID, &Showroom{
+			ShowroomID:          generateShowroomID(showroomIDLength),
+			Name:                name,
+			ShowroomGeolocation: geolocationRaw,
+		})
+		if err == nil {
+			break
+		}
+		if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			return nil, err
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -113,6 +132,7 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 
 	return &CreateShowroomResponse{
 		ID:             created.ID,
+		ShowroomID:     created.ShowroomID,
 		Name:           created.Name,
 		ShowroomLogo:   created.ShowroomLogo,
 		ShowroomBanner: created.ShowroomBanner,
@@ -186,6 +206,7 @@ func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, calle
 
 	return &CreateShowroomResponse{
 		ID:             existing.ID,
+		ShowroomID:     existing.ShowroomID,
 		Name:           existing.Name,
 		ShowroomLogo:   existing.ShowroomLogo,
 		ShowroomBanner: existing.ShowroomBanner,
@@ -336,6 +357,18 @@ func validateFile(header *multipart.FileHeader) error {
 		return apperrors.NewAppError(apperrors.CodeInvalidFileType, "invalid request", http.StatusBadRequest, nil)
 	}
 	return nil
+}
+
+func generateShowroomID(length int) string {
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	result := make([]byte, length)
+	max := big.NewInt(int64(len(chars)))
+	for i := 0; i < length; i++ {
+		// crypto/rand panics internally on entropy failure (Go 1.20+); error is unreachable.
+		value, _ := rand.Int(rand.Reader, max)
+		result[i] = chars[value.Int64()]
+	}
+	return string(result)
 }
 
 func mapMemberRepoError(err error) error {

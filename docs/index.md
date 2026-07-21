@@ -49,6 +49,7 @@ Importable JSON (per module):
 - `docs/api/user.postman_collection.json`
 - `docs/api/vehicle.postman_collection.json`
 - `docs/api/dashboard.postman_collection.json`
+- `docs/api/showroom.postman_collection.json`
 
 Postman workspace YAML collection (cloud-synced; keep in sync with JSON collections above):
 

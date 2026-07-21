@@ -186,7 +186,7 @@ func TestGetProfileHandlerSuccess(t *testing.T) {
 			CountryCode: &countryCode,
 			PhoneNumber: &phone,
 			ShowroomRoles: []user.ShowroomRole{
-				{ShowroomID: 1, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
+				{ShowroomID: 1, ExternalShowroomID: "SHOP0001", ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
 			},
 			RequiredName: false,
 			HasShowrooms: true,
@@ -220,6 +220,9 @@ func TestGetProfileHandlerSuccess(t *testing.T) {
 	}
 	if !strings.Contains(resp.Body.String(), `"showroom_roles"`) {
 		t.Fatalf("expected showroom_roles in response, got %s", resp.Body.String())
+	}
+	if !strings.Contains(resp.Body.String(), `"external_showroom_id":"SHOP0001"`) {
+		t.Fatalf("expected external_showroom_id in response, got %s", resp.Body.String())
 	}
 	if !strings.Contains(resp.Body.String(), `"required_name":false`) {
 		t.Fatalf("expected required_name in response, got %s", resp.Body.String())

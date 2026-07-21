@@ -8,11 +8,13 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"gorm.io/gorm"
 	"infiour.local/dms-api-server/internal/modules/showroom"
 )
 
@@ -126,6 +128,8 @@ func parsedFileHeader(t *testing.T, fieldName, filename string, content []byte) 
 	return req.MultipartForm.File[fieldName][0]
 }
 
+var showroomIDPattern = regexp.MustCompile(`^[A-Z0-9]{8}$`)
+
 // ─── CreateShowroom ───────────────────────────────────────────────────────────
 
 func TestCreateShowroom_EmptyName(t *testing.T) {
@@ -188,18 +192,66 @@ func TestCreateShowroom_CreateWithOwnerError(t *testing.T) {
 	repo.AssertExpectations(t)
 }
 
+func TestCreateShowroom_AssignsGeneratedShowroomIDToRepository(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage)
+
+	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
+		return s.Name == "Generated" && showroomIDPattern.MatchString(s.ShowroomID)
+	})).Return(&showroom.Showroom{ID: 11, ShowroomID: "ZXCV1234", Name: "Generated"}, nil)
+
+	resp, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "Generated"}, nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "ZXCV1234", resp.ShowroomID)
+	repo.AssertExpectations(t)
+}
+
+func TestCreateShowroom_DuplicateShowroomIDRetrySuccess(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage)
+
+	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
+		return showroomIDPattern.MatchString(s.ShowroomID)
+	})).Return(nil, gorm.ErrDuplicatedKey).Once()
+	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
+		return showroomIDPattern.MatchString(s.ShowroomID)
+	})).Return(&showroom.Showroom{ID: 12, ShowroomID: "RETRY123", Name: "Retry"}, nil).Once()
+
+	resp, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "Retry"}, nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "RETRY123", resp.ShowroomID)
+	repo.AssertExpectations(t)
+}
+
+func TestCreateShowroom_DuplicateShowroomIDRetryExhausted(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	svc := showroom.NewService(repo, storage)
+
+	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
+		return showroomIDPattern.MatchString(s.ShowroomID)
+	})).Return(nil, gorm.ErrDuplicatedKey).Times(5)
+
+	_, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "Retry"}, nil, nil)
+	assert.ErrorIs(t, err, gorm.ErrDuplicatedKey)
+	repo.AssertExpectations(t)
+}
+
 func TestCreateShowroom_NoFiles_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
 	storage := new(mockStorageProvider)
 	svc := showroom.NewService(repo, storage)
 
-	created := &showroom.Showroom{ID: 7, Name: "MyShowroom"}
+	created := &showroom.Showroom{ID: 7, ShowroomID: "ABC12345", Name: "MyShowroom"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 
 	resp, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "MyShowroom"}, nil, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, uint64(7), resp.ID)
+	assert.Equal(t, "ABC12345", resp.ShowroomID)
 	assert.Equal(t, "MyShowroom", resp.Name)
 	assert.Nil(t, resp.ShowroomLogo)
 	assert.Nil(t, resp.ShowroomBanner)
@@ -748,7 +800,7 @@ func TestServiceUpdateMemberRole_Success(t *testing.T) {
 func existingShowroom() *showroom.Showroom {
 	logo := "old/logo.jpg"
 	banner := "old/banner.jpg"
-	return &showroom.Showroom{ID: 1, Name: "Old Name", ShowroomLogo: &logo, ShowroomBanner: &banner}
+	return &showroom.Showroom{ID: 1, ShowroomID: "SHOP0001", Name: "Old Name", ShowroomLogo: &logo, ShowroomBanner: &banner}
 }
 
 func TestUpdateShowroom_Forbidden(t *testing.T) {
@@ -828,6 +880,7 @@ func TestUpdateShowroom_NoChanges_Success(t *testing.T) {
 	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
 		&showroom.UpdateShowroomRequest{}, nil, nil)
 	assert.NoError(t, err)
+	assert.Equal(t, "SHOP0001", resp.ShowroomID)
 	assert.Equal(t, "Old Name", resp.Name)
 	repo.AssertNotCalled(t, "UpdateShowroomFields")
 }

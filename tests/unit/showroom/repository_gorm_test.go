@@ -47,11 +47,12 @@ func TestCreateWithOwner_Success(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	s := &showroom.Showroom{Name: "Test Showroom"}
+	s := &showroom.Showroom{ShowroomID: "SHOP0001", Name: "Test Showroom"}
 	result, err := repo.CreateWithOwner(context.Background(), uint64(10), s)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, uint64(1), result.ID)
+	assert.Equal(t, "SHOP0001", result.ShowroomID)
 }
 
 func TestCreateWithOwner_CreateError(t *testing.T) {
@@ -540,12 +541,13 @@ func TestGetByID_Success(t *testing.T) {
 	repo := showroom.NewRepository(gormDB)
 
 	mock.ExpectQuery(`SELECT \* FROM "showrooms"`).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "name"}).AddRow(uint64(1), "Test Showroom"))
+		WillReturnRows(sqlmock.NewRows([]string{"id", "showroom_id", "name"}).AddRow(uint64(1), "SHOP0001", "Test Showroom"))
 
 	result, err := repo.GetByID(context.Background(), uint64(1))
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, uint64(1), result.ID)
+	assert.Equal(t, "SHOP0001", result.ShowroomID)
 	assert.Equal(t, "Test Showroom", result.Name)
 }
 

@@ -9,6 +9,7 @@ type CreateShowroomRequest struct {
 
 type CreateShowroomResponse struct {
 	ID             uint64          `json:"id"`
+	ShowroomID     string          `json:"showroom_id"`
 	Name           string          `json:"name"`
 	ShowroomLogo   *string         `json:"showroom_logo"`
 	ShowroomBanner *string         `json:"showroom_banner"`

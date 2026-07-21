@@ -250,7 +250,7 @@ func TestGetProfileSuccess(t *testing.T) {
 	repo := &fakeServiceRepo{
 		user: &user.User{ID: 1, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999"},
 		showroomRoles: []user.ShowroomRole{
-			{ShowroomID: 10, ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
+			{ShowroomID: 10, ExternalShowroomID: "SHOP0001", ShowroomName: "Showroom A", Role: user.UserRoleTypeOwner},
 		},
 		hasShowrooms: true,
 		hasVehicles:  true,
@@ -272,6 +272,9 @@ func TestGetProfileSuccess(t *testing.T) {
 	}
 	if len(resp.ShowroomRoles) != 1 || resp.ShowroomRoles[0].ShowroomID != 10 {
 		t.Fatalf("unexpected showroom roles: %+v", resp.ShowroomRoles)
+	}
+	if resp.ShowroomRoles[0].ExternalShowroomID != "SHOP0001" {
+		t.Fatalf("expected external showroom id SHOP0001, got %s", resp.ShowroomRoles[0].ExternalShowroomID)
 	}
 	if resp.RequiredName {
 		t.Fatal("expected required_name false for profile with name set")

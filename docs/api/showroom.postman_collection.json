@@ -69,7 +69,7 @@
               "name": "Created",
               "status": "Created",
               "code": 201,
-              "body": "{\n  \"success\": true,\n  \"message\": \"showroom created\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"My Showroom\",\n    \"showroom_logo\": \"1/1/20240101120000.jpg\",\n    \"showroom_banner\": null,\n    \"geolocation\": {\"address\":\"123 Main St\",\"city\":\"Bengaluru\",\"state\":\"Karnataka\",\"pincode\":\"560001\",\"lat\":12.9716,\"lng\":77.5946}\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom created\",\n  \"data\": {\n    \"id\": 1,\n    \"showroom_id\": \"SHOP0001\",\n    \"name\": \"My Showroom\",\n    \"showroom_logo\": \"1/1/20240101120000.jpg\",\n    \"showroom_banner\": null,\n    \"geolocation\": {\"address\":\"123 Main St\",\"city\":\"Bengaluru\",\"state\":\"Karnataka\",\"pincode\":\"560001\",\"lat\":12.9716,\"lng\":77.5946}\n  }\n}"
             },
             {
               "name": "Missing Name",
@@ -190,7 +190,7 @@
               "name": "OK",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"showroom updated\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Updated Showroom Name\",\n    \"showroom_logo\": null,\n    \"showroom_banner\": \"1/1/20240101120000.jpg\",\n    \"geolocation\": {\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom updated\",\n  \"data\": {\n    \"id\": 1,\n    \"showroom_id\": \"SHOP0001\",\n    \"name\": \"Updated Showroom Name\",\n    \"showroom_logo\": null,\n    \"showroom_banner\": \"1/1/20240101120000.jpg\",\n    \"geolocation\": {\"address\":\"456 New St\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"lat\":19.076,\"lng\":72.8777}\n  }\n}"
             },
             {
               "name": "Invalid Geolocation JSON",

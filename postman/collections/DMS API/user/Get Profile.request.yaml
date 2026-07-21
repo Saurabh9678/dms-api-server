@@ -1,5 +1,5 @@
 $kind: http-request
-description: "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, separate country code and local phone number, showroom-role pairs, and onboarding flags. Fields are nullable where documented."
+description: "User: Protected endpoint (requires Bearer token). Returns the authenticated user's profile including name, separate country code and local phone number, showroom-role pairs with numeric and external showroom identifiers, and onboarding flags. Fields are nullable where documented."
 url: "{{base_url}}/api/v1/user/me"
 method: GET
 headers:

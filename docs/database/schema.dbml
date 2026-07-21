@@ -84,12 +84,18 @@ Table moderators {
 
 Table showrooms {
   id                   BIGSERIAL   [pk, increment, not null]
+  showroom_id          VARCHAR(8)  [not null, unique, note: '8-character uppercase alphanumeric external identifier']
   name                 VARCHAR     [not null]
   showroom_logo        TEXT        [null]
+  showroom_banner      TEXT        [null]
   showroom_geolocation JSON        [null]
   created_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
   updated_at           TIMESTAMPTZ [not null, default: `CURRENT_TIMESTAMP`]
   deleted_at           TIMESTAMPTZ [null]
+
+  indexes {
+    showroom_id [unique, name: 'idx_showrooms_showroom_id']
+  }
 }
 
 Table user_showroom_relations {

@@ -217,9 +217,9 @@ func TestRepositoryFindShowroomRolesByUserIDSuccess(t *testing.T) {
 	gormDB, mock := newMockDB(t)
 	repo := user.NewRepository(gormDB)
 
-	rows := sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}).
-		AddRow(uint64(1), "Showroom A", "owner").
-		AddRow(uint64(2), "Showroom B", "manager")
+	rows := sqlmock.NewRows([]string{"showroom_id", "external_showroom_id", "showroom_name", "role"}).
+		AddRow(uint64(1), "SHOP0001", "Showroom A", "owner").
+		AddRow(uint64(2), "SHOP0002", "Showroom B", "manager")
 	mock.ExpectQuery(`user_showroom_relations`).
 		WillReturnRows(rows)
 
@@ -230,6 +230,9 @@ func TestRepositoryFindShowroomRolesByUserIDSuccess(t *testing.T) {
 	if len(results) != 2 {
 		t.Fatalf("expected 2 results, got %d", len(results))
 	}
+	if results[0].ExternalShowroomID != "SHOP0001" {
+		t.Fatalf("expected external showroom id SHOP0001, got %s", results[0].ExternalShowroomID)
+	}
 }
 
 func TestRepositoryFindShowroomRolesByUserIDEmpty(t *testing.T) {
@@ -237,7 +240,7 @@ func TestRepositoryFindShowroomRolesByUserIDEmpty(t *testing.T) {
 	repo := user.NewRepository(gormDB)
 
 	mock.ExpectQuery(`user_showroom_relations`).
-		WillReturnRows(sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}))
+		WillReturnRows(sqlmock.NewRows([]string{"showroom_id", "external_showroom_id", "showroom_name", "role"}))
 
 	results, err := repo.FindShowroomRolesByUserID(context.Background(), 42)
 	if err != nil {
@@ -265,9 +268,9 @@ func TestRepositoryLoadUserShowroomRolesSuccess(t *testing.T) {
 	gormDB, mock := newMockDB(t)
 	repo := user.NewRepository(gormDB)
 
-	rows := sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}).
-		AddRow(uint64(1), "Showroom A", "owner").
-		AddRow(uint64(2), "Showroom B", "manager")
+	rows := sqlmock.NewRows([]string{"showroom_id", "external_showroom_id", "showroom_name", "role"}).
+		AddRow(uint64(1), "SHOP0001", "Showroom A", "owner").
+		AddRow(uint64(2), "SHOP0002", "Showroom B", "manager")
 	mock.ExpectQuery(`user_showroom_relations`).
 		WillReturnRows(rows)
 
@@ -291,7 +294,7 @@ func TestRepositoryLoadUserShowroomRolesEmpty(t *testing.T) {
 	repo := user.NewRepository(gormDB)
 
 	mock.ExpectQuery(`user_showroom_relations`).
-		WillReturnRows(sqlmock.NewRows([]string{"showroom_id", "showroom_name", "role"}))
+		WillReturnRows(sqlmock.NewRows([]string{"showroom_id", "external_showroom_id", "showroom_name", "role"}))
 
 	result, err := repo.LoadUserShowroomRoles(context.Background(), 42)
 	if err != nil {

@@ -9,9 +9,10 @@ type UpdateProfileResponse struct {
 }
 
 type ShowroomRole struct {
-	ShowroomID   uint64       `json:"showroom_id"`
-	ShowroomName string       `json:"showroom_name"`
-	Role         UserRoleType `json:"role"`
+	ShowroomID         uint64       `json:"showroom_id"`
+	ExternalShowroomID string       `json:"external_showroom_id"`
+	ShowroomName       string       `json:"showroom_name"`
+	Role               UserRoleType `json:"role"`
 }
 
 type GetProfileResponse struct {

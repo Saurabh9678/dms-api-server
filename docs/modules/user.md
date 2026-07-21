@@ -68,14 +68,14 @@
    - Returns `name` as `*string` (nil if empty), `country_code` separately, and `phone_number` as the local stored phone number without country code
    - Returns `required_name: true` when the authenticated user has not set a name
    - Returns `has_showrooms` and `has_vehicles` for client onboarding decisions
-   - Returns `showroom_roles` as a slice (empty array if none)
+   - Returns `showroom_roles` as a slice (empty array if none). Each role keeps numeric `showroom_id` for existing clients and includes `external_showroom_id` for the generated 8-character showroom identifier.
 6. **Repository** (`internal/modules/user/repository.go`):
    - `FindByID` queries `users` table by primary key; returns `ErrUserNotFound` if not found
-   - `FindShowroomRolesByUserID` joins `user_showroom_relations`, `showrooms`, and `user_roles`; returns `[]ShowroomRole`
+   - `FindShowroomRolesByUserID` joins `user_showroom_relations`, `showrooms`, and `user_roles`; returns `[]ShowroomRole` with numeric `showroom_id` and string `external_showroom_id`
    - `LoadOnboardingFlags` returns `has_showrooms` when the user has at least one active/non-deleted showroom membership and `has_vehicles` when a non-deleted vehicle belongs to any active/non-deleted showroom for that user
 
 **Response**:
-- **200 OK**: `{"success": true, "message": "profile fetched", "data": {"name": "John Doe" | null, "country_code": "+91" | null, "phone_number": "9999999999" | null, "showroom_roles": [{"showroom_id": 1, "showroom_name": "Showroom A", "role": "owner"}], "required_name": false, "has_showrooms": true, "has_vehicles": true}}`
+- **200 OK**: `{"success": true, "message": "profile fetched", "data": {"name": "John Doe" | null, "country_code": "+91" | null, "phone_number": "9999999999" | null, "showroom_roles": [{"showroom_id": 1, "external_showroom_id": "SHOP0001", "showroom_name": "Showroom A", "role": "owner"}], "required_name": false, "has_showrooms": true, "has_vehicles": true}}`
 - **400 INVALID_DEVICE_CONTEXT**: Missing or invalid device-context headers
 - **401 INVALID_ACCESS_TOKEN**: Missing or invalid Bearer token
 - **404 USER_NOT_FOUND**: User ID from token not found in database

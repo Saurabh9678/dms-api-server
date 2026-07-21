@@ -20,8 +20,8 @@ response:
           "country_code": "+91",
           "phone_number": "9999999999",
           "showroom_roles": [
-            {"showroom_id": 1, "showroom_name": "Showroom A", "role": "owner"},
-            {"showroom_id": 2, "showroom_name": "Showroom B", "role": "manager"}
+            {"showroom_id": 1, "external_showroom_id": "SHOP0001", "showroom_name": "Showroom A", "role": "owner"},
+            {"showroom_id": 2, "external_showroom_id": "SHOP0002", "showroom_name": "Showroom B", "role": "manager"}
           ],
           "required_name": false,
           "has_showrooms": true,

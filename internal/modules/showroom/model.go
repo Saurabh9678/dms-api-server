@@ -8,6 +8,7 @@ import (
 
 type Showroom struct {
 	ID                  uint64          `gorm:"primaryKey;autoIncrement" json:"id"`
+	ShowroomID          string          `gorm:"column:showroom_id;type:varchar(8);uniqueIndex;not null" json:"showroom_id"`
 	Name                string          `gorm:"type:varchar(255);not null" json:"name"`
 	ShowroomLogo        *string         `gorm:"type:text" json:"showroom_logo"`
 	ShowroomBanner      *string         `gorm:"type:text" json:"showroom_banner"`

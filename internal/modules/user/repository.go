@@ -57,7 +57,7 @@ func (r *Repository) FindShowroomRolesByUserID(ctx context.Context, userID uint6
 	var results []ShowroomRole
 	err := r.db.WithContext(ctx).
 		Table("user_showroom_relations usr").
-		Select("usr.showroom_id, s.name AS showroom_name, ur.type AS role").
+		Select("usr.showroom_id, s.showroom_id AS external_showroom_id, s.name AS showroom_name, ur.type AS role").
 		Joins("JOIN showrooms s ON s.id = usr.showroom_id").
 		Joins("JOIN user_roles ur ON ur.id = usr.role_id").
 		Where("usr.user_id = ? AND usr.deleted_at IS NULL", userID).
