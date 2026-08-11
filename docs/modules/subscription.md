@@ -34,6 +34,7 @@ See `docs/database/tables/subscription_*.md` and `docs/database/tables/dealer_su
 - `000023_create_subscription_pricing_table`
 - `000024_create_plan_features_table`
 - `000025_create_dealer_subscriptions_table`
+- `000031_add_subscription_features_soft_delete` — adds `subscription_features.deleted_at` and partial unique on `key` for active rows
 
 ## API Endpoints
 
@@ -67,3 +68,4 @@ None yet. HTTP handlers and routes will be added when subscription APIs are defi
 - `dealer_id` is `BIGINT` and references `users.id` (dealers are authenticated users).
 - Plan primary keys and most subscription entities use `UUID`; user IDs remain `BIGSERIAL`.
 - `subscription_plans.customer_id` is `UUID` with no FK yet — `customers.id` is still `BIGSERIAL`.
+- `subscription_features.deleted_at` soft-deletes features. Active `key` uniqueness is enforced by partial unique index `idx_subscription_features_key_active`. Soft-deleted features are omitted from catalog lists by default and from new plan feature attachment; existing `plan_features` rows are retained.
