@@ -20,7 +20,7 @@ response:
           "showroom_id": "SHOP0001",
           "name": "Updated Showroom Name",
           "showroom_logo": null,
-          "showroom_banner": "1/1/20240101120000.jpg",
+          "showroom_banner": "https://storage.googleapis.com/dms-dev-assets/1/showroom/SHOP0001/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...",
           "geolocation": {"address":"456 New St","city":"Mumbai","state":"Maharashtra","pincode":"400001","lat":19.076,"lng":72.8777}
         }
       }

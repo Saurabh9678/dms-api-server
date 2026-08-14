@@ -109,6 +109,22 @@ func TestRun_ExitsOnServerError(t *testing.T) {
 	assert.Equal(t, 1, exitCode)
 }
 
+func TestBuildDependencies_StorageInitPanics(t *testing.T) {
+	gormDB, _ := newTestGormDB(t)
+	log := slog.New(slog.NewTextHandler(io.Discard, nil))
+	cfg := &config.Config{
+		Env: "development",
+		Storage: config.StorageConfig{
+			Provider: "gcs",
+			// missing bucket triggers NewProvider error
+		},
+	}
+
+	assert.Panics(t, func() {
+		_ = buildDependencies(cfg, gormDB, log)
+	})
+}
+
 func TestNewRouter_HealthEndpoint_PingError(t *testing.T) {
 	gormDB, _ := newTestGormDB(t)
 	sqlDB, mock, err := sqlmock.New(sqlmock.MonitorPingsOption(true))

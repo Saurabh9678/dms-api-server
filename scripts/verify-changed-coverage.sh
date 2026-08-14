@@ -91,6 +91,13 @@ resolve_test_targets() {
 		# config has whitebox tests inside the package alongside external tests
 		targets="./tests/... ./${pkg_dir}/..."
 		;;
+	internal/infra/storage)
+		# local tests live under tests/unit/storage; GCS whitebox tests live in-package
+		targets="./tests/unit/storage/... ./${pkg_dir}/..."
+		;;
+	internal/providers/storage)
+		targets="./${pkg_dir}/..."
+		;;
 	esac
 
 	if [[ -z "$targets" ]]; then

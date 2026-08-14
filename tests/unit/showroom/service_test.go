@@ -9,7 +9,9 @@ import (
 	"net/http"
 	"net/textproto"
 	"regexp"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -91,6 +93,27 @@ func (m *mockStorageProvider) Upload(ctx context.Context, key string, data []byt
 	return args.String(0), args.Error(1)
 }
 
+func (m *mockStorageProvider) SignedURL(ctx context.Context, key string, ttl time.Duration) (string, error) {
+	if !mockHasExpectation(m, "SignedURL") {
+		return key, nil
+	}
+	args := m.Called(ctx, key, ttl)
+	return args.String(0), args.Error(1)
+}
+
+func mockHasExpectation(m *mockStorageProvider, method string) bool {
+	for _, call := range m.ExpectedCalls {
+		if call.Method == method {
+			return true
+		}
+	}
+	return false
+}
+
+func newMockStorage() *mockStorageProvider {
+	return new(mockStorageProvider)
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 func makeFileHeader(filename string, size int64) *multipart.FileHeader {
@@ -139,7 +162,7 @@ var showroomIDPattern = regexp.MustCompile(`^[A-Z0-9]{8}$`)
 
 func TestCreateShowroom_EmptyName(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	_, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "  "}, nil, nil)
@@ -149,7 +172,7 @@ func TestCreateShowroom_EmptyName(t *testing.T) {
 
 func TestCreateShowroom_InvalidGeolocationJSON(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	_, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{
@@ -162,7 +185,7 @@ func TestCreateShowroom_InvalidGeolocationJSON(t *testing.T) {
 
 func TestCreateShowroom_LogoTooLarge(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	logo := makeFileHeader("logo.jpg", 11*1024*1024)
@@ -174,7 +197,7 @@ func TestCreateShowroom_LogoTooLarge(t *testing.T) {
 
 func TestCreateShowroom_BannerInvalidExtension(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	banner := makeFileHeader("banner.gif", 100)
@@ -186,7 +209,7 @@ func TestCreateShowroom_BannerInvalidExtension(t *testing.T) {
 
 func TestCreateShowroom_CreateWithOwnerError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).
@@ -199,7 +222,7 @@ func TestCreateShowroom_CreateWithOwnerError(t *testing.T) {
 
 func TestCreateShowroom_AssignsGeneratedShowroomIDToRepository(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
@@ -214,7 +237,7 @@ func TestCreateShowroom_AssignsGeneratedShowroomIDToRepository(t *testing.T) {
 
 func TestCreateShowroom_DuplicateShowroomIDRetrySuccess(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
@@ -234,7 +257,7 @@ func TestCreateShowroom_DuplicateShowroomIDRetrySuccess(t *testing.T) {
 
 func TestListShowrooms_RepoError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("ListByUserID", mock.Anything, uint64(1)).
 		Return([]showroom.ShowroomListRecord{}, errors.New("db error"))
@@ -246,7 +269,7 @@ func TestListShowrooms_RepoError(t *testing.T) {
 
 func TestListShowrooms_EmptyList(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("ListByUserID", mock.Anything, uint64(1)).
 		Return([]showroom.ShowroomListRecord{}, nil)
@@ -259,7 +282,7 @@ func TestListShowrooms_EmptyList(t *testing.T) {
 
 func TestListShowrooms_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("ListByUserID", mock.Anything, uint64(1)).
 		Return([]showroom.ShowroomListRecord{
@@ -280,7 +303,7 @@ func TestListShowrooms_Success(t *testing.T) {
 
 func TestCreateShowroom_DuplicateShowroomIDRetryExhausted(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.MatchedBy(func(s *showroom.Showroom) bool {
@@ -294,7 +317,7 @@ func TestCreateShowroom_DuplicateShowroomIDRetryExhausted(t *testing.T) {
 
 func TestCreateShowroom_NoFiles_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
 	created := &showroom.Showroom{ID: 7, ShowroomID: "ABC12345", Name: "MyShowroom"}
@@ -314,10 +337,10 @@ func TestCreateShowroom_NoFiles_Success(t *testing.T) {
 
 func TestCreateShowroom_WithValidGeolocation_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
-	created := &showroom.Showroom{ID: 8, Name: "Geo"}
+	created := &showroom.Showroom{ID: 8, ShowroomID: "GEO00001", Name: "Geo"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(2), mock.Anything).Return(created, nil)
 
 	geo := `{"address":"123 Main St","city":"Bengaluru"}`
@@ -332,11 +355,11 @@ func TestCreateShowroom_WithValidGeolocation_Success(t *testing.T) {
 
 func TestCreateShowroom_LogoOpenError_SkipsUpload(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(errorOpener(errors.New("open failed"))))
 
-	created := &showroom.Showroom{ID: 3, Name: "X"}
+	created := &showroom.Showroom{ID: 3, ShowroomID: "OPEN0003", Name: "X"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 
 	logo := makeFileHeader("logo.jpg", 100)
@@ -348,12 +371,12 @@ func TestCreateShowroom_LogoOpenError_SkipsUpload(t *testing.T) {
 
 func TestCreateShowroom_LogoStorageError_SkipsUpload(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	imgData := []byte("fake-image-data")
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(inMemoryOpener(imgData)))
 
-	created := &showroom.Showroom{ID: 4, Name: "X"}
+	created := &showroom.Showroom{ID: 4, ShowroomID: "FAIL0004", Name: "X"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
@@ -367,16 +390,16 @@ func TestCreateShowroom_LogoStorageError_SkipsUpload(t *testing.T) {
 
 func TestCreateShowroom_BothFiles_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	imgData := []byte("image-bytes")
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(inMemoryOpener(imgData)))
 
-	created := &showroom.Showroom{ID: 5, Name: "Both"}
+	created := &showroom.Showroom{ID: 5, ShowroomID: "BOTH0005", Name: "Both"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 
-	logoPath := "1/5/logo.jpg"
-	bannerPath := "1/5/banner.png"
+	logoPath := "1/showroom/BOTH0005/logo.jpg"
+	bannerPath := "1/showroom/BOTH0005/banner.png"
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
 		Return(logoPath, nil).Once()
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
@@ -397,12 +420,12 @@ func TestCreateShowroom_BothFiles_Success(t *testing.T) {
 
 func TestCreateShowroom_BannerStorageError_SkipsUpload(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	imgData := []byte("image-bytes")
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(inMemoryOpener(imgData)))
 
-	created := &showroom.Showroom{ID: 6, Name: "X"}
+	created := &showroom.Showroom{ID: 6, ShowroomID: "BANR0006", Name: "X"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
 		Return("", errors.New("upload failed"))
@@ -415,15 +438,15 @@ func TestCreateShowroom_BannerStorageError_SkipsUpload(t *testing.T) {
 
 func TestCreateShowroom_LogoOnlyUploadSuccess_UpdateFilePaths(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	imgData := []byte("img")
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(inMemoryOpener(imgData)))
 
-	created := &showroom.Showroom{ID: 9, Name: "Logo"}
+	created := &showroom.Showroom{ID: 9, ShowroomID: "LOGO0009", Name: "Logo"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
-		Return("1/9/logo.jpg", nil)
+		Return("1/showroom/LOGO0009/logo.jpg", nil)
 	repo.On("UpdateFilePaths", mock.Anything, uint64(9), mock.Anything, (*string)(nil)).Return(nil)
 
 	logo := makeFileHeader("logo.jpg", int64(len(imgData)))
@@ -436,13 +459,13 @@ func TestCreateShowroom_LogoOnlyUploadSuccess_UpdateFilePaths(t *testing.T) {
 
 func TestCreateShowroom_DefaultOpenFile_UploadSuccess(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage)
 
-	created := &showroom.Showroom{ID: 20, Name: "Default"}
+	created := &showroom.Showroom{ID: 20, ShowroomID: "DEFT0020", Name: "Default"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
-		Return("1/20/logo.jpg", nil)
+		Return("1/showroom/DEFT0020/logo.jpg", nil)
 	repo.On("UpdateFilePaths", mock.Anything, uint64(20), mock.Anything, (*string)(nil)).Return(nil)
 
 	logo := parsedFileHeader(t, "showroom_logo", "logo.jpg", []byte("img-data"))
@@ -456,15 +479,15 @@ func TestCreateShowroom_DefaultOpenFile_UploadSuccess(t *testing.T) {
 
 func TestCreateShowroom_EmptyContentType_UsesOctetStream(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	imgData := []byte("img")
 	svc := showroom.NewService(repo, storage,
 		showroom.WithFileOpener(inMemoryOpener(imgData)))
 
-	created := &showroom.Showroom{ID: 10, Name: "CT"}
+	created := &showroom.Showroom{ID: 10, ShowroomID: "CTYP0010", Name: "CT"}
 	repo.On("CreateWithOwner", mock.Anything, uint64(1), mock.Anything).Return(created, nil)
 	storage.On("Upload", mock.Anything, mock.Anything, mock.Anything, "application/octet-stream").
-		Return("1/10/logo.jpg", nil)
+		Return("1/showroom/CTYP0010/logo.jpg", nil)
 	repo.On("UpdateFilePaths", mock.Anything, uint64(10), mock.Anything, (*string)(nil)).Return(nil)
 
 	fh := &multipart.FileHeader{
@@ -475,6 +498,64 @@ func TestCreateShowroom_EmptyContentType_UsesOctetStream(t *testing.T) {
 	resp, err := svc.CreateShowroom(context.Background(), 1, &showroom.CreateShowroomRequest{Name: "CT"}, fh, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
+	storage.AssertExpectations(t)
+}
+
+func TestCreateShowroom_UploadKeyUsesExternalShowroomID(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := newMockStorage()
+	imgData := []byte("img")
+	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener(imgData)))
+
+	created := &showroom.Showroom{ID: 42, ShowroomID: "EXT12345", Name: "Path"}
+	repo.On("CreateWithOwner", mock.Anything, uint64(7), mock.Anything).Return(created, nil)
+	storage.On("Upload", mock.Anything, mock.MatchedBy(func(key string) bool {
+		return strings.HasPrefix(key, "7/showroom/EXT12345/") && strings.HasSuffix(key, ".jpg")
+	}), mock.Anything, mock.Anything).Return("7/showroom/EXT12345/20260101120000.jpg", nil)
+	repo.On("UpdateFilePaths", mock.Anything, uint64(42), mock.Anything, (*string)(nil)).Return(nil)
+
+	logo := makeFileHeader("logo.jpg", int64(len(imgData)))
+	resp, err := svc.CreateShowroom(context.Background(), 7, &showroom.CreateShowroomRequest{Name: "Path"}, logo, nil)
+	require.NoError(t, err)
+	require.NotNil(t, resp.ShowroomLogo)
+	assert.Equal(t, "7/showroom/EXT12345/20260101120000.jpg", *resp.ShowroomLogo)
+	storage.AssertExpectations(t)
+}
+
+func TestUpdateShowroom_SignedURLFailure_OmitsMediaURLs(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	storage.On("SignedURL", mock.Anything, mock.Anything, mock.Anything).
+		Return("", errors.New("sign failed"))
+
+	svc := showroom.NewService(repo, storage)
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, nil)
+	require.NoError(t, err)
+	assert.Nil(t, resp.ShowroomLogo)
+	assert.Nil(t, resp.ShowroomBanner)
+}
+
+func TestNewService_WithSignedURLTTL(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	storage.On("SignedURL", mock.Anything, "old/logo.jpg", 30*time.Minute).
+		Return("https://signed/logo", nil).Once()
+	storage.On("SignedURL", mock.Anything, "old/banner.jpg", 30*time.Minute).
+		Return("https://signed/banner", nil).Once()
+
+	svc := showroom.NewService(repo, storage, showroom.WithSignedURLTTL(30*time.Minute))
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+
+	resp, err := svc.UpdateShowroom(context.Background(), uint64(1), ownerRoles(1), uint64(1),
+		&showroom.UpdateShowroomRequest{}, nil, nil)
+	require.NoError(t, err)
+	require.NotNil(t, resp.ShowroomLogo)
+	require.NotNil(t, resp.ShowroomBanner)
+	assert.Equal(t, "https://signed/logo", *resp.ShowroomLogo)
+	assert.Equal(t, "https://signed/banner", *resp.ShowroomBanner)
 	storage.AssertExpectations(t)
 }
 
@@ -494,7 +575,7 @@ func employeeRoles(showroomID uint64) map[uint64]string {
 
 func TestAddMember_CallerNotMember_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.AddMember(context.Background(), map[uint64]string{}, uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
 	assert.Error(t, err)
@@ -502,7 +583,7 @@ func TestAddMember_CallerNotMember_Forbidden(t *testing.T) {
 
 func TestAddMember_CallerIsEmployee_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.AddMember(context.Background(), employeeRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "employee"})
 	assert.Error(t, err)
@@ -510,7 +591,7 @@ func TestAddMember_CallerIsEmployee_Forbidden(t *testing.T) {
 
 func TestAddMember_InvalidRole(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.AddMember(context.Background(), ownerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "owner"})
 	assert.Error(t, err)
@@ -519,7 +600,7 @@ func TestAddMember_InvalidRole(t *testing.T) {
 
 func TestAddMember_ManagerTriesToAddManager_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.AddMember(context.Background(), managerRoles(1), uint64(1), &showroom.AddMemberRequest{UserID: 99, Role: "manager"})
 	assert.Error(t, err)
@@ -528,7 +609,7 @@ func TestAddMember_ManagerTriesToAddManager_Forbidden(t *testing.T) {
 
 func TestAddMember_TargetUserNotFound(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
 		Return(showroom.ErrTargetUserNotFound)
@@ -539,7 +620,7 @@ func TestAddMember_TargetUserNotFound(t *testing.T) {
 
 func TestAddMember_AlreadyAMember(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
 		Return(showroom.ErrDuplicateMember)
@@ -550,7 +631,7 @@ func TestAddMember_AlreadyAMember(t *testing.T) {
 
 func TestAddMember_RepoError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").
 		Return(errors.New("db error"))
@@ -561,7 +642,7 @@ func TestAddMember_RepoError(t *testing.T) {
 
 func TestAddMember_OwnerAddsEmployee_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").Return(nil)
 
@@ -574,7 +655,7 @@ func TestAddMember_OwnerAddsEmployee_Success(t *testing.T) {
 
 func TestAddMember_OwnerAddsManager_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "manager").Return(nil)
 
@@ -585,7 +666,7 @@ func TestAddMember_OwnerAddsManager_Success(t *testing.T) {
 
 func TestAddMember_ManagerAddsEmployee_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("AddMember", mock.Anything, uint64(1), uint64(99), "employee").Return(nil)
 
@@ -598,7 +679,7 @@ func TestAddMember_ManagerAddsEmployee_Success(t *testing.T) {
 
 func TestListMembers_CallerNotMember_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.ListMembers(context.Background(), map[uint64]string{}, uint64(1), 1, 20)
 	assert.Error(t, err)
@@ -606,7 +687,7 @@ func TestListMembers_CallerNotMember_Forbidden(t *testing.T) {
 
 func TestListMembers_CallerIsEmployee_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.ListMembers(context.Background(), employeeRoles(1), uint64(1), 1, 20)
 	assert.Error(t, err)
@@ -614,7 +695,7 @@ func TestListMembers_CallerIsEmployee_Forbidden(t *testing.T) {
 
 func TestListMembers_RepoError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
 		Return([]showroom.MemberRecord{}, int64(0), errors.New("db error"))
@@ -625,7 +706,7 @@ func TestListMembers_RepoError(t *testing.T) {
 
 func TestListMembers_EmptyList(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("ListMembers", mock.Anything, uint64(1), 1, 20).
 		Return([]showroom.MemberRecord{}, int64(0), nil)
@@ -638,7 +719,7 @@ func TestListMembers_EmptyList(t *testing.T) {
 
 func TestListMembers_WithNameAndPhone_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	records := []showroom.MemberRecord{
 		{UserID: 10, Name: "Alice", CountryCode: "+91", PhoneNumber: "9999999999", Role: "manager"},
@@ -659,7 +740,7 @@ func TestListMembers_WithNameAndPhone_Success(t *testing.T) {
 
 func TestListMembers_EmptyNameAndPhone_NilFields(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	records := []showroom.MemberRecord{
 		{UserID: 11, Name: "", CountryCode: "", PhoneNumber: "", Role: "employee"},
@@ -679,7 +760,7 @@ func TestListMembers_EmptyNameAndPhone_NilFields(t *testing.T) {
 
 func TestRemoveMember_NotMemberAndNotSelf_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	err := svc.RemoveMember(context.Background(), uint64(1), map[uint64]string{}, uint64(1), uint64(99))
 	assert.Error(t, err)
@@ -687,7 +768,7 @@ func TestRemoveMember_NotMemberAndNotSelf_Forbidden(t *testing.T) {
 
 func TestRemoveMember_SelfRemoval_NotMemberAtAll_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	// callerUserID == targetUserID but no role in showroom
 	err := svc.RemoveMember(context.Background(), uint64(99), map[uint64]string{}, uint64(1), uint64(99))
@@ -696,7 +777,7 @@ func TestRemoveMember_SelfRemoval_NotMemberAtAll_Forbidden(t *testing.T) {
 
 func TestRemoveMember_SelfRemoval_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
 
@@ -706,7 +787,7 @@ func TestRemoveMember_SelfRemoval_Success(t *testing.T) {
 
 func TestRemoveMember_OwnerRemovesManager_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
 
@@ -716,7 +797,7 @@ func TestRemoveMember_OwnerRemovesManager_Success(t *testing.T) {
 
 func TestRemoveMember_ManagerRemovesEmployee_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("employee", nil)
 	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(nil)
@@ -727,7 +808,7 @@ func TestRemoveMember_ManagerRemovesEmployee_Success(t *testing.T) {
 
 func TestRemoveMember_ManagerTriesToRemoveManager_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("manager", nil)
 
@@ -737,7 +818,7 @@ func TestRemoveMember_ManagerTriesToRemoveManager_Forbidden(t *testing.T) {
 
 func TestRemoveMember_ManagerTriesToRemoveOwner_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("owner", nil)
 
@@ -747,7 +828,7 @@ func TestRemoveMember_ManagerTriesToRemoveOwner_Forbidden(t *testing.T) {
 
 func TestRemoveMember_GetMemberRole_NotFound(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("", showroom.ErrMemberNotFound)
 
@@ -757,7 +838,7 @@ func TestRemoveMember_GetMemberRole_NotFound(t *testing.T) {
 
 func TestRemoveMember_GetMemberRole_DBError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetMemberRole", mock.Anything, uint64(1), uint64(99)).Return("", errors.New("db error"))
 
@@ -767,7 +848,7 @@ func TestRemoveMember_GetMemberRole_DBError(t *testing.T) {
 
 func TestRemoveMember_MemberNotFound(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(showroom.ErrMemberNotFound)
 
@@ -777,7 +858,7 @@ func TestRemoveMember_MemberNotFound(t *testing.T) {
 
 func TestRemoveMember_RepoError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("RemoveMember", mock.Anything, uint64(1), uint64(99)).Return(errors.New("db error"))
 
@@ -789,7 +870,7 @@ func TestRemoveMember_RepoError(t *testing.T) {
 
 func TestUpdateMemberRole_CallerNotOwner_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), managerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "employee"})
 	assert.Error(t, err)
@@ -797,7 +878,7 @@ func TestUpdateMemberRole_CallerNotOwner_Forbidden(t *testing.T) {
 
 func TestUpdateMemberRole_SelfRoleChange_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	// callerUserID == targetUserID
 	_, err := svc.UpdateMemberRole(context.Background(), uint64(99), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "employee"})
@@ -806,7 +887,7 @@ func TestUpdateMemberRole_SelfRoleChange_Forbidden(t *testing.T) {
 
 func TestUpdateMemberRole_InvalidRole(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.UpdateMemberRole(context.Background(), uint64(1), ownerRoles(1), uint64(1), uint64(99), &showroom.UpdateMemberRoleRequest{Role: "owner"})
 	assert.Error(t, err)
@@ -815,7 +896,7 @@ func TestUpdateMemberRole_InvalidRole(t *testing.T) {
 
 func TestServiceUpdateMemberRole_MemberNotFound(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").
 		Return(showroom.ErrMemberNotFound)
@@ -826,7 +907,7 @@ func TestServiceUpdateMemberRole_MemberNotFound(t *testing.T) {
 
 func TestUpdateMemberRole_RepoError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").
 		Return(errors.New("db error"))
@@ -837,7 +918,7 @@ func TestUpdateMemberRole_RepoError(t *testing.T) {
 
 func TestServiceUpdateMemberRole_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("UpdateMemberRole", mock.Anything, uint64(1), uint64(99), "manager").Return(nil)
 
@@ -858,7 +939,7 @@ func existingShowroom() *showroom.Showroom {
 
 func TestUpdateShowroom_Forbidden(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	_, err := svc.UpdateShowroom(context.Background(), uint64(1), employeeRoles(1), uint64(1), &showroom.UpdateShowroomRequest{}, nil, nil)
 	assert.Error(t, err)
@@ -867,7 +948,7 @@ func TestUpdateShowroom_Forbidden(t *testing.T) {
 
 func TestUpdateShowroom_ShowroomNotFound(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, showroom.ErrShowroomNotFound)
 
@@ -877,7 +958,7 @@ func TestUpdateShowroom_ShowroomNotFound(t *testing.T) {
 
 func TestUpdateShowroom_GetByIDDBError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
 
@@ -887,7 +968,7 @@ func TestUpdateShowroom_GetByIDDBError(t *testing.T) {
 
 func TestUpdateShowroom_InvalidGeolocationJSON(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 
@@ -899,7 +980,7 @@ func TestUpdateShowroom_InvalidGeolocationJSON(t *testing.T) {
 
 func TestUpdateShowroom_LogoFileTooLarge(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	logo := makeFileHeader("logo.jpg", 11*1024*1024)
@@ -912,7 +993,7 @@ func TestUpdateShowroom_LogoFileTooLarge(t *testing.T) {
 
 func TestUpdateShowroom_BannerInvalidExt(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	banner := makeFileHeader("banner.gif", 100)
@@ -925,7 +1006,7 @@ func TestUpdateShowroom_BannerInvalidExt(t *testing.T) {
 
 func TestUpdateShowroom_NoChanges_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	existing := existingShowroom()
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existing, nil)
@@ -940,7 +1021,7 @@ func TestUpdateShowroom_NoChanges_Success(t *testing.T) {
 
 func TestUpdateShowroom_UpdateNameAndGeo_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
@@ -954,7 +1035,7 @@ func TestUpdateShowroom_UpdateNameAndGeo_Success(t *testing.T) {
 
 func TestUpdateShowroom_RemoveLogo_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
@@ -967,7 +1048,7 @@ func TestUpdateShowroom_RemoveLogo_Success(t *testing.T) {
 
 func TestUpdateShowroom_RemoveBanner_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)
@@ -980,7 +1061,7 @@ func TestUpdateShowroom_RemoveBanner_Success(t *testing.T) {
 
 func TestUpdateShowroom_LogoUploadSuccess(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
@@ -997,7 +1078,7 @@ func TestUpdateShowroom_LogoUploadSuccess(t *testing.T) {
 
 func TestUpdateShowroom_LogoUploadFails_LogoUnchanged(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(errorOpener(errors.New("open fail"))))
 
 	existing := existingShowroom()
@@ -1014,7 +1095,7 @@ func TestUpdateShowroom_LogoUploadFails_LogoUnchanged(t *testing.T) {
 
 func TestUpdateShowroom_LogoUploadOverridesRemoveLogo(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
@@ -1031,7 +1112,7 @@ func TestUpdateShowroom_LogoUploadOverridesRemoveLogo(t *testing.T) {
 
 func TestUpdateShowroom_BannerUploadSuccess(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(inMemoryOpener([]byte("img"))))
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
@@ -1048,7 +1129,7 @@ func TestUpdateShowroom_BannerUploadSuccess(t *testing.T) {
 
 func TestUpdateShowroom_BannerUploadFails_BannerUnchanged(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	storage := new(mockStorageProvider)
+	storage := newMockStorage()
 	svc := showroom.NewService(repo, storage, showroom.WithFileOpener(errorOpener(errors.New("open fail"))))
 
 	existing := existingShowroom()
@@ -1064,7 +1145,7 @@ func TestUpdateShowroom_BannerUploadFails_BannerUnchanged(t *testing.T) {
 
 func TestUpdateShowroom_UpdateShowroomFieldsError(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(errors.New("db error"))
@@ -1076,7 +1157,7 @@ func TestUpdateShowroom_UpdateShowroomFieldsError(t *testing.T) {
 
 func TestUpdateShowroom_ManagerCanUpdate_Success(t *testing.T) {
 	repo := new(mockShowroomRepo)
-	svc := showroom.NewService(repo, new(mockStorageProvider))
+	svc := showroom.NewService(repo, newMockStorage())
 
 	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
 	repo.On("UpdateShowroomFields", mock.Anything, uint64(1), mock.Anything).Return(nil)

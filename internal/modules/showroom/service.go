@@ -40,6 +40,15 @@ func WithFileOpener(fn func(*multipart.FileHeader) (io.ReadCloser, error)) Servi
 	return func(s *service) { s.openFile = fn }
 }
 
+// WithSignedURLTTL overrides the signed URL lifetime used in API responses.
+func WithSignedURLTTL(ttl time.Duration) ServiceOption {
+	return func(s *service) {
+		if ttl > 0 {
+			s.signedURLTTL = ttl
+		}
+	}
+}
+
 type Service interface {
 	CreateShowroom(ctx context.Context, userID uint64, req *CreateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
 	ListShowrooms(ctx context.Context, userID uint64) (*ListShowroomsResponse, error)
@@ -64,15 +73,17 @@ type showroomRepo interface {
 }
 
 type service struct {
-	repo     showroomRepo
-	storage  storageprovider.Provider
-	openFile func(*multipart.FileHeader) (io.ReadCloser, error)
+	repo         showroomRepo
+	storage      storageprovider.Provider
+	signedURLTTL time.Duration
+	openFile     func(*multipart.FileHeader) (io.ReadCloser, error)
 }
 
 func NewService(repo showroomRepo, storage storageprovider.Provider, opts ...ServiceOption) Service {
 	s := &service{
-		repo:    repo,
-		storage: storage,
+		repo:         repo,
+		storage:      storage,
+		signedURLTTL: time.Hour,
 		openFile: func(h *multipart.FileHeader) (io.ReadCloser, error) {
 			return h.Open()
 		},
@@ -123,8 +134,8 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 		return nil, err
 	}
 
-	logoPath := s.maybeUpload(ctx, userID, created.ID, logo)
-	bannerPath := s.maybeUpload(ctx, userID, created.ID, banner)
+	logoPath := s.maybeUpload(ctx, userID, created.ShowroomID, logo)
+	bannerPath := s.maybeUpload(ctx, userID, created.ShowroomID, banner)
 
 	if logoPath != nil || bannerPath != nil {
 		_ = s.repo.UpdateFilePaths(ctx, created.ID, logoPath, bannerPath)
@@ -136,8 +147,8 @@ func (s *service) CreateShowroom(ctx context.Context, userID uint64, req *Create
 		ID:             created.ID,
 		ShowroomID:     created.ShowroomID,
 		Name:           created.Name,
-		ShowroomLogo:   created.ShowroomLogo,
-		ShowroomBanner: created.ShowroomBanner,
+		ShowroomLogo:   s.resolveAccessURL(ctx, created.ShowroomLogo),
+		ShowroomBanner: s.resolveAccessURL(ctx, created.ShowroomBanner),
 		Geolocation:    created.ShowroomGeolocation,
 	}, nil
 }
@@ -199,7 +210,7 @@ func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, calle
 		if err := validateFile(logo); err != nil {
 			return nil, err
 		}
-		if path := s.maybeUpload(ctx, callerUserID, showroomID, logo); path != nil {
+		if path := s.maybeUpload(ctx, callerUserID, existing.ShowroomID, logo); path != nil {
 			updates["showroom_logo"] = *path
 			existing.ShowroomLogo = path
 		}
@@ -213,7 +224,7 @@ func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, calle
 		if err := validateFile(banner); err != nil {
 			return nil, err
 		}
-		if path := s.maybeUpload(ctx, callerUserID, showroomID, banner); path != nil {
+		if path := s.maybeUpload(ctx, callerUserID, existing.ShowroomID, banner); path != nil {
 			updates["showroom_banner"] = *path
 			existing.ShowroomBanner = path
 		}
@@ -229,8 +240,8 @@ func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, calle
 		ID:             existing.ID,
 		ShowroomID:     existing.ShowroomID,
 		Name:           existing.Name,
-		ShowroomLogo:   existing.ShowroomLogo,
-		ShowroomBanner: existing.ShowroomBanner,
+		ShowroomLogo:   s.resolveAccessURL(ctx, existing.ShowroomLogo),
+		ShowroomBanner: s.resolveAccessURL(ctx, existing.ShowroomBanner),
 		Geolocation:    existing.ShowroomGeolocation,
 	}, nil
 }
@@ -339,7 +350,7 @@ func (s *service) UpdateMemberRole(ctx context.Context, callerUserID uint64, cal
 	return &AddMemberResponse{ShowroomID: showroomID, UserID: targetUserID, Role: req.Role}, nil
 }
 
-func (s *service) maybeUpload(ctx context.Context, userID, showroomID uint64, header *multipart.FileHeader) *string {
+func (s *service) maybeUpload(ctx context.Context, userID uint64, externalShowroomID string, header *multipart.FileHeader) *string {
 	if header == nil {
 		return nil
 	}
@@ -352,7 +363,7 @@ func (s *service) maybeUpload(ctx context.Context, userID, showroomID uint64, he
 	data, _ := io.ReadAll(f)
 
 	ext := strings.ToLower(filepath.Ext(header.Filename))
-	key := fmt.Sprintf("%d/%d/%s%s", userID, showroomID, time.Now().Format("20060102150405"), ext)
+	key := fmt.Sprintf("%d/showroom/%s/%s%s", userID, externalShowroomID, time.Now().Format("20060102150405"), ext)
 
 	contentType := header.Header.Get("Content-Type")
 	if contentType == "" {
@@ -364,6 +375,19 @@ func (s *service) maybeUpload(ctx context.Context, userID, showroomID uint64, he
 		return nil
 	}
 	return &path
+}
+
+// resolveAccessURL turns a stored object key into a client-facing access URL (signed when using GCS).
+// On signing failure the field is omitted (nil) so clients never receive a bare private key path.
+func (s *service) resolveAccessURL(ctx context.Context, key *string) *string {
+	if key == nil || *key == "" {
+		return nil
+	}
+	url, err := s.storage.SignedURL(ctx, *key, s.signedURLTTL)
+	if err != nil {
+		return nil
+	}
+	return &url
 }
 
 func validateFile(header *multipart.FileHeader) error {

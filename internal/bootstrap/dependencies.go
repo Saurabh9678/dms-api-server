@@ -50,9 +50,13 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	dashboardSvc := dashboard.NewService(dashboardRepo)
 	dashboardHandler := dashboard.NewHandler(dashboardSvc)
 
-	storageProvider := infrastorage.NewLocalProvider(cfg.Storage.BasePath)
+	storageProvider, err := infrastorage.NewProvider(cfg.Storage)
+	if err != nil {
+		log.Error("failed to init storage provider", "error", err)
+		panic(err)
+	}
 	showroomRepo := showroom.NewRepository(db)
-	showroomSvc := showroom.NewService(showroomRepo, storageProvider)
+	showroomSvc := showroom.NewService(showroomRepo, storageProvider, showroom.WithSignedURLTTL(cfg.Storage.SignedURLTTL))
 	showroomHandler := showroom.NewHandler(showroomSvc)
 
 	return &Dependencies{

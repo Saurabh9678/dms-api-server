@@ -11,7 +11,10 @@ type Config struct {
 }
 
 type StorageConfig struct {
-	BasePath string
+	Provider     string // local | gcs
+	BasePath     string
+	GCSBucket    string
+	SignedURLTTL time.Duration
 }
 
 type ServerConfig struct {
@@ -58,7 +61,10 @@ func defaultLoad() (*Config, error) {
 			OTPMaxDailySends:   getInt("AUTH_OTP_MAX_DAILY_SENDS", 10),
 		},
 		Storage: StorageConfig{
-			BasePath: getEnv("STORAGE_BASE_PATH", "./uploads"),
+			Provider:     getEnv("STORAGE_PROVIDER", "local"),
+			BasePath:     getEnv("STORAGE_BASE_PATH", "./uploads"),
+			GCSBucket:    getEnv("GCS_BUCKET_NAME", ""),
+			SignedURLTTL: getDurationFromSeconds("STORAGE_SIGNED_URL_TTL_SECONDS", 3600),
 		},
 	}
 	return cfg, nil

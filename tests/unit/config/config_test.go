@@ -16,7 +16,7 @@ func TestLoad_Defaults(t *testing.T) {
 		"AUTH_ACCESS_TOKEN_SECRET", "AUTH_ACCESS_TOKEN_TTL_SECONDS",
 		"AUTH_REFRESH_TOKEN_TTL_SECONDS", "AUTH_OTP_TTL_SECONDS",
 		"AUTH_OTP_MAX_ATTEMPTS", "AUTH_OTP_COOLDOWN_SECONDS", "AUTH_OTP_MAX_DAILY_SENDS",
-		"STORAGE_BASE_PATH",
+		"STORAGE_BASE_PATH", "STORAGE_PROVIDER", "GCS_BUCKET_NAME", "STORAGE_SIGNED_URL_TTL_SECONDS",
 	}
 	for _, v := range vars {
 		t.Setenv(v, "")
@@ -34,7 +34,10 @@ func TestLoad_Defaults(t *testing.T) {
 	assert.Equal(t, 5, cfg.Auth.OTPMaxAttempts)
 	assert.Equal(t, 60, cfg.Auth.OTPCooldownSeconds)
 	assert.Equal(t, 10, cfg.Auth.OTPMaxDailySends)
+	assert.Equal(t, "local", cfg.Storage.Provider)
 	assert.Equal(t, "./uploads", cfg.Storage.BasePath)
+	assert.Equal(t, "", cfg.Storage.GCSBucket)
+	assert.Equal(t, 3600*time.Second, cfg.Storage.SignedURLTTL)
 }
 
 func TestLoad_EnvOverrides(t *testing.T) {
@@ -84,4 +87,17 @@ func TestLoad_StorageBasePathOverride(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "/var/uploads", cfg.Storage.BasePath)
+}
+
+func TestLoad_StorageGCSOverrides(t *testing.T) {
+	t.Setenv("STORAGE_PROVIDER", "gcs")
+	t.Setenv("GCS_BUCKET_NAME", "dms-dev-assets")
+	t.Setenv("STORAGE_SIGNED_URL_TTL_SECONDS", "1800")
+
+	cfg, err := config.Load()
+	require.NoError(t, err)
+
+	assert.Equal(t, "gcs", cfg.Storage.Provider)
+	assert.Equal(t, "dms-dev-assets", cfg.Storage.GCSBucket)
+	assert.Equal(t, 1800*time.Second, cfg.Storage.SignedURLTTL)
 }

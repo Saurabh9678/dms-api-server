@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	storageprovider "infiour.local/dms-api-server/internal/providers/storage"
 )
@@ -26,6 +27,14 @@ func (p *LocalProvider) Upload(_ context.Context, key string, data []byte, _ str
 	}
 	if err := os.WriteFile(fullPath, data, 0644); err != nil {
 		return "", fmt.Errorf("write file: %w", err)
+	}
+	return key, nil
+}
+
+// SignedURL returns the object key for local development (no remote signing).
+func (p *LocalProvider) SignedURL(_ context.Context, key string, _ time.Duration) (string, error) {
+	if key == "" {
+		return "", fmt.Errorf("empty object key")
 	}
 	return key, nil
 }

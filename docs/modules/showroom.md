@@ -36,8 +36,9 @@
    b. Validates geolocation JSON if present.
    c. Validates files: size ≤ 10 MB, extension `.jpg`/`.jpeg`/`.png`.
   d. Generates an internal `showroom_id` (`A-Z`, `0-9`, 8 chars) and calls `repo.CreateWithOwner` in a single DB transaction: inserts showroom, looks up `owner` role, inserts `user_showroom_relations` row. Rare duplicate `showroom_id` collisions are retried.
-   e. Uploads logo and banner via `storage.Provider` (best-effort; upload failure does not fail the request).
-   f. Calls `repo.UpdateFilePaths` if any upload succeeded.
+   e. Uploads logo and banner via `storage.Provider` (best-effort; upload failure does not fail the request). Object key: `{userID}/showroom/{externalShowroomID}/{YYYYMMDDHHmmss}{ext}`.
+   f. Calls `repo.UpdateFilePaths` if any upload succeeded (stores object keys only).
+   g. Response logo/banner fields are resolved via `SignedURL` (1h by default) for client access.
 5. Returns 201 with `CreateShowroomResponse`, including numeric `id` and external string `showroom_id`.
 
 **Response branches:**
@@ -67,8 +68,11 @@
 
 ## File Storage
 
-- Provider: `storage.Provider` interface (`internal/providers/storage/provider.go`).
-- Current implementation: `internal/infra/storage.LocalProvider` — writes to `{STORAGE_BASE_PATH}/{userID}/{showroomID}/{datetime}.{ext}`.
+- Provider: `storage.Provider` interface (`internal/providers/storage/provider.go`) with `Upload` + `SignedURL`.
+- Implementations: `LocalProvider` (default) or `GCSProvider` selected by `STORAGE_PROVIDER`.
+- Object key layout: `{userID}/showroom/{externalShowroomID}/{YYYYMMDDHHmmss}{ext}`.
+- DB columns `showroom_logo` / `showroom_banner` store object keys only.
+- Create/update API responses return signed access URLs (TTL from `STORAGE_SIGNED_URL_TTL_SECONDS`, default 3600s). Signing failure omits the field (`null`).
 - Provider is injected via DI in `bootstrap/dependencies.go`.
 
 ## Endpoint: PATCH /api/v1/showroom/:id
@@ -93,10 +97,10 @@
    b. Fetches current showroom via `repo.GetByID` (404 `SHOWROOM_NOT_FOUND` if absent).
    c. Builds an updates map; missing/empty fields are skipped.
    d. Validates geolocation JSON if provided.
-   e. Validates and uploads logo/banner files if provided (best-effort — upload failure leaves the field unchanged).
+   e. Validates and uploads logo/banner files if provided (best-effort — upload failure leaves the field unchanged). Keys use external `showroom_id`.
    f. `remove_*` flags clear the respective path to NULL; a new file upload overrides the remove.
-   g. Calls `repo.UpdateShowroomFields` only if the updates map is non-empty.
-   h. Merges updates into the fetched record in memory and returns the full showroom.
+   g. Calls `repo.UpdateShowroomFields` only if the updates map is non-empty (persists object keys).
+   h. Merges updates into the fetched record in memory and resolves logo/banner via `SignedURL` for the response.
 6. Returns 200 with full showroom object (same shape as `CreateShowroomResponse`, including `showroom_id`).
 
 **Response branches:**
