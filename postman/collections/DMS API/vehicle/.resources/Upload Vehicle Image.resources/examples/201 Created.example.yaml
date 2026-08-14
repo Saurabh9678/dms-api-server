@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/image"
+  method: POST
+  headers:
+    Authorization: Bearer {{access_token}}
+    X-Platform: web
+    X-Device-Id: device-001
+response:
+  statusCode: 201
+  statusText: Created
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle image uploaded",
+        "data": {
+          "id": 9,
+          "vehicle_id": 1,
+          "label": "front",
+          "url": "https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...",
+          "uploaded_at": "2024-01-01T12:00:00Z"
+        }
+      }
+order: 1000

@@ -24,4 +24,5 @@ const (
 	CodeMemberNotFound           = "MEMBER_NOT_FOUND"
 	CodeShowroomNotFound         = "SHOWROOM_NOT_FOUND"
 	CodeVehicleAlreadyInShowroom = "VEHICLE_ALREADY_IN_SHOWROOM"
+	CodeVehicleImageNotFound     = "VEHICLE_IMAGE_NOT_FOUND"
 )

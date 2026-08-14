@@ -237,6 +237,69 @@
           ]
         },
         {
+          "name": "Get Vehicle",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "Required: JWT access token"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web",
+                "description": "Required: web | ios_mobile | android_mobile | desktop"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "device-001",
+                "description": "Required: non-empty device identifier"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vehicle/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicle",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Vehicle ID"
+                }
+              ]
+            },
+            "description": "Get vehicle details by ID. Any showroom member. Owner receives admin fields (buying price, expenses, documents). All roles receive an images section grouped by label, with signed URLs and image ids for delete."
+          },
+          "response": [
+            {
+              "name": "200 OK (owner)",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle details\",\n  \"data\": {\n    \"basic\": {\n      \"id\": 1,\n      \"vehicle_type\": \"car\",\n      \"manufacturer\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"variant\": \"LE\",\n      \"color\": \"Black\",\n      \"year_of_manufacture\": 2020,\n      \"rto_code\": \"KA-01\",\n      \"registration_number\": \"KA01AB1234\",\n      \"registration_state\": \"Karnataka\",\n      \"usage_km\": 50000,\n      \"fuel_type\": \"petrol\",\n      \"transmission_type\": \"manual\",\n      \"current_status\": {\n        \"status\": \"garage\",\n        \"started_at\": \"2024-01-01T00:00:00Z\"\n      },\n      \"created_at\": \"2024-01-01T00:00:00Z\",\n      \"updated_at\": \"2024-01-01T00:00:00Z\"\n    },\n    \"buying_details\": {\n      \"buying_price\": 200000,\n      \"buying_date\": \"2024-01-01T00:00:00Z\",\n      \"currency\": \"inr\",\n      \"remarks\": \"\"\n    },\n    \"pricing\": {\n      \"price_tag\": 350000,\n      \"tagged_at\": \"2024-01-01T00:00:00Z\",\n      \"currency\": \"inr\"\n    },\n    \"status\": {\n      \"current\": {\n        \"status\": \"garage\",\n        \"description\": \"\",\n        \"started_at\": \"2024-01-01T00:00:00Z\",\n        \"ended_at\": \"0001-01-01T00:00:00Z\"\n      },\n      \"history\": [\n        {\n          \"status\": \"garage\",\n          \"description\": \"\",\n          \"started_at\": \"2024-01-01T00:00:00Z\",\n          \"ended_at\": \"0001-01-01T00:00:00Z\"\n        }\n      ]\n    },\n    \"expenses\": [],\n    \"documents\": [],\n    \"images\": {\n      \"front\": [\n        {\n          \"id\": 9,\n          \"url\": \"https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\"\n        },\n        {\n          \"id\": 10,\n          \"url\": \"https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101120500.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\"\n        }\n      ],\n      \"interior\": [\n        {\n          \"id\": 11,\n          \"url\": \"https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101121000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\"\n        }\n      ]\n    }\n  }\n}"
+            },
+            {
+              "name": "200 OK (manager or employee)",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle details\",\n  \"data\": {\n    \"basic\": {\n      \"id\": 1,\n      \"vehicle_type\": \"car\",\n      \"manufacturer\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"variant\": \"LE\",\n      \"color\": \"Black\",\n      \"year_of_manufacture\": 2020,\n      \"rto_code\": \"KA-01\",\n      \"registration_number\": \"KA01AB1234\",\n      \"registration_state\": \"Karnataka\",\n      \"usage_km\": 50000,\n      \"fuel_type\": \"petrol\",\n      \"transmission_type\": \"manual\",\n      \"current_status\": {\n        \"status\": \"ready_for_sale\",\n        \"started_at\": \"2024-01-01T00:00:00Z\"\n      },\n      \"created_at\": \"2024-01-01T00:00:00Z\",\n      \"updated_at\": \"2024-01-01T00:00:00Z\"\n    },\n    \"pricing\": {\n      \"price_tag\": 350000,\n      \"currency\": \"inr\"\n    },\n    \"images\": {\n      \"front\": [\n        {\n          \"id\": 9,\n          \"url\": \"https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\"\n        }\n      ]\n    }\n  }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Update Vehicle (Core Fields)",
           "request": {
             "method": "PATCH",
@@ -530,6 +593,169 @@
               "status": "Conflict",
               "code": 409,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_ALREADY_IN_SHOWROOM\",\n    \"message\": \"vehicle already assigned to a showroom\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Vehicle Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "Required: JWT access token"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web",
+                "description": "Required: web | ios_mobile | android_mobile | desktop"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "device-001",
+                "description": "Required: non-empty device identifier"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "label",
+                  "value": "front",
+                  "type": "text",
+                  "description": "Required. front | interior | exterior | back | wheel"
+                },
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": "/path/to/photo.jpg",
+                  "description": "Required. jpg/jpeg/png, max 15 MB"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vehicle/:id/image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicle",
+                ":id",
+                "image"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Vehicle ID"
+                }
+              ]
+            },
+            "description": "Upload a vehicle photo. Any showroom member. Multiple photos per label allowed. Stores an object key; response url is a 1-hour signed URL. Blocked when the vehicle is sold."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle image uploaded\",\n  \"data\": {\n    \"id\": 9,\n    \"vehicle_id\": 1,\n    \"label\": \"front\",\n    \"url\": \"https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\",\n    \"uploaded_at\": \"2024-01-01T12:00:00Z\"\n  }\n}"
+            },
+            {
+              "name": "400 Bad Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "400 File Too Large",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FILE_TOO_LARGE\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+            },
+            {
+              "name": "422 Unprocessable Entity (vehicle sold)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_UPDATE_FORBIDDEN\",\n    \"message\": \"vehicle is sold\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Vehicle Image",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "Required: JWT access token"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web",
+                "description": "Required: web | ios_mobile | android_mobile | desktop"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "device-001",
+                "description": "Required: non-empty device identifier"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vehicle/:id/image/:image_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicle",
+                ":id",
+                "image",
+                ":image_id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Vehicle ID"
+                },
+                {
+                  "key": "image_id",
+                  "value": "9",
+                  "description": "Vehicle image ID"
+                }
+              ]
+            },
+            "description": "Soft-delete a vehicle photo. Any showroom member. Blocked when the vehicle is sold. Does not delete the object from storage."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle image deleted\"\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_IMAGE_NOT_FOUND\",\n    \"message\": \"vehicle image not found\"\n  }\n}"
+            },
+            {
+              "name": "422 Unprocessable Entity (vehicle sold)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_UPDATE_FORBIDDEN\",\n    \"message\": \"vehicle is sold\"\n  }\n}"
             }
           ]
         }

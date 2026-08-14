@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -11,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"infiour.local/dms-api-server/internal/modules/vehicle"
 	"infiour.local/dms-api-server/pkg/middleware"
 )
@@ -86,6 +88,19 @@ func (m *mockHandlerService) AssignVehicleToShowroom(ctx context.Context, vehicl
 		return nil, args.Error(1)
 	}
 	return args.Get(0).(*vehicle.AssignShowroomResponse), args.Error(1)
+}
+
+func (m *mockHandlerService) AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*vehicle.AddVehicleImageResponse, error) {
+	args := m.Called(ctx, userID, vehicleID, label, photo)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AddVehicleImageResponse), args.Error(1)
+}
+
+func (m *mockHandlerService) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
+	args := m.Called(ctx, vehicleID, imageID)
+	return args.Error(0)
 }
 
 func TestHandler_CreateVehicle_Success(t *testing.T) {
@@ -409,6 +424,7 @@ func TestHandler_GetVehicle_ManagerGetsBasicResponse(t *testing.T) {
 	assert.Contains(t, data, "basic")
 	assert.NotContains(t, data, "expenses")
 	assert.NotContains(t, data, "buying_details")
+	assert.Contains(t, data, "images")
 }
 
 func TestHandler_GetVehicle_EmployeeGetsBasicResponse(t *testing.T) {
@@ -428,6 +444,7 @@ func TestHandler_GetVehicle_EmployeeGetsBasicResponse(t *testing.T) {
 	data := resp["data"].(map[string]interface{})
 	assert.Contains(t, data, "basic")
 	assert.NotContains(t, data, "buying_details")
+	assert.Contains(t, data, "images")
 }
 
 func TestHandler_GetVehicle_OwnerWithPricingAndSale(t *testing.T) {
@@ -524,8 +541,43 @@ func TestHandler_GetVehicle_OwnerWithNonEmptyCollections(t *testing.T) {
 	assert.Len(t, expenses, 1)
 	documents := data["documents"].([]interface{})
 	assert.Len(t, documents, 1)
-	images := data["images"].([]interface{})
-	assert.Len(t, images, 1)
+	images := data["images"].(map[string]interface{})
+	front := images["front"].([]interface{})
+	assert.Len(t, front, 1)
+	assert.Equal(t, float64(1), front[0].(map[string]interface{})["id"])
+	assert.Equal(t, "http://example.com/img", front[0].(map[string]interface{})["url"])
+}
+
+func TestHandler_GetVehicle_ImagesGroupedByLabel(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "3")
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 3, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Images: []vehicle.VehicleImage{
+			{ID: 1, Label: vehicle.VehicleImageLabelFront, ImageURL: "https://signed/front-1"},
+			{ID: 2, Label: vehicle.VehicleImageLabelFront, ImageURL: "https://signed/front-2"},
+			{ID: 3, Label: vehicle.VehicleImageLabelInterior, ImageURL: "https://signed/interior-1"},
+			{ID: 4, Label: "", ImageURL: "https://signed/skip-empty-label"},
+			{ID: 5, Label: vehicle.VehicleImageLabelBack, ImageURL: ""},
+		},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(3)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "manager"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	images := resp["data"].(map[string]interface{})["images"].(map[string]interface{})
+	assert.Len(t, images, 2)
+	assert.Len(t, images["front"].([]interface{}), 2)
+	assert.Len(t, images["interior"].([]interface{}), 1)
+	assert.NotContains(t, images, "back")
+	assert.NotContains(t, images, "")
+	front := images["front"].([]interface{})
+	assert.Equal(t, float64(1), front[0].(map[string]interface{})["id"])
+	assert.Equal(t, "https://signed/front-1", front[0].(map[string]interface{})["url"])
+	assert.Equal(t, float64(2), front[1].(map[string]interface{})["id"])
 }
 
 func TestHandler_PublicListVehicles_Success(t *testing.T) {
@@ -1091,4 +1143,203 @@ func TestHandler_AssignShowroom_Success_Manager(t *testing.T) {
 	vehicle.NewHandler(mockSvc).AssignShowroom(ctx)
 	assert.Equal(t, http.StatusCreated, w.Code)
 	mockSvc.AssertExpectations(t)
+}
+
+func multipartPhotoRequest(t *testing.T, label, filename string, content []byte) *http.Request {
+	t.Helper()
+	var body bytes.Buffer
+	w := multipart.NewWriter(&body)
+	if label != "" {
+		require.NoError(t, w.WriteField("label", label))
+	}
+	if filename != "" {
+		part, err := w.CreateFormFile("photo", filename)
+		require.NoError(t, err)
+		_, err = part.Write(content)
+		require.NoError(t, err)
+	}
+	require.NoError(t, w.Close())
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/vehicle/1/image", &body)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	return req
+}
+
+func setupImageHandlerContext(t *testing.T, vehicleID string, req *http.Request) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: vehicleID}}
+	return ctx, w, new(mockHandlerService)
+}
+
+func TestHandler_AddVehicleImage_Success(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddVehicleImage", mock.Anything, uint64(7), uint64(1), "front", mock.Anything).
+		Return(&vehicle.AddVehicleImageResponse{ID: 9, VehicleID: 1, Label: "front", URL: "https://signed"}, nil)
+
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AddVehicleImage_MissingUser(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_AddVehicleImage_UserIDWrongType(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, "not-uint")
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_AddVehicleImage_InvalidVehicleID(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "abc", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleImage_ZeroVehicleID(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "0", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleImage_MissingRoles(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_AddVehicleImage_RolesWrongType(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, "bad")
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_AddVehicleImage_ShowroomLookupError(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestHandler_AddVehicleImage_NotMember(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{9: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestHandler_AddVehicleImage_NotMultipart(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/vehicle/1/image", bytes.NewBufferString("not-multipart"))
+	req.Header.Set("Content-Type", "application/json")
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleImage_MissingPhoto(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleImage_ServiceError(t *testing.T) {
+	req := multipartPhotoRequest(t, "front", "front.jpg", []byte("img"))
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddVehicleImage", mock.Anything, uint64(7), uint64(1), "front", mock.Anything).
+		Return(nil, vehicle.ErrVehicleSold)
+	vehicle.NewHandler(mockSvc).AddVehicleImage(ctx)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestHandler_DeleteVehicleImage_MissingUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/vehicle/1/image/9", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Params = append(ctx.Params, gin.Param{Key: "image_id", Value: "9"})
+	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_DeleteVehicleImage_Success(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/vehicle/1/image/9", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Params = append(ctx.Params, gin.Param{Key: "image_id", Value: "9"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("DeleteVehicleImage", mock.Anything, uint64(1), uint64(9)).Return(nil)
+	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_DeleteVehicleImage_InvalidImageID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/vehicle/1/image/0", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Params = append(ctx.Params, gin.Param{Key: "image_id", Value: "0"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_DeleteVehicleImage_NonNumericImageID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/vehicle/1/image/x", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Params = append(ctx.Params, gin.Param{Key: "image_id", Value: "x"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_DeleteVehicleImage_ServiceError(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/vehicle/1/image/9", nil)
+	ctx, w, mockSvc := setupImageHandlerContext(t, "1", req)
+	ctx.Params = append(ctx.Params, gin.Param{Key: "image_id", Value: "9"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("DeleteVehicleImage", mock.Anything, uint64(1), uint64(9)).Return(vehicle.ErrVehicleImageNotFound)
+	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }

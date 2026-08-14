@@ -1,0 +1,10 @@
+$kind: http-request
+description: Get vehicle details by ID. Any showroom member. Owner receives admin fields (buying price, expenses, documents). All roles receive an images section grouped by label, with signed URLs and image ids for delete.
+url: "{{base_url}}/api/v1/vehicle/1"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: device-001
+examples: ./.resources/Get Vehicle.resources/examples
+order: 3500

@@ -3,12 +3,42 @@ package vehicle
 import (
 	"context"
 	stderrors "errors"
+	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
+	storageprovider "infiour.local/dms-api-server/internal/providers/storage"
 	apperrors "infiour.local/dms-api-server/pkg/errors"
 )
+
+const maxVehicleImageSize = 15 * 1024 * 1024 // 15 MB
+
+var allowedVehicleImageExtensions = map[string]bool{
+	".jpg":  true,
+	".jpeg": true,
+	".png":  true,
+}
+
+// ServiceOption configures the vehicle service. Used in tests to inject behaviour.
+type ServiceOption func(*service)
+
+// WithFileOpener overrides how multipart file headers are opened. Used in tests.
+func WithFileOpener(fn func(*multipart.FileHeader) (io.ReadCloser, error)) ServiceOption {
+	return func(s *service) { s.openFile = fn }
+}
+
+// WithSignedURLTTL overrides the signed URL lifetime used in API responses.
+func WithSignedURLTTL(ttl time.Duration) ServiceOption {
+	return func(s *service) {
+		if ttl > 0 {
+			s.signedURLTTL = ttl
+		}
+	}
+}
 
 type Service interface {
 	CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error)
@@ -20,6 +50,8 @@ type Service interface {
 	UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *UpdateVehiclePricingRequest) (*UpdateVehiclePricingResponse, error)
 	AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error)
 	AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error)
+	AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*AddVehicleImageResponse, error)
+	DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error
 }
 
 type vehicleRepo interface {
@@ -38,16 +70,30 @@ type vehicleRepo interface {
 	CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error)
 	VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error)
 	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
+	CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error)
+	SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error
 }
 
 type service struct {
-	repo vehicleRepo
+	repo         vehicleRepo
+	storage      storageprovider.Provider
+	signedURLTTL time.Duration
+	openFile     func(*multipart.FileHeader) (io.ReadCloser, error)
 }
 
-func NewService(repo vehicleRepo) Service {
-	return &service{
-		repo: repo,
+func NewService(repo vehicleRepo, storage storageprovider.Provider, opts ...ServiceOption) Service {
+	s := &service{
+		repo:         repo,
+		storage:      storage,
+		signedURLTTL: time.Hour,
+		openFile: func(h *multipart.FileHeader) (io.ReadCloser, error) {
+			return h.Open()
+		},
 	}
+	for _, opt := range opts {
+		opt(s)
+	}
+	return s
 }
 
 func (s *service) CreateVehicle(ctx context.Context, req *CreateVehicleRequest) (*CreateVehicleResponse, error) {
@@ -433,7 +479,12 @@ func (s *service) validateListQuery(query *ListVehiclesQuery) error {
 }
 
 func (s *service) GetVehicleByID(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error) {
-	return s.repo.GetByIDWithFullDetails(ctx, vehicleID)
+	details, err := s.repo.GetByIDWithFullDetails(ctx, vehicleID)
+	if err != nil {
+		return nil, err
+	}
+	s.signVehicleImages(ctx, details)
+	return details, nil
 }
 
 func isValidVehicleStatusType(st VehicleStatusType) bool {
@@ -826,4 +877,130 @@ func (s *service) AssignVehicleToShowroom(ctx context.Context, vehicleID, showro
 		ShowroomID: rel.ShowroomID,
 		AssignedAt: rel.CreatedAt.Format(time.RFC3339),
 	}, nil
+}
+
+func (s *service) AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*AddVehicleImageResponse, error) {
+	normalizedLabel := strings.TrimSpace(strings.ToLower(label))
+	if !isValidVehicleImageLabel(VehicleImageLabel(normalizedLabel)) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if err := validateVehicleImageFile(photo); err != nil {
+		return nil, err
+	}
+
+	status, err := s.repo.GetCurrentStatus(ctx, vehicleID)
+	if err != nil {
+		return nil, err
+	}
+	if status == VehicleStatusTypeSold {
+		return nil, ErrVehicleSold
+	}
+
+	key, err := s.readAndUploadImage(ctx, userID, vehicleID, photo)
+	if err != nil {
+		return nil, err
+	}
+
+	created, err := s.repo.CreateImage(ctx, &VehicleImage{
+		VehicleID:  vehicleID,
+		ImageURL:   key,
+		Label:      VehicleImageLabel(normalizedLabel),
+		UploadedAt: time.Now(),
+		UploadedBy: userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	url := ""
+	if signed, signErr := s.storage.SignedURL(ctx, created.ImageURL, s.signedURLTTL); signErr == nil {
+		url = signed
+	}
+
+	return &AddVehicleImageResponse{
+		ID:         created.ID,
+		VehicleID:  created.VehicleID,
+		Label:      string(created.Label),
+		URL:        url,
+		UploadedAt: created.UploadedAt.Format(time.RFC3339),
+	}, nil
+}
+
+func (s *service) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
+	status, err := s.repo.GetCurrentStatus(ctx, vehicleID)
+	if err != nil {
+		return err
+	}
+	if status == VehicleStatusTypeSold {
+		return ErrVehicleSold
+	}
+	return s.repo.SoftDeleteImage(ctx, vehicleID, imageID)
+}
+
+func (s *service) readAndUploadImage(ctx context.Context, userID, vehicleID uint64, header *multipart.FileHeader) (string, error) {
+	f, err := s.openFile(header)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, err)
+	}
+	defer func() { _ = f.Close() }()
+
+	data, err := io.ReadAll(f)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, err)
+	}
+
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	key := fmt.Sprintf("%d/vehicle/%d/%s%s", userID, vehicleID, time.Now().Format("20060102150405"), ext)
+
+	contentType := header.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	storedKey, err := s.storage.Upload(ctx, key, data, contentType)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInternal, "failed to upload image", http.StatusInternalServerError, err)
+	}
+	return storedKey, nil
+}
+
+func (s *service) signVehicleImages(ctx context.Context, details *VehicleFullDetails) {
+	if details == nil || len(details.Images) == 0 {
+		return
+	}
+	kept := make([]VehicleImage, 0, len(details.Images))
+	for _, img := range details.Images {
+		if img.ImageURL == "" {
+			continue
+		}
+		url, err := s.storage.SignedURL(ctx, img.ImageURL, s.signedURLTTL)
+		if err != nil {
+			continue
+		}
+		img.ImageURL = url
+		kept = append(kept, img)
+	}
+	details.Images = kept
+}
+
+func validateVehicleImageFile(header *multipart.FileHeader) error {
+	if header == nil {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if header.Size > maxVehicleImageSize {
+		return apperrors.NewAppError(apperrors.CodeFileTooLarge, "invalid request", http.StatusBadRequest, nil)
+	}
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	if !allowedVehicleImageExtensions[ext] {
+		return apperrors.NewAppError(apperrors.CodeInvalidFileType, "invalid request", http.StatusBadRequest, nil)
+	}
+	return nil
+}
+
+func isValidVehicleImageLabel(label VehicleImageLabel) bool {
+	return label == VehicleImageLabelFront ||
+		label == VehicleImageLabelInterior ||
+		label == VehicleImageLabelExterior ||
+		label == VehicleImageLabelBack ||
+		label == VehicleImageLabelWheel
 }

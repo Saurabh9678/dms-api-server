@@ -20,6 +20,7 @@ func TestVehicleErrorMapper(t *testing.T) {
 		{"ErrVehicleNotFound", vehicle.ErrVehicleNotFound, apperrors.CodeVehicleNotFound, http.StatusNotFound},
 		{"ErrVehicleSold", vehicle.ErrVehicleSold, apperrors.CodeVehicleUpdateForbidden, http.StatusUnprocessableEntity},
 		{"ErrVehicleAlreadyInShowroom", vehicle.ErrVehicleAlreadyInShowroom, apperrors.CodeVehicleAlreadyInShowroom, http.StatusConflict},
+		{"ErrVehicleImageNotFound", vehicle.ErrVehicleImageNotFound, apperrors.CodeVehicleImageNotFound, http.StatusNotFound},
 	}
 
 	for _, tc := range cases {

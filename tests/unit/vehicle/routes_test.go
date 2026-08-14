@@ -2,6 +2,7 @@ package vehicle_test
 
 import (
 	"context"
+	"mime/multipart"
 	"net/http"
 	"testing"
 
@@ -84,6 +85,19 @@ func (m *mockRoutesService) AssignVehicleToShowroom(ctx context.Context, vehicle
 	return args.Get(0).(*vehicle.AssignShowroomResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*vehicle.AddVehicleImageResponse, error) {
+	args := m.Called(ctx, userID, vehicleID, label, photo)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AddVehicleImageResponse), args.Error(1)
+}
+
+func (m *mockRoutesService) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
+	args := m.Called(ctx, vehicleID, imageID)
+	return args.Error(0)
+}
+
 func noopMiddleware(c *gin.Context) { c.Next() }
 
 func TestRegisterRoutes(t *testing.T) {
@@ -111,6 +125,8 @@ func TestRegisterRoutes(t *testing.T) {
 	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id/pricing"], "PATCH /api/v1/vehicle/:id/pricing route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/expense"], "POST /api/v1/vehicle/:id/expense route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/showroom"], "POST /api/v1/vehicle/:id/showroom route should be registered")
+	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/image"], "POST /api/v1/vehicle/:id/image route should be registered")
+	assert.True(t, routeMap["DELETE:/api/v1/vehicle/:id/image/:image_id"], "DELETE /api/v1/vehicle/:id/image/:image_id route should be registered")
 }
 
 func TestRegisterRoutes_NoopMiddlewareUsed(t *testing.T) {

@@ -1,0 +1,19 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/image/9"
+  method: DELETE
+  headers:
+    Authorization: Bearer {{access_token}}
+    X-Platform: web
+    X-Device-Id: device-001
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle image deleted"
+      }
+order: 1000

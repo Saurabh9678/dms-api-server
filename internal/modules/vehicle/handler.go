@@ -1,6 +1,7 @@
 package vehicle
 
 import (
+	"mime/multipart"
 	"net/http"
 	"strconv"
 	"time"
@@ -118,7 +119,7 @@ func buildAdminResponse(d *VehicleFullDetails) GetVehicleAdminResponse {
 		Status:    buildStatusSection(d.Statuses),
 		Expenses:  buildExpenseItems(d.Expenses),
 		Documents: buildDocumentItems(d.Documents),
-		Images:    buildImageItems(d.Images),
+		Images:    buildImageSection(d.Images),
 	}
 
 	if d.Pricing != nil {
@@ -159,7 +160,8 @@ func buildAdminResponse(d *VehicleFullDetails) GetVehicleAdminResponse {
 
 func buildBasicResponse(d *VehicleFullDetails) GetVehicleBasicResponse {
 	resp := GetVehicleBasicResponse{
-		Basic: buildBasicSection(d),
+		Basic:  buildBasicSection(d),
+		Images: buildImageSection(d.Images),
 	}
 
 	if d.Pricing != nil {
@@ -388,16 +390,19 @@ func (h *Handler) AddExpense(c *gin.Context) {
 	response.Created(c, "expense added", resp)
 }
 
-func buildImageItems(images []VehicleImage) []VehicleImageItem {
-	items := make([]VehicleImageItem, 0, len(images))
+func buildImageSection(images []VehicleImage) map[string][]VehicleImageItem {
+	section := make(map[string][]VehicleImageItem)
 	for _, img := range images {
-		items = append(items, VehicleImageItem{
-			ID:    img.ID,
-			Label: string(img.Label),
-			URL:   img.ImageURL,
+		label := string(img.Label)
+		if label == "" || img.ImageURL == "" {
+			continue
+		}
+		section[label] = append(section[label], VehicleImageItem{
+			ID:  img.ID,
+			URL: img.ImageURL,
 		})
 	}
-	return items
+	return section
 }
 
 func (h *Handler) AssignShowroom(c *gin.Context) {
@@ -447,4 +452,118 @@ func (h *Handler) AssignShowroom(c *gin.Context) {
 	}
 
 	response.Created(c, "vehicle assigned to showroom", resp)
+}
+
+func (h *Handler) AddVehicleImage(c *gin.Context) {
+	vehicleID, userID, ok := h.requireVehicleMembership(c)
+	if !ok {
+		return
+	}
+
+	if err := c.Request.ParseMultipartForm(20 << 20); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	label := c.Request.FormValue("label")
+	var photo *multipart.FileHeader
+	if form := c.Request.MultipartForm; form != nil {
+		if files := form.File["photo"]; len(files) > 0 {
+			photo = files[0]
+		}
+	}
+	if photo == nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	resp, err := h.service.AddVehicleImage(c.Request.Context(), userID, vehicleID, label, photo)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.Created(c, "vehicle image uploaded", resp)
+}
+
+func (h *Handler) DeleteVehicleImage(c *gin.Context) {
+	vehicleID, _, ok := h.requireVehicleMembership(c)
+	if !ok {
+		return
+	}
+
+	imageID, err := strconv.ParseUint(c.Param("image_id"), 10, 64)
+	if err != nil || imageID == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	if err := h.service.DeleteVehicleImage(c.Request.Context(), vehicleID, imageID); err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.OK(c, "vehicle image deleted", nil)
+}
+
+func (h *Handler) extractUserID(c *gin.Context) (uint64, bool) {
+	val, exists := c.Get(middleware.ContextKeyUserID)
+	if !exists {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return 0, false
+	}
+	userID, ok := val.(uint64)
+	if !ok {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return 0, false
+	}
+	return userID, true
+}
+
+func (h *Handler) parseVehicleID(c *gin.Context) (uint64, bool) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil || id == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return 0, false
+	}
+	return id, true
+}
+
+func (h *Handler) extractShowroomRoles(c *gin.Context) (map[uint64]string, bool) {
+	val, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return nil, false
+	}
+	roles, ok := val.(map[uint64]string)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return nil, false
+	}
+	return roles, true
+}
+
+func (h *Handler) requireVehicleMembership(c *gin.Context) (vehicleID uint64, userID uint64, ok bool) {
+	userID, ok = h.extractUserID(c)
+	if !ok {
+		return 0, 0, false
+	}
+	vehicleID, ok = h.parseVehicleID(c)
+	if !ok {
+		return 0, 0, false
+	}
+	roles, ok := h.extractShowroomRoles(c)
+	if !ok {
+		return 0, 0, false
+	}
+	showroomID, err := h.service.GetVehicleShowroomID(c.Request.Context(), vehicleID)
+	if err != nil {
+		response.FromError(c, err)
+		return 0, 0, false
+	}
+	if _, isMember := roles[showroomID]; !isMember {
+		response.Error(c, http.StatusNotFound, apperrors.CodeVehicleNotFound, "vehicle not found")
+		return 0, 0, false
+	}
+	return vehicleID, userID, true
 }

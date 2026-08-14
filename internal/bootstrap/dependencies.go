@@ -42,10 +42,6 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 	userSvc := user.NewService(userRepo)
 	userHandler := user.NewHandler(userSvc)
 
-	vehicleRepo := vehicle.NewRepository(db)
-	vehicleSvc := vehicle.NewService(vehicleRepo)
-	vehicleHandler := vehicle.NewHandler(vehicleSvc)
-
 	dashboardRepo := dashboard.NewRepository(db)
 	dashboardSvc := dashboard.NewService(dashboardRepo)
 	dashboardHandler := dashboard.NewHandler(dashboardSvc)
@@ -55,6 +51,11 @@ func buildDependencies(cfg *config.Config, db *gorm.DB, log *slog.Logger) *Depen
 		log.Error("failed to init storage provider", "error", err)
 		panic(err)
 	}
+
+	vehicleRepo := vehicle.NewRepository(db)
+	vehicleSvc := vehicle.NewService(vehicleRepo, storageProvider, vehicle.WithSignedURLTTL(cfg.Storage.SignedURLTTL))
+	vehicleHandler := vehicle.NewHandler(vehicleSvc)
+
 	showroomRepo := showroom.NewRepository(db)
 	showroomSvc := showroom.NewService(showroomRepo, storageProvider, showroom.WithSignedURLTTL(cfg.Storage.SignedURLTTL))
 	showroomHandler := showroom.NewHandler(showroomSvc)

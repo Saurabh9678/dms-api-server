@@ -1,0 +1,15 @@
+$kind: http-request
+description: Upload a vehicle photo. Any showroom member. Multipart field photo (jpg/jpeg/png, max 15 MB) and label (front|interior|exterior|back|wheel). Multiple photos per label are allowed. Blocked when the vehicle is sold.
+url: "{{base_url}}/api/v1/vehicle/1/image"
+method: POST
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: device-001
+body:
+  type: text
+  content: |-
+    label=front
+    photo=<file>
+examples: ./.resources/Upload Vehicle Image.resources/examples
+order: 6000

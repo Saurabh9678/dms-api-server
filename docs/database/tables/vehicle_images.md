@@ -8,7 +8,7 @@
 
 - `id`: `BIGSERIAL`, primary key, auto-increment, not null.
 - `vehicle_id`: `BIGINT`, not null, foreign key.
-- `image_url`: `TEXT`, not null.
+- `image_url`: `TEXT`, not null. Object storage key (not a public URL). Example: `{userID}/vehicle/{vehicleID}/{YYYYMMDDHHmmss}.jpg`. API responses that expose images resolve this key to a 1-hour signed URL.
 - `label`: `vehicle_image_label`, enum, nullable (`front`, `interior`, `exterior`, `back`, `wheel`).
 - `uploaded_at`: `TIMESTAMPTZ`, not null, default `CURRENT_TIMESTAMP`.
 - `uploaded_by`: `BIGINT`, nullable, foreign key.

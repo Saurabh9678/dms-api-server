@@ -1,0 +1,10 @@
+$kind: http-request
+description: Soft-delete a vehicle photo. Any showroom member. Blocked when the vehicle is sold. Does not delete the object from storage.
+url: "{{base_url}}/api/v1/vehicle/1/image/9"
+method: DELETE
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: device-001
+examples: ./.resources/Delete Vehicle Image.resources/examples
+order: 7000

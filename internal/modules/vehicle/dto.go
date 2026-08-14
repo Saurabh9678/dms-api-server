@@ -123,9 +123,8 @@ type VehicleDocumentItem struct {
 }
 
 type VehicleImageItem struct {
-	ID    uint64 `json:"id"`
-	Label string `json:"label"`
-	URL   string `json:"url"`
+	ID  uint64 `json:"id"`
+	URL string `json:"url"`
 }
 
 type VehicleSaleCustomer struct {
@@ -152,20 +151,21 @@ type VehicleSoldPriceOnly struct {
 }
 
 type GetVehicleAdminResponse struct {
-	Basic         VehicleBasicSection    `json:"basic"`
-	BuyingDetails *VehicleBuyingSection  `json:"buying_details,omitempty"`
-	Pricing       *VehiclePricingSection `json:"pricing,omitempty"`
-	Status        VehicleStatusSection   `json:"status"`
-	Expenses      []VehicleExpenseItem   `json:"expenses"`
-	Documents     []VehicleDocumentItem  `json:"documents"`
-	Images        []VehicleImageItem     `json:"images"`
-	Selling       *VehicleSellingSection `json:"selling,omitempty"`
+	Basic         VehicleBasicSection           `json:"basic"`
+	BuyingDetails *VehicleBuyingSection         `json:"buying_details,omitempty"`
+	Pricing       *VehiclePricingSection        `json:"pricing,omitempty"`
+	Status        VehicleStatusSection          `json:"status"`
+	Expenses      []VehicleExpenseItem          `json:"expenses"`
+	Documents     []VehicleDocumentItem         `json:"documents"`
+	Images        map[string][]VehicleImageItem `json:"images"`
+	Selling       *VehicleSellingSection        `json:"selling,omitempty"`
 }
 
 type GetVehicleBasicResponse struct {
-	Basic   VehicleBasicSection   `json:"basic"`
-	Pricing *VehiclePriceTagOnly  `json:"pricing,omitempty"`
-	Selling *VehicleSoldPriceOnly `json:"selling,omitempty"`
+	Basic   VehicleBasicSection           `json:"basic"`
+	Pricing *VehiclePriceTagOnly          `json:"pricing,omitempty"`
+	Selling *VehicleSoldPriceOnly         `json:"selling,omitempty"`
+	Images  map[string][]VehicleImageItem `json:"images"`
 }
 
 type PublicListVehiclesQuery struct {
@@ -322,4 +322,12 @@ type AssignShowroomResponse struct {
 	VehicleID  uint64 `json:"vehicle_id"`
 	ShowroomID uint64 `json:"showroom_id"`
 	AssignedAt string `json:"assigned_at"`
+}
+
+type AddVehicleImageResponse struct {
+	ID         uint64 `json:"id"`
+	VehicleID  uint64 `json:"vehicle_id"`
+	Label      string `json:"label"`
+	URL        string `json:"url"`
+	UploadedAt string `json:"uploaded_at"`
 }

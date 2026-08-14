@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -125,9 +126,36 @@ func (m *mockVehicleRepo) AssignShowroom(ctx context.Context, vehicleID, showroo
 	return args.Get(0).(*vehicle.VehicleShowroom), args.Error(1)
 }
 
+func (m *mockVehicleRepo) CreateImage(ctx context.Context, img *vehicle.VehicleImage) (*vehicle.VehicleImage, error) {
+	args := m.Called(ctx, img)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleImage), args.Error(1)
+}
+
+func (m *mockVehicleRepo) SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error {
+	args := m.Called(ctx, vehicleID, imageID)
+	return args.Error(0)
+}
+
+type passthroughStorage struct{}
+
+func (passthroughStorage) Upload(_ context.Context, key string, _ []byte, _ string) (string, error) {
+	return key, nil
+}
+
+func (passthroughStorage) SignedURL(_ context.Context, key string, _ time.Duration) (string, error) {
+	return key, nil
+}
+
+func newTestService(repo *mockVehicleRepo, opts ...vehicle.ServiceOption) vehicle.Service {
+	return vehicle.NewService(repo, passthroughStorage{}, opts...)
+}
+
 func TestCreateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -179,7 +207,7 @@ func TestCreateVehicle_Success(t *testing.T) {
 
 func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleType("truck"),
@@ -205,7 +233,7 @@ func TestCreateVehicle_InvalidVehicleType(t *testing.T) {
 
 func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -231,7 +259,7 @@ func TestCreateVehicle_EmptyManufacturer(t *testing.T) {
 
 func TestCreateVehicle_EmptyModel(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -256,7 +284,7 @@ func TestCreateVehicle_EmptyModel(t *testing.T) {
 
 func TestCreateVehicle_EmptyVariant(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -281,7 +309,7 @@ func TestCreateVehicle_EmptyVariant(t *testing.T) {
 
 func TestCreateVehicle_EmptyColor(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -306,7 +334,7 @@ func TestCreateVehicle_EmptyColor(t *testing.T) {
 
 func TestCreateVehicle_YearBelowMin(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -331,7 +359,7 @@ func TestCreateVehicle_YearBelowMin(t *testing.T) {
 
 func TestCreateVehicle_YearInFuture(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -356,7 +384,7 @@ func TestCreateVehicle_YearInFuture(t *testing.T) {
 
 func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -381,7 +409,7 @@ func TestCreateVehicle_EmptyRTOCode(t *testing.T) {
 
 func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -406,7 +434,7 @@ func TestCreateVehicle_EmptyRegistrationNumber(t *testing.T) {
 
 func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -431,7 +459,7 @@ func TestCreateVehicle_EmptyRegistrationState(t *testing.T) {
 
 func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -456,7 +484,7 @@ func TestCreateVehicle_NegativeUsageKM(t *testing.T) {
 
 func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -481,7 +509,7 @@ func TestCreateVehicle_InvalidFuelType(t *testing.T) {
 
 func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -506,7 +534,7 @@ func TestCreateVehicle_InvalidTransmissionType(t *testing.T) {
 
 func TestCreateVehicle_RepositoryError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -547,7 +575,7 @@ func TestCreateVehicle_AllVehicleTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := vehicle.NewService(mockRepo)
+			svc := newTestService(mockRepo)
 
 			req := &vehicle.CreateVehicleRequest{
 				VehicleType:        tt.vehicleType,
@@ -595,7 +623,7 @@ func TestCreateVehicle_AllFuelTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := vehicle.NewService(mockRepo)
+			svc := newTestService(mockRepo)
 
 			req := &vehicle.CreateVehicleRequest{
 				VehicleType:        vehicle.VehicleTypeCar,
@@ -642,7 +670,7 @@ func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := vehicle.NewService(mockRepo)
+			svc := newTestService(mockRepo)
 
 			req := &vehicle.CreateVehicleRequest{
 				VehicleType:        vehicle.VehicleTypeCar,
@@ -678,7 +706,7 @@ func TestCreateVehicle_AllTransmissionTypes(t *testing.T) {
 
 func TestValidateRequest_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	resp, err := svc.CreateVehicle(context.Background(), nil)
 	assert.Error(t, err)
@@ -687,7 +715,7 @@ func TestValidateRequest_NilRequest(t *testing.T) {
 
 func TestValidateRequest_ValidRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.CreateVehicleRequest{
 		VehicleType:        vehicle.VehicleTypeCar,
@@ -743,7 +771,7 @@ func TestRepository_Create_Covered(t *testing.T) {
 
 func TestListVehicles_DefaultStatusFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
 
@@ -782,7 +810,7 @@ func TestListVehicles_DefaultStatusFilter(t *testing.T) {
 
 func TestListVehicles_MultiStatusFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{
 		Statuses: []string{"garage", "inspection"},
@@ -808,7 +836,7 @@ func TestListVehicles_MultiStatusFilter(t *testing.T) {
 
 func TestListVehicles_TypeFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{
 		VehicleTypes: []string{"car"},
@@ -837,7 +865,7 @@ func TestListVehicles_TypeFilter(t *testing.T) {
 
 func TestListVehicles_PriceRangeFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	minP := 100000.0
 	maxP := 500000.0
@@ -866,7 +894,7 @@ func TestListVehicles_PriceRangeFilter(t *testing.T) {
 
 func TestListVehicles_EmptyResult(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
 
@@ -883,7 +911,7 @@ func TestListVehicles_EmptyResult(t *testing.T) {
 
 func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
 
@@ -908,7 +936,7 @@ func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 
 func TestListVehicles_InvalidPage(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Page: 0, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -918,7 +946,7 @@ func TestListVehicles_InvalidPage(t *testing.T) {
 
 func TestListVehicles_InvalidLimit(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	tests := []struct {
 		name  string
@@ -939,7 +967,7 @@ func TestListVehicles_InvalidLimit(t *testing.T) {
 
 func TestListVehicles_InvalidStatusEnum(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Statuses: []string{"unknown"}, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -949,7 +977,7 @@ func TestListVehicles_InvalidStatusEnum(t *testing.T) {
 
 func TestListVehicles_InvalidTypeEnum(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{VehicleTypes: []string{"truck"}, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -959,7 +987,7 @@ func TestListVehicles_InvalidTypeEnum(t *testing.T) {
 
 func TestListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	min := 500000.0
 	max := 100000.0
@@ -971,7 +999,7 @@ func TestListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
 
 func TestListVehicles_NilQuery(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	resp, err := svc.ListVehicles(context.Background(), nil)
 	assert.Error(t, err)
@@ -980,7 +1008,7 @@ func TestListVehicles_NilQuery(t *testing.T) {
 
 func TestListVehicles_CountByTypeError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 
@@ -992,7 +1020,7 @@ func TestListVehicles_CountByTypeError(t *testing.T) {
 
 func TestGetVehicleByID_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	details := &vehicle.VehicleFullDetails{
 		Vehicle: vehicle.Vehicle{ID: 5, VehicleType: vehicle.VehicleTypeCar},
@@ -1008,7 +1036,7 @@ func TestGetVehicleByID_Success(t *testing.T) {
 
 func TestGetVehicleByID_NotFound(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("GetByIDWithFullDetails", mock.Anything, uint64(99)).Return(nil, vehicle.ErrVehicleNotFound)
 
@@ -1020,7 +1048,7 @@ func TestGetVehicleByID_NotFound(t *testing.T) {
 
 func TestGetVehicleByID_RepoError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("GetByIDWithFullDetails", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
 
@@ -1032,7 +1060,7 @@ func TestGetVehicleByID_RepoError(t *testing.T) {
 
 func TestListVehicles_ListError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
 	mockRepo.On("List", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
@@ -1045,7 +1073,7 @@ func TestListVehicles_ListError(t *testing.T) {
 
 func TestListVehicles_Pagination(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{Page: 2, Limit: 10}
 
@@ -1069,7 +1097,7 @@ func TestListVehicles_Pagination(t *testing.T) {
 
 func TestPublicListVehicles_NilQuery(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	resp, err := svc.PublicListVehicles(context.Background(), nil)
 	assert.Error(t, err)
@@ -1078,7 +1106,7 @@ func TestPublicListVehicles_NilQuery(t *testing.T) {
 
 func TestPublicListVehicles_ZeroShowroomID(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 0, Page: 1, Limit: 20, SortBy: "price_asc"}
 	resp, err := svc.PublicListVehicles(context.Background(), query)
@@ -1088,7 +1116,7 @@ func TestPublicListVehicles_ZeroShowroomID(t *testing.T) {
 
 func TestPublicListVehicles_InvalidPage(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 0, Limit: 20, SortBy: "price_asc"}
 	resp, err := svc.PublicListVehicles(context.Background(), query)
@@ -1098,7 +1126,7 @@ func TestPublicListVehicles_InvalidPage(t *testing.T) {
 
 func TestPublicListVehicles_InvalidLimit(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	tests := []struct{ limit int }{
 		{0}, {101}, {-1},
@@ -1113,7 +1141,7 @@ func TestPublicListVehicles_InvalidLimit(t *testing.T) {
 
 func TestPublicListVehicles_InvalidSortBy(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "invalid_sort"}
 	resp, err := svc.PublicListVehicles(context.Background(), query)
@@ -1123,7 +1151,7 @@ func TestPublicListVehicles_InvalidSortBy(t *testing.T) {
 
 func TestPublicListVehicles_InvalidTypeEnum(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, VehicleTypes: []string{"truck"}, Page: 1, Limit: 20, SortBy: "price_asc"}
 	resp, err := svc.PublicListVehicles(context.Background(), query)
@@ -1133,7 +1161,7 @@ func TestPublicListVehicles_InvalidTypeEnum(t *testing.T) {
 
 func TestPublicListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	min, max := 500000.0, 100000.0
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, MinPrice: &min, MaxPrice: &max, Page: 1, Limit: 20, SortBy: "price_asc"}
@@ -1144,7 +1172,7 @@ func TestPublicListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
 
 func TestPublicListVehicles_CountByTypeError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("PublicCountByType", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 
@@ -1156,7 +1184,7 @@ func TestPublicListVehicles_CountByTypeError(t *testing.T) {
 
 func TestPublicListVehicles_ListError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	mockRepo.On("PublicCountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
 	mockRepo.On("PublicList", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
@@ -1169,7 +1197,7 @@ func TestPublicListVehicles_ListError(t *testing.T) {
 
 func TestPublicListVehicles_Success_AllTypes(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
 
@@ -1206,7 +1234,7 @@ func TestPublicListVehicles_Success_AllTypes(t *testing.T) {
 
 func TestPublicListVehicles_TypeFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{
 		ShowroomID:   1,
@@ -1240,7 +1268,7 @@ func TestPublicListVehicles_TypeFilter(t *testing.T) {
 
 func TestPublicListVehicles_PriceRangeFilter(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	min, max := 100000.0, 500000.0
 	query := &vehicle.PublicListVehiclesQuery{
@@ -1262,7 +1290,7 @@ func TestPublicListVehicles_PriceRangeFilter(t *testing.T) {
 
 func TestPublicListVehicles_NoPricingOnItem(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
 
@@ -1286,7 +1314,7 @@ func TestPublicListVehicles_NoPricingOnItem(t *testing.T) {
 
 func TestGetVehicleShowroomID_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(5)).Return(uint64(10), nil)
 	id, err := svc.GetVehicleShowroomID(context.Background(), 5)
 	assert.NoError(t, err)
@@ -1296,7 +1324,7 @@ func TestGetVehicleShowroomID_Success(t *testing.T) {
 
 func TestGetVehicleShowroomID_NotFound(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(99)).Return(uint64(0), vehicle.ErrVehicleNotFound)
 	id, err := svc.GetVehicleShowroomID(context.Background(), 99)
 	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
@@ -1306,7 +1334,7 @@ func TestGetVehicleShowroomID_NotFound(t *testing.T) {
 
 func TestGetVehicleShowroomID_RepoError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), errors.New("db error"))
 	_, err := svc.GetVehicleShowroomID(context.Background(), 1)
 	assert.Error(t, err)
@@ -1317,7 +1345,7 @@ func TestGetVehicleShowroomID_RepoError(t *testing.T) {
 
 func TestUpdateVehicle_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	manufacturer := "Honda"
 	color := "Red"
@@ -1340,7 +1368,7 @@ func TestUpdateVehicle_Success(t *testing.T) {
 
 func TestUpdateVehicle_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	resp, err := svc.UpdateVehicle(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -1349,7 +1377,7 @@ func TestUpdateVehicle_NilRequest(t *testing.T) {
 
 func TestUpdateVehicle_GetCurrentStatusError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	manufacturer := "Honda"
 	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusType(""), errors.New("db error"))
@@ -1361,7 +1389,7 @@ func TestUpdateVehicle_GetCurrentStatusError(t *testing.T) {
 
 func TestUpdateVehicle_VehicleSold(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	manufacturer := "Honda"
 	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeSold, nil)
@@ -1373,7 +1401,7 @@ func TestUpdateVehicle_VehicleSold(t *testing.T) {
 
 func TestUpdateVehicle_InvalidVehicleType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	vt := vehicle.VehicleType("truck")
 	req := &vehicle.UpdateVehicleRequest{VehicleType: &vt}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1384,7 +1412,7 @@ func TestUpdateVehicle_InvalidVehicleType(t *testing.T) {
 
 func TestUpdateVehicle_EmptyManufacturer(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := "  "
 	req := &vehicle.UpdateVehicleRequest{Manufacturer: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1395,7 +1423,7 @@ func TestUpdateVehicle_EmptyManufacturer(t *testing.T) {
 
 func TestUpdateVehicle_EmptyModel(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := ""
 	req := &vehicle.UpdateVehicleRequest{Model: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1406,7 +1434,7 @@ func TestUpdateVehicle_EmptyModel(t *testing.T) {
 
 func TestUpdateVehicle_EmptyVariant(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := ""
 	req := &vehicle.UpdateVehicleRequest{Variant: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1417,7 +1445,7 @@ func TestUpdateVehicle_EmptyVariant(t *testing.T) {
 
 func TestUpdateVehicle_EmptyColor(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := "  "
 	req := &vehicle.UpdateVehicleRequest{Color: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1428,7 +1456,7 @@ func TestUpdateVehicle_EmptyColor(t *testing.T) {
 
 func TestUpdateVehicle_YearTooLow(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	year := 1800
 	req := &vehicle.UpdateVehicleRequest{YearOfManufacture: &year}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1439,7 +1467,7 @@ func TestUpdateVehicle_YearTooLow(t *testing.T) {
 
 func TestUpdateVehicle_YearTooHigh(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	year := 2099
 	req := &vehicle.UpdateVehicleRequest{YearOfManufacture: &year}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1450,7 +1478,7 @@ func TestUpdateVehicle_YearTooHigh(t *testing.T) {
 
 func TestUpdateVehicle_EmptyRTOCode(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := ""
 	req := &vehicle.UpdateVehicleRequest{RTOCode: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1461,7 +1489,7 @@ func TestUpdateVehicle_EmptyRTOCode(t *testing.T) {
 
 func TestUpdateVehicle_EmptyRegistrationState(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	empty := ""
 	req := &vehicle.UpdateVehicleRequest{RegistrationState: &empty}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1472,7 +1500,7 @@ func TestUpdateVehicle_EmptyRegistrationState(t *testing.T) {
 
 func TestUpdateVehicle_NegativeUsageKM(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	km := -1
 	req := &vehicle.UpdateVehicleRequest{UsageKM: &km}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1483,7 +1511,7 @@ func TestUpdateVehicle_NegativeUsageKM(t *testing.T) {
 
 func TestUpdateVehicle_InvalidFuelType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	ft := vehicle.FuelType("cng")
 	req := &vehicle.UpdateVehicleRequest{FuelType: &ft}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1494,7 +1522,7 @@ func TestUpdateVehicle_InvalidFuelType(t *testing.T) {
 
 func TestUpdateVehicle_InvalidTransmissionType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	tt := vehicle.TransmissionType("cvt")
 	req := &vehicle.UpdateVehicleRequest{TransmissionType: &tt}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1505,7 +1533,7 @@ func TestUpdateVehicle_InvalidTransmissionType(t *testing.T) {
 
 func TestUpdateVehicle_AllFieldsNil(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	req := &vehicle.UpdateVehicleRequest{}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
 	resp, err := svc.UpdateVehicle(context.Background(), 1, req)
@@ -1516,7 +1544,7 @@ func TestUpdateVehicle_AllFieldsNil(t *testing.T) {
 
 func TestUpdateVehicle_UpdateFieldsError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	manufacturer := "Honda"
 	req := &vehicle.UpdateVehicleRequest{Manufacturer: &manufacturer}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1529,7 +1557,7 @@ func TestUpdateVehicle_UpdateFieldsError(t *testing.T) {
 
 func TestUpdateVehicle_ValidUsageKMZero(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	km := 0
 	req := &vehicle.UpdateVehicleRequest{UsageKM: &km}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeReadyForSale, nil)
@@ -1542,7 +1570,7 @@ func TestUpdateVehicle_ValidUsageKMZero(t *testing.T) {
 
 func TestUpdateVehicle_AllValidFields(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	vt := vehicle.VehicleTypeBike
 	mfr := "Yamaha"
@@ -1576,7 +1604,7 @@ func TestUpdateVehicle_AllValidFields(t *testing.T) {
 
 func TestUpdateVehiclePricing_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	resp, err := svc.UpdateVehiclePricing(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -1585,7 +1613,7 @@ func TestUpdateVehiclePricing_NilRequest(t *testing.T) {
 
 func TestUpdateVehiclePricing_GetCurrentStatusError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1597,7 +1625,7 @@ func TestUpdateVehiclePricing_GetCurrentStatusError(t *testing.T) {
 
 func TestUpdateVehiclePricing_VehicleSold(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1609,7 +1637,7 @@ func TestUpdateVehiclePricing_VehicleSold(t *testing.T) {
 
 func TestUpdateVehiclePricing_GetPricingError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1623,7 +1651,7 @@ func TestUpdateVehiclePricing_GetPricingError(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	bp := 100000.0
 	bd := "2024-01-01"
@@ -1643,7 +1671,7 @@ func TestUpdateVehiclePricing_CreateNew_Success(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_AllFields(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	bp := 100000.0
 	bd := "2024-01-01"
@@ -1668,7 +1696,7 @@ func TestUpdateVehiclePricing_CreateNew_AllFields(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_NilBuyingPrice(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingDate: &bd}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1680,7 +1708,7 @@ func TestUpdateVehiclePricing_CreateNew_NilBuyingPrice(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_ZeroBuyingPrice(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 0.0
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1693,7 +1721,7 @@ func TestUpdateVehiclePricing_CreateNew_ZeroBuyingPrice(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_NilBuyingDate(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1705,7 +1733,7 @@ func TestUpdateVehiclePricing_CreateNew_NilBuyingDate(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_InvalidBuyingDate(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "not-a-date"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1718,7 +1746,7 @@ func TestUpdateVehiclePricing_CreateNew_InvalidBuyingDate(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_NegativePriceTag(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	pt := -1.0
@@ -1732,7 +1760,7 @@ func TestUpdateVehiclePricing_CreateNew_NegativePriceTag(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_InvalidTaggedAt(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	ta := "not-a-timestamp"
@@ -1746,7 +1774,7 @@ func TestUpdateVehiclePricing_CreateNew_InvalidTaggedAt(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_InvalidCurrency(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	cur := "eur"
@@ -1760,7 +1788,7 @@ func TestUpdateVehiclePricing_CreateNew_InvalidCurrency(t *testing.T) {
 
 func TestUpdateVehiclePricing_CreateNew_CreatePricingError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := 100000.0
 	bd := "2024-01-01"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp, BuyingDate: &bd}
@@ -1774,7 +1802,7 @@ func TestUpdateVehiclePricing_CreateNew_CreatePricingError(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	pt := 200000.0
 	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
@@ -1794,7 +1822,7 @@ func TestUpdateVehiclePricing_UpdateExisting_Success(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_AllFieldsNil(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	req := &vehicle.UpdateVehiclePricingRequest{}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
 	mockRepo.On("GetCurrentStatus", mock.Anything, uint64(1)).Return(vehicle.VehicleStatusTypeGarage, nil)
@@ -1807,7 +1835,7 @@ func TestUpdateVehiclePricing_UpdateExisting_AllFieldsNil(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingPrice(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bp := -1.0
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingPrice: &bp}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1820,7 +1848,7 @@ func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingPrice(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingDate(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	bd := "bad-date"
 	req := &vehicle.UpdateVehiclePricingRequest{BuyingDate: &bd}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1833,7 +1861,7 @@ func TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingDate(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_NegativePriceTag(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	pt := -1.0
 	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1846,7 +1874,7 @@ func TestUpdateVehiclePricing_UpdateExisting_NegativePriceTag(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_InvalidTaggedAt(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	ta := "not-rfc3339"
 	req := &vehicle.UpdateVehiclePricingRequest{TaggedAt: &ta}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1859,7 +1887,7 @@ func TestUpdateVehiclePricing_UpdateExisting_InvalidTaggedAt(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_InvalidCurrency(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	cur := "gbp"
 	req := &vehicle.UpdateVehiclePricingRequest{Currency: &cur}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1872,7 +1900,7 @@ func TestUpdateVehiclePricing_UpdateExisting_InvalidCurrency(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_UpdateFieldsError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	pt := 200000.0
 	req := &vehicle.UpdateVehiclePricingRequest{PriceTag: &pt}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1886,7 +1914,7 @@ func TestUpdateVehiclePricing_UpdateExisting_UpdateFieldsError(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_Remarks(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	remarks := "updated"
 	req := &vehicle.UpdateVehiclePricingRequest{Remarks: &remarks}
 	existing := &vehicle.VehiclePricing{ID: 1, VehicleID: 1}
@@ -1902,7 +1930,7 @@ func TestUpdateVehiclePricing_UpdateExisting_Remarks(t *testing.T) {
 
 func TestUpdateVehiclePricing_UpdateExisting_AllValidFields(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	bp := 150000.0
 	bd := "2023-06-15"
@@ -1936,7 +1964,7 @@ func TestUpdateVehiclePricing_UpdateExisting_AllValidFields(t *testing.T) {
 
 func TestAddExpense_NilRequest(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	resp, err := svc.AddExpense(context.Background(), 1, nil)
 	assert.Error(t, err)
@@ -1946,7 +1974,7 @@ func TestAddExpense_NilRequest(t *testing.T) {
 
 func TestAddExpense_InvalidType(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.AddExpenseRequest{Type: "invalid_type", Amount: 1000}
 	resp, err := svc.AddExpense(context.Background(), 1, req)
@@ -1957,7 +1985,7 @@ func TestAddExpense_InvalidType(t *testing.T) {
 
 func TestAddExpense_ZeroAmount(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 0}
 	resp, err := svc.AddExpense(context.Background(), 1, req)
@@ -1968,7 +1996,7 @@ func TestAddExpense_ZeroAmount(t *testing.T) {
 
 func TestAddExpense_NegativeAmount(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: -500}
 	resp, err := svc.AddExpense(context.Background(), 1, req)
@@ -1979,7 +2007,7 @@ func TestAddExpense_NegativeAmount(t *testing.T) {
 
 func TestAddExpense_InvalidDateFormat(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	badDate := "not-a-date"
 	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 1000, Date: &badDate}
@@ -1991,7 +2019,7 @@ func TestAddExpense_InvalidDateFormat(t *testing.T) {
 
 func TestAddExpense_WithValidDate(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	date := "2024-03-15T10:00:00Z"
 	req := &vehicle.AddExpenseRequest{Type: "service", Amount: 2500, PaidTo: "Mechanic", Description: "Routine service", Date: &date}
@@ -2008,7 +2036,7 @@ func TestAddExpense_WithValidDate(t *testing.T) {
 
 func TestAddExpense_WithoutDate_UsesNow(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.AddExpenseRequest{Type: "repair", Amount: 3000}
 	created := &vehicle.VehicleExpenses{ID: 2, VehicleID: 1, Type: vehicle.VehicleExpensesTypeRepair, Amount: 3000}
@@ -2023,7 +2051,7 @@ func TestAddExpense_WithoutDate_UsesNow(t *testing.T) {
 
 func TestAddExpense_RepoError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 
 	req := &vehicle.AddExpenseRequest{Type: "insurance", Amount: 5000}
 	mockRepo.On("CreateExpense", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
@@ -2040,7 +2068,7 @@ func TestAddExpense_AllValidTypes(t *testing.T) {
 	for _, expType := range types {
 		t.Run(expType, func(t *testing.T) {
 			mockRepo := new(mockVehicleRepo)
-			svc := vehicle.NewService(mockRepo)
+			svc := newTestService(mockRepo)
 
 			req := &vehicle.AddExpenseRequest{Type: expType, Amount: 1000}
 			created := &vehicle.VehicleExpenses{ID: 1, VehicleID: 1, Type: vehicle.VehicleExpensesType(expType), Amount: 1000}
@@ -2058,7 +2086,7 @@ func TestAddExpense_AllValidTypes(t *testing.T) {
 
 func TestAssignVehicleToShowroom_VehicleNotFound(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(false, nil)
 	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
 	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
@@ -2068,7 +2096,7 @@ func TestAssignVehicleToShowroom_VehicleNotFound(t *testing.T) {
 
 func TestAssignVehicleToShowroom_VehicleExistsError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(false, errors.New("db error"))
 	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
 	assert.Error(t, err)
@@ -2078,7 +2106,7 @@ func TestAssignVehicleToShowroom_VehicleExistsError(t *testing.T) {
 
 func TestAssignVehicleToShowroom_AlreadyAssigned(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
 	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
@@ -2089,7 +2117,7 @@ func TestAssignVehicleToShowroom_AlreadyAssigned(t *testing.T) {
 
 func TestAssignVehicleToShowroom_GetShowroomIDUnexpectedError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), errors.New("db error"))
 	resp, err := svc.AssignVehicleToShowroom(context.Background(), 1, 10)
@@ -2100,7 +2128,7 @@ func TestAssignVehicleToShowroom_GetShowroomIDUnexpectedError(t *testing.T) {
 
 func TestAssignVehicleToShowroom_AssignShowroomError(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
 	mockRepo.On("AssignShowroom", mock.Anything, uint64(1), uint64(10)).Return(nil, errors.New("db error"))
@@ -2112,7 +2140,7 @@ func TestAssignVehicleToShowroom_AssignShowroomError(t *testing.T) {
 
 func TestAssignVehicleToShowroom_Success(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
-	svc := vehicle.NewService(mockRepo)
+	svc := newTestService(mockRepo)
 	mockRepo.On("VehicleExistsByID", mock.Anything, uint64(1)).Return(true, nil)
 	mockRepo.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
 	rel := &vehicle.VehicleShowroom{VehicleID: 1, ShowroomID: 10}

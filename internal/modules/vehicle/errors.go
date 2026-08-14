@@ -10,6 +10,7 @@ import (
 var ErrVehicleNotFound = stderrors.New("vehicle not found")
 var ErrVehicleSold = stderrors.New("vehicle is sold")
 var ErrVehicleAlreadyInShowroom = stderrors.New("vehicle already assigned to a showroom")
+var ErrVehicleImageNotFound = stderrors.New("vehicle image not found")
 
 func init() {
 	apperrors.RegisterMapper(func(err error) (*apperrors.AppError, bool) {
@@ -21,6 +22,9 @@ func init() {
 		}
 		if stderrors.Is(err, ErrVehicleAlreadyInShowroom) {
 			return apperrors.NewAppError(apperrors.CodeVehicleAlreadyInShowroom, "vehicle already assigned to a showroom", http.StatusConflict, err), true
+		}
+		if stderrors.Is(err, ErrVehicleImageNotFound) {
+			return apperrors.NewAppError(apperrors.CodeVehicleImageNotFound, "vehicle image not found", http.StatusNotFound, err), true
 		}
 		return nil, false
 	})

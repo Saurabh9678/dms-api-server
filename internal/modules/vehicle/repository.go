@@ -213,6 +213,24 @@ func (r *Repository) CreateExpense(ctx context.Context, expense *VehicleExpenses
 	return expense, nil
 }
 
+func (r *Repository) CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error) {
+	if err := r.db.WithContext(ctx).Create(img).Error; err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
+func (r *Repository) SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error {
+	result := r.db.WithContext(ctx).Where("id = ? AND vehicle_id = ?", imageID, vehicleID).Delete(&VehicleImage{})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return ErrVehicleImageNotFound
+	}
+	return nil
+}
+
 func (r *Repository) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
 	var count int64
 	err := r.db.WithContext(ctx).Model(&Vehicle{}).Where("id = ? AND deleted_at IS NULL", vehicleID).Count(&count).Error

@@ -35,6 +35,13 @@
 - `{userID}/showroom/{externalShowroomID}/{YYYYMMDDHHmmss}{ext}`
 - Example: `42/showroom/SHOP0001/20260812211000.jpg`
 
+## Object key convention (vehicle photos)
+
+- `{userID}/vehicle/{vehicleID}/{YYYYMMDDHHmmss}{ext}`
+- Example: `42/vehicle/18/20260814215100.jpg`
+- Multiple rows/photos per `label` are allowed.
+- Vehicle photo files: `.jpg` / `.jpeg` / `.png`, max **15 MB**.
+
 ## Update Checklist
 
 - Update this file when storage contract, providers, key layout, or signing behavior changes.

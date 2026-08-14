@@ -834,3 +834,75 @@ func TestRepo_AssignShowroom_DBError(t *testing.T) {
 	_, err := repo.AssignShowroom(context.Background(), 1, 10)
 	assert.Error(t, err)
 }
+
+func TestRepo_CreateImage_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_images"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(3)))
+	mock.ExpectCommit()
+
+	img := &vehicle.VehicleImage{
+		VehicleID:  1,
+		ImageURL:   "7/vehicle/1/20260101120000.jpg",
+		Label:      vehicle.VehicleImageLabelFront,
+		UploadedBy: 7,
+	}
+	result, err := repo.CreateImage(context.Background(), img)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+}
+
+func TestRepo_CreateImage_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_images"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.CreateImage(context.Background(), &vehicle.VehicleImage{VehicleID: 1, ImageURL: "k.jpg"})
+	assert.Error(t, err)
+}
+
+func TestRepo_SoftDeleteImage_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_images" SET "deleted_at"`).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectCommit()
+
+	err := repo.SoftDeleteImage(context.Background(), 1, 9)
+	assert.NoError(t, err)
+}
+
+func TestRepo_SoftDeleteImage_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_images" SET "deleted_at"`).
+		WillReturnResult(sqlmock.NewResult(0, 0))
+	mock.ExpectCommit()
+
+	err := repo.SoftDeleteImage(context.Background(), 1, 9)
+	assert.ErrorIs(t, err, vehicle.ErrVehicleImageNotFound)
+}
+
+func TestRepo_SoftDeleteImage_DBError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectExec(`UPDATE "vehicle_images" SET "deleted_at"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	err := repo.SoftDeleteImage(context.Background(), 1, 9)
+	assert.Error(t, err)
+}

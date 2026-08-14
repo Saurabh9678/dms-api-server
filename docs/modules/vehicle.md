@@ -78,8 +78,9 @@
 1. `GET /api/v1/vehicle/:id` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` middleware → `vehicle.Handler.GetVehicle`
 2. Handler: parse `:id` → calls `service.GetVehicleByID`
 3. Check `middleware.ContextKeyShowroomRoles` (map[uint64]string) — if vehicle's showroom not in map → 404
-4. Role `owner` → `buildAdminResponse` (full details including buying price, expenses, documents, images)
-5. Role `manager`/`employee` → `buildBasicResponse` (basic fields + price_tag only, no buying price)
+4. Role `owner` → `buildAdminResponse` (full details including buying price, expenses, documents, images).
+5. Role `manager`/`employee` → `buildBasicResponse` (basic fields + price_tag only, no buying price). Images are included for every showroom role.
+6. `images` is a section grouped by label: `{ "front": [{ "id", "url" }, ...], "interior": [...] }`. `url` values are 1-hour signed URLs resolved from stored object keys. Images that fail to sign, and labels with no photos, are omitted. Multiple photos per label are returned as an array. `id` is the `vehicle_images.id` used by `DELETE /api/v1/vehicle/:id/image/:image_id`.
 
 ---
 
@@ -270,6 +271,57 @@
 | Caller is `employee` role | 403 | `FORBIDDEN` |
 | Vehicle does not exist | 404 | `VEHICLE_NOT_FOUND` |
 | Vehicle already assigned to a showroom | 409 | `VEHICLE_ALREADY_IN_SHOWROOM` |
+
+---
+
+### POST /api/v1/vehicle/:id/image — Upload Vehicle Photo
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/image` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.AddVehicleImage`
+2. Handler:
+   - Extracts caller `userID`, parses `:id`, loads showroom roles
+   - `GetVehicleShowroomID` + membership check (any role: owner/manager/employee). Non-member → 404 `VEHICLE_NOT_FOUND`
+   - Parses `multipart/form-data` (20 MB form limit). Required file field `photo`; required form field `label`
+3. Service:
+   - Validates `label` ∈ `front`, `interior`, `exterior`, `back`, `wheel`
+   - Validates file: `.jpg`/`.jpeg`/`.png`, size ≤ 15 MB
+   - `GetCurrentStatus` — sold → 422 `VEHICLE_UPDATE_FORBIDDEN`
+   - Uploads via `storage.Provider`. Object key: `{userID}/vehicle/{vehicleID}/{YYYYMMDDHHmmss}{ext}`
+   - Persists `vehicle_images` with the **object key** in `image_url` and `uploaded_by` = caller. Upload failure fails the request (no DB row).
+   - Response `url` is a signed GET URL (TTL from `STORAGE_SIGNED_URL_TTL_SECONDS`, default 1 hour). Signing failure returns an empty `url`.
+4. Multiple photos with the same label are allowed (no unique constraint).
+5. Response: `201 Created` with `AddVehicleImageResponse`
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Missing/invalid file, label, or multipart body | 400 | `INVALID_REQUEST` |
+| File larger than 15 MB | 400 | `FILE_TOO_LARGE` |
+| Extension not jpg/jpeg/png | 400 | `INVALID_FILE_TYPE` |
+| Vehicle not found / not a showroom member | 404 | `VEHICLE_NOT_FOUND` |
+| Vehicle is sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
+| Storage upload failure | 500 | `INTERNAL` |
+
+---
+
+### DELETE /api/v1/vehicle/:id/image/:image_id — Soft-delete Vehicle Photo
+
+**Flow:**
+1. `DELETE /api/v1/vehicle/:id/image/:image_id` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.DeleteVehicleImage`
+2. Handler: same membership gate as upload (any showroom member).
+3. Service:
+   - `GetCurrentStatus` — sold → 422 `VEHICLE_UPDATE_FORBIDDEN`
+   - `repo.SoftDeleteImage` sets `deleted_at` where `id` and `vehicle_id` match. No GCS object delete.
+   - Missing row → 404 `VEHICLE_IMAGE_NOT_FOUND`
+4. Response: `200 OK` with message `vehicle image deleted`
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Invalid vehicle or image id | 400 | `INVALID_REQUEST` |
+| Vehicle not found / not a showroom member | 404 | `VEHICLE_NOT_FOUND` |
+| Image not found for this vehicle | 404 | `VEHICLE_IMAGE_NOT_FOUND` |
+| Vehicle is sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
 
 ---
 

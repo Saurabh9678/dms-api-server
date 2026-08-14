@@ -10,6 +10,8 @@ func RegisterRoutes(group *gin.RouterGroup, h *Handler, showroomRoles gin.Handle
 	group.PATCH("/vehicle/:id/pricing", showroomRoles, h.UpdateVehiclePricing)
 	group.POST("/vehicle/:id/expense", showroomRoles, h.AddExpense)
 	group.POST("/vehicle/:id/showroom", showroomRoles, h.AssignShowroom)
+	group.POST("/vehicle/:id/image", showroomRoles, h.AddVehicleImage)
+	group.DELETE("/vehicle/:id/image/:image_id", showroomRoles, h.DeleteVehicleImage)
 }
 
 func RegisterPublicRoutes(group *gin.RouterGroup, h *Handler) {
