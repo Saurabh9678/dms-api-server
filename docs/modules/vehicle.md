@@ -43,7 +43,7 @@
 4. Repository:
    - Uses LATERAL JOIN to get latest `vehicle_statuses` row (by `id DESC`) as current status
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
-   - Applies filters: `vs.status = ANY(statuses)`, `v.type = ANY(types)` (aliased as `vehicle_type` in responses), price range on `price_tag`
+   - Applies filters: `vs.status IN (statuses)`, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
    - Paginates with `LIMIT/OFFSET`
 5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`
 
@@ -167,7 +167,7 @@
    - JOINs `vehicle_showroom_relations` on `showroom_id = ?` to scope to the showroom
    - Uses LATERAL JOIN to get latest `vehicle_statuses` row — hardcoded to `ready_for_sale`
    - Uses LATERAL JOIN (inner) to get latest `vehicle_pricing` row where `price_tag IS NOT NULL`
-   - Applies optional `vehicle_type`, `min_price`, `max_price` filters
+   - Applies optional `vehicle_type` (`v.type IN (?)`), `min_price`, `max_price` filters
    - Orders by `vp.price_tag ASC` or `DESC` based on `sort_by`
    - Paginates with `LIMIT/OFFSET`
 6. Response: `200 OK` — grouped as `cars`, `bikes`, `scooties`, each with `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `price_tag` and `currency` but **no buying price**.

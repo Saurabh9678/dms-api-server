@@ -212,6 +212,50 @@ func TestVehicleRepositoryCountByType_Error(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestVehicleRepositoryCountByType_UsesInClauseForStatusFilter(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
+		AddRow("car", int64(2))
+	mock.ExpectQuery(`vs\.status IN \(`).WillReturnRows(rows)
+
+	filter := vehicle.ListFilter{
+		Statuses: []vehicle.VehicleStatusType{
+			vehicle.VehicleStatusTypeGarage,
+			vehicle.VehicleStatusTypeInspection,
+			vehicle.VehicleStatusTypeReadyForSale,
+			vehicle.VehicleStatusTypeSold,
+		},
+		Page:  1,
+		Limit: 20,
+	}
+
+	counts, err := repo.CountByType(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(2), counts[vehicle.VehicleTypeCar])
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestVehicleRepositoryList_UsesInClauseForTypeFilter(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`(?s)vs\.status IN \(.*v\.type IN \(`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	filter := vehicle.ListFilter{
+		Statuses:     []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		VehicleTypes: []vehicle.VehicleType{vehicle.VehicleTypeCar, vehicle.VehicleTypeBike},
+		Page:         1,
+		Limit:        20,
+	}
+
+	results, err := repo.List(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
 func TestGetByIDWithFullDetails_NotFound(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
@@ -353,7 +397,7 @@ func TestVehicleRepositoryPublicList_WithTypeFilter(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
 
-	mock.ExpectQuery(`SELECT`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+	mock.ExpectQuery(`v\.type IN \(`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
 
 	filter := vehicle.PublicListFilter{
 		ShowroomID:   1,
@@ -365,6 +409,7 @@ func TestVehicleRepositoryPublicList_WithTypeFilter(t *testing.T) {
 	results, err := repo.PublicList(context.Background(), filter)
 	assert.NoError(t, err)
 	assert.Empty(t, results)
+	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
 func TestVehicleRepositoryPublicList_WithPriceFilter(t *testing.T) {

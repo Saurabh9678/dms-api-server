@@ -324,8 +324,8 @@ LEFT JOIN LATERAL (
   ORDER BY id DESC LIMIT 1
 ) vp ON true
 WHERE v.deleted_at IS NULL
-  AND vs.status = ANY(?)
-  AND (? OR v.type = ANY(?))
+  AND vs.status IN (?)
+  AND (? OR v.type IN (?))
   AND (? OR vp.price_tag >= ?)
   AND (? OR vp.price_tag <= ?)
 ORDER BY v.id DESC`
@@ -474,7 +474,7 @@ JOIN LATERAL (
 ) vp ON true
 WHERE v.deleted_at IS NULL
   AND vs.status = 'ready_for_sale'
-  AND (? OR v.type = ANY(?))
+  AND (? OR v.type IN (?))
   AND (? OR vp.price_tag >= ?)
   AND (? OR vp.price_tag <= ?)
 ORDER BY ` + orderClause
