@@ -28,7 +28,7 @@
 ## Auth notes
 
 - GCS uses Application Default Credentials. Local ADC may impersonate a service account.
-- Staging/production should use a service account identity (JSON key mount or equivalent), not a developer user login.
+- Staging Docker mounts a service-account JSON at `/secrets/gcs-sa.json` (`GOOGLE_APPLICATION_CREDENTIALS`) from host `${GCS_SA_KEY_PATH:-/opt/infiniour/secrets/gcs-sa.json}`. Do not `gcloud auth` inside the distroless API image.
 
 ## Object key convention (showroom media)
 

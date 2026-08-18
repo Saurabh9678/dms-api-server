@@ -137,6 +137,27 @@ Generate a strong secret for `AUTH_ACCESS_TOKEN_SECRET`:
 openssl rand -hex 32
 ```
 
+### GCS service account key
+
+The API image is distroless (`nonroot`, uid `65532`) and has no shell, so do not run `gcloud auth` in the container. Mount a service-account JSON on the host and point ADC at it.
+
+```bash
+sudo mkdir -p /opt/infiniour/secrets
+sudo nano /opt/infiniour/secrets/gcs-sa.json   # paste the SA JSON
+sudo chown 65532:65532 /opt/infiniour/secrets/gcs-sa.json
+sudo chmod 400 /opt/infiniour/secrets/gcs-sa.json
+```
+
+`docker-compose.yml` bind-mounts that file to `/secrets/gcs-sa.json` and sets `GOOGLE_APPLICATION_CREDENTIALS`. Confirm `.env` has:
+
+```
+STORAGE_PROVIDER=gcs
+GCS_BUCKET_NAME=dms-dev-assets
+GOOGLE_APPLICATION_CREDENTIALS=/secrets/gcs-sa.json
+```
+
+The host path can be overridden with `GCS_SA_KEY_PATH` in `.env`. Compose will fail to start if the host file is missing.
+
 ---
 
 ## Bootstrap Scripts

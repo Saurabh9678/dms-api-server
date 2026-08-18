@@ -153,7 +153,7 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L1",
       "id": "tests_smoke_auth_auth_routes_smoke_test_go",
-      "community": 149,
+      "community": 175,
       "norm_label": "auth_routes_smoke_test.go"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L47",
       "id": "auth_auth_routes_smoke_test_testauthloginrouteshape",
-      "community": 149,
+      "community": 175,
       "norm_label": "testauthloginrouteshape()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L66",
       "id": "auth_auth_routes_smoke_test_testauthloginmissingdevicecontextheaders",
-      "community": 149,
+      "community": 175,
       "norm_label": "testauthloginmissingdevicecontextheaders()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "tests/smoke/auth/auth_routes_smoke_test.go",
       "source_location": "L86",
       "id": "auth_auth_routes_smoke_test_testauthlogininvalidplatformheader",
-      "community": 149,
+      "community": 175,
       "norm_label": "testauthlogininvalidplatformheader()"
     },
     {
@@ -333,7 +333,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L77",
       "id": "middleware_middleware_test_testrecovery_nopanic",
-      "community": 253,
+      "community": 47,
       "norm_label": "testrecovery_nopanic()"
     },
     {
@@ -342,7 +342,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L88",
       "id": "middleware_middleware_test_testrecovery_panicreturns500",
-      "community": 253,
+      "community": 47,
       "norm_label": "testrecovery_panicreturns500()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L99",
       "id": "middleware_middleware_test_testrequestid_withexistingheader",
-      "community": 265,
+      "community": 253,
       "norm_label": "testrequestid_withexistingheader()"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L111",
       "id": "middleware_middleware_test_testrequestid_generateswhenmissing",
-      "community": 265,
+      "community": 253,
       "norm_label": "testrequestid_generateswhenmissing()"
     },
     {
@@ -729,7 +729,7 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L208",
       "id": "vehicle_service_test_testcreatevehicle_invalidvehicletype",
-      "community": 5,
+      "community": 34,
       "norm_label": "testcreatevehicle_invalidvehicletype()"
     },
     {
@@ -1260,7 +1260,7 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L1418",
       "id": "vehicle_service_test_testupdatevehicle_invalidvehicletype",
-      "community": 5,
+      "community": 34,
       "norm_label": "testupdatevehicle_invalidvehicletype()"
     },
     {
@@ -2034,7 +2034,7 @@
       "source_file": "tests/unit/vehicle/image_service_test.go",
       "source_location": "L51",
       "id": "vehicle_errreadcloser_read",
-      "community": 265,
+      "community": 169,
       "norm_label": ".read()"
     },
     {
@@ -6453,7 +6453,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_handler_test_go",
-      "community": 175,
+      "community": 124,
       "norm_label": "handler_test.go"
     },
     {
@@ -6462,7 +6462,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L16",
       "id": "auth_fakehandlerauthservice",
-      "community": 237,
+      "community": 124,
       "norm_label": "fakehandlerauthservice"
     },
     {
@@ -6471,7 +6471,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L18",
       "id": "auth_fakehandlerauthservice_register",
-      "community": 237,
+      "community": 124,
       "norm_label": ".register()"
     },
     {
@@ -6480,7 +6480,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L22",
       "id": "auth_fakehandlerauthservice_login",
-      "community": 237,
+      "community": 124,
       "norm_label": ".login()"
     },
     {
@@ -6489,7 +6489,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L26",
       "id": "auth_fakehandlerauthservice_verifyotp",
-      "community": 237,
+      "community": 124,
       "norm_label": ".verifyotp()"
     },
     {
@@ -6498,7 +6498,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L35",
       "id": "auth_fakehandlerauthservice_refreshtoken",
-      "community": 237,
+      "community": 124,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -6507,7 +6507,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L44",
       "id": "auth_fakehandlerauthservice_sendotp",
-      "community": 237,
+      "community": 124,
       "norm_label": ".sendotp()"
     },
     {
@@ -6516,7 +6516,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L48",
       "id": "auth_fakehandlerauthservice_logout",
-      "community": 237,
+      "community": 124,
       "norm_label": ".logout()"
     },
     {
@@ -6570,7 +6570,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L167",
       "id": "auth_fakeerrorauthservice",
-      "community": 234,
+      "community": 124,
       "norm_label": "fakeerrorauthservice"
     },
     {
@@ -6579,7 +6579,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L169",
       "id": "auth_fakeerrorauthservice_register",
-      "community": 234,
+      "community": 124,
       "norm_label": ".register()"
     },
     {
@@ -6588,7 +6588,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L173",
       "id": "auth_fakeerrorauthservice_login",
-      "community": 234,
+      "community": 124,
       "norm_label": ".login()"
     },
     {
@@ -6597,7 +6597,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L177",
       "id": "auth_fakeerrorauthservice_verifyotp",
-      "community": 234,
+      "community": 124,
       "norm_label": ".verifyotp()"
     },
     {
@@ -6606,7 +6606,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L181",
       "id": "auth_fakeerrorauthservice_refreshtoken",
-      "community": 234,
+      "community": 124,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -6615,7 +6615,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L185",
       "id": "auth_fakeerrorauthservice_sendotp",
-      "community": 234,
+      "community": 124,
       "norm_label": ".sendotp()"
     },
     {
@@ -6624,7 +6624,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L189",
       "id": "auth_fakeerrorauthservice_logout",
-      "community": 234,
+      "community": 124,
       "norm_label": ".logout()"
     },
     {
@@ -6633,7 +6633,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L197",
       "id": "auth_handler_test_testsendotp_badjson",
-      "community": 175,
+      "community": 124,
       "norm_label": "testsendotp_badjson()"
     },
     {
@@ -6642,7 +6642,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L218",
       "id": "auth_handler_test_testsendotp_missingheaders",
-      "community": 175,
+      "community": 124,
       "norm_label": "testsendotp_missingheaders()"
     },
     {
@@ -6660,7 +6660,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L256",
       "id": "auth_handler_test_testsendotp_success",
-      "community": 175,
+      "community": 124,
       "norm_label": "testsendotp_success()"
     },
     {
@@ -6669,7 +6669,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L281",
       "id": "auth_handler_test_testregister_badjson",
-      "community": 175,
+      "community": 124,
       "norm_label": "testregister_badjson()"
     },
     {
@@ -6678,7 +6678,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L303",
       "id": "auth_handler_test_testregister_missingheaders",
-      "community": 175,
+      "community": 124,
       "norm_label": "testregister_missingheaders()"
     },
     {
@@ -6696,7 +6696,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L341",
       "id": "auth_handler_test_testregister_success",
-      "community": 175,
+      "community": 124,
       "norm_label": "testregister_success()"
     },
     {
@@ -6714,7 +6714,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L388",
       "id": "auth_handler_test_testverifyotp_badjson",
-      "community": 175,
+      "community": 124,
       "norm_label": "testverifyotp_badjson()"
     },
     {
@@ -6723,7 +6723,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L410",
       "id": "auth_handler_test_testverifyotp_missingheaders",
-      "community": 175,
+      "community": 124,
       "norm_label": "testverifyotp_missingheaders()"
     },
     {
@@ -6741,7 +6741,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L452",
       "id": "auth_handler_test_testrefreshtoken_badjson",
-      "community": 175,
+      "community": 124,
       "norm_label": "testrefreshtoken_badjson()"
     },
     {
@@ -6768,7 +6768,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L515",
       "id": "auth_handler_test_testextractbearertoken_emptybearervalue",
-      "community": 175,
+      "community": 124,
       "norm_label": "testextractbearertoken_emptybearervalue()"
     },
     {
@@ -6777,7 +6777,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L536",
       "id": "auth_handler_test_testextractbearertoken_nobearerprefix",
-      "community": 175,
+      "community": 124,
       "norm_label": "testextractbearertoken_nobearerprefix()"
     },
     {
@@ -6786,7 +6786,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L561",
       "id": "auth_handler_test_testlogin_missingheaders",
-      "community": 175,
+      "community": 124,
       "norm_label": "testlogin_missingheaders()"
     },
     {
@@ -10953,7 +10953,7 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L22",
       "id": "vehicle_vehicletype",
-      "community": 31,
+      "community": 34,
       "norm_label": "vehicletype"
     },
     {
@@ -12636,7 +12636,7 @@
       "source_file": "internal/modules/auth/routes.go",
       "source_location": "L1",
       "id": "internal_modules_auth_routes_go",
-      "community": 149,
+      "community": 175,
       "norm_label": "routes.go"
     },
     {
@@ -12645,7 +12645,7 @@
       "source_file": "internal/modules/auth/routes.go",
       "source_location": "L5",
       "id": "auth_routes_registerroutes",
-      "community": 149,
+      "community": 175,
       "norm_label": "registerroutes()"
     },
     {
@@ -12663,7 +12663,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L17",
       "id": "auth_mockservice",
-      "community": 251,
+      "community": 124,
       "norm_label": "mockservice"
     },
     {
@@ -12672,7 +12672,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L26",
       "id": "auth_mockservice_sendotp",
-      "community": 251,
+      "community": 124,
       "norm_label": ".sendotp()"
     },
     {
@@ -12681,7 +12681,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L29",
       "id": "auth_mockservice_register",
-      "community": 251,
+      "community": 124,
       "norm_label": ".register()"
     },
     {
@@ -12690,7 +12690,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L32",
       "id": "auth_mockservice_login",
-      "community": 251,
+      "community": 124,
       "norm_label": ".login()"
     },
     {
@@ -12699,7 +12699,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L35",
       "id": "auth_mockservice_verifyotp",
-      "community": 251,
+      "community": 124,
       "norm_label": ".verifyotp()"
     },
     {
@@ -12708,7 +12708,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L38",
       "id": "auth_mockservice_refreshtoken",
-      "community": 251,
+      "community": 124,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -12717,7 +12717,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L41",
       "id": "auth_mockservice_logout",
-      "community": 251,
+      "community": 124,
       "norm_label": ".logout()"
     },
     {
@@ -16155,7 +16155,7 @@
       "source_file": "CMS-portal/src/generated/prisma/client.ts",
       "source_location": "L1",
       "id": "cms_portal_src_generated_prisma_client_ts",
-      "community": 262,
+      "community": 237,
       "norm_label": "client.ts"
     },
     {
@@ -16164,7 +16164,7 @@
       "source_file": "CMS-portal/src/generated/prisma/client.ts",
       "source_location": "L40",
       "id": "prisma_client_prismaclient",
-      "community": 262,
+      "community": 237,
       "norm_label": "prismaclient"
     },
     {
@@ -16173,7 +16173,7 @@
       "source_file": "CMS-portal/src/generated/prisma/client.ts",
       "source_location": "L48",
       "id": "prisma_client_moderatorrole",
-      "community": 262,
+      "community": 237,
       "norm_label": "moderatorrole"
     },
     {
@@ -16461,7 +16461,7 @@
       "source_file": "CMS-portal/src/generated/prisma/enums.ts",
       "source_location": "L1",
       "id": "cms_portal_src_generated_prisma_enums_ts",
-      "community": 262,
+      "community": 237,
       "norm_label": "enums.ts"
     },
     {
@@ -19197,7 +19197,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L119",
       "id": "app_actions_createuserstate",
-      "community": 159,
+      "community": 206,
       "norm_label": "createuserstate"
     },
     {
@@ -19215,7 +19215,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L147",
       "id": "app_actions_updateuserprofilestate",
-      "community": 247,
+      "community": 136,
       "norm_label": "updateuserprofilestate"
     },
     {
@@ -19224,7 +19224,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L157",
       "id": "app_actions_addusermembershipstate",
-      "community": 159,
+      "community": 206,
       "norm_label": "addusermembershipstate"
     },
     {
@@ -19233,7 +19233,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L166",
       "id": "app_actions_updateusermembershiprolestate",
-      "community": 159,
+      "community": 206,
       "norm_label": "updateusermembershiprolestate"
     },
     {
@@ -19242,7 +19242,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L174",
       "id": "app_actions_removeusermembershipstate",
-      "community": 159,
+      "community": 206,
       "norm_label": "removeusermembershipstate"
     },
     {
@@ -19251,7 +19251,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L179",
       "id": "app_actions_updateshowroomprofilestate",
-      "community": 247,
+      "community": 234,
       "norm_label": "updateshowroomprofilestate"
     },
     {
@@ -19530,7 +19530,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L379",
       "id": "app_actions_readupdateuserprofilefields",
-      "community": 158,
+      "community": 1,
       "norm_label": "readupdateuserprofilefields()"
     },
     {
@@ -19539,7 +19539,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L387",
       "id": "app_actions_readaddusermembershipfields",
-      "community": 158,
+      "community": 1,
       "norm_label": "readaddusermembershipfields()"
     },
     {
@@ -19557,7 +19557,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L408",
       "id": "app_actions_readaddshowroommemberfields",
-      "community": 158,
+      "community": 1,
       "norm_label": "readaddshowroommemberfields()"
     },
     {
@@ -19593,7 +19593,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L464",
       "id": "app_actions_readaddvehicleexpensefields",
-      "community": 158,
+      "community": 174,
       "norm_label": "readaddvehicleexpensefields()"
     },
     {
@@ -19629,7 +19629,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L578",
       "id": "app_actions_parserequiredid",
-      "community": 158,
+      "community": 1,
       "norm_label": "parserequiredid()"
     },
     {
@@ -19647,7 +19647,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L594",
       "id": "app_actions_readselecteduserid",
-      "community": 158,
+      "community": 1,
       "norm_label": "readselecteduserid()"
     },
     {
@@ -19656,7 +19656,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L605",
       "id": "app_actions_readactiveselecteduserid",
-      "community": 158,
+      "community": 1,
       "norm_label": "readactiveselecteduserid()"
     },
     {
@@ -19665,7 +19665,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L630",
       "id": "app_actions_openuserdetailaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "openuserdetailaction()"
     },
     {
@@ -19674,7 +19674,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L642",
       "id": "app_actions_readselectedshowroomid",
-      "community": 158,
+      "community": 1,
       "norm_label": "readselectedshowroomid()"
     },
     {
@@ -19683,7 +19683,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L653",
       "id": "app_actions_readactiveselectedshowroomid",
-      "community": 158,
+      "community": 1,
       "norm_label": "readactiveselectedshowroomid()"
     },
     {
@@ -19692,7 +19692,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L680",
       "id": "app_actions_openshowroomdetailaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "openshowroomdetailaction()"
     },
     {
@@ -19755,7 +19755,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L789",
       "id": "app_actions_updateprofileaction",
-      "community": 275,
+      "community": 262,
       "norm_label": "updateprofileaction()"
     },
     {
@@ -19791,7 +19791,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1298",
       "id": "app_actions_updateuserprofileaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "updateuserprofileaction()"
     },
     {
@@ -19800,7 +19800,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1402",
       "id": "app_actions_deleteselecteduseraction",
-      "community": 218,
+      "community": 136,
       "norm_label": "deleteselecteduseraction()"
     },
     {
@@ -19809,7 +19809,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1422",
       "id": "app_actions_addusermembershipaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "addusermembershipaction()"
     },
     {
@@ -19818,7 +19818,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1546",
       "id": "app_actions_updateusermembershiproleaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "updateusermembershiproleaction()"
     },
     {
@@ -19827,7 +19827,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1694",
       "id": "app_actions_removeusermembershipaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "removeusermembershipaction()"
     },
     {
@@ -19854,7 +19854,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1879",
       "id": "app_actions_deleteselectedshowroomaction",
-      "community": 206,
+      "community": 218,
       "norm_label": "deleteselectedshowroomaction()"
     },
     {
@@ -19863,7 +19863,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1900",
       "id": "app_actions_addshowroommemberaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "addshowroommemberaction()"
     },
     {
@@ -19872,7 +19872,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2025",
       "id": "app_actions_updateshowroommemberroleaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "updateshowroommemberroleaction()"
     },
     {
@@ -19881,7 +19881,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2175",
       "id": "app_actions_removeshowroommemberaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "removeshowroommemberaction()"
     },
     {
@@ -19890,7 +19890,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2256",
       "id": "app_actions_readselectedvehicleid",
-      "community": 158,
+      "community": 1,
       "norm_label": "readselectedvehicleid()"
     },
     {
@@ -19899,7 +19899,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2267",
       "id": "app_actions_readeditableselectedvehicle",
-      "community": 158,
+      "community": 174,
       "norm_label": "readeditableselectedvehicle()"
     },
     {
@@ -19908,7 +19908,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2323",
       "id": "app_actions_openvehicledetailaction",
-      "community": 158,
+      "community": 1,
       "norm_label": "openvehicledetailaction()"
     },
     {
@@ -19944,7 +19944,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2669",
       "id": "app_actions_updateselectedvehiclestatusaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "updateselectedvehiclestatusaction()"
     },
     {
@@ -19953,7 +19953,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2712",
       "id": "app_actions_deleteselectedvehicleaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "deleteselectedvehicleaction()"
     },
     {
@@ -19962,7 +19962,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2732",
       "id": "app_actions_addselectedvehicleexpenseaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "addselectedvehicleexpenseaction()"
     },
     {
@@ -19971,7 +19971,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2814",
       "id": "app_actions_uploadselectedvehicleimageaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "uploadselectedvehicleimageaction()"
     },
     {
@@ -19980,7 +19980,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2876",
       "id": "app_actions_deleteselectedvehicleimageaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "deleteselectedvehicleimageaction()"
     },
     {
@@ -19989,7 +19989,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2905",
       "id": "app_actions_uploadselectedvehicledocumentaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "uploadselectedvehicledocumentaction()"
     },
     {
@@ -19998,7 +19998,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3012",
       "id": "app_actions_deleteselectedvehicledocumentaction",
-      "community": 158,
+      "community": 174,
       "norm_label": "deleteselectedvehicledocumentaction()"
     },
     {
@@ -20106,7 +20106,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3149",
       "id": "app_actions_readcreatesubscriptionfeaturefields",
-      "community": 244,
+      "community": 158,
       "norm_label": "readcreatesubscriptionfeaturefields()"
     },
     {
@@ -20142,7 +20142,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3199",
       "id": "app_actions_opensubscriptionplandetailaction",
-      "community": 218,
+      "community": 258,
       "norm_label": "opensubscriptionplandetailaction()"
     },
     {
@@ -20169,7 +20169,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3335",
       "id": "app_actions_createsubscriptionfeatureaction",
-      "community": 244,
+      "community": 158,
       "norm_label": "createsubscriptionfeatureaction()"
     },
     {
@@ -20214,7 +20214,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3655",
       "id": "app_actions_updateselectedsubscriptionplanfeatureaction",
-      "community": 244,
+      "community": 158,
       "norm_label": "updateselectedsubscriptionplanfeatureaction()"
     },
     {
@@ -20430,7 +20430,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L24",
       "id": "detail_page_datetimeformatter",
-      "community": 206,
+      "community": 218,
       "norm_label": "datetimeformatter"
     },
     {
@@ -20628,7 +20628,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_profile_page_tsx",
-      "community": 275,
+      "community": 262,
       "norm_label": "page.tsx"
     },
     {
@@ -20637,7 +20637,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L8",
       "id": "profile_page_formatdate",
-      "community": 275,
+      "community": 262,
       "norm_label": "formatdate()"
     },
     {
@@ -20646,7 +20646,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L19",
       "id": "profile_page_profilepage",
-      "community": 275,
+      "community": 262,
       "norm_label": "profilepage()"
     },
     {
@@ -20655,7 +20655,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_users_page_tsx",
-      "community": 215,
+      "community": 166,
       "norm_label": "page.tsx"
     },
     {
@@ -20664,7 +20664,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L10",
       "id": "users_page_userspageprops",
-      "community": 215,
+      "community": 166,
       "norm_label": "userspageprops"
     },
     {
@@ -20673,7 +20673,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L14",
       "id": "users_page_dateformatter",
-      "community": 215,
+      "community": 166,
       "norm_label": "dateformatter"
     },
     {
@@ -20682,7 +20682,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L18",
       "id": "users_page_datetimeformatter",
-      "community": 215,
+      "community": 166,
       "norm_label": "datetimeformatter"
     },
     {
@@ -20691,7 +20691,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L23",
       "id": "users_page_getstringparam",
-      "community": 215,
+      "community": 166,
       "norm_label": "getstringparam()"
     },
     {
@@ -20700,7 +20700,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L31",
       "id": "users_page_parsepage",
-      "community": 215,
+      "community": 166,
       "norm_label": "parsepage()"
     },
     {
@@ -20709,7 +20709,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L36",
       "id": "users_page_pagehref",
-      "community": 215,
+      "community": 166,
       "norm_label": "pagehref()"
     },
     {
@@ -20718,7 +20718,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L50",
       "id": "users_page_formatdate",
-      "community": 215,
+      "community": 166,
       "norm_label": "formatdate()"
     },
     {
@@ -20727,7 +20727,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L54",
       "id": "users_page_formatdatetime",
-      "community": 215,
+      "community": 166,
       "norm_label": "formatdatetime()"
     },
     {
@@ -20736,7 +20736,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L58",
       "id": "users_page_statusbadgeclassname",
-      "community": 215,
+      "community": 166,
       "norm_label": "statusbadgeclassname()"
     },
     {
@@ -20745,7 +20745,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/page.tsx",
       "source_location": "L64",
       "id": "users_page_userspage",
-      "community": 215,
+      "community": 166,
       "norm_label": "userspage()"
     },
     {
@@ -20754,7 +20754,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_users_detail_page_tsx",
-      "community": 218,
+      "community": 136,
       "norm_label": "page.tsx"
     },
     {
@@ -20763,7 +20763,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L30",
       "id": "detail_page_formatlocation",
-      "community": 218,
+      "community": 136,
       "norm_label": "formatlocation()"
     },
     {
@@ -20772,7 +20772,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L42",
       "id": "detail_page_formatprice",
-      "community": 218,
+      "community": 136,
       "norm_label": "formatprice()"
     },
     {
@@ -20781,7 +20781,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L56",
       "id": "detail_page_formatsubscriptionlabel",
-      "community": 218,
+      "community": 136,
       "norm_label": "formatsubscriptionlabel()"
     },
     {
@@ -20790,7 +20790,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L60",
       "id": "detail_page_userdetailpage",
-      "community": 218,
+      "community": 136,
       "norm_label": "userdetailpage()"
     },
     {
@@ -20853,7 +20853,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_showrooms_page_tsx",
-      "community": 206,
+      "community": 162,
       "norm_label": "page.tsx"
     },
     {
@@ -20862,7 +20862,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L10",
       "id": "showrooms_page_showroomspageprops",
-      "community": 206,
+      "community": 162,
       "norm_label": "showroomspageprops"
     },
     {
@@ -20871,7 +20871,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L14",
       "id": "showrooms_page_dateformatter",
-      "community": 206,
+      "community": 162,
       "norm_label": "dateformatter"
     },
     {
@@ -20880,7 +20880,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L18",
       "id": "showrooms_page_getstringparam",
-      "community": 206,
+      "community": 162,
       "norm_label": "getstringparam()"
     },
     {
@@ -20889,7 +20889,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L26",
       "id": "showrooms_page_parsepage",
-      "community": 206,
+      "community": 162,
       "norm_label": "parsepage()"
     },
     {
@@ -20898,7 +20898,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L31",
       "id": "showrooms_page_pagehref",
-      "community": 206,
+      "community": 162,
       "norm_label": "pagehref()"
     },
     {
@@ -20907,7 +20907,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L41",
       "id": "showrooms_page_formatdate",
-      "community": 206,
+      "community": 162,
       "norm_label": "formatdate()"
     },
     {
@@ -20916,7 +20916,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L45",
       "id": "showrooms_page_formatlocation",
-      "community": 206,
+      "community": 162,
       "norm_label": "formatlocation()"
     },
     {
@@ -20925,7 +20925,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L58",
       "id": "showrooms_page_formatownername",
-      "community": 206,
+      "community": 162,
       "norm_label": "formatownername()"
     },
     {
@@ -20934,7 +20934,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/page.tsx",
       "source_location": "L62",
       "id": "showrooms_page_showroomspage",
-      "community": 206,
+      "community": 162,
       "norm_label": "showroomspage()"
     },
     {
@@ -20943,7 +20943,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_showrooms_detail_page_tsx",
-      "community": 206,
+      "community": 218,
       "norm_label": "page.tsx"
     },
     {
@@ -20952,7 +20952,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L16",
       "id": "detail_page_showroomdetailpageprops",
-      "community": 206,
+      "community": 218,
       "norm_label": "showroomdetailpageprops"
     },
     {
@@ -20961,7 +20961,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L29",
       "id": "detail_page_getstringparam",
-      "community": 206,
+      "community": 218,
       "norm_label": "getstringparam()"
     },
     {
@@ -20970,7 +20970,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L37",
       "id": "detail_page_parsepage",
-      "community": 206,
+      "community": 218,
       "norm_label": "parsepage()"
     },
     {
@@ -20979,7 +20979,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L50",
       "id": "detail_page_formatlabel",
-      "community": 206,
+      "community": 218,
       "norm_label": "formatlabel()"
     },
     {
@@ -20988,7 +20988,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L58",
       "id": "detail_page_vehicleshref",
-      "community": 206,
+      "community": 218,
       "norm_label": "vehicleshref()"
     },
     {
@@ -20997,7 +20997,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/page.tsx",
       "source_location": "L63",
       "id": "detail_page_showroomdetailpage",
-      "community": 206,
+      "community": 218,
       "norm_label": "showroomdetailpage()"
     },
     {
@@ -21006,7 +21006,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/detail/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_showrooms_detail_vehicles_detail_page_tsx",
-      "community": 174,
+      "community": 1,
       "norm_label": "page.tsx"
     },
     {
@@ -21015,7 +21015,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/detail/page.tsx",
       "source_location": "L11",
       "id": "detail_page_showroomvehicledetailpage",
-      "community": 174,
+      "community": 1,
       "norm_label": "showroomvehicledetailpage()"
     },
     {
@@ -21024,7 +21024,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/new/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_showrooms_detail_vehicles_new_page_tsx",
-      "community": 206,
+      "community": 1,
       "norm_label": "page.tsx"
     },
     {
@@ -21033,7 +21033,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/new/page.tsx",
       "source_location": "L10",
       "id": "new_page_addshowroomvehiclepage",
-      "community": 206,
+      "community": 1,
       "norm_label": "addshowroomvehiclepage()"
     },
     {
@@ -21078,7 +21078,7 @@
       "source_file": "CMS-portal/src/components/showroom-create-form.tsx",
       "source_location": "L40",
       "id": "components_showroom_create_form_showroomcreateform",
-      "community": 206,
+      "community": 162,
       "norm_label": "showroomcreateform()"
     },
     {
@@ -21087,7 +21087,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_profile_edit_form_tsx",
-      "community": 275,
+      "community": 262,
       "norm_label": "profile-edit-form.tsx"
     },
     {
@@ -21096,7 +21096,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L10",
       "id": "components_profile_edit_form_profileeditformprops",
-      "community": 275,
+      "community": 262,
       "norm_label": "profileeditformprops"
     },
     {
@@ -21105,7 +21105,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L17",
       "id": "components_profile_edit_form_profileupdatestate",
-      "community": 275,
+      "community": 262,
       "norm_label": "profileupdatestate"
     },
     {
@@ -21114,7 +21114,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L22",
       "id": "components_profile_edit_form_initialstate",
-      "community": 275,
+      "community": 262,
       "norm_label": "initialstate"
     },
     {
@@ -21123,7 +21123,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L24",
       "id": "components_profile_edit_form_savebutton",
-      "community": 275,
+      "community": 262,
       "norm_label": "savebutton()"
     },
     {
@@ -21132,7 +21132,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L39",
       "id": "components_profile_edit_form_profileeditform",
-      "community": 275,
+      "community": 262,
       "norm_label": "profileeditform()"
     },
     {
@@ -21204,7 +21204,7 @@
       "source_file": "CMS-portal/src/components/subscription-plan-detail-manager.tsx",
       "source_location": "L349",
       "id": "components_subscription_plan_detail_manager_subscriptionplandetailmanager",
-      "community": 218,
+      "community": 247,
       "norm_label": "subscriptionplandetailmanager()"
     },
     {
@@ -21213,7 +21213,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_user_profile_edit_form_tsx",
-      "community": 247,
+      "community": 136,
       "norm_label": "user-profile-edit-form.tsx"
     },
     {
@@ -21222,7 +21222,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_user_profile_edit_form_userprofileeditformprops",
-      "community": 247,
+      "community": 136,
       "norm_label": "userprofileeditformprops"
     },
     {
@@ -21231,7 +21231,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L27",
       "id": "components_user_profile_edit_form_initialstate",
-      "community": 247,
+      "community": 136,
       "norm_label": "initialstate"
     },
     {
@@ -21240,7 +21240,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L29",
       "id": "components_user_profile_edit_form_savebutton",
-      "community": 247,
+      "community": 136,
       "norm_label": "savebutton()"
     },
     {
@@ -21249,7 +21249,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L44",
       "id": "components_user_profile_edit_form_userprofileeditform",
-      "community": 247,
+      "community": 136,
       "norm_label": "userprofileeditform()"
     },
     {
@@ -21258,7 +21258,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_showroom_profile_edit_form_tsx",
-      "community": 247,
+      "community": 234,
       "norm_label": "showroom-profile-edit-form.tsx"
     },
     {
@@ -21267,7 +21267,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_showroom_profile_edit_form_showroomprofileeditformprops",
-      "community": 247,
+      "community": 234,
       "norm_label": "showroomprofileeditformprops"
     },
     {
@@ -21276,7 +21276,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L31",
       "id": "components_showroom_profile_edit_form_initialstate",
-      "community": 247,
+      "community": 234,
       "norm_label": "initialstate"
     },
     {
@@ -21285,7 +21285,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L33",
       "id": "components_showroom_profile_edit_form_savebutton",
-      "community": 247,
+      "community": 234,
       "norm_label": "savebutton()"
     },
     {
@@ -21294,7 +21294,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L48",
       "id": "components_showroom_profile_edit_form_formatlocation",
-      "community": 247,
+      "community": 234,
       "norm_label": "formatlocation()"
     },
     {
@@ -21303,7 +21303,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L62",
       "id": "components_showroom_profile_edit_form_showroomprofileeditform",
-      "community": 247,
+      "community": 234,
       "norm_label": "showroomprofileeditform()"
     },
     {
@@ -21537,7 +21537,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_user_membership_manager_tsx",
-      "community": 159,
+      "community": 206,
       "norm_label": "user-membership-manager.tsx"
     },
     {
@@ -21546,7 +21546,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L20",
       "id": "components_user_membership_manager_usermembershipmanagerprops",
-      "community": 159,
+      "community": 206,
       "norm_label": "usermembershipmanagerprops"
     },
     {
@@ -21555,7 +21555,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L35",
       "id": "components_user_membership_manager_initialaddstate",
-      "community": 159,
+      "community": 206,
       "norm_label": "initialaddstate"
     },
     {
@@ -21564,7 +21564,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L36",
       "id": "components_user_membership_manager_initialupdatestate",
-      "community": 159,
+      "community": 206,
       "norm_label": "initialupdatestate"
     },
     {
@@ -21573,7 +21573,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L37",
       "id": "components_user_membership_manager_initialremovestate",
-      "community": 159,
+      "community": 206,
       "norm_label": "initialremovestate"
     },
     {
@@ -21582,7 +21582,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L39",
       "id": "components_user_membership_manager_submitbutton",
-      "community": 159,
+      "community": 206,
       "norm_label": "submitbutton()"
     },
     {
@@ -21591,7 +21591,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L65",
       "id": "components_user_membership_manager_removebutton",
-      "community": 159,
+      "community": 206,
       "norm_label": "removebutton()"
     },
     {
@@ -21609,7 +21609,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L194",
       "id": "components_user_membership_manager_assignmembershipform",
-      "community": 159,
+      "community": 247,
       "norm_label": "assignmembershipform()"
     },
     {
@@ -21618,7 +21618,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L302",
       "id": "components_user_membership_manager_usermembershipmanager",
-      "community": 215,
+      "community": 136,
       "norm_label": "usermembershipmanager()"
     },
     {
@@ -21654,7 +21654,7 @@
       "source_file": "CMS-portal/src/components/vehicle-create-form.tsx",
       "source_location": "L35",
       "id": "components_vehicle_create_form_vehiclecreateform",
-      "community": 206,
+      "community": 1,
       "norm_label": "vehiclecreateform()"
     },
     {
@@ -21969,7 +21969,7 @@
       "source_file": "CMS-portal/src/components/showroom-member-manager.tsx",
       "source_location": "L301",
       "id": "components_showroom_member_manager_showroommembermanager",
-      "community": 206,
+      "community": 159,
       "norm_label": "showroommembermanager()"
     },
     {
@@ -22023,7 +22023,7 @@
       "source_file": "CMS-portal/src/components/user-create-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_user_create_form_tsx",
-      "community": 159,
+      "community": 206,
       "norm_label": "user-create-form.tsx"
     },
     {
@@ -22032,7 +22032,7 @@
       "source_file": "CMS-portal/src/components/user-create-form.tsx",
       "source_location": "L13",
       "id": "components_user_create_form_usercreateformprops",
-      "community": 159,
+      "community": 206,
       "norm_label": "usercreateformprops"
     },
     {
@@ -22041,7 +22041,7 @@
       "source_file": "CMS-portal/src/components/user-create-form.tsx",
       "source_location": "L18",
       "id": "components_user_create_form_initialstate",
-      "community": 159,
+      "community": 206,
       "norm_label": "initialstate"
     },
     {
@@ -22050,7 +22050,7 @@
       "source_file": "CMS-portal/src/components/user-create-form.tsx",
       "source_location": "L20",
       "id": "components_user_create_form_submitbutton",
-      "community": 159,
+      "community": 206,
       "norm_label": "submitbutton()"
     },
     {
@@ -22059,7 +22059,7 @@
       "source_file": "CMS-portal/src/components/user-create-form.tsx",
       "source_location": "L39",
       "id": "components_user_create_form_usercreateform",
-      "community": 159,
+      "community": 166,
       "norm_label": "usercreateform()"
     },
     {
@@ -22221,7 +22221,7 @@
       "source_file": "CMS-portal/src/lib/prisma.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_prisma_ts",
-      "community": 230,
+      "community": 237,
       "norm_label": "prisma.ts"
     },
     {
@@ -22230,7 +22230,7 @@
       "source_file": "CMS-portal/src/lib/prisma.ts",
       "source_location": "L7",
       "id": "lib_prisma_globalforprisma",
-      "community": 230,
+      "community": 237,
       "norm_label": "globalforprisma"
     },
     {
@@ -22239,7 +22239,7 @@
       "source_file": "CMS-portal/src/lib/prisma.ts",
       "source_location": "L11",
       "id": "lib_prisma_createprismaclient",
-      "community": 230,
+      "community": 237,
       "norm_label": "createprismaclient()"
     },
     {
@@ -22482,7 +22482,7 @@
       "source_file": "CMS-portal/src/lib/subscription-constants.ts",
       "source_location": "L145",
       "id": "lib_subscription_constants_isfeaturevaluetype",
-      "community": 244,
+      "community": 158,
       "norm_label": "isfeaturevaluetype()"
     },
     {
@@ -22563,7 +22563,7 @@
       "source_file": "CMS-portal/src/lib/vehicles.ts",
       "source_location": "L88",
       "id": "lib_vehicles_parsevehicleid",
-      "community": 174,
+      "community": 1,
       "norm_label": "parsevehicleid()"
     },
     {
@@ -22581,7 +22581,7 @@
       "source_file": "CMS-portal/src/lib/vehicles.ts",
       "source_location": "L104",
       "id": "lib_vehicles_getvehicledetail",
-      "community": 174,
+      "community": 1,
       "norm_label": "getvehicledetail()"
     },
     {
@@ -22626,7 +22626,7 @@
       "source_file": "CMS-portal/src/lib/showroom-types.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_showroom_types_ts",
-      "community": 159,
+      "community": 206,
       "norm_label": "showroom-types.ts"
     },
     {
@@ -22635,7 +22635,7 @@
       "source_file": "CMS-portal/src/lib/showroom-types.ts",
       "source_location": "L1",
       "id": "lib_showroom_types_showroomoption",
-      "community": 159,
+      "community": 206,
       "norm_label": "showroomoption"
     },
     {
@@ -22644,7 +22644,7 @@
       "source_file": "CMS-portal/src/lib/showroom-types.ts",
       "source_location": "L8",
       "id": "lib_showroom_types_showroomdetailmember",
-      "community": 159,
+      "community": 206,
       "norm_label": "showroomdetailmember"
     },
     {
@@ -23040,7 +23040,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L160",
       "id": "lib_showrooms_tocount",
-      "community": 206,
+      "community": 218,
       "norm_label": "tocount()"
     },
     {
@@ -23049,7 +23049,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L176",
       "id": "lib_showrooms_normalizepage",
-      "community": 206,
+      "community": 162,
       "norm_label": "normalizepage()"
     },
     {
@@ -23058,7 +23058,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L180",
       "id": "lib_showrooms_parseshowroomid",
-      "community": 206,
+      "community": 218,
       "norm_label": "parseshowroomid()"
     },
     {
@@ -23094,7 +23094,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L221",
       "id": "lib_showrooms_listshowroomoptions",
-      "community": 215,
+      "community": 136,
       "norm_label": "listshowroomoptions()"
     },
     {
@@ -23103,7 +23103,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L247",
       "id": "lib_showrooms_listshowrooms",
-      "community": 206,
+      "community": 162,
       "norm_label": "listshowrooms()"
     },
     {
@@ -23112,7 +23112,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L398",
       "id": "lib_showrooms_getshowroomdetail",
-      "community": 206,
+      "community": 218,
       "norm_label": "getshowroomdetail()"
     },
     {
@@ -23121,7 +23121,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L514",
       "id": "lib_showrooms_listshowroomvehicles",
-      "community": 206,
+      "community": 218,
       "norm_label": "listshowroomvehicles()"
     },
     {
@@ -23400,7 +23400,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L221",
       "id": "lib_subscriptions_listsubscriptionplans",
-      "community": 258,
+      "community": 244,
       "norm_label": "listsubscriptionplans()"
     },
     {
@@ -23499,7 +23499,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L770",
       "id": "lib_subscriptions_updatesubscriptionplanfeature",
-      "community": 244,
+      "community": 158,
       "norm_label": "updatesubscriptionplanfeature()"
     },
     {
@@ -23517,7 +23517,7 @@
       "source_file": "CMS-portal/src/lib/showroom-detail-selection.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_showroom_detail_selection_ts",
-      "community": 206,
+      "community": 1,
       "norm_label": "showroom-detail-selection.ts"
     },
     {
@@ -23526,7 +23526,7 @@
       "source_file": "CMS-portal/src/lib/showroom-detail-selection.ts",
       "source_location": "L10",
       "id": "lib_showroom_detail_selection_getselectionkey",
-      "community": 206,
+      "community": 1,
       "norm_label": "getselectionkey()"
     },
     {
@@ -23535,7 +23535,7 @@
       "source_file": "CMS-portal/src/lib/showroom-detail-selection.ts",
       "source_location": "L20",
       "id": "lib_showroom_detail_selection_setselectedshowroomdetail",
-      "community": 206,
+      "community": 1,
       "norm_label": "setselectedshowroomdetail()"
     },
     {
@@ -23544,7 +23544,7 @@
       "source_file": "CMS-portal/src/lib/showroom-detail-selection.ts",
       "source_location": "L41",
       "id": "lib_showroom_detail_selection_getselectedshowroomdetailid",
-      "community": 206,
+      "community": 1,
       "norm_label": "getselectedshowroomdetailid()"
     },
     {
@@ -23553,7 +23553,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_users_ts",
-      "community": 215,
+      "community": 142,
       "norm_label": "users.ts"
     },
     {
@@ -23562,7 +23562,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L19",
       "id": "lib_users_userstatus",
-      "community": 215,
+      "community": 142,
       "norm_label": "userstatus"
     },
     {
@@ -23571,7 +23571,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L21",
       "id": "lib_users_userlistitem",
-      "community": 215,
+      "community": 142,
       "norm_label": "userlistitem"
     },
     {
@@ -23598,7 +23598,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L43",
       "id": "lib_users_usersubscriptionsummary",
-      "community": 215,
+      "community": 142,
       "norm_label": "usersubscriptionsummary"
     },
     {
@@ -23607,7 +23607,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L56",
       "id": "lib_users_userdetail",
-      "community": 215,
+      "community": 142,
       "norm_label": "userdetail"
     },
     {
@@ -23616,7 +23616,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L72",
       "id": "lib_users_countrow",
-      "community": 215,
+      "community": 142,
       "norm_label": "countrow"
     },
     {
@@ -23625,7 +23625,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L76",
       "id": "lib_users_userrow",
-      "community": 215,
+      "community": 142,
       "norm_label": "userrow"
     },
     {
@@ -23634,7 +23634,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L87",
       "id": "lib_users_useroptionrow",
-      "community": 215,
+      "community": 142,
       "norm_label": "useroptionrow"
     },
     {
@@ -23643,7 +23643,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L94",
       "id": "lib_users_userrolerow",
-      "community": 215,
+      "community": 142,
       "norm_label": "userrolerow"
     },
     {
@@ -23652,7 +23652,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L98",
       "id": "lib_users_userdetailrow",
-      "community": 215,
+      "community": 142,
       "norm_label": "userdetailrow"
     },
     {
@@ -23661,7 +23661,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L111",
       "id": "lib_users_userdetailmembershiprow",
-      "community": 215,
+      "community": 142,
       "norm_label": "userdetailmembershiprow"
     },
     {
@@ -23670,7 +23670,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L123",
       "id": "lib_users_usersubscriptionrow",
-      "community": 215,
+      "community": 142,
       "norm_label": "usersubscriptionrow"
     },
     {
@@ -23679,7 +23679,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L136",
       "id": "lib_users_tocount",
-      "community": 215,
+      "community": 142,
       "norm_label": "tocount()"
     },
     {
@@ -23688,7 +23688,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L152",
       "id": "lib_users_normalizepage",
-      "community": 215,
+      "community": 142,
       "norm_label": "normalizepage()"
     },
     {
@@ -23697,7 +23697,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L156",
       "id": "lib_users_activeuserscutoff",
-      "community": 215,
+      "community": 142,
       "norm_label": "activeuserscutoff()"
     },
     {
@@ -23706,7 +23706,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L161",
       "id": "lib_users_formatphonenumber",
-      "community": 215,
+      "community": 142,
       "norm_label": "formatphonenumber()"
     },
     {
@@ -23715,7 +23715,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L180",
       "id": "lib_users_formatuseroptionlabel",
-      "community": 215,
+      "community": 142,
       "norm_label": "formatuseroptionlabel()"
     },
     {
@@ -23724,7 +23724,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L186",
       "id": "lib_users_titlecase",
-      "community": 215,
+      "community": 142,
       "norm_label": "titlecase()"
     },
     {
@@ -23733,7 +23733,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L193",
       "id": "lib_users_parseuserid",
-      "community": 215,
+      "community": 142,
       "norm_label": "parseuserid()"
     },
     {
@@ -23742,7 +23742,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L201",
       "id": "lib_users_listuseroptions",
-      "community": 206,
+      "community": 218,
       "norm_label": "listuseroptions()"
     },
     {
@@ -23751,7 +23751,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L221",
       "id": "lib_users_listuserroleoptions",
-      "community": 215,
+      "community": 136,
       "norm_label": "listuserroleoptions()"
     },
     {
@@ -23760,7 +23760,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L241",
       "id": "lib_users_listusers",
-      "community": 215,
+      "community": 142,
       "norm_label": "listusers()"
     },
     {
@@ -23769,7 +23769,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L344",
       "id": "lib_users_getuserdetail",
-      "community": 215,
+      "community": 136,
       "norm_label": "getuserdetail()"
     },
     {
@@ -23778,7 +23778,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L486",
       "id": "lib_users_listactiveusers",
-      "community": 215,
+      "community": 142,
       "norm_label": "listactiveusers()"
     },
     {
@@ -23787,7 +23787,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L608",
       "id": "lib_users_listdeletedusers",
-      "community": 215,
+      "community": 142,
       "norm_label": "listdeletedusers()"
     },
     {
@@ -23796,7 +23796,7 @@
       "source_file": "CMS-portal/src/lib/vehicle-detail-selection.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_vehicle_detail_selection_ts",
-      "community": 174,
+      "community": 1,
       "norm_label": "vehicle-detail-selection.ts"
     },
     {
@@ -23805,7 +23805,7 @@
       "source_file": "CMS-portal/src/lib/vehicle-detail-selection.ts",
       "source_location": "L10",
       "id": "lib_vehicle_detail_selection_getselectionkey",
-      "community": 174,
+      "community": 1,
       "norm_label": "getselectionkey()"
     },
     {
@@ -23814,7 +23814,7 @@
       "source_file": "CMS-portal/src/lib/vehicle-detail-selection.ts",
       "source_location": "L20",
       "id": "lib_vehicle_detail_selection_setselectedvehicledetail",
-      "community": 174,
+      "community": 1,
       "norm_label": "setselectedvehicledetail()"
     },
     {
@@ -23823,7 +23823,7 @@
       "source_file": "CMS-portal/src/lib/vehicle-detail-selection.ts",
       "source_location": "L41",
       "id": "lib_vehicle_detail_selection_getselectedvehicledetailid",
-      "community": 174,
+      "community": 1,
       "norm_label": "getselectedvehicledetailid()"
     },
     {
@@ -23832,7 +23832,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_user_detail_selection_ts",
-      "community": 218,
+      "community": 1,
       "norm_label": "user-detail-selection.ts"
     },
     {
@@ -23841,7 +23841,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L10",
       "id": "lib_user_detail_selection_getselectionkey",
-      "community": 218,
+      "community": 1,
       "norm_label": "getselectionkey()"
     },
     {
@@ -23850,7 +23850,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L20",
       "id": "lib_user_detail_selection_setselecteduserdetail",
-      "community": 218,
+      "community": 1,
       "norm_label": "setselecteduserdetail()"
     },
     {
@@ -23859,7 +23859,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L41",
       "id": "lib_user_detail_selection_getselecteduserdetailid",
-      "community": 218,
+      "community": 1,
       "norm_label": "getselecteduserdetailid()"
     },
     {
@@ -24003,7 +24003,7 @@
       "source_file": "CMS-portal/src/lib/auth.ts",
       "source_location": "L251",
       "id": "lib_auth_requiremoderator",
-      "community": 158,
+      "community": 1,
       "norm_label": "requiremoderator()"
     },
     {
@@ -24012,7 +24012,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L1",
       "id": "pkg_middleware_recovery_go",
-      "community": 253,
+      "community": 47,
       "norm_label": "recovery.go"
     },
     {
@@ -24021,7 +24021,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L12",
       "id": "middleware_recovery_recovery",
-      "community": 253,
+      "community": 47,
       "norm_label": "recovery()"
     },
     {
@@ -24093,7 +24093,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 265,
+      "community": 253,
       "norm_label": "request_id.go"
     },
     {
@@ -24102,7 +24102,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 265,
+      "community": 253,
       "norm_label": "requestid()"
     },
     {
@@ -24111,7 +24111,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 265,
+      "community": 253,
       "norm_label": "newrequestid()"
     },
     {
@@ -24696,7 +24696,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L44",
       "id": "staging_readme_prerequisites",
-      "community": 166,
+      "community": 125,
       "norm_label": "prerequisites"
     },
     {
@@ -24705,7 +24705,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L51",
       "id": "staging_readme_install_docker",
-      "community": 166,
+      "community": 125,
       "norm_label": "install docker"
     },
     {
@@ -24714,7 +24714,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L53",
       "id": "staging_readme_codeblock_3",
-      "community": 166,
+      "community": 125,
       "norm_label": "code:bash (curl -fssl https://get.docker.com | sudo sh)"
     },
     {
@@ -24723,7 +24723,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L59",
       "id": "staging_readme_install_nginx",
-      "community": 166,
+      "community": 125,
       "norm_label": "install nginx"
     },
     {
@@ -24732,7 +24732,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L61",
       "id": "staging_readme_codeblock_4",
-      "community": 166,
+      "community": 125,
       "norm_label": "code:bash (sudo apt update && sudo apt install -y nginx)"
     },
     {
@@ -24808,345 +24808,372 @@
       "norm_label": "code:bash (openssl rand -hex 32)"
     },
     {
+      "label": "GCS service account key",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L140",
+      "id": "staging_readme_gcs_service_account_key",
+      "community": 125,
+      "norm_label": "gcs service account key"
+    },
+    {
+      "label": "code:bash (sudo mkdir -p /opt/infiniour/secrets)",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L144",
+      "id": "staging_readme_codeblock_10",
+      "community": 125,
+      "norm_label": "code:bash (sudo mkdir -p /opt/infiniour/secrets)"
+    },
+    {
+      "label": "code:block11 (STORAGE_PROVIDER=gcs)",
+      "file_type": "document",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L153",
+      "id": "staging_readme_codeblock_11",
+      "community": 125,
+      "norm_label": "code:block11 (storage_provider=gcs)"
+    },
+    {
       "label": "Bootstrap Scripts",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L142",
+      "source_location": "L163",
       "id": "staging_readme_bootstrap_scripts",
-      "community": 277,
+      "community": 125,
       "norm_label": "bootstrap scripts"
     },
     {
       "label": "code:bash (# Installs nginx if missing, copies nginx.conf, enables site)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L147",
-      "id": "staging_readme_codeblock_10",
-      "community": 277,
+      "source_location": "L168",
+      "id": "staging_readme_codeblock_12",
+      "community": 125,
       "norm_label": "code:bash (# installs nginx if missing, copies nginx.conf, enables site)"
     },
     {
       "label": "code:bash (# Installs certbot, obtains Let's Encrypt cert, tests renewa)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L153",
-      "id": "staging_readme_codeblock_11",
-      "community": 277,
+      "source_location": "L174",
+      "id": "staging_readme_codeblock_13",
+      "community": 125,
       "norm_label": "code:bash (# installs certbot, obtains let's encrypt cert, tests renewa)"
     },
     {
       "label": "Step 4 \u2014 Configure Host Nginx",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L162",
+      "source_location": "L183",
       "id": "staging_readme_step_4_configure_host_nginx",
-      "community": 162,
+      "community": 125,
       "norm_label": "step 4 \u2014 configure host nginx"
     },
     {
       "label": "Main config",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L164",
+      "source_location": "L185",
       "id": "staging_readme_main_config",
-      "community": 162,
+      "community": 125,
       "norm_label": "main config"
     },
     {
       "label": "code:nginx (user www-data;)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L168",
-      "id": "staging_readme_codeblock_12",
-      "community": 162,
+      "source_location": "L189",
+      "id": "staging_readme_codeblock_14",
+      "community": 125,
       "norm_label": "code:nginx (user www-data;)"
     },
     {
       "label": "Site config",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L215",
+      "source_location": "L236",
       "id": "staging_readme_site_config",
-      "community": 162,
+      "community": 125,
       "norm_label": "site config"
     },
     {
       "label": "code:nginx (server {)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L219",
-      "id": "staging_readme_codeblock_13",
-      "community": 162,
+      "source_location": "L240",
+      "id": "staging_readme_codeblock_15",
+      "community": 125,
       "norm_label": "code:nginx (server {)"
     },
     {
       "label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L287",
-      "id": "staging_readme_codeblock_14",
-      "community": 162,
+      "source_location": "L308",
+      "id": "staging_readme_codeblock_16",
+      "community": 125,
       "norm_label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)"
     },
     {
       "label": "Step 5 \u2014 Initial Deployment",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L297",
+      "source_location": "L318",
       "id": "staging_readme_step_5_initial_deployment",
-      "community": 1,
+      "community": 125,
       "norm_label": "step 5 \u2014 initial deployment"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L301",
-      "id": "staging_readme_codeblock_15",
-      "community": 1,
+      "source_location": "L322",
+      "id": "staging_readme_codeblock_17",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "code:bash (./scripts/migrate.sh version)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L317",
-      "id": "staging_readme_codeblock_16",
-      "community": 1,
+      "source_location": "L338",
+      "id": "staging_readme_codeblock_18",
+      "community": 125,
       "norm_label": "code:bash (./scripts/migrate.sh version)"
     },
     {
       "label": "Step 6 \u2014 Configure SSL (After DNS is Live)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L323",
+      "source_location": "L344",
       "id": "staging_readme_step_6_configure_ssl_after_dns_is_live",
-      "community": 1,
+      "community": 125,
       "norm_label": "step 6 \u2014 configure ssl (after dns is live)"
     },
     {
       "label": "code:bash (sudo apt install -y certbot python3-certbot-nginx)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L325",
-      "id": "staging_readme_codeblock_17",
-      "community": 1,
+      "source_location": "L346",
+      "id": "staging_readme_codeblock_19",
+      "community": 125,
       "norm_label": "code:bash (sudo apt install -y certbot python3-certbot-nginx)"
     },
     {
       "label": "Operational Runbook",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L341",
+      "source_location": "L362",
       "id": "staging_readme_operational_runbook",
-      "community": 136,
+      "community": 125,
       "norm_label": "operational runbook"
     },
     {
       "label": "Deploy new API image",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L343",
+      "source_location": "L364",
       "id": "staging_readme_deploy_new_api_image",
-      "community": 1,
+      "community": 125,
       "norm_label": "deploy new api image"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L347",
-      "id": "staging_readme_codeblock_18",
-      "community": 276,
+      "source_location": "L368",
+      "id": "staging_readme_codeblock_20",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Apply database migrations",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L354",
+      "source_location": "L375",
       "id": "staging_readme_apply_database_migrations",
-      "community": 136,
+      "community": 125,
       "norm_label": "apply database migrations"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L358",
-      "id": "staging_readme_codeblock_19",
-      "community": 136,
+      "source_location": "L379",
+      "id": "staging_readme_codeblock_21",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Update API image only (no Postgres restart)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L363",
+      "source_location": "L384",
       "id": "staging_readme_update_api_image_only_no_postgres_restart",
-      "community": 276,
+      "community": 125,
       "norm_label": "update api image only (no postgres restart)"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L365",
-      "id": "staging_readme_codeblock_20",
-      "community": 276,
+      "source_location": "L386",
+      "id": "staging_readme_codeblock_22",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Restart a single service",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L372",
+      "source_location": "L393",
       "id": "staging_readme_restart_a_single_service",
-      "community": 136,
+      "community": 125,
       "norm_label": "restart a single service"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L374",
-      "id": "staging_readme_codeblock_21",
-      "community": 136,
+      "source_location": "L395",
+      "id": "staging_readme_codeblock_23",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "View logs",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L380",
+      "source_location": "L401",
       "id": "staging_readme_view_logs",
-      "community": 276,
+      "community": 125,
       "norm_label": "view logs"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L382",
-      "id": "staging_readme_codeblock_22",
-      "community": 276,
+      "source_location": "L403",
+      "id": "staging_readme_codeblock_24",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Manage Nginx",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L401",
+      "source_location": "L422",
       "id": "staging_readme_manage_nginx",
-      "community": 136,
+      "community": 125,
       "norm_label": "manage nginx"
     },
     {
       "label": "code:bash (sudo nginx -t                    # validate config)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L403",
-      "id": "staging_readme_codeblock_23",
-      "community": 136,
+      "source_location": "L424",
+      "id": "staging_readme_codeblock_25",
+      "community": 125,
       "norm_label": "code:bash (sudo nginx -t                    # validate config)"
     },
     {
       "label": "Database backup",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L410",
+      "source_location": "L431",
       "id": "staging_readme_database_backup",
-      "community": 136,
+      "community": 125,
       "norm_label": "database backup"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L412",
-      "id": "staging_readme_codeblock_24",
-      "community": 136,
+      "source_location": "L433",
+      "id": "staging_readme_codeblock_26",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "code:bash (sudo crontab -e)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L421",
-      "id": "staging_readme_codeblock_25",
-      "community": 142,
+      "source_location": "L442",
+      "id": "staging_readme_codeblock_27",
+      "community": 125,
       "norm_label": "code:bash (sudo crontab -e)"
     },
     {
       "label": "Database restore",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L427",
+      "source_location": "L448",
       "id": "staging_readme_database_restore",
-      "community": 136,
+      "community": 125,
       "norm_label": "database restore"
     },
     {
       "label": "code:bash (cd /opt/dms-api-server/deploy/staging)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L429",
-      "id": "staging_readme_codeblock_26",
-      "community": 280,
+      "source_location": "L450",
+      "id": "staging_readme_codeblock_28",
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
       "label": "Health check",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L434",
+      "source_location": "L455",
       "id": "staging_readme_health_check",
-      "community": 142,
+      "community": 125,
       "norm_label": "health check"
     },
     {
       "label": "code:bash (curl http://stag-api.infiniour.com/health   # via Nginx)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L436",
-      "id": "staging_readme_codeblock_27",
-      "community": 142,
+      "source_location": "L457",
+      "id": "staging_readme_codeblock_29",
+      "community": 125,
       "norm_label": "code:bash (curl http://stag-api.infiniour.com/health   # via nginx)"
     },
     {
       "label": "Security: Exposed Ports",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L445",
+      "source_location": "L466",
       "id": "staging_readme_security_exposed_ports",
-      "community": 280,
+      "community": 125,
       "norm_label": "security: exposed ports"
     },
     {
       "label": "code:bash (# From an external machine:)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L463",
-      "id": "staging_readme_codeblock_28",
-      "community": 280,
+      "source_location": "L484",
+      "id": "staging_readme_codeblock_30",
+      "community": 125,
       "norm_label": "code:bash (# from an external machine:)"
     },
     {
       "label": "Disaster Recovery After VM Recreation",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L471",
+      "source_location": "L492",
       "id": "staging_readme_disaster_recovery_after_vm_recreation",
-      "community": 142,
+      "community": 125,
       "norm_label": "disaster recovery after vm recreation"
     },
     {
       "label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)",
       "file_type": "document",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L479",
-      "id": "staging_readme_codeblock_29",
-      "community": 142,
+      "source_location": "L500",
+      "id": "staging_readme_codeblock_31",
+      "community": 125,
       "norm_label": "code:bash (sudo ln -s /etc/nginx/sites-available/stag-api.infiniour.com)"
     },
     {
@@ -29087,7 +29114,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L29",
-      "community": 159,
+      "community": 206,
       "norm_label": "showroomoption",
       "id": "lib_showrooms_showroomoption"
     },
@@ -29114,7 +29141,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L36",
-      "community": 159,
+      "community": 206,
       "norm_label": "userroleoption",
       "id": "lib_users_userroleoption"
     },
@@ -29123,7 +29150,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L41",
-      "community": 159,
+      "community": 206,
       "norm_label": "userdetailmembership",
       "id": "lib_users_userdetailmembership"
     },
@@ -29195,7 +29222,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L1",
-      "community": 215,
+      "community": 136,
       "norm_label": "page.tsx",
       "id": "cms_portal_src_app_portal_users_userid_page_tsx"
     },
@@ -29204,7 +29231,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L11",
-      "community": 215,
+      "community": 136,
       "norm_label": "userdetailpageprops",
       "id": "userid_page_userdetailpageprops"
     },
@@ -29213,7 +29240,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L17",
-      "community": 215,
+      "community": 136,
       "norm_label": "dateformatter",
       "id": "userid_page_dateformatter"
     },
@@ -29222,7 +29249,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L21",
-      "community": 215,
+      "community": 136,
       "norm_label": "datetimeformatter",
       "id": "userid_page_datetimeformatter"
     },
@@ -29231,7 +29258,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L26",
-      "community": 215,
+      "community": 136,
       "norm_label": "formatdate()",
       "id": "userid_page_formatdate"
     },
@@ -29240,7 +29267,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L30",
-      "community": 215,
+      "community": 136,
       "norm_label": "formatdatetime()",
       "id": "userid_page_formatdatetime"
     },
@@ -29249,7 +29276,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L34",
-      "community": 215,
+      "community": 136,
       "norm_label": "formatlocation()",
       "id": "userid_page_formatlocation"
     },
@@ -29258,7 +29285,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L46",
-      "community": 215,
+      "community": 136,
       "norm_label": "formatprice()",
       "id": "userid_page_formatprice"
     },
@@ -29267,7 +29294,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L60",
-      "community": 215,
+      "community": 136,
       "norm_label": "formatsubscriptionlabel()",
       "id": "userid_page_formatsubscriptionlabel"
     },
@@ -29276,7 +29303,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L64",
-      "community": 215,
+      "community": 136,
       "norm_label": "userdetailpage()",
       "id": "userid_page_userdetailpage"
     },
@@ -29393,7 +29420,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L1",
-      "community": 150,
+      "community": 175,
       "norm_label": "auth_routes_smoke_test.go",
       "id": "tests_smoke_auth_routes_smoke_test_go"
     },
@@ -29456,7 +29483,7 @@
       "file_type": "code",
       "source_file": "tests/smoke/auth_routes_smoke_test.go",
       "source_location": "L36",
-      "community": 150,
+      "community": 175,
       "norm_label": "testauthloginrouteshape()",
       "id": "smoke_auth_routes_smoke_test_testauthloginrouteshape"
     },
@@ -29699,7 +29726,7 @@
       "file_type": "code",
       "source_file": "internal/auth/routes.go",
       "source_location": "L1",
-      "community": 149,
+      "community": 175,
       "norm_label": "routes.go",
       "id": "internal_auth_routes_go"
     },
@@ -29717,7 +29744,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L14",
-      "community": 175,
+      "community": 251,
       "norm_label": "fakeauthservice",
       "id": "auth_fakeauthservice"
     },
@@ -29726,7 +29753,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L16",
-      "community": 175,
+      "community": 251,
       "norm_label": ".register()",
       "id": "auth_fakeauthservice_register"
     },
@@ -29735,7 +29762,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L20",
-      "community": 175,
+      "community": 251,
       "norm_label": ".login()",
       "id": "auth_fakeauthservice_login"
     },
@@ -29744,7 +29771,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L24",
-      "community": 175,
+      "community": 251,
       "norm_label": ".verifyotp()",
       "id": "auth_fakeauthservice_verifyotp"
     },
@@ -29753,7 +29780,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L33",
-      "community": 175,
+      "community": 251,
       "norm_label": ".refreshtoken()",
       "id": "auth_fakeauthservice_refreshtoken"
     },
@@ -29762,7 +29789,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L42",
-      "community": 175,
+      "community": 251,
       "norm_label": ".logout()",
       "id": "auth_fakeauthservice_logout"
     },
@@ -38929,9 +38956,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_repository_gorm_test_go",
-      "target": "vehicle_repository_gorm_test_testvehiclerepositorycreate_statusinserterror",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_testvehiclerepositorycreate_statusinserterror"
     },
     {
       "relation": "contains",
@@ -39482,9 +39509,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_gorm_test_testvehiclerepositorycreate_statusinserterror",
-      "target": "vehicle_repository_gorm_test_newvehiclemockdb",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_newvehiclemockdb"
     },
     {
       "relation": "calls",
@@ -82330,6 +82357,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "staging_readme_step_3_configure_environment",
+      "target": "staging_readme_gcs_service_account_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "staging_readme_gcs_service_account_key",
+      "target": "staging_readme_codeblock_10",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "staging_readme_gcs_service_account_key",
+      "target": "staging_readme_codeblock_11",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L145",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -82350,21 +82407,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L162",
+      "source_location": "L168",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_step_4_configure_host_nginx",
-      "target": "staging_readme_main_config"
+      "source": "staging_readme_bootstrap_scripts",
+      "target": "staging_readme_codeblock_12",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L213",
+      "source_location": "L174",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_step_4_configure_host_nginx",
-      "target": "staging_readme_site_config"
+      "source": "staging_readme_bootstrap_scripts",
+      "target": "staging_readme_codeblock_13",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82390,11 +82447,61 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L162",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_step_4_configure_host_nginx",
+      "target": "staging_readme_main_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L213",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_step_4_configure_host_nginx",
+      "target": "staging_readme_site_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "staging_readme_main_config",
+      "target": "staging_readme_codeblock_14",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L285",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_site_config",
       "target": "staging_readme_codeblock_14"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "staging_readme_site_config",
+      "target": "staging_readme_codeblock_15",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L308",
+      "weight": 1.0,
+      "source": "staging_readme_site_config",
+      "target": "staging_readme_codeblock_16",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82430,6 +82537,26 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "staging_readme_step_5_initial_deployment",
+      "target": "staging_readme_codeblock_17",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L338",
+      "weight": 1.0,
+      "source": "staging_readme_step_5_initial_deployment",
+      "target": "staging_readme_codeblock_18",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L324",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -82445,6 +82572,56 @@
       "confidence_score": 1.0,
       "source": "staging_readme_deploy_new_api_image",
       "target": "staging_readme_codeblock_17"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L346",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_deploy_new_api_image",
+      "target": "staging_readme_codeblock_18"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L342",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_update_api_image_only_no_postgres_restart",
+      "target": "staging_readme_codeblock_18"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L346",
+      "weight": 1.0,
+      "source": "staging_readme_step_6_configure_ssl_after_dns_is_live",
+      "target": "staging_readme_codeblock_19",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L357",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_apply_database_migrations",
+      "target": "staging_readme_codeblock_19"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L350",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_restart_a_single_service",
+      "target": "staging_readme_codeblock_19"
     },
     {
       "relation": "contains",
@@ -82540,41 +82717,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L346",
+      "source_location": "L368",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "staging_readme_deploy_new_api_image",
-      "target": "staging_readme_codeblock_18"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "deploy/staging/README.md",
-      "source_location": "L342",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_update_api_image_only_no_postgres_restart",
-      "target": "staging_readme_codeblock_18"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "deploy/staging/README.md",
-      "source_location": "L357",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_apply_database_migrations",
-      "target": "staging_readme_codeblock_19"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "deploy/staging/README.md",
-      "source_location": "L350",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_restart_a_single_service",
-      "target": "staging_readme_codeblock_19"
+      "target": "staging_readme_codeblock_20",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82600,6 +82747,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L379",
+      "weight": 1.0,
+      "source": "staging_readme_apply_database_migrations",
+      "target": "staging_readme_codeblock_21",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L372",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -82615,6 +82772,16 @@
       "confidence_score": 1.0,
       "source": "staging_readme_manage_nginx",
       "target": "staging_readme_codeblock_21"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "staging_readme_update_api_image_only_no_postgres_restart",
+      "target": "staging_readme_codeblock_22",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82640,6 +82807,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L395",
+      "weight": 1.0,
+      "source": "staging_readme_restart_a_single_service",
+      "target": "staging_readme_codeblock_23",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L401",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -82660,21 +82837,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L410",
+      "source_location": "L403",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "staging_readme_database_backup",
-      "target": "staging_readme_codeblock_24"
+      "source": "staging_readme_view_logs",
+      "target": "staging_readme_codeblock_24",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
-      "source_location": "L419",
+      "source_location": "L410",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_database_backup",
-      "target": "staging_readme_codeblock_25"
+      "target": "staging_readme_codeblock_24"
     },
     {
       "relation": "contains",
@@ -82690,11 +82867,51 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L424",
+      "weight": 1.0,
+      "source": "staging_readme_manage_nginx",
+      "target": "staging_readme_codeblock_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L419",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "staging_readme_database_backup",
+      "target": "staging_readme_codeblock_25"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L412",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_health_check",
       "target": "staging_readme_codeblock_25"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L433",
+      "weight": 1.0,
+      "source": "staging_readme_database_backup",
+      "target": "staging_readme_codeblock_26",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L442",
+      "weight": 1.0,
+      "source": "staging_readme_database_backup",
+      "target": "staging_readme_codeblock_27",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82740,6 +82957,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L450",
+      "weight": 1.0,
+      "source": "staging_readme_database_restore",
+      "target": "staging_readme_codeblock_28",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L461",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -82750,11 +82977,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "deploy/staging/README.md",
+      "source_location": "L457",
+      "weight": 1.0,
+      "source": "staging_readme_health_check",
+      "target": "staging_readme_codeblock_29",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
       "source_location": "L477",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "staging_readme_disaster_recovery_after_vm_recreation",
       "target": "staging_readme_codeblock_29"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L484",
+      "weight": 1.0,
+      "source": "staging_readme_security_exposed_ports",
+      "target": "staging_readme_codeblock_30",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy/staging/README.md",
+      "source_location": "L500",
+      "weight": 1.0,
+      "source": "staging_readme_disaster_recovery_after_vm_recreation",
+      "target": "staging_readme_codeblock_31",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -88580,5 +88837,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "310aa53470fd51de72faaaaaf0485c93057d2949"
+  "built_at_commit": "cc1aae2d5d9056e83e9508ab0447514e54938707"
 }

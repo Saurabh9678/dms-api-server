@@ -35,7 +35,10 @@ services:
       APP_ENV: staging
       APP_PORT: "8080"
       DB_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
-      # Optional: mount SA JSON and set GOOGLE_APPLICATION_CREDENTIALS in .env
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/gcs-sa.json
+    volumes:
+      # Host file must exist before `docker compose up` (chmod 400, owner 65532:65532).
+      - ${GCS_SA_KEY_PATH:-/opt/infiniour/secrets/gcs-sa.json}:/secrets/gcs-sa.json:ro
     ports:
       - "127.0.0.1:8080:8080"
     depends_on:
