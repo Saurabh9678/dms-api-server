@@ -31,16 +31,17 @@
 ### GET /api/v1/vehicle/listing — List Vehicles by Category
 
 **Flow:**
-1. `GET /api/v1/vehicle/listing` → `RequireDeviceContext` → `RequireAuth` → `vehicle.Handler.ListVehicles`
-2. Handler: `ShouldBindQuery` → calls `service.ListVehicles`
+1. `GET /api/v1/vehicle/listing` → `RequireDeviceContext` → `RequireAuth` → `RequireShowroomRoles` → `vehicle.Handler.ListVehicles`
+2. Handler: `ShouldBindQuery` → requires `showroom_id` > 0 → caller must be a member of that showroom (any role) → calls `service.ListVehicles`
 3. Service:
-   - Validates query (page ≥ 1, limit 1–100, valid status/type enums, min_price ≤ max_price)
+   - Validates query (`showroom_id` > 0, page ≥ 1, limit 1–100, valid status/type enums, min_price ≤ max_price)
    - Omits `status` filter when empty (all current statuses); otherwise filters to requested statuses
    - Calls `repo.CountByType` → per-category totals (same filters as the page query)
    - Calls `repo.List` → paginated vehicles with current status + pricing (`LIMIT`/`OFFSET` on the combined result ordered by `v.id DESC`)
    - Groups results by vehicle_type (car/bike/scooty)
    - Returns `ListVehiclesResponse` with only requested categories (omits unmatched when type filter applied)
 4. Repository:
+   - JOINs `vehicle_showroom_relations` on `showroom_id = ?` to return only vehicles assigned to that showroom
    - Uses LATERAL JOIN to get latest `vehicle_statuses` row (by `id DESC`) as current status
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
    - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
@@ -50,12 +51,19 @@
 **Query Parameters:**
 | Param | Default | Notes |
 |---|---|---|
+| `showroom_id` | — | **Required**, numeric showroom ID; caller must be a member |
 | `status` (repeatable) | all statuses | garage, inspection, ready_for_sale, sold |
 | `type` (repeatable) | all types | car, bike, scooty |
 | `min_price` | — | filters on `price_tag` |
 | `max_price` | — | filters on `price_tag` |
 | `page` | 1 | ≥ 1 |
 | `limit` | 20 | 1–100 |
+
+**Errors:**
+| Condition | Status | Code |
+|---|---|---|
+| Missing/zero `showroom_id` or invalid query | 400 | `INVALID_REQUEST` |
+| Caller is not a member of the showroom | 403 | `FORBIDDEN` |
 
 **Response Shape:**
 ```json

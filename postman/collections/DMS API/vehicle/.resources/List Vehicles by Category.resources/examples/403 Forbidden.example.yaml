@@ -1,22 +1,22 @@
 $kind: http-example
 request:
-  url: "{{base_url}}/api/v1/vehicle/listing"
+  url: "{{base_url}}/api/v1/vehicle/listing?showroom_id=99&page=1&limit=20"
   method: GET
   headers:
     X-Platform: web
     X-Device-Id: device-001
     Authorization: Bearer {{access_token}}
 response:
-  statusCode: 400
-  statusText: Bad Request
+  statusCode: 403
+  statusText: Forbidden
   body:
     type: text
     content: |-
       {
         "success": false,
         "error": {
-          "code": "INVALID_REQUEST",
-          "message": "invalid request"
+          "code": "FORBIDDEN",
+          "message": "forbidden"
         }
       }
-order: 2000
+order: 3000

@@ -88,7 +88,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/v1/vehicle/listing?page=1&limit=20",
+              "raw": "{{base_url}}/api/v1/vehicle/listing?showroom_id=1&page=1&limit=20",
               "host": [
                 "{{base_url}}"
               ],
@@ -99,6 +99,11 @@
                 "listing"
               ],
               "query": [
+                {
+                  "key": "showroom_id",
+                  "value": "1",
+                  "description": "Required: numeric showroom ID. Caller must be a member of this showroom."
+                },
                 {
                   "key": "status",
                   "value": "",
@@ -135,7 +140,7 @@
                 }
               ]
             },
-            "description": "List vehicles grouped by category (cars, bikes, scooties). Defaults to all statuses. Supports filtering by status, type, and price range with pagination (page/limit)."
+            "description": "List vehicles in a showroom grouped by category (cars, bikes, scooties). Requires showroom_id; caller must be a member of that showroom. Defaults to all statuses. Supports filtering by status, type, and price range with pagination (page/limit)."
           },
           "response": [
             {
@@ -149,6 +154,12 @@
               "status": "Bad Request",
               "code": 400,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "403 Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"forbidden\"\n  }\n}"
             }
           ]
         },

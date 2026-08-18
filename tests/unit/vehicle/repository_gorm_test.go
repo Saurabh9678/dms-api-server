@@ -89,9 +89,10 @@ func TestVehicleRepositoryList_Success(t *testing.T) {
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
 
 	filter := vehicle.ListFilter{
-		Statuses: []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		Page:       1,
+		Limit:      20,
 	}
 
 	results, err := repo.List(context.Background(), filter)
@@ -124,6 +125,7 @@ func TestVehicleRepositoryList_NoStatusOrPricing(t *testing.T) {
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
 
 	filter := vehicle.ListFilter{
+		ShowroomID:   1,
 		Statuses:     []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeGarage},
 		VehicleTypes: []vehicle.VehicleType{vehicle.VehicleTypeBike},
 		Page:         1,
@@ -146,11 +148,12 @@ func TestVehicleRepositoryList_WithPriceFilter(t *testing.T) {
 	minP := 100000.0
 	maxP := 500000.0
 	filter := vehicle.ListFilter{
-		Statuses: []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
-		MinPrice: &minP,
-		MaxPrice: &maxP,
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		MinPrice:   &minP,
+		MaxPrice:   &maxP,
+		Page:       1,
+		Limit:      20,
 	}
 
 	results, err := repo.List(context.Background(), filter)
@@ -165,9 +168,10 @@ func TestVehicleRepositoryList_Error(t *testing.T) {
 	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrInvalidData)
 
 	filter := vehicle.ListFilter{
-		Statuses: []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		Page:       1,
+		Limit:      20,
 	}
 
 	_, err := repo.List(context.Background(), filter)
@@ -185,9 +189,10 @@ func TestVehicleRepositoryCountByType_Success(t *testing.T) {
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
 
 	filter := vehicle.ListFilter{
-		Statuses: []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		Page:       1,
+		Limit:      20,
 	}
 
 	counts, err := repo.CountByType(context.Background(), filter)
@@ -203,9 +208,10 @@ func TestVehicleRepositoryCountByType_Error(t *testing.T) {
 	mock.ExpectQuery(`SELECT`).WillReturnError(gorm.ErrInvalidData)
 
 	filter := vehicle.ListFilter{
-		Statuses: []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
+		Page:       1,
+		Limit:      20,
 	}
 
 	_, err := repo.CountByType(context.Background(), filter)
@@ -221,6 +227,7 @@ func TestVehicleRepositoryCountByType_UsesInClauseForStatusFilter(t *testing.T) 
 	mock.ExpectQuery(`vs\.status IN \(`).WillReturnRows(rows)
 
 	filter := vehicle.ListFilter{
+		ShowroomID: 1,
 		Statuses: []vehicle.VehicleStatusType{
 			vehicle.VehicleStatusTypeGarage,
 			vehicle.VehicleStatusTypeInspection,
@@ -244,6 +251,7 @@ func TestVehicleRepositoryList_UsesInClauseForTypeFilter(t *testing.T) {
 	mock.ExpectQuery(`(?s)vs\.status IN \(.*v\.type IN \(`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
 
 	filter := vehicle.ListFilter{
+		ShowroomID:   1,
 		Statuses:     []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeReadyForSale},
 		VehicleTypes: []vehicle.VehicleType{vehicle.VehicleTypeCar, vehicle.VehicleTypeBike},
 		Page:         1,
@@ -263,8 +271,9 @@ func TestVehicleRepositoryList_EmptyStatusIncludesAll(t *testing.T) {
 	mock.ExpectQuery(`OR vs\.status IN \(`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
 
 	filter := vehicle.ListFilter{
-		Page:  1,
-		Limit: 20,
+		ShowroomID: 1,
+		Page:       1,
+		Limit:      20,
 	}
 
 	results, err := repo.List(context.Background(), filter)
@@ -281,9 +290,22 @@ func TestVehicleRepositoryCountByType_EmptyStatusIncludesAll(t *testing.T) {
 		AddRow("car", int64(4))
 	mock.ExpectQuery(`OR vs\.status IN \(`).WillReturnRows(rows)
 
-	counts, err := repo.CountByType(context.Background(), vehicle.ListFilter{Page: 1, Limit: 20})
+	counts, err := repo.CountByType(context.Background(), vehicle.ListFilter{ShowroomID: 1, Page: 1, Limit: 20})
 	assert.NoError(t, err)
 	assert.Equal(t, int64(4), counts[vehicle.VehicleTypeCar])
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestVehicleRepositoryList_ScopesToShowroom(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`vehicle_showroom_relations`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	filter := vehicle.ListFilter{ShowroomID: 42, Page: 1, Limit: 20}
+	results, err := repo.List(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 

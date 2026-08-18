@@ -64,6 +64,19 @@ func (h *Handler) ListVehicles(c *gin.Context) {
 		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
 		return
 	}
+	if query.ShowroomID == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	roles, ok := h.extractShowroomRoles(c)
+	if !ok {
+		return
+	}
+	if _, isMember := roles[query.ShowroomID]; !isMember {
+		response.Error(c, http.StatusForbidden, apperrors.CodeForbidden, "forbidden")
+		return
+	}
 
 	resp, err := h.service.ListVehicles(c.Request.Context(), &query)
 	if err != nil {

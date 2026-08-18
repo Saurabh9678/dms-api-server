@@ -1,6 +1,7 @@
 package vehicle
 
 type ListVehiclesQuery struct {
+	ShowroomID   uint64   `form:"showroom_id"`
 	Statuses     []string `form:"status"`
 	VehicleTypes []string `form:"type"`
 	MinPrice     *float64 `form:"min_price"`

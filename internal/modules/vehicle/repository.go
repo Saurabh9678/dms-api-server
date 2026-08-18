@@ -252,6 +252,7 @@ func (r *Repository) AssignShowroom(ctx context.Context, vehicleID, showroomID u
 }
 
 type ListFilter struct {
+	ShowroomID   uint64
 	Statuses     []VehicleStatusType
 	VehicleTypes []VehicleType
 	MinPrice     *float64
@@ -313,6 +314,9 @@ SELECT v.id, v.type AS vehicle_type, v.manufacturer, v.model, v.variant, v.color
        vp.buying_price AS vp_buying_price, vp.price_tag AS vp_price_tag,
        vp.currency AS vp_currency, vp.tagged_at AS vp_tagged_at
 FROM vehicles v
+JOIN vehicle_showroom_relations vsr ON vsr.vehicle_id = v.id
+  AND vsr.showroom_id = ?
+  AND vsr.deleted_at IS NULL
 JOIN LATERAL (
   SELECT status, started_at FROM vehicle_statuses
   WHERE vehicle_id = v.id AND deleted_at IS NULL
@@ -355,6 +359,7 @@ ORDER BY v.id DESC`
 	}
 
 	args := []interface{}{
+		filter.ShowroomID,
 		noStatusFilter, statuses,
 		noTypeFilter, types,
 		noMinPrice, minPrice,

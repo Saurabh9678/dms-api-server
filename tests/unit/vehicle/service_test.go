@@ -773,7 +773,7 @@ func TestListVehicles_DefaultAllStatuses(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 
 	counts := map[vehicle.VehicleType]int64{
 		vehicle.VehicleTypeCar:    2,
@@ -787,10 +787,10 @@ func TestListVehicles_DefaultAllStatuses(t *testing.T) {
 	}
 
 	mockRepo.On("CountByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.Statuses) == 0 && f.Page == 1 && f.Limit == 20
+		return f.ShowroomID == 1 && len(f.Statuses) == 0 && f.Page == 1 && f.Limit == 20
 	})).Return(counts, nil)
 	mockRepo.On("List", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.Statuses) == 0 && f.Page == 1 && f.Limit == 20
+		return f.ShowroomID == 1 && len(f.Statuses) == 0 && f.Page == 1 && f.Limit == 20
 	})).Return(vehicles, nil)
 
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -815,19 +815,20 @@ func TestListVehicles_MultiStatusFilter(t *testing.T) {
 	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{
-		Statuses: []string{"garage", "inspection"},
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		Statuses:   []string{"garage", "inspection"},
+		Page:       1,
+		Limit:      20,
 	}
 
 	counts := map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}
 	vehicles := []vehicle.VehicleWithDetails{{ID: 1, VehicleType: vehicle.VehicleTypeCar}}
 
 	mockRepo.On("CountByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.Statuses) == 2
+		return f.ShowroomID == 1 && len(f.Statuses) == 2
 	})).Return(counts, nil)
 	mockRepo.On("List", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.Statuses) == 2
+		return f.ShowroomID == 1 && len(f.Statuses) == 2
 	})).Return(vehicles, nil)
 
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -841,6 +842,7 @@ func TestListVehicles_TypeFilter(t *testing.T) {
 	svc := newTestService(mockRepo)
 
 	query := &vehicle.ListVehiclesQuery{
+		ShowroomID:   1,
 		VehicleTypes: []string{"car"},
 		Page:         1,
 		Limit:        20,
@@ -850,10 +852,10 @@ func TestListVehicles_TypeFilter(t *testing.T) {
 	vehicles := []vehicle.VehicleWithDetails{{ID: 1, VehicleType: vehicle.VehicleTypeCar}}
 
 	mockRepo.On("CountByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.VehicleTypes) == 1 && f.VehicleTypes[0] == vehicle.VehicleTypeCar && len(f.Statuses) == 0
+		return f.ShowroomID == 1 && len(f.VehicleTypes) == 1 && f.VehicleTypes[0] == vehicle.VehicleTypeCar && len(f.Statuses) == 0
 	})).Return(counts, nil)
 	mockRepo.On("List", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return len(f.VehicleTypes) == 1 && f.VehicleTypes[0] == vehicle.VehicleTypeCar && len(f.Statuses) == 0
+		return f.ShowroomID == 1 && len(f.VehicleTypes) == 1 && f.VehicleTypes[0] == vehicle.VehicleTypeCar && len(f.Statuses) == 0
 	})).Return(vehicles, nil)
 
 	resp, err := svc.ListVehicles(context.Background(), query)
@@ -872,10 +874,11 @@ func TestListVehicles_PriceRangeFilter(t *testing.T) {
 	minP := 100000.0
 	maxP := 500000.0
 	query := &vehicle.ListVehiclesQuery{
-		MinPrice: &minP,
-		MaxPrice: &maxP,
-		Page:     1,
-		Limit:    20,
+		ShowroomID: 1,
+		MinPrice:   &minP,
+		MaxPrice:   &maxP,
+		Page:       1,
+		Limit:      20,
 	}
 
 	counts := map[vehicle.VehicleType]int64{}
@@ -898,7 +901,7 @@ func TestListVehicles_EmptyResult(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 
 	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
 	mockRepo.On("List", mock.Anything, mock.Anything).Return([]vehicle.VehicleWithDetails{}, nil)
@@ -915,7 +918,7 @@ func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 
 	st := vehicle.VehicleStatus{Status: vehicle.VehicleStatusTypeReadyForSale}
 	pr := vehicle.VehiclePricing{BuyingPrice: 200000, PriceTag: 300000, Currency: vehicle.CurrencyINR}
@@ -936,11 +939,22 @@ func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 	assert.Equal(t, 300000.0, resp.Cars.Vehicles[0].Pricing.PriceTag)
 }
 
+func TestListVehicles_ZeroShowroomID(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 0, Page: 1, Limit: 20}
+	resp, err := svc.ListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockRepo.AssertNotCalled(t, "CountByType")
+}
+
 func TestListVehicles_InvalidPage(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Page: 0, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 0, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -960,7 +974,7 @@ func TestListVehicles_InvalidLimit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			resp, err := svc.ListVehicles(context.Background(), &vehicle.ListVehiclesQuery{Page: 1, Limit: tt.limit})
+			resp, err := svc.ListVehicles(context.Background(), &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: tt.limit})
 			assert.Error(t, err)
 			assert.Nil(t, resp)
 		})
@@ -971,7 +985,7 @@ func TestListVehicles_InvalidStatusEnum(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Statuses: []string{"unknown"}, Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Statuses: []string{"unknown"}, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -981,7 +995,7 @@ func TestListVehicles_InvalidTypeEnum(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{VehicleTypes: []string{"truck"}, Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, VehicleTypes: []string{"truck"}, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -993,7 +1007,7 @@ func TestListVehicles_MinPriceGreaterThanMaxPrice(t *testing.T) {
 
 	min := 500000.0
 	max := 100000.0
-	query := &vehicle.ListVehiclesQuery{MinPrice: &min, MaxPrice: &max, Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, MinPrice: &min, MaxPrice: &max, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -1014,7 +1028,7 @@ func TestListVehicles_CountByTypeError(t *testing.T) {
 
 	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 
-	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -1067,7 +1081,7 @@ func TestListVehicles_ListError(t *testing.T) {
 	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
 	mockRepo.On("List", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 
-	query := &vehicle.ListVehiclesQuery{Page: 1, Limit: 20}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 	resp, err := svc.ListVehicles(context.Background(), query)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -1077,16 +1091,16 @@ func TestListVehicles_Pagination(t *testing.T) {
 	mockRepo := new(mockVehicleRepo)
 	svc := newTestService(mockRepo)
 
-	query := &vehicle.ListVehiclesQuery{Page: 2, Limit: 10}
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 2, Limit: 10}
 
 	counts := map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 25}
 	vehicles := []vehicle.VehicleWithDetails{{ID: 11, VehicleType: vehicle.VehicleTypeCar}}
 
 	mockRepo.On("CountByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return f.Page == 2 && f.Limit == 10 && len(f.Statuses) == 0
+		return f.ShowroomID == 1 && f.Page == 2 && f.Limit == 10 && len(f.Statuses) == 0
 	})).Return(counts, nil)
 	mockRepo.On("List", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
-		return f.Page == 2 && f.Limit == 10 && len(f.Statuses) == 0
+		return f.ShowroomID == 1 && f.Page == 2 && f.Limit == 10 && len(f.Statuses) == 0
 	})).Return(vehicles, nil)
 
 	resp, err := svc.ListVehicles(context.Background(), query)

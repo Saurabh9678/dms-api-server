@@ -267,17 +267,104 @@ func TestHandler_ListVehicles_Success(t *testing.T) {
 		},
 	}
 
-	mockSvc.On("ListVehicles", mock.Anything, mock.Anything).Return(respData, nil)
+	mockSvc.On("ListVehicles", mock.Anything, mock.MatchedBy(func(q *vehicle.ListVehiclesQuery) bool {
+		return q.ShowroomID == 1
+	})).Return(respData, nil)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{1: "owner"})
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_ListVehicles_MissingShowroomID(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
 
 	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{1: "owner"})
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
+}
+
+func TestHandler_ListVehicles_ZeroShowroomID(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=0", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{1: "owner"})
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
+}
+
+func TestHandler_ListVehicles_MissingShowroomRoles(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=1", nil)
 	w := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(w)
 	ctx.Request = req
 
 	handler.ListVehicles(ctx)
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	mockSvc.AssertExpectations(t)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
+}
+
+func TestHandler_ListVehicles_WrongShowroomRolesType(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, "not-a-map")
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
+}
+
+func TestHandler_ListVehicles_NotShowroomMember(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	handler := vehicle.NewHandler(mockSvc)
+
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=1", nil)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+
+	handler.ListVehicles(ctx)
+
+	assert.Equal(t, http.StatusForbidden, w.Code)
+	mockSvc.AssertNotCalled(t, "ListVehicles")
 }
 
 func TestHandler_ListVehicles_InvalidQueryParam(t *testing.T) {
@@ -303,10 +390,11 @@ func TestHandler_ListVehicles_ServiceError(t *testing.T) {
 
 	mockSvc.On("ListVehicles", mock.Anything, mock.Anything).Return(nil, &mockError{})
 
-	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing", nil)
+	req := httptest.NewRequest("GET", "/api/v1/vehicle/listing?showroom_id=1", nil)
 	w := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(w)
 	ctx.Request = req
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{1: "employee"})
 
 	handler.ListVehicles(ctx)
 

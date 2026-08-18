@@ -213,6 +213,7 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 	}
 
 	filter := ListFilter{
+		ShowroomID:   query.ShowroomID,
 		Statuses:     statuses,
 		VehicleTypes: types,
 		MinPrice:     query.MinPrice,
@@ -450,6 +451,9 @@ func toVehicleListItem(v VehicleWithDetails) VehicleListItem {
 
 func (s *service) validateListQuery(query *ListVehiclesQuery) error {
 	if query == nil {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if query.ShowroomID == 0 {
 		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
 	}
 	if query.Page < 1 {

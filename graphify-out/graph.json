@@ -925,7 +925,7 @@
       "label": "TestListVehicles_TypeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L839",
+      "source_location": "L840",
       "id": "vehicle_service_test_testlistvehicles_typefilter",
       "community": 5,
       "norm_label": "testlistvehicles_typefilter()"
@@ -934,7 +934,7 @@
       "label": "TestListVehicles_PriceRangeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L868",
+      "source_location": "L870",
       "id": "vehicle_service_test_testlistvehicles_pricerangefilter",
       "community": 5,
       "norm_label": "testlistvehicles_pricerangefilter()"
@@ -943,7 +943,7 @@
       "label": "TestListVehicles_EmptyResult()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L897",
+      "source_location": "L900",
       "id": "vehicle_service_test_testlistvehicles_emptyresult",
       "community": 5,
       "norm_label": "testlistvehicles_emptyresult()"
@@ -952,16 +952,25 @@
       "label": "TestListVehicles_WithStatusAndPricing()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L914",
+      "source_location": "L917",
       "id": "vehicle_service_test_testlistvehicles_withstatusandpricing",
       "community": 5,
       "norm_label": "testlistvehicles_withstatusandpricing()"
     },
     {
+      "label": "TestListVehicles_ZeroShowroomID()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/service_test.go",
+      "source_location": "L942",
+      "id": "vehicle_service_test_testlistvehicles_zeroshowroomid",
+      "community": 5,
+      "norm_label": "testlistvehicles_zeroshowroomid()"
+    },
+    {
       "label": "TestListVehicles_InvalidPage()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L939",
+      "source_location": "L953",
       "id": "vehicle_service_test_testlistvehicles_invalidpage",
       "community": 5,
       "norm_label": "testlistvehicles_invalidpage()"
@@ -970,7 +979,7 @@
       "label": "TestListVehicles_InvalidLimit()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L949",
+      "source_location": "L963",
       "id": "vehicle_service_test_testlistvehicles_invalidlimit",
       "community": 5,
       "norm_label": "testlistvehicles_invalidlimit()"
@@ -979,7 +988,7 @@
       "label": "TestListVehicles_InvalidStatusEnum()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L970",
+      "source_location": "L984",
       "id": "vehicle_service_test_testlistvehicles_invalidstatusenum",
       "community": 5,
       "norm_label": "testlistvehicles_invalidstatusenum()"
@@ -988,7 +997,7 @@
       "label": "TestListVehicles_InvalidTypeEnum()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L980",
+      "source_location": "L994",
       "id": "vehicle_service_test_testlistvehicles_invalidtypeenum",
       "community": 5,
       "norm_label": "testlistvehicles_invalidtypeenum()"
@@ -997,7 +1006,7 @@
       "label": "TestListVehicles_MinPriceGreaterThanMaxPrice()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L990",
+      "source_location": "L1004",
       "id": "vehicle_service_test_testlistvehicles_minpricegreaterthanmaxprice",
       "community": 5,
       "norm_label": "testlistvehicles_minpricegreaterthanmaxprice()"
@@ -1006,7 +1015,7 @@
       "label": "TestListVehicles_NilQuery()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1002",
+      "source_location": "L1016",
       "id": "vehicle_service_test_testlistvehicles_nilquery",
       "community": 5,
       "norm_label": "testlistvehicles_nilquery()"
@@ -1015,7 +1024,7 @@
       "label": "TestListVehicles_CountByTypeError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1011",
+      "source_location": "L1025",
       "id": "vehicle_service_test_testlistvehicles_countbytypeerror",
       "community": 5,
       "norm_label": "testlistvehicles_countbytypeerror()"
@@ -1024,7 +1033,7 @@
       "label": "TestGetVehicleByID_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1023",
+      "source_location": "L1037",
       "id": "vehicle_service_test_testgetvehiclebyid_success",
       "community": 5,
       "norm_label": "testgetvehiclebyid_success()"
@@ -1033,7 +1042,7 @@
       "label": "TestGetVehicleByID_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1039",
+      "source_location": "L1053",
       "id": "vehicle_service_test_testgetvehiclebyid_notfound",
       "community": 5,
       "norm_label": "testgetvehiclebyid_notfound()"
@@ -1042,7 +1051,7 @@
       "label": "TestGetVehicleByID_RepoError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1051",
+      "source_location": "L1065",
       "id": "vehicle_service_test_testgetvehiclebyid_repoerror",
       "community": 5,
       "norm_label": "testgetvehiclebyid_repoerror()"
@@ -1051,7 +1060,7 @@
       "label": "TestListVehicles_ListError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1063",
+      "source_location": "L1077",
       "id": "vehicle_service_test_testlistvehicles_listerror",
       "community": 5,
       "norm_label": "testlistvehicles_listerror()"
@@ -1060,7 +1069,7 @@
       "label": "TestListVehicles_Pagination()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1076",
+      "source_location": "L1090",
       "id": "vehicle_service_test_testlistvehicles_pagination",
       "community": 5,
       "norm_label": "testlistvehicles_pagination()"
@@ -1069,7 +1078,7 @@
       "label": "TestPublicListVehicles_NilQuery()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1100",
+      "source_location": "L1114",
       "id": "vehicle_service_test_testpubliclistvehicles_nilquery",
       "community": 5,
       "norm_label": "testpubliclistvehicles_nilquery()"
@@ -1078,7 +1087,7 @@
       "label": "TestPublicListVehicles_ZeroShowroomID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1109",
+      "source_location": "L1123",
       "id": "vehicle_service_test_testpubliclistvehicles_zeroshowroomid",
       "community": 5,
       "norm_label": "testpubliclistvehicles_zeroshowroomid()"
@@ -1087,7 +1096,7 @@
       "label": "TestPublicListVehicles_InvalidPage()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1119",
+      "source_location": "L1133",
       "id": "vehicle_service_test_testpubliclistvehicles_invalidpage",
       "community": 5,
       "norm_label": "testpubliclistvehicles_invalidpage()"
@@ -1096,7 +1105,7 @@
       "label": "TestPublicListVehicles_InvalidLimit()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1129",
+      "source_location": "L1143",
       "id": "vehicle_service_test_testpubliclistvehicles_invalidlimit",
       "community": 5,
       "norm_label": "testpubliclistvehicles_invalidlimit()"
@@ -1105,7 +1114,7 @@
       "label": "TestPublicListVehicles_InvalidSortBy()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1144",
+      "source_location": "L1158",
       "id": "vehicle_service_test_testpubliclistvehicles_invalidsortby",
       "community": 5,
       "norm_label": "testpubliclistvehicles_invalidsortby()"
@@ -1114,7 +1123,7 @@
       "label": "TestPublicListVehicles_InvalidTypeEnum()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1154",
+      "source_location": "L1168",
       "id": "vehicle_service_test_testpubliclistvehicles_invalidtypeenum",
       "community": 5,
       "norm_label": "testpubliclistvehicles_invalidtypeenum()"
@@ -1123,7 +1132,7 @@
       "label": "TestPublicListVehicles_MinPriceGreaterThanMaxPrice()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1164",
+      "source_location": "L1178",
       "id": "vehicle_service_test_testpubliclistvehicles_minpricegreaterthanmaxprice",
       "community": 5,
       "norm_label": "testpubliclistvehicles_minpricegreaterthanmaxprice()"
@@ -1132,7 +1141,7 @@
       "label": "TestPublicListVehicles_CountByTypeError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1175",
+      "source_location": "L1189",
       "id": "vehicle_service_test_testpubliclistvehicles_countbytypeerror",
       "community": 5,
       "norm_label": "testpubliclistvehicles_countbytypeerror()"
@@ -1141,7 +1150,7 @@
       "label": "TestPublicListVehicles_ListError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1187",
+      "source_location": "L1201",
       "id": "vehicle_service_test_testpubliclistvehicles_listerror",
       "community": 5,
       "norm_label": "testpubliclistvehicles_listerror()"
@@ -1150,7 +1159,7 @@
       "label": "TestPublicListVehicles_Success_AllTypes()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1200",
+      "source_location": "L1214",
       "id": "vehicle_service_test_testpubliclistvehicles_success_alltypes",
       "community": 5,
       "norm_label": "testpubliclistvehicles_success_alltypes()"
@@ -1159,7 +1168,7 @@
       "label": "TestPublicListVehicles_TypeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1237",
+      "source_location": "L1251",
       "id": "vehicle_service_test_testpubliclistvehicles_typefilter",
       "community": 5,
       "norm_label": "testpubliclistvehicles_typefilter()"
@@ -1168,7 +1177,7 @@
       "label": "TestPublicListVehicles_PriceRangeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1271",
+      "source_location": "L1285",
       "id": "vehicle_service_test_testpubliclistvehicles_pricerangefilter",
       "community": 5,
       "norm_label": "testpubliclistvehicles_pricerangefilter()"
@@ -1177,7 +1186,7 @@
       "label": "TestPublicListVehicles_NoPricingOnItem()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1293",
+      "source_location": "L1307",
       "id": "vehicle_service_test_testpubliclistvehicles_nopricingonitem",
       "community": 5,
       "norm_label": "testpubliclistvehicles_nopricingonitem()"
@@ -1186,7 +1195,7 @@
       "label": "TestGetVehicleShowroomID_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1317",
+      "source_location": "L1331",
       "id": "vehicle_service_test_testgetvehicleshowroomid_success",
       "community": 141,
       "norm_label": "testgetvehicleshowroomid_success()"
@@ -1195,7 +1204,7 @@
       "label": "TestGetVehicleShowroomID_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1327",
+      "source_location": "L1341",
       "id": "vehicle_service_test_testgetvehicleshowroomid_notfound",
       "community": 141,
       "norm_label": "testgetvehicleshowroomid_notfound()"
@@ -1204,7 +1213,7 @@
       "label": "TestGetVehicleShowroomID_RepoError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1337",
+      "source_location": "L1351",
       "id": "vehicle_service_test_testgetvehicleshowroomid_repoerror",
       "community": 141,
       "norm_label": "testgetvehicleshowroomid_repoerror()"
@@ -1213,7 +1222,7 @@
       "label": "TestUpdateVehicle_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1348",
+      "source_location": "L1362",
       "id": "vehicle_service_test_testupdatevehicle_success",
       "community": 5,
       "norm_label": "testupdatevehicle_success()"
@@ -1222,7 +1231,7 @@
       "label": "TestUpdateVehicle_NilRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1371",
+      "source_location": "L1385",
       "id": "vehicle_service_test_testupdatevehicle_nilrequest",
       "community": 5,
       "norm_label": "testupdatevehicle_nilrequest()"
@@ -1231,7 +1240,7 @@
       "label": "TestUpdateVehicle_GetCurrentStatusError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1380",
+      "source_location": "L1394",
       "id": "vehicle_service_test_testupdatevehicle_getcurrentstatuserror",
       "community": 5,
       "norm_label": "testupdatevehicle_getcurrentstatuserror()"
@@ -1240,7 +1249,7 @@
       "label": "TestUpdateVehicle_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1392",
+      "source_location": "L1406",
       "id": "vehicle_service_test_testupdatevehicle_vehiclesold",
       "community": 5,
       "norm_label": "testupdatevehicle_vehiclesold()"
@@ -1249,7 +1258,7 @@
       "label": "TestUpdateVehicle_InvalidVehicleType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1404",
+      "source_location": "L1418",
       "id": "vehicle_service_test_testupdatevehicle_invalidvehicletype",
       "community": 34,
       "norm_label": "testupdatevehicle_invalidvehicletype()"
@@ -1258,7 +1267,7 @@
       "label": "TestUpdateVehicle_EmptyManufacturer()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1415",
+      "source_location": "L1429",
       "id": "vehicle_service_test_testupdatevehicle_emptymanufacturer",
       "community": 5,
       "norm_label": "testupdatevehicle_emptymanufacturer()"
@@ -1267,7 +1276,7 @@
       "label": "TestUpdateVehicle_EmptyModel()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1426",
+      "source_location": "L1440",
       "id": "vehicle_service_test_testupdatevehicle_emptymodel",
       "community": 5,
       "norm_label": "testupdatevehicle_emptymodel()"
@@ -1276,7 +1285,7 @@
       "label": "TestUpdateVehicle_EmptyVariant()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1437",
+      "source_location": "L1451",
       "id": "vehicle_service_test_testupdatevehicle_emptyvariant",
       "community": 5,
       "norm_label": "testupdatevehicle_emptyvariant()"
@@ -1285,7 +1294,7 @@
       "label": "TestUpdateVehicle_EmptyColor()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1448",
+      "source_location": "L1462",
       "id": "vehicle_service_test_testupdatevehicle_emptycolor",
       "community": 5,
       "norm_label": "testupdatevehicle_emptycolor()"
@@ -1294,7 +1303,7 @@
       "label": "TestUpdateVehicle_YearTooLow()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1459",
+      "source_location": "L1473",
       "id": "vehicle_service_test_testupdatevehicle_yeartoolow",
       "community": 5,
       "norm_label": "testupdatevehicle_yeartoolow()"
@@ -1303,7 +1312,7 @@
       "label": "TestUpdateVehicle_YearTooHigh()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1470",
+      "source_location": "L1484",
       "id": "vehicle_service_test_testupdatevehicle_yeartoohigh",
       "community": 5,
       "norm_label": "testupdatevehicle_yeartoohigh()"
@@ -1312,7 +1321,7 @@
       "label": "TestUpdateVehicle_EmptyRTOCode()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1481",
+      "source_location": "L1495",
       "id": "vehicle_service_test_testupdatevehicle_emptyrtocode",
       "community": 5,
       "norm_label": "testupdatevehicle_emptyrtocode()"
@@ -1321,7 +1330,7 @@
       "label": "TestUpdateVehicle_EmptyRegistrationState()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1492",
+      "source_location": "L1506",
       "id": "vehicle_service_test_testupdatevehicle_emptyregistrationstate",
       "community": 5,
       "norm_label": "testupdatevehicle_emptyregistrationstate()"
@@ -1330,7 +1339,7 @@
       "label": "TestUpdateVehicle_NegativeUsageKM()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1503",
+      "source_location": "L1517",
       "id": "vehicle_service_test_testupdatevehicle_negativeusagekm",
       "community": 5,
       "norm_label": "testupdatevehicle_negativeusagekm()"
@@ -1339,7 +1348,7 @@
       "label": "TestUpdateVehicle_InvalidFuelType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1514",
+      "source_location": "L1528",
       "id": "vehicle_service_test_testupdatevehicle_invalidfueltype",
       "community": 34,
       "norm_label": "testupdatevehicle_invalidfueltype()"
@@ -1348,7 +1357,7 @@
       "label": "TestUpdateVehicle_InvalidTransmissionType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1525",
+      "source_location": "L1539",
       "id": "vehicle_service_test_testupdatevehicle_invalidtransmissiontype",
       "community": 34,
       "norm_label": "testupdatevehicle_invalidtransmissiontype()"
@@ -1357,7 +1366,7 @@
       "label": "TestUpdateVehicle_AllFieldsNil()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1536",
+      "source_location": "L1550",
       "id": "vehicle_service_test_testupdatevehicle_allfieldsnil",
       "community": 5,
       "norm_label": "testupdatevehicle_allfieldsnil()"
@@ -1366,7 +1375,7 @@
       "label": "TestUpdateVehicle_UpdateFieldsError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1547",
+      "source_location": "L1561",
       "id": "vehicle_service_test_testupdatevehicle_updatefieldserror",
       "community": 5,
       "norm_label": "testupdatevehicle_updatefieldserror()"
@@ -1375,7 +1384,7 @@
       "label": "TestUpdateVehicle_ValidUsageKMZero()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1560",
+      "source_location": "L1574",
       "id": "vehicle_service_test_testupdatevehicle_validusagekmzero",
       "community": 5,
       "norm_label": "testupdatevehicle_validusagekmzero()"
@@ -1384,7 +1393,7 @@
       "label": "TestUpdateVehicle_AllValidFields()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1573",
+      "source_location": "L1587",
       "id": "vehicle_service_test_testupdatevehicle_allvalidfields",
       "community": 5,
       "norm_label": "testupdatevehicle_allvalidfields()"
@@ -1393,7 +1402,7 @@
       "label": "TestUpdateVehiclePricing_NilRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1607",
+      "source_location": "L1621",
       "id": "vehicle_service_test_testupdatevehiclepricing_nilrequest",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_nilrequest()"
@@ -1402,7 +1411,7 @@
       "label": "TestUpdateVehiclePricing_GetCurrentStatusError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1616",
+      "source_location": "L1630",
       "id": "vehicle_service_test_testupdatevehiclepricing_getcurrentstatuserror",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_getcurrentstatuserror()"
@@ -1411,7 +1420,7 @@
       "label": "TestUpdateVehiclePricing_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1628",
+      "source_location": "L1642",
       "id": "vehicle_service_test_testupdatevehiclepricing_vehiclesold",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_vehiclesold()"
@@ -1420,7 +1429,7 @@
       "label": "TestUpdateVehiclePricing_GetPricingError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1640",
+      "source_location": "L1654",
       "id": "vehicle_service_test_testupdatevehiclepricing_getpricingerror",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_getpricingerror()"
@@ -1429,7 +1438,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1654",
+      "source_location": "L1668",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_success",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_success()"
@@ -1438,7 +1447,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_AllFields()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1674",
+      "source_location": "L1688",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_allfields",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_allfields()"
@@ -1447,7 +1456,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_NilBuyingPrice()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1699",
+      "source_location": "L1713",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_nilbuyingprice",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_nilbuyingprice()"
@@ -1456,7 +1465,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_ZeroBuyingPrice()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1711",
+      "source_location": "L1725",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_zerobuyingprice",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_zerobuyingprice()"
@@ -1465,7 +1474,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_NilBuyingDate()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1724",
+      "source_location": "L1738",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_nilbuyingdate",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_nilbuyingdate()"
@@ -1474,7 +1483,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_InvalidBuyingDate()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1736",
+      "source_location": "L1750",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_invalidbuyingdate",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_invalidbuyingdate()"
@@ -1483,7 +1492,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_NegativePriceTag()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1749",
+      "source_location": "L1763",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_negativepricetag",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_negativepricetag()"
@@ -1492,7 +1501,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_InvalidTaggedAt()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1763",
+      "source_location": "L1777",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_invalidtaggedat",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_invalidtaggedat()"
@@ -1501,7 +1510,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_InvalidCurrency()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1777",
+      "source_location": "L1791",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_invalidcurrency",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_invalidcurrency()"
@@ -1510,7 +1519,7 @@
       "label": "TestUpdateVehiclePricing_CreateNew_CreatePricingError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1791",
+      "source_location": "L1805",
       "id": "vehicle_service_test_testupdatevehiclepricing_createnew_createpricingerror",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_createnew_createpricingerror()"
@@ -1519,7 +1528,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1805",
+      "source_location": "L1819",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_success",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_success()"
@@ -1528,7 +1537,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_AllFieldsNil()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1825",
+      "source_location": "L1839",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_allfieldsnil",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_allfieldsnil()"
@@ -1537,7 +1546,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingPrice()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1838",
+      "source_location": "L1852",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_invalidbuyingprice",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_invalidbuyingprice()"
@@ -1546,7 +1555,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_InvalidBuyingDate()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1851",
+      "source_location": "L1865",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_invalidbuyingdate",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_invalidbuyingdate()"
@@ -1555,7 +1564,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_NegativePriceTag()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1864",
+      "source_location": "L1878",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_negativepricetag",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_negativepricetag()"
@@ -1564,7 +1573,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_InvalidTaggedAt()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1877",
+      "source_location": "L1891",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_invalidtaggedat",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_invalidtaggedat()"
@@ -1573,7 +1582,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_InvalidCurrency()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1890",
+      "source_location": "L1904",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_invalidcurrency",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_invalidcurrency()"
@@ -1582,7 +1591,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_UpdateFieldsError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1903",
+      "source_location": "L1917",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_updatefieldserror",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_updatefieldserror()"
@@ -1591,7 +1600,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_Remarks()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1917",
+      "source_location": "L1931",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_remarks",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_remarks()"
@@ -1600,7 +1609,7 @@
       "label": "TestUpdateVehiclePricing_UpdateExisting_AllValidFields()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1933",
+      "source_location": "L1947",
       "id": "vehicle_service_test_testupdatevehiclepricing_updateexisting_allvalidfields",
       "community": 5,
       "norm_label": "testupdatevehiclepricing_updateexisting_allvalidfields()"
@@ -1609,7 +1618,7 @@
       "label": "TestAddExpense_NilRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1967",
+      "source_location": "L1981",
       "id": "vehicle_service_test_testaddexpense_nilrequest",
       "community": 5,
       "norm_label": "testaddexpense_nilrequest()"
@@ -1618,7 +1627,7 @@
       "label": "TestAddExpense_InvalidType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1977",
+      "source_location": "L1991",
       "id": "vehicle_service_test_testaddexpense_invalidtype",
       "community": 5,
       "norm_label": "testaddexpense_invalidtype()"
@@ -1627,7 +1636,7 @@
       "label": "TestAddExpense_ZeroAmount()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1988",
+      "source_location": "L2002",
       "id": "vehicle_service_test_testaddexpense_zeroamount",
       "community": 5,
       "norm_label": "testaddexpense_zeroamount()"
@@ -1636,7 +1645,7 @@
       "label": "TestAddExpense_NegativeAmount()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L1999",
+      "source_location": "L2013",
       "id": "vehicle_service_test_testaddexpense_negativeamount",
       "community": 5,
       "norm_label": "testaddexpense_negativeamount()"
@@ -1645,7 +1654,7 @@
       "label": "TestAddExpense_InvalidDateFormat()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2010",
+      "source_location": "L2024",
       "id": "vehicle_service_test_testaddexpense_invaliddateformat",
       "community": 5,
       "norm_label": "testaddexpense_invaliddateformat()"
@@ -1654,7 +1663,7 @@
       "label": "TestAddExpense_WithValidDate()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2022",
+      "source_location": "L2036",
       "id": "vehicle_service_test_testaddexpense_withvaliddate",
       "community": 5,
       "norm_label": "testaddexpense_withvaliddate()"
@@ -1663,7 +1672,7 @@
       "label": "TestAddExpense_WithoutDate_UsesNow()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2039",
+      "source_location": "L2053",
       "id": "vehicle_service_test_testaddexpense_withoutdate_usesnow",
       "community": 5,
       "norm_label": "testaddexpense_withoutdate_usesnow()"
@@ -1672,7 +1681,7 @@
       "label": "TestAddExpense_RepoError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2054",
+      "source_location": "L2068",
       "id": "vehicle_service_test_testaddexpense_repoerror",
       "community": 5,
       "norm_label": "testaddexpense_repoerror()"
@@ -1681,7 +1690,7 @@
       "label": "TestAddExpense_AllValidTypes()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2068",
+      "source_location": "L2082",
       "id": "vehicle_service_test_testaddexpense_allvalidtypes",
       "community": 5,
       "norm_label": "testaddexpense_allvalidtypes()"
@@ -1690,7 +1699,7 @@
       "label": "TestAssignVehicleToShowroom_VehicleNotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2089",
+      "source_location": "L2103",
       "id": "vehicle_service_test_testassignvehicletoshowroom_vehiclenotfound",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_vehiclenotfound()"
@@ -1699,7 +1708,7 @@
       "label": "TestAssignVehicleToShowroom_VehicleExistsError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2099",
+      "source_location": "L2113",
       "id": "vehicle_service_test_testassignvehicletoshowroom_vehicleexistserror",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_vehicleexistserror()"
@@ -1708,7 +1717,7 @@
       "label": "TestAssignVehicleToShowroom_AlreadyAssigned()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2109",
+      "source_location": "L2123",
       "id": "vehicle_service_test_testassignvehicletoshowroom_alreadyassigned",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_alreadyassigned()"
@@ -1717,7 +1726,7 @@
       "label": "TestAssignVehicleToShowroom_GetShowroomIDUnexpectedError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2120",
+      "source_location": "L2134",
       "id": "vehicle_service_test_testassignvehicletoshowroom_getshowroomidunexpectederror",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_getshowroomidunexpectederror()"
@@ -1726,7 +1735,7 @@
       "label": "TestAssignVehicleToShowroom_AssignShowroomError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2131",
+      "source_location": "L2145",
       "id": "vehicle_service_test_testassignvehicletoshowroom_assignshowroomerror",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_assignshowroomerror()"
@@ -1735,7 +1744,7 @@
       "label": "TestAssignVehicleToShowroom_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/service_test.go",
-      "source_location": "L2143",
+      "source_location": "L2157",
       "id": "vehicle_service_test_testassignvehicletoshowroom_success",
       "community": 5,
       "norm_label": "testassignvehicletoshowroom_success()"
@@ -2277,7 +2286,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L20",
       "id": "vehicle_mockhandlerservice",
-      "community": 6,
+      "community": 267,
       "norm_label": "mockhandlerservice"
     },
     {
@@ -2286,7 +2295,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L24",
       "id": "vehicle_mockhandlerservice_createvehicle",
-      "community": 6,
+      "community": 267,
       "norm_label": ".createvehicle()"
     },
     {
@@ -2304,7 +2313,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L40",
       "id": "vehicle_mockhandlerservice_getvehiclebyid",
-      "community": 6,
+      "community": 267,
       "norm_label": ".getvehiclebyid()"
     },
     {
@@ -2313,7 +2322,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L48",
       "id": "vehicle_mockhandlerservice_publiclistvehicles",
-      "community": 6,
+      "community": 267,
       "norm_label": ".publiclistvehicles()"
     },
     {
@@ -2322,7 +2331,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L56",
       "id": "vehicle_mockhandlerservice_getvehicleshowroomid",
-      "community": 6,
+      "community": 267,
       "norm_label": ".getvehicleshowroomid()"
     },
     {
@@ -2331,7 +2340,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L61",
       "id": "vehicle_mockhandlerservice_updatevehicle",
-      "community": 6,
+      "community": 272,
       "norm_label": ".updatevehicle()"
     },
     {
@@ -2340,7 +2349,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L69",
       "id": "vehicle_mockhandlerservice_updatevehiclepricing",
-      "community": 6,
+      "community": 270,
       "norm_label": ".updatevehiclepricing()"
     },
     {
@@ -2349,7 +2358,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L77",
       "id": "vehicle_mockhandlerservice_addexpense",
-      "community": 6,
+      "community": 274,
       "norm_label": ".addexpense()"
     },
     {
@@ -2358,7 +2367,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L85",
       "id": "vehicle_mockhandlerservice_assignvehicletoshowroom",
-      "community": 6,
+      "community": 267,
       "norm_label": ".assignvehicletoshowroom()"
     },
     {
@@ -2367,7 +2376,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L93",
       "id": "vehicle_mockhandlerservice_addvehicleimage",
-      "community": 6,
+      "community": 220,
       "norm_label": ".addvehicleimage()"
     },
     {
@@ -2376,7 +2385,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L101",
       "id": "vehicle_mockhandlerservice_deletevehicleimage",
-      "community": 6,
+      "community": 220,
       "norm_label": ".deletevehicleimage()"
     },
     {
@@ -2385,7 +2394,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L106",
       "id": "vehicle_handler_test_testhandler_createvehicle_success",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_createvehicle_success()"
     },
     {
@@ -2394,7 +2403,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L161",
       "id": "vehicle_handler_test_testhandler_createvehicle_invalidjson",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_createvehicle_invalidjson()"
     },
     {
@@ -2403,7 +2412,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L180",
       "id": "vehicle_handler_test_testhandler_createvehicle_missinguserid",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_createvehicle_missinguserid()"
     },
     {
@@ -2412,7 +2421,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L214",
       "id": "vehicle_handler_test_testhandler_createvehicle_serviceerror",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_createvehicle_serviceerror()"
     },
     {
@@ -2421,7 +2430,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L250",
       "id": "vehicle_mockerror",
-      "community": 6,
+      "community": 267,
       "norm_label": "mockerror"
     },
     {
@@ -2430,7 +2439,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L252",
       "id": "vehicle_mockerror_error",
-      "community": 6,
+      "community": 267,
       "norm_label": ".error()"
     },
     {
@@ -2443,10 +2452,55 @@
       "norm_label": "testhandler_listvehicles_success()"
     },
     {
+      "label": "TestHandler_ListVehicles_MissingShowroomID()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L286",
+      "id": "vehicle_handler_test_testhandler_listvehicles_missingshowroomid",
+      "community": 6,
+      "norm_label": "testhandler_listvehicles_missingshowroomid()"
+    },
+    {
+      "label": "TestHandler_ListVehicles_ZeroShowroomID()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L303",
+      "id": "vehicle_handler_test_testhandler_listvehicles_zeroshowroomid",
+      "community": 6,
+      "norm_label": "testhandler_listvehicles_zeroshowroomid()"
+    },
+    {
+      "label": "TestHandler_ListVehicles_MissingShowroomRoles()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L320",
+      "id": "vehicle_handler_test_testhandler_listvehicles_missingshowroomroles",
+      "community": 6,
+      "norm_label": "testhandler_listvehicles_missingshowroomroles()"
+    },
+    {
+      "label": "TestHandler_ListVehicles_WrongShowroomRolesType()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L336",
+      "id": "vehicle_handler_test_testhandler_listvehicles_wrongshowroomrolestype",
+      "community": 6,
+      "norm_label": "testhandler_listvehicles_wrongshowroomrolestype()"
+    },
+    {
+      "label": "TestHandler_ListVehicles_NotShowroomMember()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L353",
+      "id": "vehicle_handler_test_testhandler_listvehicles_notshowroommember",
+      "community": 6,
+      "norm_label": "testhandler_listvehicles_notshowroommember()"
+    },
+    {
       "label": "TestHandler_ListVehicles_InvalidQueryParam()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L283",
+      "source_location": "L370",
       "id": "vehicle_handler_test_testhandler_listvehicles_invalidqueryparam",
       "community": 6,
       "norm_label": "testhandler_listvehicles_invalidqueryparam()"
@@ -2455,7 +2509,7 @@
       "label": "TestHandler_ListVehicles_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L299",
+      "source_location": "L386",
       "id": "vehicle_handler_test_testhandler_listvehicles_serviceerror",
       "community": 6,
       "norm_label": "testhandler_listvehicles_serviceerror()"
@@ -2464,7 +2518,7 @@
       "label": "setupGetVehicleContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L316",
+      "source_location": "L404",
       "id": "vehicle_handler_test_setupgetvehiclecontext",
       "community": 6,
       "norm_label": "setupgetvehiclecontext()"
@@ -2473,7 +2527,7 @@
       "label": "TestHandler_GetVehicle_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L328",
+      "source_location": "L416",
       "id": "vehicle_handler_test_testhandler_getvehicle_invalidid",
       "community": 6,
       "norm_label": "testhandler_getvehicle_invalidid()"
@@ -2482,7 +2536,7 @@
       "label": "TestHandler_GetVehicle_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L335",
+      "source_location": "L423",
       "id": "vehicle_handler_test_testhandler_getvehicle_zeroid",
       "community": 6,
       "norm_label": "testhandler_getvehicle_zeroid()"
@@ -2491,7 +2545,7 @@
       "label": "TestHandler_GetVehicle_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L342",
+      "source_location": "L430",
       "id": "vehicle_handler_test_testhandler_getvehicle_notfound",
       "community": 6,
       "norm_label": "testhandler_getvehicle_notfound()"
@@ -2500,7 +2554,7 @@
       "label": "TestHandler_GetVehicle_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L350",
+      "source_location": "L438",
       "id": "vehicle_handler_test_testhandler_getvehicle_serviceerror",
       "community": 6,
       "norm_label": "testhandler_getvehicle_serviceerror()"
@@ -2509,7 +2563,7 @@
       "label": "TestHandler_GetVehicle_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L358",
+      "source_location": "L446",
       "id": "vehicle_handler_test_testhandler_getvehicle_missingshowroomroles",
       "community": 6,
       "norm_label": "testhandler_getvehicle_missingshowroomroles()"
@@ -2518,7 +2572,7 @@
       "label": "TestHandler_GetVehicle_WrongShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L366",
+      "source_location": "L454",
       "id": "vehicle_handler_test_testhandler_getvehicle_wrongshowroomrolestype",
       "community": 6,
       "norm_label": "testhandler_getvehicle_wrongshowroomrolestype()"
@@ -2527,7 +2581,7 @@
       "label": "TestHandler_GetVehicle_UserNotInShowroom()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L375",
+      "source_location": "L463",
       "id": "vehicle_handler_test_testhandler_getvehicle_usernotinshowroom",
       "community": 6,
       "norm_label": "testhandler_getvehicle_usernotinshowroom()"
@@ -2536,7 +2590,7 @@
       "label": "TestHandler_GetVehicle_OwnerGetsAdminResponse()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L384",
+      "source_location": "L472",
       "id": "vehicle_handler_test_testhandler_getvehicle_ownergetsadminresponse",
       "community": 6,
       "norm_label": "testhandler_getvehicle_ownergetsadminresponse()"
@@ -2545,7 +2599,7 @@
       "label": "TestHandler_GetVehicle_ManagerGetsBasicResponse()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L409",
+      "source_location": "L497",
       "id": "vehicle_handler_test_testhandler_getvehicle_managergetsbasicresponse",
       "community": 6,
       "norm_label": "testhandler_getvehicle_managergetsbasicresponse()"
@@ -2554,7 +2608,7 @@
       "label": "TestHandler_GetVehicle_EmployeeGetsBasicResponse()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L430",
+      "source_location": "L518",
       "id": "vehicle_handler_test_testhandler_getvehicle_employeegetsbasicresponse",
       "community": 6,
       "norm_label": "testhandler_getvehicle_employeegetsbasicresponse()"
@@ -2563,7 +2617,7 @@
       "label": "TestHandler_GetVehicle_OwnerWithPricingAndSale()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L450",
+      "source_location": "L538",
       "id": "vehicle_handler_test_testhandler_getvehicle_ownerwithpricingandsale",
       "community": 6,
       "norm_label": "testhandler_getvehicle_ownerwithpricingandsale()"
@@ -2572,7 +2626,7 @@
       "label": "TestHandler_GetVehicle_NonOwnerWithPricingAndSale()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L479",
+      "source_location": "L567",
       "id": "vehicle_handler_test_testhandler_getvehicle_nonownerwithpricingandsale",
       "community": 6,
       "norm_label": "testhandler_getvehicle_nonownerwithpricingandsale()"
@@ -2581,7 +2635,7 @@
       "label": "TestHandler_GetVehicle_OwnerWithNonEmptyCollections()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L504",
+      "source_location": "L592",
       "id": "vehicle_handler_test_testhandler_getvehicle_ownerwithnonemptycollections",
       "community": 6,
       "norm_label": "testhandler_getvehicle_ownerwithnonemptycollections()"
@@ -2590,7 +2644,7 @@
       "label": "TestHandler_GetVehicle_ImagesGroupedByLabel()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L551",
+      "source_location": "L639",
       "id": "vehicle_handler_test_testhandler_getvehicle_imagesgroupedbylabel",
       "community": 6,
       "norm_label": "testhandler_getvehicle_imagesgroupedbylabel()"
@@ -2599,331 +2653,331 @@
       "label": "TestHandler_PublicListVehicles_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L583",
+      "source_location": "L671",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_success",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_publiclistvehicles_success()"
     },
     {
       "label": "TestHandler_PublicListVehicles_InvalidQueryParam()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L614",
+      "source_location": "L702",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_invalidqueryparam",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_publiclistvehicles_invalidqueryparam()"
     },
     {
       "label": "TestHandler_PublicListVehicles_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L630",
+      "source_location": "L718",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_serviceerror",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_publiclistvehicles_serviceerror()"
     },
     {
       "label": "TestHandler_PublicListVehicles_ResponseNoBuyingInfo()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L647",
+      "source_location": "L735",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_responsenobuyinginfo",
-      "community": 6,
+      "community": 267,
       "norm_label": "testhandler_publiclistvehicles_responsenobuyinginfo()"
     },
     {
       "label": "setupPatchVehicleContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L684",
+      "source_location": "L772",
       "id": "vehicle_handler_test_setuppatchvehiclecontext",
-      "community": 6,
+      "community": 272,
       "norm_label": "setuppatchvehiclecontext()"
     },
     {
       "label": "TestHandler_UpdateVehicle_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L697",
+      "source_location": "L785",
       "id": "vehicle_handler_test_testhandler_updatevehicle_invalidid",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_invalidid()"
     },
     {
       "label": "TestHandler_UpdateVehicle_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L704",
+      "source_location": "L792",
       "id": "vehicle_handler_test_testhandler_updatevehicle_zeroid",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_zeroid()"
     },
     {
       "label": "TestHandler_UpdateVehicle_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L711",
+      "source_location": "L799",
       "id": "vehicle_handler_test_testhandler_updatevehicle_invalidjson",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_invalidjson()"
     },
     {
       "label": "TestHandler_UpdateVehicle_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L718",
+      "source_location": "L806",
       "id": "vehicle_handler_test_testhandler_updatevehicle_missingshowroomroles",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_missingshowroomroles()"
     },
     {
       "label": "TestHandler_UpdateVehicle_WrongShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L727",
+      "source_location": "L815",
       "id": "vehicle_handler_test_testhandler_updatevehicle_wrongshowroomrolestype",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_wrongshowroomrolestype()"
     },
     {
       "label": "TestHandler_UpdateVehicle_GetShowroomIDNotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L737",
+      "source_location": "L825",
       "id": "vehicle_handler_test_testhandler_updatevehicle_getshowroomidnotfound",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_getshowroomidnotfound()"
     },
     {
       "label": "TestHandler_UpdateVehicle_NotShowroomMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L748",
+      "source_location": "L836",
       "id": "vehicle_handler_test_testhandler_updatevehicle_notshowroommember",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_notshowroommember()"
     },
     {
       "label": "TestHandler_UpdateVehicle_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L759",
+      "source_location": "L847",
       "id": "vehicle_handler_test_testhandler_updatevehicle_vehiclesold",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_vehiclesold()"
     },
     {
       "label": "TestHandler_UpdateVehicle_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L771",
+      "source_location": "L859",
       "id": "vehicle_handler_test_testhandler_updatevehicle_serviceerror",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_serviceerror()"
     },
     {
       "label": "TestHandler_UpdateVehicle_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L783",
+      "source_location": "L871",
       "id": "vehicle_handler_test_testhandler_updatevehicle_success",
-      "community": 6,
+      "community": 272,
       "norm_label": "testhandler_updatevehicle_success()"
     },
     {
       "label": "setupPatchPricingContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L804",
+      "source_location": "L892",
       "id": "vehicle_handler_test_setuppatchpricingcontext",
-      "community": 6,
+      "community": 270,
       "norm_label": "setuppatchpricingcontext()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L817",
+      "source_location": "L905",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_invalidid",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_invalidid()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L824",
+      "source_location": "L912",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_zeroid",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_zeroid()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L831",
+      "source_location": "L919",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_invalidjson",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_invalidjson()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L838",
+      "source_location": "L926",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_missingshowroomroles",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_missingshowroomroles()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_WrongShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L847",
+      "source_location": "L935",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_wrongshowroomrolestype",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_wrongshowroomrolestype()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_GetShowroomIDNotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L857",
+      "source_location": "L945",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_getshowroomidnotfound",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_getshowroomidnotfound()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_NotShowroomMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L868",
+      "source_location": "L956",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_notshowroommember",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_notshowroommember()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L879",
+      "source_location": "L967",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_vehiclesold",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_vehiclesold()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L891",
+      "source_location": "L979",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_serviceerror",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_serviceerror()"
     },
     {
       "label": "TestHandler_UpdateVehiclePricing_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L903",
+      "source_location": "L991",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_success",
-      "community": 6,
+      "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_success()"
     },
     {
       "label": "setupAddExpenseContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L925",
+      "source_location": "L1013",
       "id": "vehicle_handler_test_setupaddexpensecontext",
-      "community": 6,
+      "community": 274,
       "norm_label": "setupaddexpensecontext()"
     },
     {
       "label": "TestHandler_AddExpense_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L938",
+      "source_location": "L1026",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidid",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_invalidid()"
     },
     {
       "label": "TestHandler_AddExpense_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L946",
+      "source_location": "L1034",
       "id": "vehicle_handler_test_testhandler_addexpense_zeroid",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_zeroid()"
     },
     {
       "label": "TestHandler_AddExpense_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L954",
+      "source_location": "L1042",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidjson",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_invalidjson()"
     },
     {
       "label": "TestHandler_AddExpense_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L961",
+      "source_location": "L1049",
       "id": "vehicle_handler_test_testhandler_addexpense_missingshowroomroles",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_missingshowroomroles()"
     },
     {
       "label": "TestHandler_AddExpense_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L969",
+      "source_location": "L1057",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidshowroomrolestype",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_invalidshowroomrolestype()"
     },
     {
       "label": "TestHandler_AddExpense_GetShowroomIDError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L978",
+      "source_location": "L1066",
       "id": "vehicle_handler_test_testhandler_addexpense_getshowroomiderror",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_getshowroomiderror()"
     },
     {
       "label": "TestHandler_AddExpense_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L988",
+      "source_location": "L1076",
       "id": "vehicle_handler_test_testhandler_addexpense_notmember",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_notmember()"
     },
     {
       "label": "TestHandler_AddExpense_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L998",
+      "source_location": "L1086",
       "id": "vehicle_handler_test_testhandler_addexpense_serviceerror",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_serviceerror()"
     },
     {
       "label": "TestHandler_AddExpense_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1009",
+      "source_location": "L1097",
       "id": "vehicle_handler_test_testhandler_addexpense_success",
-      "community": 6,
+      "community": 274,
       "norm_label": "testhandler_addexpense_success()"
     },
     {
       "label": "setupAssignShowroomContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1033",
+      "source_location": "L1121",
       "id": "vehicle_handler_test_setupassignshowroomcontext",
       "community": 6,
       "norm_label": "setupassignshowroomcontext()"
@@ -2932,7 +2986,7 @@
       "label": "TestHandler_AssignShowroom_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1046",
+      "source_location": "L1134",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidid()"
@@ -2941,7 +2995,7 @@
       "label": "TestHandler_AssignShowroom_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1054",
+      "source_location": "L1142",
       "id": "vehicle_handler_test_testhandler_assignshowroom_zeroid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_zeroid()"
@@ -2950,7 +3004,7 @@
       "label": "TestHandler_AssignShowroom_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1062",
+      "source_location": "L1150",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidjson",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidjson()"
@@ -2959,7 +3013,7 @@
       "label": "TestHandler_AssignShowroom_ZeroShowroomID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1069",
+      "source_location": "L1157",
       "id": "vehicle_handler_test_testhandler_assignshowroom_zeroshowroomid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_zeroshowroomid()"
@@ -2968,7 +3022,7 @@
       "label": "TestHandler_AssignShowroom_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1077",
+      "source_location": "L1165",
       "id": "vehicle_handler_test_testhandler_assignshowroom_missingshowroomroles",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_missingshowroomroles()"
@@ -2977,7 +3031,7 @@
       "label": "TestHandler_AssignShowroom_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1085",
+      "source_location": "L1173",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidshowroomrolestype",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidshowroomrolestype()"
@@ -2986,7 +3040,7 @@
       "label": "TestHandler_AssignShowroom_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1094",
+      "source_location": "L1182",
       "id": "vehicle_handler_test_testhandler_assignshowroom_notmember",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_notmember()"
@@ -2995,7 +3049,7 @@
       "label": "TestHandler_AssignShowroom_EmployeeForbidden()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1103",
+      "source_location": "L1191",
       "id": "vehicle_handler_test_testhandler_assignshowroom_employeeforbidden",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_employeeforbidden()"
@@ -3004,7 +3058,7 @@
       "label": "TestHandler_AssignShowroom_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1112",
+      "source_location": "L1200",
       "id": "vehicle_handler_test_testhandler_assignshowroom_serviceerror",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_serviceerror()"
@@ -3013,7 +3067,7 @@
       "label": "TestHandler_AssignShowroom_Success_Owner()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1122",
+      "source_location": "L1210",
       "id": "vehicle_handler_test_testhandler_assignshowroom_success_owner",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_success_owner()"
@@ -3022,7 +3076,7 @@
       "label": "TestHandler_AssignShowroom_Success_Manager()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1137",
+      "source_location": "L1225",
       "id": "vehicle_handler_test_testhandler_assignshowroom_success_manager",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_success_manager()"
@@ -3031,171 +3085,171 @@
       "label": "multipartPhotoRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1148",
+      "source_location": "L1236",
       "id": "vehicle_handler_test_multipartphotorequest",
-      "community": 6,
+      "community": 220,
       "norm_label": "multipartphotorequest()"
     },
     {
       "label": "setupImageHandlerContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1167",
+      "source_location": "L1255",
       "id": "vehicle_handler_test_setupimagehandlercontext",
-      "community": 6,
+      "community": 220,
       "norm_label": "setupimagehandlercontext()"
     },
     {
       "label": "TestHandler_AddVehicleImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1177",
+      "source_location": "L1265",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_success",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_success()"
     },
     {
       "label": "TestHandler_AddVehicleImage_MissingUser()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1191",
+      "source_location": "L1279",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missinguser",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_missinguser()"
     },
     {
       "label": "TestHandler_AddVehicleImage_UserIDWrongType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1198",
+      "source_location": "L1286",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_useridwrongtype",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_useridwrongtype()"
     },
     {
       "label": "TestHandler_AddVehicleImage_InvalidVehicleID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1206",
+      "source_location": "L1294",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_invalidvehicleid",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_invalidvehicleid()"
     },
     {
       "label": "TestHandler_AddVehicleImage_ZeroVehicleID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1214",
+      "source_location": "L1302",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_zerovehicleid",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_zerovehicleid()"
     },
     {
       "label": "TestHandler_AddVehicleImage_MissingRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1222",
+      "source_location": "L1310",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missingroles",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_missingroles()"
     },
     {
       "label": "TestHandler_AddVehicleImage_RolesWrongType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1230",
+      "source_location": "L1318",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_roleswrongtype",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_roleswrongtype()"
     },
     {
       "label": "TestHandler_AddVehicleImage_ShowroomLookupError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1239",
+      "source_location": "L1327",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_showroomlookuperror",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_showroomlookuperror()"
     },
     {
       "label": "TestHandler_AddVehicleImage_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1249",
+      "source_location": "L1337",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_notmember",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_notmember()"
     },
     {
       "label": "TestHandler_AddVehicleImage_NotMultipart()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1259",
+      "source_location": "L1347",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_notmultipart",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_notmultipart()"
     },
     {
       "label": "TestHandler_AddVehicleImage_MissingPhoto()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1270",
+      "source_location": "L1358",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missingphoto",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_missingphoto()"
     },
     {
       "label": "TestHandler_AddVehicleImage_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1280",
+      "source_location": "L1368",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_serviceerror",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_addvehicleimage_serviceerror()"
     },
     {
       "label": "TestHandler_DeleteVehicleImage_MissingUser()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1292",
+      "source_location": "L1380",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_missinguser",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_deletevehicleimage_missinguser()"
     },
     {
       "label": "TestHandler_DeleteVehicleImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1300",
+      "source_location": "L1388",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_success",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_deletevehicleimage_success()"
     },
     {
       "label": "TestHandler_DeleteVehicleImage_InvalidImageID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1313",
+      "source_location": "L1401",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_invalidimageid",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_deletevehicleimage_invalidimageid()"
     },
     {
       "label": "TestHandler_DeleteVehicleImage_NonNumericImageID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1324",
+      "source_location": "L1412",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_nonnumericimageid",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_deletevehicleimage_nonnumericimageid()"
     },
     {
       "label": "TestHandler_DeleteVehicleImage_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1335",
+      "source_location": "L1423",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_serviceerror",
-      "community": 6,
+      "community": 220,
       "norm_label": "testhandler_deletevehicleimage_serviceerror()"
     },
     {
@@ -3256,7 +3310,7 @@
       "label": "TestVehicleRepositoryList_NoStatusOrPricing()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L105",
+      "source_location": "L106",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_nostatusorpricing",
       "community": 42,
       "norm_label": "testvehiclerepositorylist_nostatusorpricing()"
@@ -3265,7 +3319,7 @@
       "label": "TestVehicleRepositoryList_WithPriceFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L140",
+      "source_location": "L142",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_withpricefilter",
       "community": 42,
       "norm_label": "testvehiclerepositorylist_withpricefilter()"
@@ -3274,7 +3328,7 @@
       "label": "TestVehicleRepositoryList_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L161",
+      "source_location": "L164",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_error",
       "community": 42,
       "norm_label": "testvehiclerepositorylist_error()"
@@ -3283,7 +3337,7 @@
       "label": "TestVehicleRepositoryCountByType_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L177",
+      "source_location": "L181",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_success",
       "community": 42,
       "norm_label": "testvehiclerepositorycountbytype_success()"
@@ -3292,7 +3346,7 @@
       "label": "TestVehicleRepositoryCountByType_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L199",
+      "source_location": "L204",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_error",
       "community": 42,
       "norm_label": "testvehiclerepositorycountbytype_error()"
@@ -3301,7 +3355,7 @@
       "label": "TestVehicleRepositoryCountByType_UsesInClauseForStatusFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L215",
+      "source_location": "L221",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_usesinclauseforstatusfilter",
       "community": 42,
       "norm_label": "testvehiclerepositorycountbytype_usesinclauseforstatusfilter()"
@@ -3310,7 +3364,7 @@
       "label": "TestVehicleRepositoryList_UsesInClauseForTypeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L240",
+      "source_location": "L247",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_usesinclausefortypefilter",
       "community": 42,
       "norm_label": "testvehiclerepositorylist_usesinclausefortypefilter()"
@@ -3319,7 +3373,7 @@
       "label": "TestVehicleRepositoryList_EmptyStatusIncludesAll()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L259",
+      "source_location": "L267",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_emptystatusincludesall",
       "community": 42,
       "norm_label": "testvehiclerepositorylist_emptystatusincludesall()"
@@ -3328,16 +3382,25 @@
       "label": "TestVehicleRepositoryCountByType_EmptyStatusIncludesAll()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L276",
+      "source_location": "L285",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_emptystatusincludesall",
       "community": 42,
       "norm_label": "testvehiclerepositorycountbytype_emptystatusincludesall()"
     },
     {
+      "label": "TestVehicleRepositoryList_ScopesToShowroom()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/repository_gorm_test.go",
+      "source_location": "L299",
+      "id": "vehicle_repository_gorm_test_testvehiclerepositorylist_scopestoshowroom",
+      "community": 42,
+      "norm_label": "testvehiclerepositorylist_scopestoshowroom()"
+    },
+    {
       "label": "TestGetByIDWithFullDetails_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L290",
+      "source_location": "L312",
       "id": "vehicle_repository_gorm_test_testgetbyidwithfulldetails_notfound",
       "community": 42,
       "norm_label": "testgetbyidwithfulldetails_notfound()"
@@ -3346,7 +3409,7 @@
       "label": "TestGetByIDWithFullDetails_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L300",
+      "source_location": "L322",
       "id": "vehicle_repository_gorm_test_testgetbyidwithfulldetails_dberror",
       "community": 42,
       "norm_label": "testgetbyidwithfulldetails_dberror()"
@@ -3355,7 +3418,7 @@
       "label": "TestGetByIDWithFullDetails_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L311",
+      "source_location": "L333",
       "id": "vehicle_repository_gorm_test_testgetbyidwithfulldetails_success",
       "community": 42,
       "norm_label": "testgetbyidwithfulldetails_success()"
@@ -3364,7 +3427,7 @@
       "label": "TestVehicleRepositoryPublicList_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L365",
+      "source_location": "L387",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliclist_success",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliclist_success()"
@@ -3373,7 +3436,7 @@
       "label": "TestVehicleRepositoryPublicList_NilStatusAndPricing()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L400",
+      "source_location": "L422",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliclist_nilstatusandpricing",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliclist_nilstatusandpricing()"
@@ -3382,7 +3445,7 @@
       "label": "TestVehicleRepositoryPublicList_WithTypeFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L427",
+      "source_location": "L449",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliclist_withtypefilter",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliclist_withtypefilter()"
@@ -3391,7 +3454,7 @@
       "label": "TestVehicleRepositoryPublicList_WithPriceFilter()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L446",
+      "source_location": "L468",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliclist_withpricefilter",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliclist_withpricefilter()"
@@ -3400,7 +3463,7 @@
       "label": "TestVehicleRepositoryPublicList_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L466",
+      "source_location": "L488",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliclist_error",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliclist_error()"
@@ -3409,7 +3472,7 @@
       "label": "TestVehicleRepositoryPublicCountByType_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L477",
+      "source_location": "L499",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliccountbytype_success",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliccountbytype_success()"
@@ -3418,7 +3481,7 @@
       "label": "TestVehicleRepositoryPublicCountByType_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L493",
+      "source_location": "L515",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorypubliccountbytype_error",
       "community": 42,
       "norm_label": "testvehiclerepositorypubliccountbytype_error()"
@@ -3427,7 +3490,7 @@
       "label": "TestRepo_GetVehicleShowroomID_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L504",
+      "source_location": "L526",
       "id": "vehicle_repository_gorm_test_testrepo_getvehicleshowroomid_success",
       "community": 42,
       "norm_label": "testrepo_getvehicleshowroomid_success()"
@@ -3436,7 +3499,7 @@
       "label": "TestRepo_GetVehicleShowroomID_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L518",
+      "source_location": "L540",
       "id": "vehicle_repository_gorm_test_testrepo_getvehicleshowroomid_notfound",
       "community": 42,
       "norm_label": "testrepo_getvehicleshowroomid_notfound()"
@@ -3445,7 +3508,7 @@
       "label": "TestRepo_GetVehicleShowroomID_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L529",
+      "source_location": "L551",
       "id": "vehicle_repository_gorm_test_testrepo_getvehicleshowroomid_dberror",
       "community": 42,
       "norm_label": "testrepo_getvehicleshowroomid_dberror()"
@@ -3454,7 +3517,7 @@
       "label": "TestRepo_GetCurrentStatus_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L541",
+      "source_location": "L563",
       "id": "vehicle_repository_gorm_test_testrepo_getcurrentstatus_success",
       "community": 42,
       "norm_label": "testrepo_getcurrentstatus_success()"
@@ -3463,7 +3526,7 @@
       "label": "TestRepo_GetCurrentStatus_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L553",
+      "source_location": "L575",
       "id": "vehicle_repository_gorm_test_testrepo_getcurrentstatus_notfound",
       "community": 42,
       "norm_label": "testrepo_getcurrentstatus_notfound()"
@@ -3472,7 +3535,7 @@
       "label": "TestRepo_GetCurrentStatus_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L564",
+      "source_location": "L586",
       "id": "vehicle_repository_gorm_test_testrepo_getcurrentstatus_dberror",
       "community": 42,
       "norm_label": "testrepo_getcurrentstatus_dberror()"
@@ -3481,7 +3544,7 @@
       "label": "TestRepo_UpdateVehicleFields_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L576",
+      "source_location": "L598",
       "id": "vehicle_repository_gorm_test_testrepo_updatevehiclefields_success",
       "community": 42,
       "norm_label": "testrepo_updatevehiclefields_success()"
@@ -3490,7 +3553,7 @@
       "label": "TestRepo_UpdateVehicleFields_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L602",
+      "source_location": "L624",
       "id": "vehicle_repository_gorm_test_testrepo_updatevehiclefields_notfound",
       "community": 42,
       "norm_label": "testrepo_updatevehiclefields_notfound()"
@@ -3499,7 +3562,7 @@
       "label": "TestRepo_UpdateVehicleFields_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L615",
+      "source_location": "L637",
       "id": "vehicle_repository_gorm_test_testrepo_updatevehiclefields_dberror",
       "community": 42,
       "norm_label": "testrepo_updatevehiclefields_dberror()"
@@ -3508,7 +3571,7 @@
       "label": "TestRepo_UpdateVehicleFields_FetchAfterUpdateError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L628",
+      "source_location": "L650",
       "id": "vehicle_repository_gorm_test_testrepo_updatevehiclefields_fetchafterupdateerror",
       "community": 42,
       "norm_label": "testrepo_updatevehiclefields_fetchafterupdateerror()"
@@ -3517,7 +3580,7 @@
       "label": "TestRepo_GetPricingByVehicleID_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L643",
+      "source_location": "L665",
       "id": "vehicle_repository_gorm_test_testrepo_getpricingbyvehicleid_success",
       "community": 42,
       "norm_label": "testrepo_getpricingbyvehicleid_success()"
@@ -3526,7 +3589,7 @@
       "label": "TestRepo_GetPricingByVehicleID_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L658",
+      "source_location": "L680",
       "id": "vehicle_repository_gorm_test_testrepo_getpricingbyvehicleid_notfound",
       "community": 42,
       "norm_label": "testrepo_getpricingbyvehicleid_notfound()"
@@ -3535,7 +3598,7 @@
       "label": "TestRepo_GetPricingByVehicleID_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L670",
+      "source_location": "L692",
       "id": "vehicle_repository_gorm_test_testrepo_getpricingbyvehicleid_dberror",
       "community": 42,
       "norm_label": "testrepo_getpricingbyvehicleid_dberror()"
@@ -3544,7 +3607,7 @@
       "label": "TestRepo_CreatePricing_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L681",
+      "source_location": "L703",
       "id": "vehicle_repository_gorm_test_testrepo_createpricing_success",
       "community": 42,
       "norm_label": "testrepo_createpricing_success()"
@@ -3553,7 +3616,7 @@
       "label": "TestRepo_CreatePricing_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L703",
+      "source_location": "L725",
       "id": "vehicle_repository_gorm_test_testrepo_createpricing_dberror",
       "community": 42,
       "norm_label": "testrepo_createpricing_dberror()"
@@ -3562,7 +3625,7 @@
       "label": "TestRepo_UpdatePricingFields_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L716",
+      "source_location": "L738",
       "id": "vehicle_repository_gorm_test_testrepo_updatepricingfields_success",
       "community": 42,
       "norm_label": "testrepo_updatepricingfields_success()"
@@ -3571,7 +3634,7 @@
       "label": "TestRepo_UpdatePricingFields_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L738",
+      "source_location": "L760",
       "id": "vehicle_repository_gorm_test_testrepo_updatepricingfields_dberror",
       "community": 42,
       "norm_label": "testrepo_updatepricingfields_dberror()"
@@ -3580,7 +3643,7 @@
       "label": "TestRepo_UpdatePricingFields_FetchAfterUpdateError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L751",
+      "source_location": "L773",
       "id": "vehicle_repository_gorm_test_testrepo_updatepricingfields_fetchafterupdateerror",
       "community": 42,
       "norm_label": "testrepo_updatepricingfields_fetchafterupdateerror()"
@@ -3589,7 +3652,7 @@
       "label": "TestGetByIDWithFullDetails_WithSaleInfo()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L766",
+      "source_location": "L788",
       "id": "vehicle_repository_gorm_test_testgetbyidwithfulldetails_withsaleinfo",
       "community": 42,
       "norm_label": "testgetbyidwithfulldetails_withsaleinfo()"
@@ -3598,7 +3661,7 @@
       "label": "TestVehicleRepositoryCreateExpense_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L815",
+      "source_location": "L837",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycreateexpense_success",
       "community": 42,
       "norm_label": "testvehiclerepositorycreateexpense_success()"
@@ -3607,7 +3670,7 @@
       "label": "TestVehicleRepositoryCreateExpense_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L836",
+      "source_location": "L858",
       "id": "vehicle_repository_gorm_test_testvehiclerepositorycreateexpense_error",
       "community": 42,
       "norm_label": "testvehiclerepositorycreateexpense_error()"
@@ -3616,7 +3679,7 @@
       "label": "TestRepo_VehicleExistsByID_Exists()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L850",
+      "source_location": "L872",
       "id": "vehicle_repository_gorm_test_testrepo_vehicleexistsbyid_exists",
       "community": 42,
       "norm_label": "testrepo_vehicleexistsbyid_exists()"
@@ -3625,7 +3688,7 @@
       "label": "TestRepo_VehicleExistsByID_NotExists()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L862",
+      "source_location": "L884",
       "id": "vehicle_repository_gorm_test_testrepo_vehicleexistsbyid_notexists",
       "community": 42,
       "norm_label": "testrepo_vehicleexistsbyid_notexists()"
@@ -3634,7 +3697,7 @@
       "label": "TestRepo_VehicleExistsByID_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L874",
+      "source_location": "L896",
       "id": "vehicle_repository_gorm_test_testrepo_vehicleexistsbyid_dberror",
       "community": 42,
       "norm_label": "testrepo_vehicleexistsbyid_dberror()"
@@ -3643,7 +3706,7 @@
       "label": "TestRepo_AssignShowroom_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L885",
+      "source_location": "L907",
       "id": "vehicle_repository_gorm_test_testrepo_assignshowroom_success",
       "community": 42,
       "norm_label": "testrepo_assignshowroom_success()"
@@ -3652,7 +3715,7 @@
       "label": "TestRepo_AssignShowroom_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L901",
+      "source_location": "L923",
       "id": "vehicle_repository_gorm_test_testrepo_assignshowroom_dberror",
       "community": 42,
       "norm_label": "testrepo_assignshowroom_dberror()"
@@ -3661,7 +3724,7 @@
       "label": "TestRepo_CreateImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L914",
+      "source_location": "L936",
       "id": "vehicle_repository_gorm_test_testrepo_createimage_success",
       "community": 42,
       "norm_label": "testrepo_createimage_success()"
@@ -3670,7 +3733,7 @@
       "label": "TestRepo_CreateImage_Error()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L934",
+      "source_location": "L956",
       "id": "vehicle_repository_gorm_test_testrepo_createimage_error",
       "community": 42,
       "norm_label": "testrepo_createimage_error()"
@@ -3679,7 +3742,7 @@
       "label": "TestRepo_SoftDeleteImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L947",
+      "source_location": "L969",
       "id": "vehicle_repository_gorm_test_testrepo_softdeleteimage_success",
       "community": 42,
       "norm_label": "testrepo_softdeleteimage_success()"
@@ -3688,7 +3751,7 @@
       "label": "TestRepo_SoftDeleteImage_NotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L960",
+      "source_location": "L982",
       "id": "vehicle_repository_gorm_test_testrepo_softdeleteimage_notfound",
       "community": 42,
       "norm_label": "testrepo_softdeleteimage_notfound()"
@@ -3697,7 +3760,7 @@
       "label": "TestRepo_SoftDeleteImage_DBError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
-      "source_location": "L973",
+      "source_location": "L995",
       "id": "vehicle_repository_gorm_test_testrepo_softdeleteimage_dberror",
       "community": 42,
       "norm_label": "testrepo_softdeleteimage_dberror()"
@@ -10186,7 +10249,7 @@
       "label": ".GetVehicle()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L77",
+      "source_location": "L90",
       "id": "vehicle_handler_getvehicle",
       "community": 29,
       "norm_label": ".getvehicle()"
@@ -10195,7 +10258,7 @@
       "label": "buildAdminResponse()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L114",
+      "source_location": "L127",
       "id": "vehicle_handler_buildadminresponse",
       "community": 29,
       "norm_label": "buildadminresponse()"
@@ -10204,7 +10267,7 @@
       "label": "buildBasicResponse()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L161",
+      "source_location": "L174",
       "id": "vehicle_handler_buildbasicresponse",
       "community": 29,
       "norm_label": "buildbasicresponse()"
@@ -10213,7 +10276,7 @@
       "label": "buildBasicSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L183",
+      "source_location": "L196",
       "id": "vehicle_handler_buildbasicsection",
       "community": 29,
       "norm_label": "buildbasicsection()"
@@ -10222,7 +10285,7 @@
       "label": "buildStatusSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L212",
+      "source_location": "L225",
       "id": "vehicle_handler_buildstatussection",
       "community": 29,
       "norm_label": "buildstatussection()"
@@ -10231,7 +10294,7 @@
       "label": "buildExpenseItems()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L230",
+      "source_location": "L243",
       "id": "vehicle_handler_buildexpenseitems",
       "community": 29,
       "norm_label": "buildexpenseitems()"
@@ -10240,7 +10303,7 @@
       "label": "buildDocumentItems()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L245",
+      "source_location": "L258",
       "id": "vehicle_handler_builddocumentitems",
       "community": 29,
       "norm_label": "builddocumentitems()"
@@ -10249,7 +10312,7 @@
       "label": ".UpdateVehicle()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L261",
+      "source_location": "L274",
       "id": "vehicle_handler_updatevehicle",
       "community": 29,
       "norm_label": ".updatevehicle()"
@@ -10258,7 +10321,7 @@
       "label": ".UpdateVehiclePricing()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L305",
+      "source_location": "L318",
       "id": "vehicle_handler_updatevehiclepricing",
       "community": 29,
       "norm_label": ".updatevehiclepricing()"
@@ -10267,7 +10330,7 @@
       "label": ".AddExpense()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L349",
+      "source_location": "L362",
       "id": "vehicle_handler_addexpense",
       "community": 29,
       "norm_label": ".addexpense()"
@@ -10276,7 +10339,7 @@
       "label": "buildImageSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L393",
+      "source_location": "L406",
       "id": "vehicle_handler_buildimagesection",
       "community": 29,
       "norm_label": "buildimagesection()"
@@ -10285,7 +10348,7 @@
       "label": ".AssignShowroom()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L408",
+      "source_location": "L421",
       "id": "vehicle_handler_assignshowroom",
       "community": 29,
       "norm_label": ".assignshowroom()"
@@ -10294,7 +10357,7 @@
       "label": ".AddVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L457",
+      "source_location": "L470",
       "id": "vehicle_handler_addvehicleimage",
       "community": 29,
       "norm_label": ".addvehicleimage()"
@@ -10303,7 +10366,7 @@
       "label": ".DeleteVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L489",
+      "source_location": "L502",
       "id": "vehicle_handler_deletevehicleimage",
       "community": 29,
       "norm_label": ".deletevehicleimage()"
@@ -10312,7 +10375,7 @@
       "label": ".extractUserID()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L509",
+      "source_location": "L522",
       "id": "vehicle_handler_extractuserid",
       "community": 29,
       "norm_label": ".extractuserid()"
@@ -10321,7 +10384,7 @@
       "label": ".parseVehicleID()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L523",
+      "source_location": "L536",
       "id": "vehicle_handler_parsevehicleid",
       "community": 29,
       "norm_label": ".parsevehicleid()"
@@ -10330,7 +10393,7 @@
       "label": ".extractShowroomRoles()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L532",
+      "source_location": "L545",
       "id": "vehicle_handler_extractshowroomroles",
       "community": 29,
       "norm_label": ".extractshowroomroles()"
@@ -10339,7 +10402,7 @@
       "label": ".requireVehicleMembership()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L546",
+      "source_location": "L559",
       "id": "vehicle_handler_requirevehiclemembership",
       "community": 29,
       "norm_label": ".requirevehiclemembership()"
@@ -10438,7 +10501,7 @@
       "label": ".PublicListVehicles()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L284",
+      "source_location": "L285",
       "id": "vehicle_service_publiclistvehicles",
       "community": 31,
       "norm_label": ".publiclistvehicles()"
@@ -10447,7 +10510,7 @@
       "label": ".validatePublicListQuery()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L364",
+      "source_location": "L365",
       "id": "vehicle_service_validatepubliclistquery",
       "community": 31,
       "norm_label": ".validatepubliclistquery()"
@@ -10456,7 +10519,7 @@
       "label": "toPublicVehicleListItem()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L391",
+      "source_location": "L392",
       "id": "vehicle_service_topublicvehiclelistitem",
       "community": 31,
       "norm_label": "topublicvehiclelistitem()"
@@ -10465,7 +10528,7 @@
       "label": "toVehicleListItem()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L416",
+      "source_location": "L417",
       "id": "vehicle_service_tovehiclelistitem",
       "community": 31,
       "norm_label": "tovehiclelistitem()"
@@ -10474,7 +10537,7 @@
       "label": ".validateListQuery()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L451",
+      "source_location": "L452",
       "id": "vehicle_service_validatelistquery",
       "community": 31,
       "norm_label": ".validatelistquery()"
@@ -10483,7 +10546,7 @@
       "label": ".GetVehicleByID()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L477",
+      "source_location": "L481",
       "id": "vehicle_service_getvehiclebyid",
       "community": 31,
       "norm_label": ".getvehiclebyid()"
@@ -10492,7 +10555,7 @@
       "label": "isValidVehicleStatusType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L486",
+      "source_location": "L490",
       "id": "vehicle_service_isvalidvehiclestatustype",
       "community": 31,
       "norm_label": "isvalidvehiclestatustype()"
@@ -10501,7 +10564,7 @@
       "label": "isValidVehicleType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L493",
+      "source_location": "L497",
       "id": "vehicle_service_isvalidvehicletype",
       "community": 31,
       "norm_label": "isvalidvehicletype()"
@@ -10510,7 +10573,7 @@
       "label": "isValidFuelType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L497",
+      "source_location": "L501",
       "id": "vehicle_service_isvalidfueltype",
       "community": 31,
       "norm_label": "isvalidfueltype()"
@@ -10519,7 +10582,7 @@
       "label": "isValidTransmissionType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L501",
+      "source_location": "L505",
       "id": "vehicle_service_isvalidtransmissiontype",
       "community": 31,
       "norm_label": "isvalidtransmissiontype()"
@@ -10528,7 +10591,7 @@
       "label": "isValidCurrency()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L505",
+      "source_location": "L509",
       "id": "vehicle_service_isvalidcurrency",
       "community": 173,
       "norm_label": "isvalidcurrency()"
@@ -10537,7 +10600,7 @@
       "label": ".GetVehicleShowroomID()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L509",
+      "source_location": "L513",
       "id": "vehicle_service_getvehicleshowroomid",
       "community": 31,
       "norm_label": ".getvehicleshowroomid()"
@@ -10546,7 +10609,7 @@
       "label": ".UpdateVehicle()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L513",
+      "source_location": "L517",
       "id": "vehicle_service_updatevehicle",
       "community": 31,
       "norm_label": ".updatevehicle()"
@@ -10555,7 +10618,7 @@
       "label": ".buildVehicleUpdates()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L557",
+      "source_location": "L561",
       "id": "vehicle_service_buildvehicleupdates",
       "community": 31,
       "norm_label": ".buildvehicleupdates()"
@@ -10564,7 +10627,7 @@
       "label": ".UpdateVehiclePricing()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L637",
+      "source_location": "L641",
       "id": "vehicle_service_updatevehiclepricing",
       "community": 173,
       "norm_label": ".updatevehiclepricing()"
@@ -10573,7 +10636,7 @@
       "label": ".createPricing()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L675",
+      "source_location": "L679",
       "id": "vehicle_service_createpricing",
       "community": 173,
       "norm_label": ".createpricing()"
@@ -10582,7 +10645,7 @@
       "label": ".buildPricingUpdates()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L735",
+      "source_location": "L739",
       "id": "vehicle_service_buildpricingupdates",
       "community": 173,
       "norm_label": ".buildpricingupdates()"
@@ -10591,7 +10654,7 @@
       "label": ".AddExpense()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L777",
+      "source_location": "L781",
       "id": "vehicle_service_addexpense",
       "community": 39,
       "norm_label": ".addexpense()"
@@ -10600,7 +10663,7 @@
       "label": "isValidExpenseType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L825",
+      "source_location": "L829",
       "id": "vehicle_service_isvalidexpensetype",
       "community": 39,
       "norm_label": "isvalidexpensetype()"
@@ -10609,7 +10672,7 @@
       "label": "toPricingResponse()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L836",
+      "source_location": "L840",
       "id": "vehicle_service_topricingresponse",
       "community": 173,
       "norm_label": "topricingresponse()"
@@ -10618,7 +10681,7 @@
       "label": ".AssignVehicleToShowroom()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L849",
+      "source_location": "L853",
       "id": "vehicle_service_assignvehicletoshowroom",
       "community": 31,
       "norm_label": ".assignvehicletoshowroom()"
@@ -10627,7 +10690,7 @@
       "label": ".AddVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L878",
+      "source_location": "L882",
       "id": "vehicle_service_addvehicleimage",
       "community": 31,
       "norm_label": ".addvehicleimage()"
@@ -10636,7 +10699,7 @@
       "label": ".DeleteVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L925",
+      "source_location": "L929",
       "id": "vehicle_service_deletevehicleimage",
       "community": 31,
       "norm_label": ".deletevehicleimage()"
@@ -10645,7 +10708,7 @@
       "label": ".readAndUploadImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L936",
+      "source_location": "L940",
       "id": "vehicle_service_readanduploadimage",
       "community": 31,
       "norm_label": ".readanduploadimage()"
@@ -10654,7 +10717,7 @@
       "label": ".signVehicleImages()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L963",
+      "source_location": "L967",
       "id": "vehicle_service_signvehicleimages",
       "community": 31,
       "norm_label": ".signvehicleimages()"
@@ -10663,7 +10726,7 @@
       "label": "validateVehicleImageFile()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L982",
+      "source_location": "L986",
       "id": "vehicle_service_validatevehicleimagefile",
       "community": 31,
       "norm_label": "validatevehicleimagefile()"
@@ -10672,7 +10735,7 @@
       "label": "isValidVehicleImageLabel()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L996",
+      "source_location": "L1000",
       "id": "vehicle_service_isvalidvehicleimagelabel",
       "community": 31,
       "norm_label": "isvalidvehicleimagelabel()"
@@ -11149,7 +11212,7 @@
       "label": "vehicleRow",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L263",
+      "source_location": "L264",
       "id": "vehicle_vehiclerow",
       "community": 41,
       "norm_label": "vehiclerow"
@@ -11158,7 +11221,7 @@
       "label": "VehicleWithDetails",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L287",
+      "source_location": "L288",
       "id": "vehicle_vehiclewithdetails",
       "community": 41,
       "norm_label": "vehiclewithdetails"
@@ -11167,7 +11230,7 @@
       "label": "buildListQuery()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L307",
+      "source_location": "L308",
       "id": "vehicle_repository_buildlistquery",
       "community": 41,
       "norm_label": "buildlistquery()"
@@ -11176,7 +11239,7 @@
       "label": ".List()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L366",
+      "source_location": "L371",
       "id": "vehicle_repository_list",
       "community": 41,
       "norm_label": ".list()"
@@ -11185,7 +11248,7 @@
       "label": "PublicListFilter",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L421",
+      "source_location": "L426",
       "id": "vehicle_publiclistfilter",
       "community": 41,
       "norm_label": "publiclistfilter"
@@ -11194,7 +11257,7 @@
       "label": "buildPublicListQuery()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L431",
+      "source_location": "L436",
       "id": "vehicle_repository_buildpubliclistquery",
       "community": 41,
       "norm_label": "buildpubliclistquery()"
@@ -11203,7 +11266,7 @@
       "label": ".PublicList()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L492",
+      "source_location": "L497",
       "id": "vehicle_repository_publiclist",
       "community": 41,
       "norm_label": ".publiclist()"
@@ -11212,7 +11275,7 @@
       "label": ".PublicCountByType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L547",
+      "source_location": "L552",
       "id": "vehicle_repository_publiccountbytype",
       "community": 41,
       "norm_label": ".publiccountbytype()"
@@ -11221,7 +11284,7 @@
       "label": "vehicleTypeCount",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L563",
+      "source_location": "L568",
       "id": "vehicle_vehicletypecount",
       "community": 41,
       "norm_label": "vehicletypecount"
@@ -11230,7 +11293,7 @@
       "label": ".CountByType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/repository.go",
-      "source_location": "L568",
+      "source_location": "L573",
       "id": "vehicle_repository_countbytype",
       "community": 41,
       "norm_label": ".countbytype()"
@@ -11257,7 +11320,7 @@
       "label": "VehicleStatusSummary",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L12",
+      "source_location": "L13",
       "id": "vehicle_vehiclestatussummary",
       "community": 73,
       "norm_label": "vehiclestatussummary"
@@ -11266,7 +11329,7 @@
       "label": "VehiclePricingSummary",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "vehicle_vehiclepricingsummary",
       "community": 73,
       "norm_label": "vehiclepricingsummary"
@@ -11275,7 +11338,7 @@
       "label": "VehicleListItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "vehicle_vehiclelistitem",
       "community": 73,
       "norm_label": "vehiclelistitem"
@@ -11284,7 +11347,7 @@
       "label": "CategoryListing",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L44",
+      "source_location": "L45",
       "id": "vehicle_categorylisting",
       "community": 73,
       "norm_label": "categorylisting"
@@ -11293,7 +11356,7 @@
       "label": "ListVehiclesResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L51",
+      "source_location": "L52",
       "id": "vehicle_listvehiclesresponse",
       "community": 73,
       "norm_label": "listvehiclesresponse"
@@ -11302,7 +11365,7 @@
       "label": "VehicleBasicSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L57",
+      "source_location": "L58",
       "id": "vehicle_vehiclebasicsection",
       "community": 73,
       "norm_label": "vehiclebasicsection"
@@ -11311,7 +11374,7 @@
       "label": "VehicleBuyingSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L76",
+      "source_location": "L77",
       "id": "vehicle_vehiclebuyingsection",
       "community": 73,
       "norm_label": "vehiclebuyingsection"
@@ -11320,7 +11383,7 @@
       "label": "VehiclePricingSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L83",
+      "source_location": "L84",
       "id": "vehicle_vehiclepricingsection",
       "community": 73,
       "norm_label": "vehiclepricingsection"
@@ -11329,7 +11392,7 @@
       "label": "VehiclePriceTagOnly",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L89",
+      "source_location": "L90",
       "id": "vehicle_vehiclepricetagonly",
       "community": 73,
       "norm_label": "vehiclepricetagonly"
@@ -11338,7 +11401,7 @@
       "label": "VehicleStatusSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L94",
+      "source_location": "L95",
       "id": "vehicle_vehiclestatussection",
       "community": 73,
       "norm_label": "vehiclestatussection"
@@ -11347,7 +11410,7 @@
       "label": "VehicleStatusItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L99",
+      "source_location": "L100",
       "id": "vehicle_vehiclestatusitem",
       "community": 73,
       "norm_label": "vehiclestatusitem"
@@ -11356,7 +11419,7 @@
       "label": "VehicleExpenseItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L106",
+      "source_location": "L107",
       "id": "vehicle_vehicleexpenseitem",
       "community": 73,
       "norm_label": "vehicleexpenseitem"
@@ -11365,7 +11428,7 @@
       "label": "VehicleDocumentItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L115",
+      "source_location": "L116",
       "id": "vehicle_vehicledocumentitem",
       "community": 73,
       "norm_label": "vehicledocumentitem"
@@ -11374,7 +11437,7 @@
       "label": "VehicleImageItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L125",
+      "source_location": "L126",
       "id": "vehicle_vehicleimageitem",
       "community": 73,
       "norm_label": "vehicleimageitem"
@@ -11383,7 +11446,7 @@
       "label": "VehicleSaleCustomer",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L130",
+      "source_location": "L131",
       "id": "vehicle_vehiclesalecustomer",
       "community": 73,
       "norm_label": "vehiclesalecustomer"
@@ -11392,7 +11455,7 @@
       "label": "VehicleSellingSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L140",
+      "source_location": "L141",
       "id": "vehicle_vehiclesellingsection",
       "community": 73,
       "norm_label": "vehiclesellingsection"
@@ -11401,7 +11464,7 @@
       "label": "VehicleSoldPriceOnly",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L149",
+      "source_location": "L150",
       "id": "vehicle_vehiclesoldpriceonly",
       "community": 73,
       "norm_label": "vehiclesoldpriceonly"
@@ -11410,7 +11473,7 @@
       "label": "GetVehicleAdminResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L153",
+      "source_location": "L154",
       "id": "vehicle_getvehicleadminresponse",
       "community": 73,
       "norm_label": "getvehicleadminresponse"
@@ -11419,7 +11482,7 @@
       "label": "GetVehicleBasicResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L164",
+      "source_location": "L165",
       "id": "vehicle_getvehiclebasicresponse",
       "community": 73,
       "norm_label": "getvehiclebasicresponse"
@@ -11428,7 +11491,7 @@
       "label": "PublicListVehiclesQuery",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L171",
+      "source_location": "L172",
       "id": "vehicle_publiclistvehiclesquery",
       "community": 73,
       "norm_label": "publiclistvehiclesquery"
@@ -11437,7 +11500,7 @@
       "label": "PublicVehicleListItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L181",
+      "source_location": "L182",
       "id": "vehicle_publicvehiclelistitem",
       "community": 73,
       "norm_label": "publicvehiclelistitem"
@@ -11446,7 +11509,7 @@
       "label": "PublicCategoryListing",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L201",
+      "source_location": "L202",
       "id": "vehicle_publiccategorylisting",
       "community": 73,
       "norm_label": "publiccategorylisting"
@@ -11455,7 +11518,7 @@
       "label": "PublicListVehiclesResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L208",
+      "source_location": "L209",
       "id": "vehicle_publiclistvehiclesresponse",
       "community": 73,
       "norm_label": "publiclistvehiclesresponse"
@@ -11464,7 +11527,7 @@
       "label": "UpdateVehicleRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L214",
+      "source_location": "L215",
       "id": "vehicle_updatevehiclerequest",
       "community": 73,
       "norm_label": "updatevehiclerequest"
@@ -11473,7 +11536,7 @@
       "label": "UpdateVehicleResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L228",
+      "source_location": "L229",
       "id": "vehicle_updatevehicleresponse",
       "community": 73,
       "norm_label": "updatevehicleresponse"
@@ -11482,7 +11545,7 @@
       "label": "UpdateVehiclePricingRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L245",
+      "source_location": "L246",
       "id": "vehicle_updatevehiclepricingrequest",
       "community": 73,
       "norm_label": "updatevehiclepricingrequest"
@@ -11491,7 +11554,7 @@
       "label": "UpdateVehiclePricingResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L254",
+      "source_location": "L255",
       "id": "vehicle_updatevehiclepricingresponse",
       "community": 73,
       "norm_label": "updatevehiclepricingresponse"
@@ -11500,7 +11563,7 @@
       "label": "CreateVehicleRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L265",
+      "source_location": "L266",
       "id": "vehicle_createvehiclerequest",
       "community": 73,
       "norm_label": "createvehiclerequest"
@@ -11509,7 +11572,7 @@
       "label": "CreateVehicleResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L280",
+      "source_location": "L281",
       "id": "vehicle_createvehicleresponse",
       "community": 73,
       "norm_label": "createvehicleresponse"
@@ -11518,7 +11581,7 @@
       "label": "AddExpenseRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L298",
+      "source_location": "L299",
       "id": "vehicle_addexpenserequest",
       "community": 73,
       "norm_label": "addexpenserequest"
@@ -11527,7 +11590,7 @@
       "label": "AddExpenseResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L306",
+      "source_location": "L307",
       "id": "vehicle_addexpenseresponse",
       "community": 73,
       "norm_label": "addexpenseresponse"
@@ -11536,7 +11599,7 @@
       "label": "AssignShowroomRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L317",
+      "source_location": "L318",
       "id": "vehicle_assignshowroomrequest",
       "community": 73,
       "norm_label": "assignshowroomrequest"
@@ -11545,7 +11608,7 @@
       "label": "AssignShowroomResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L321",
+      "source_location": "L322",
       "id": "vehicle_assignshowroomresponse",
       "community": 73,
       "norm_label": "assignshowroomresponse"
@@ -11554,7 +11617,7 @@
       "label": "AddVehicleImageResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L327",
+      "source_location": "L328",
       "id": "vehicle_addvehicleimageresponse",
       "community": 73,
       "norm_label": "addvehicleimageresponse"
@@ -15091,7 +15154,7 @@
       "label": "variable",
       "file_type": "code",
       "source_file": "docs/api/vehicle.postman_collection.json",
-      "source_location": "L766",
+      "source_location": "L777",
       "id": "api_vehicle_postman_collection_variable",
       "community": 86,
       "norm_label": "variable"
@@ -16947,7 +17010,7 @@
       "source_file": "CMS-portal/src/generated/prisma/internal/prismaNamespace.ts",
       "source_location": "L302",
       "id": "internal_prismanamespace_boolean",
-      "community": 199,
+      "community": 244,
       "norm_label": "boolean"
     },
     {
@@ -19143,7 +19206,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L147",
       "id": "app_actions_updateuserprofilestate",
-      "community": 218,
+      "community": 247,
       "norm_label": "updateuserprofilestate"
     },
     {
@@ -19179,7 +19242,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L179",
       "id": "app_actions_updateshowroomprofilestate",
-      "community": 267,
+      "community": 247,
       "norm_label": "updateshowroomprofilestate"
     },
     {
@@ -19440,7 +19503,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L355",
       "id": "app_actions_readcreateuserfields",
-      "community": 220,
+      "community": 158,
       "norm_label": "readcreateuserfields()"
     },
     {
@@ -19458,7 +19521,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L379",
       "id": "app_actions_readupdateuserprofilefields",
-      "community": 220,
+      "community": 158,
       "norm_label": "readupdateuserprofilefields()"
     },
     {
@@ -19467,7 +19530,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L387",
       "id": "app_actions_readaddusermembershipfields",
-      "community": 220,
+      "community": 158,
       "norm_label": "readaddusermembershipfields()"
     },
     {
@@ -19485,7 +19548,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L408",
       "id": "app_actions_readaddshowroommemberfields",
-      "community": 220,
+      "community": 158,
       "norm_label": "readaddshowroommemberfields()"
     },
     {
@@ -19494,7 +19557,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L415",
       "id": "app_actions_readcreatevehiclefields",
-      "community": 199,
+      "community": 158,
       "norm_label": "readcreatevehiclefields()"
     },
     {
@@ -19539,7 +19602,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L542",
       "id": "app_actions_validateuserprofilefields",
-      "community": 220,
+      "community": 158,
       "norm_label": "validateuserprofilefields()"
     },
     {
@@ -19548,7 +19611,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L562",
       "id": "app_actions_validateeditableuserfields",
-      "community": 220,
+      "community": 158,
       "norm_label": "validateeditableuserfields()"
     },
     {
@@ -19557,7 +19620,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L578",
       "id": "app_actions_parserequiredid",
-      "community": 220,
+      "community": 158,
       "norm_label": "parserequiredid()"
     },
     {
@@ -19566,7 +19629,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L586",
       "id": "app_actions_parseoptionalid",
-      "community": 220,
+      "community": 158,
       "norm_label": "parseoptionalid()"
     },
     {
@@ -19575,7 +19638,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L594",
       "id": "app_actions_readselecteduserid",
-      "community": 220,
+      "community": 158,
       "norm_label": "readselecteduserid()"
     },
     {
@@ -19584,7 +19647,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L605",
       "id": "app_actions_readactiveselecteduserid",
-      "community": 220,
+      "community": 158,
       "norm_label": "readactiveselecteduserid()"
     },
     {
@@ -19593,7 +19656,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L630",
       "id": "app_actions_openuserdetailaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "openuserdetailaction()"
     },
     {
@@ -19602,7 +19665,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L642",
       "id": "app_actions_readselectedshowroomid",
-      "community": 220,
+      "community": 158,
       "norm_label": "readselectedshowroomid()"
     },
     {
@@ -19611,7 +19674,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L653",
       "id": "app_actions_readactiveselectedshowroomid",
-      "community": 220,
+      "community": 158,
       "norm_label": "readactiveselectedshowroomid()"
     },
     {
@@ -19620,7 +19683,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L680",
       "id": "app_actions_openshowroomdetailaction",
-      "community": 246,
+      "community": 158,
       "norm_label": "openshowroomdetailaction()"
     },
     {
@@ -19683,7 +19746,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L789",
       "id": "app_actions_updateprofileaction",
-      "community": 262,
+      "community": 275,
       "norm_label": "updateprofileaction()"
     },
     {
@@ -19701,7 +19764,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1028",
       "id": "app_actions_createuseraction",
-      "community": 220,
+      "community": 158,
       "norm_label": "createuseraction()"
     },
     {
@@ -19719,7 +19782,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1298",
       "id": "app_actions_updateuserprofileaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "updateuserprofileaction()"
     },
     {
@@ -19728,7 +19791,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1402",
       "id": "app_actions_deleteselecteduseraction",
-      "community": 253,
+      "community": 218,
       "norm_label": "deleteselecteduseraction()"
     },
     {
@@ -19737,7 +19800,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1422",
       "id": "app_actions_addusermembershipaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "addusermembershipaction()"
     },
     {
@@ -19746,7 +19809,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1546",
       "id": "app_actions_updateusermembershiproleaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "updateusermembershiproleaction()"
     },
     {
@@ -19755,7 +19818,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1694",
       "id": "app_actions_removeusermembershipaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "removeusermembershipaction()"
     },
     {
@@ -19791,7 +19854,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1900",
       "id": "app_actions_addshowroommemberaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "addshowroommemberaction()"
     },
     {
@@ -19800,7 +19863,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2025",
       "id": "app_actions_updateshowroommemberroleaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "updateshowroommemberroleaction()"
     },
     {
@@ -19809,7 +19872,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2175",
       "id": "app_actions_removeshowroommemberaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "removeshowroommemberaction()"
     },
     {
@@ -19818,7 +19881,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2256",
       "id": "app_actions_readselectedvehicleid",
-      "community": 246,
+      "community": 158,
       "norm_label": "readselectedvehicleid()"
     },
     {
@@ -19836,7 +19899,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2323",
       "id": "app_actions_openvehicledetailaction",
-      "community": 220,
+      "community": 158,
       "norm_label": "openvehicledetailaction()"
     },
     {
@@ -19845,7 +19908,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L2354",
       "id": "app_actions_createshowroomvehicleaction",
-      "community": 199,
+      "community": 158,
       "norm_label": "createshowroomvehicleaction()"
     },
     {
@@ -20007,7 +20070,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3117",
       "id": "app_actions_istruthyformflag",
-      "community": 158,
+      "community": 258,
       "norm_label": "istruthyformflag()"
     },
     {
@@ -20016,7 +20079,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3122",
       "id": "app_actions_readcreatesubscriptionplanfields",
-      "community": 158,
+      "community": 258,
       "norm_label": "readcreatesubscriptionplanfields()"
     },
     {
@@ -20025,7 +20088,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3137",
       "id": "app_actions_readupdatesubscriptionplanfields",
-      "community": 158,
+      "community": 258,
       "norm_label": "readupdatesubscriptionplanfields()"
     },
     {
@@ -20043,7 +20106,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3164",
       "id": "app_actions_parsedisplayorder",
-      "community": 158,
+      "community": 258,
       "norm_label": "parsedisplayorder()"
     },
     {
@@ -20052,7 +20115,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3177",
       "id": "app_actions_parsecurrency",
-      "community": 158,
+      "community": 258,
       "norm_label": "parsecurrency()"
     },
     {
@@ -20061,7 +20124,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3186",
       "id": "app_actions_readselectedsubscriptionplanid",
-      "community": 158,
+      "community": 258,
       "norm_label": "readselectedsubscriptionplanid()"
     },
     {
@@ -20079,7 +20142,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3213",
       "id": "app_actions_createsubscriptionplanaction",
-      "community": 158,
+      "community": 258,
       "norm_label": "createsubscriptionplanaction()"
     },
     {
@@ -20088,7 +20151,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3279",
       "id": "app_actions_updateselectedsubscriptionplanaction",
-      "community": 158,
+      "community": 258,
       "norm_label": "updateselectedsubscriptionplanaction()"
     },
     {
@@ -20124,7 +20187,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3533",
       "id": "app_actions_createselectedsubscriptionpricingaction",
-      "community": 158,
+      "community": 258,
       "norm_label": "createselectedsubscriptionpricingaction()"
     },
     {
@@ -20133,7 +20196,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3610",
       "id": "app_actions_updateselectedsubscriptionpricingaction",
-      "community": 158,
+      "community": 258,
       "norm_label": "updateselectedsubscriptionpricingaction()"
     },
     {
@@ -20142,7 +20205,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3655",
       "id": "app_actions_updateselectedsubscriptionplanfeatureaction",
-      "community": 158,
+      "community": 258,
       "norm_label": "updateselectedsubscriptionplanfeatureaction()"
     },
     {
@@ -20232,7 +20295,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_subscriptions_page_tsx",
-      "community": 258,
+      "community": 244,
       "norm_label": "page.tsx"
     },
     {
@@ -20241,7 +20304,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L9",
       "id": "subscriptions_page_subscriptionspageprops",
-      "community": 258,
+      "community": 244,
       "norm_label": "subscriptionspageprops"
     },
     {
@@ -20250,7 +20313,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L13",
       "id": "subscriptions_page_dateformatter",
-      "community": 258,
+      "community": 244,
       "norm_label": "dateformatter"
     },
     {
@@ -20259,7 +20322,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L17",
       "id": "subscriptions_page_getstringparam",
-      "community": 258,
+      "community": 244,
       "norm_label": "getstringparam()"
     },
     {
@@ -20268,7 +20331,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L25",
       "id": "subscriptions_page_parsepage",
-      "community": 258,
+      "community": 244,
       "norm_label": "parsepage()"
     },
     {
@@ -20277,7 +20340,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L30",
       "id": "subscriptions_page_pagehref",
-      "community": 258,
+      "community": 244,
       "norm_label": "pagehref()"
     },
     {
@@ -20286,7 +20349,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L48",
       "id": "subscriptions_page_formatdate",
-      "community": 258,
+      "community": 244,
       "norm_label": "formatdate()"
     },
     {
@@ -20295,7 +20358,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/page.tsx",
       "source_location": "L52",
       "id": "subscriptions_page_subscriptionspage",
-      "community": 258,
+      "community": 244,
       "norm_label": "subscriptionspage()"
     },
     {
@@ -20556,7 +20619,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_profile_page_tsx",
-      "community": 262,
+      "community": 275,
       "norm_label": "page.tsx"
     },
     {
@@ -20565,7 +20628,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L8",
       "id": "profile_page_formatdate",
-      "community": 262,
+      "community": 275,
       "norm_label": "formatdate()"
     },
     {
@@ -20574,7 +20637,7 @@
       "source_file": "CMS-portal/src/app/(portal)/profile/page.tsx",
       "source_location": "L19",
       "id": "profile_page_profilepage",
-      "community": 262,
+      "community": 275,
       "norm_label": "profilepage()"
     },
     {
@@ -20682,7 +20745,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_users_detail_page_tsx",
-      "community": 253,
+      "community": 218,
       "norm_label": "page.tsx"
     },
     {
@@ -20691,7 +20754,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L30",
       "id": "detail_page_formatlocation",
-      "community": 253,
+      "community": 218,
       "norm_label": "formatlocation()"
     },
     {
@@ -20700,7 +20763,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L42",
       "id": "detail_page_formatprice",
-      "community": 253,
+      "community": 218,
       "norm_label": "formatprice()"
     },
     {
@@ -20709,7 +20772,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L56",
       "id": "detail_page_formatsubscriptionlabel",
-      "community": 253,
+      "community": 218,
       "norm_label": "formatsubscriptionlabel()"
     },
     {
@@ -20718,7 +20781,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L60",
       "id": "detail_page_userdetailpage",
-      "community": 253,
+      "community": 218,
       "norm_label": "userdetailpage()"
     },
     {
@@ -21015,7 +21078,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_profile_edit_form_tsx",
-      "community": 262,
+      "community": 275,
       "norm_label": "profile-edit-form.tsx"
     },
     {
@@ -21024,7 +21087,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L10",
       "id": "components_profile_edit_form_profileeditformprops",
-      "community": 262,
+      "community": 275,
       "norm_label": "profileeditformprops"
     },
     {
@@ -21033,7 +21096,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L17",
       "id": "components_profile_edit_form_profileupdatestate",
-      "community": 262,
+      "community": 275,
       "norm_label": "profileupdatestate"
     },
     {
@@ -21042,7 +21105,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L22",
       "id": "components_profile_edit_form_initialstate",
-      "community": 262,
+      "community": 275,
       "norm_label": "initialstate"
     },
     {
@@ -21051,7 +21114,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L24",
       "id": "components_profile_edit_form_savebutton",
-      "community": 262,
+      "community": 275,
       "norm_label": "savebutton()"
     },
     {
@@ -21060,7 +21123,7 @@
       "source_file": "CMS-portal/src/components/profile-edit-form.tsx",
       "source_location": "L39",
       "id": "components_profile_edit_form_profileeditform",
-      "community": 262,
+      "community": 275,
       "norm_label": "profileeditform()"
     },
     {
@@ -21141,7 +21204,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_user_profile_edit_form_tsx",
-      "community": 218,
+      "community": 247,
       "norm_label": "user-profile-edit-form.tsx"
     },
     {
@@ -21150,7 +21213,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_user_profile_edit_form_userprofileeditformprops",
-      "community": 218,
+      "community": 247,
       "norm_label": "userprofileeditformprops"
     },
     {
@@ -21159,7 +21222,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L27",
       "id": "components_user_profile_edit_form_initialstate",
-      "community": 218,
+      "community": 247,
       "norm_label": "initialstate"
     },
     {
@@ -21168,7 +21231,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L29",
       "id": "components_user_profile_edit_form_savebutton",
-      "community": 218,
+      "community": 247,
       "norm_label": "savebutton()"
     },
     {
@@ -21177,7 +21240,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L44",
       "id": "components_user_profile_edit_form_userprofileeditform",
-      "community": 218,
+      "community": 247,
       "norm_label": "userprofileeditform()"
     },
     {
@@ -21186,7 +21249,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_showroom_profile_edit_form_tsx",
-      "community": 267,
+      "community": 247,
       "norm_label": "showroom-profile-edit-form.tsx"
     },
     {
@@ -21195,7 +21258,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_showroom_profile_edit_form_showroomprofileeditformprops",
-      "community": 267,
+      "community": 247,
       "norm_label": "showroomprofileeditformprops"
     },
     {
@@ -21204,7 +21267,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L31",
       "id": "components_showroom_profile_edit_form_initialstate",
-      "community": 267,
+      "community": 247,
       "norm_label": "initialstate"
     },
     {
@@ -21213,7 +21276,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L33",
       "id": "components_showroom_profile_edit_form_savebutton",
-      "community": 267,
+      "community": 247,
       "norm_label": "savebutton()"
     },
     {
@@ -21222,7 +21285,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L48",
       "id": "components_showroom_profile_edit_form_formatlocation",
-      "community": 267,
+      "community": 247,
       "norm_label": "formatlocation()"
     },
     {
@@ -21231,7 +21294,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L62",
       "id": "components_showroom_profile_edit_form_showroomprofileeditform",
-      "community": 267,
+      "community": 247,
       "norm_label": "showroomprofileeditform()"
     },
     {
@@ -21888,7 +21951,7 @@
       "source_file": "CMS-portal/src/components/showroom-member-manager.tsx",
       "source_location": "L189",
       "id": "components_showroom_member_manager_assignmemberform",
-      "community": 247,
+      "community": 159,
       "norm_label": "assignmemberform()"
     },
     {
@@ -22581,7 +22644,7 @@
       "source_file": "CMS-portal/src/lib/moderator-types.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_moderator_types_ts",
-      "community": 199,
+      "community": 262,
       "norm_label": "moderator-types.ts"
     },
     {
@@ -22590,7 +22653,7 @@
       "source_file": "CMS-portal/src/lib/moderator-types.ts",
       "source_location": "L1",
       "id": "lib_moderator_types_moderatorroleoption",
-      "community": 199,
+      "community": 262,
       "norm_label": "moderatorroleoption"
     },
     {
@@ -23022,7 +23085,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L221",
       "id": "lib_showrooms_listshowroomoptions",
-      "community": 253,
+      "community": 218,
       "norm_label": "listshowroomoptions()"
     },
     {
@@ -23355,7 +23418,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L431",
       "id": "lib_subscriptions_createsubscriptionplan",
-      "community": 158,
+      "community": 244,
       "norm_label": "createsubscriptionplan()"
     },
     {
@@ -23364,7 +23427,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L502",
       "id": "lib_subscriptions_updatesubscriptionplan",
-      "community": 158,
+      "community": 258,
       "norm_label": "updatesubscriptionplan()"
     },
     {
@@ -23409,7 +23472,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L683",
       "id": "lib_subscriptions_upsertplanpricingtiers",
-      "community": 158,
+      "community": 258,
       "norm_label": "upsertplanpricingtiers()"
     },
     {
@@ -23418,7 +23481,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L745",
       "id": "lib_subscriptions_updatesubscriptionpricing",
-      "community": 158,
+      "community": 258,
       "norm_label": "updatesubscriptionpricing()"
     },
     {
@@ -23427,7 +23490,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L770",
       "id": "lib_subscriptions_updatesubscriptionplanfeature",
-      "community": 158,
+      "community": 258,
       "norm_label": "updatesubscriptionplanfeature()"
     },
     {
@@ -23670,7 +23733,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L201",
       "id": "lib_users_listuseroptions",
-      "community": 264,
+      "community": 253,
       "norm_label": "listuseroptions()"
     },
     {
@@ -23679,7 +23742,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L221",
       "id": "lib_users_listuserroleoptions",
-      "community": 253,
+      "community": 218,
       "norm_label": "listuserroleoptions()"
     },
     {
@@ -23697,7 +23760,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L344",
       "id": "lib_users_getuserdetail",
-      "community": 232,
+      "community": 218,
       "norm_label": "getuserdetail()"
     },
     {
@@ -23760,7 +23823,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_user_detail_selection_ts",
-      "community": 220,
+      "community": 218,
       "norm_label": "user-detail-selection.ts"
     },
     {
@@ -23769,7 +23832,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L10",
       "id": "lib_user_detail_selection_getselectionkey",
-      "community": 220,
+      "community": 218,
       "norm_label": "getselectionkey()"
     },
     {
@@ -23778,7 +23841,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L20",
       "id": "lib_user_detail_selection_setselecteduserdetail",
-      "community": 220,
+      "community": 218,
       "norm_label": "setselecteduserdetail()"
     },
     {
@@ -23787,7 +23850,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L41",
       "id": "lib_user_detail_selection_getselecteduserdetailid",
-      "community": 220,
+      "community": 218,
       "norm_label": "getselecteduserdetailid()"
     },
     {
@@ -23931,7 +23994,7 @@
       "source_file": "CMS-portal/src/lib/auth.ts",
       "source_location": "L251",
       "id": "lib_auth_requiremoderator",
-      "community": 220,
+      "community": 158,
       "norm_label": "requiremoderator()"
     },
     {
@@ -24714,7 +24777,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L123",
       "id": "staging_readme_step_3_configure_environment",
-      "community": 125,
+      "community": 278,
       "norm_label": "step 3 \u2014 configure environment"
     },
     {
@@ -24723,7 +24786,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L127",
       "id": "staging_readme_codeblock_8",
-      "community": 125,
+      "community": 278,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -24732,7 +24795,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L136",
       "id": "staging_readme_codeblock_9",
-      "community": 125,
+      "community": 278,
       "norm_label": "code:bash (openssl rand -hex 32)"
     },
     {
@@ -24741,7 +24804,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L142",
       "id": "staging_readme_bootstrap_scripts",
-      "community": 125,
+      "community": 277,
       "norm_label": "bootstrap scripts"
     },
     {
@@ -24750,7 +24813,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L147",
       "id": "staging_readme_codeblock_10",
-      "community": 125,
+      "community": 277,
       "norm_label": "code:bash (# installs nginx if missing, copies nginx.conf, enables site)"
     },
     {
@@ -24759,7 +24822,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L153",
       "id": "staging_readme_codeblock_11",
-      "community": 125,
+      "community": 277,
       "norm_label": "code:bash (# installs certbot, obtains let's encrypt cert, tests renewa)"
     },
     {
@@ -24885,7 +24948,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L347",
       "id": "staging_readme_codeblock_18",
-      "community": 136,
+      "community": 276,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -24912,7 +24975,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L363",
       "id": "staging_readme_update_api_image_only_no_postgres_restart",
-      "community": 136,
+      "community": 276,
       "norm_label": "update api image only (no postgres restart)"
     },
     {
@@ -24921,7 +24984,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L365",
       "id": "staging_readme_codeblock_20",
-      "community": 136,
+      "community": 276,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -24948,7 +25011,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L380",
       "id": "staging_readme_view_logs",
-      "community": 136,
+      "community": 276,
       "norm_label": "view logs"
     },
     {
@@ -24957,7 +25020,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L382",
       "id": "staging_readme_codeblock_22",
-      "community": 136,
+      "community": 276,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -24993,7 +25056,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L412",
       "id": "staging_readme_codeblock_24",
-      "community": 270,
+      "community": 136,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -25011,7 +25074,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L427",
       "id": "staging_readme_database_restore",
-      "community": 270,
+      "community": 136,
       "norm_label": "database restore"
     },
     {
@@ -25020,7 +25083,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L429",
       "id": "staging_readme_codeblock_26",
-      "community": 270,
+      "community": 125,
       "norm_label": "code:bash (cd /opt/dms-api-server/deploy/staging)"
     },
     {
@@ -25047,7 +25110,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L445",
       "id": "staging_readme_security_exposed_ports",
-      "community": 270,
+      "community": 125,
       "norm_label": "security: exposed ports"
     },
     {
@@ -25056,7 +25119,7 @@
       "source_file": "deploy/staging/README.md",
       "source_location": "L463",
       "id": "staging_readme_codeblock_28",
-      "community": 270,
+      "community": 125,
       "norm_label": "code:bash (# from an external machine:)"
     },
     {
@@ -28663,7 +28726,7 @@
       "label": "code:json ({)",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L61",
+      "source_location": "L69",
       "id": "modules_vehicle_codeblock_1",
       "community": 95,
       "norm_label": "code:json ({)"
@@ -28672,7 +28735,7 @@
       "label": "GET /api/v1/vehicle/:id \u2014 Get Vehicle Details",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L75",
+      "source_location": "L83",
       "id": "modules_vehicle_get_api_v1_vehicle_id_get_vehicle_details",
       "community": 95,
       "norm_label": "get /api/v1/vehicle/:id \u2014 get vehicle details"
@@ -28681,7 +28744,7 @@
       "label": "PATCH /api/v1/vehicle/:id \u2014 Update Vehicle Core Fields",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L87",
+      "source_location": "L95",
       "id": "modules_vehicle_patch_api_v1_vehicle_id_update_vehicle_core_fields",
       "community": 95,
       "norm_label": "patch /api/v1/vehicle/:id \u2014 update vehicle core fields"
@@ -28690,7 +28753,7 @@
       "label": "PATCH /api/v1/vehicle/:id/pricing \u2014 Update Vehicle Pricing",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L126",
+      "source_location": "L134",
       "id": "modules_vehicle_patch_api_v1_vehicle_id_pricing_update_vehicle_pricing",
       "community": 95,
       "norm_label": "patch /api/v1/vehicle/:id/pricing \u2014 update vehicle pricing"
@@ -28699,7 +28762,7 @@
       "label": "GET /api/v1/vehicle/public-listing \u2014 Public Showroom Vehicle Listing",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L155",
+      "source_location": "L163",
       "id": "modules_vehicle_get_api_v1_vehicle_public_listing_public_showroom_vehicle_listing",
       "community": 95,
       "norm_label": "get /api/v1/vehicle/public-listing \u2014 public showroom vehicle listing"
@@ -28708,7 +28771,7 @@
       "label": "code:json ({)",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L187",
+      "source_location": "L195",
       "id": "modules_vehicle_codeblock_2",
       "community": 95,
       "norm_label": "code:json ({)"
@@ -28717,7 +28780,7 @@
       "label": "POST /api/v1/vehicle/:id/expense \u2014 Add Vehicle Expense",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L201",
+      "source_location": "L209",
       "id": "modules_vehicle_post_api_v1_vehicle_id_expense_add_vehicle_expense",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/expense \u2014 add vehicle expense"
@@ -28726,7 +28789,7 @@
       "label": "POST /api/v1/vehicle/:id/showroom \u2014 Assign Vehicle to Showroom",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L239",
+      "source_location": "L247",
       "id": "modules_vehicle_post_api_v1_vehicle_id_showroom_assign_vehicle_to_showroom",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/showroom \u2014 assign vehicle to showroom"
@@ -28735,7 +28798,7 @@
       "label": "POST /api/v1/vehicle/:id/image \u2014 Upload Vehicle Photo",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L277",
+      "source_location": "L285",
       "id": "modules_vehicle_post_api_v1_vehicle_id_image_upload_vehicle_photo",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/image \u2014 upload vehicle photo"
@@ -28744,7 +28807,7 @@
       "label": "DELETE /api/v1/vehicle/:id/image/:image_id \u2014 Soft-delete Vehicle Photo",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L307",
+      "source_location": "L315",
       "id": "modules_vehicle_delete_api_v1_vehicle_id_image_image_id_soft_delete_vehicle_photo",
       "community": 95,
       "norm_label": "delete /api/v1/vehicle/:id/image/:image_id \u2014 soft-delete vehicle photo"
@@ -28753,7 +28816,7 @@
       "label": "Documentation Update Checklist",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L328",
+      "source_location": "L336",
       "id": "modules_vehicle_documentation_update_checklist",
       "community": 95,
       "norm_label": "documentation update checklist"
@@ -29024,7 +29087,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L38",
-      "community": 159,
+      "community": 206,
       "norm_label": "showroomdetailmember",
       "id": "lib_showrooms_showroomdetailmember"
     },
@@ -29645,7 +29708,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L14",
-      "community": 276,
+      "community": 175,
       "norm_label": "fakeauthservice",
       "id": "auth_fakeauthservice"
     },
@@ -29654,7 +29717,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L16",
-      "community": 276,
+      "community": 175,
       "norm_label": ".register()",
       "id": "auth_fakeauthservice_register"
     },
@@ -29663,7 +29726,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L20",
-      "community": 276,
+      "community": 175,
       "norm_label": ".login()",
       "id": "auth_fakeauthservice_login"
     },
@@ -29672,7 +29735,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L24",
-      "community": 276,
+      "community": 175,
       "norm_label": ".verifyotp()",
       "id": "auth_fakeauthservice_verifyotp"
     },
@@ -29681,7 +29744,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L33",
-      "community": 276,
+      "community": 175,
       "norm_label": ".refreshtoken()",
       "id": "auth_fakeauthservice_refreshtoken"
     },
@@ -29690,7 +29753,7 @@
       "file_type": "code",
       "source_file": "internal/auth/handler_test.go",
       "source_location": "L42",
-      "community": 276,
+      "community": 175,
       "norm_label": ".logout()",
       "id": "auth_fakeauthservice_logout"
     },
@@ -32504,9 +32567,9 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L772",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_service_test_go",
-      "target": "vehicle_service_test_testlistvehicles_defaultallstatuses",
-      "confidence_score": 1.0
+      "target": "vehicle_service_test_testlistvehicles_defaultallstatuses"
     },
     {
       "relation": "contains",
@@ -32557,6 +32620,16 @@
       "confidence_score": 1.0,
       "source": "tests_unit_vehicle_service_test_go",
       "target": "vehicle_service_test_testlistvehicles_withstatusandpricing"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/service_test.go",
+      "source_location": "L942",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_service_test_go",
+      "target": "vehicle_service_test_testlistvehicles_zeroshowroomid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33899,9 +33972,9 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L774",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service_test_testlistvehicles_defaultallstatuses",
-      "target": "vehicle_service_test_newtestservice",
-      "confidence_score": 1.0
+      "target": "vehicle_service_test_newtestservice"
     },
     {
       "relation": "calls",
@@ -33957,6 +34030,17 @@
       "confidence_score": 1.0,
       "source": "vehicle_service_test_testlistvehicles_withstatusandpricing",
       "target": "vehicle_service_test_newtestservice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/service_test.go",
+      "source_location": "L944",
+      "weight": 1.0,
+      "source": "vehicle_service_test_testlistvehicles_zeroshowroomid",
+      "target": "vehicle_service_test_newtestservice",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -36079,6 +36163,56 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L286",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_listvehicles_missingshowroomid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_listvehicles_zeroshowroomid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L320",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_listvehicles_missingshowroomroles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L336",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_listvehicles_wrongshowroomrolestype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_listvehicles_notshowroommember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L252",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -37101,6 +37235,61 @@
       "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_listvehicles_success",
       "target": "vehicle_mockhandlerservice_listvehicles"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_listvehicles_missingshowroomid",
+      "target": "vehicle_mockhandlerservice_listvehicles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L314",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_listvehicles_zeroshowroomid",
+      "target": "vehicle_mockhandlerservice_listvehicles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L330",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_listvehicles_missingshowroomroles",
+      "target": "vehicle_mockhandlerservice_listvehicles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L347",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_listvehicles_wrongshowroomrolestype",
+      "target": "vehicle_mockhandlerservice_listvehicles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_listvehicles_notshowroommember",
+      "target": "vehicle_mockhandlerservice_listvehicles",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -38811,9 +39000,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L259",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_repository_gorm_test_go",
-      "target": "vehicle_repository_gorm_test_testvehiclerepositorylist_emptystatusincludesall",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_testvehiclerepositorylist_emptystatusincludesall"
     },
     {
       "relation": "contains",
@@ -38821,8 +39010,18 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L276",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_repository_gorm_test_go",
-      "target": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_emptystatusincludesall",
+      "target": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_emptystatusincludesall"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/repository_gorm_test.go",
+      "source_location": "L299",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_repository_gorm_test_go",
+      "target": "vehicle_repository_gorm_test_testvehiclerepositorylist_scopestoshowroom",
       "confidence_score": 1.0
     },
     {
@@ -39352,9 +39551,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L260",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_gorm_test_testvehiclerepositorylist_emptystatusincludesall",
-      "target": "vehicle_repository_gorm_test_newvehiclemockdb",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_newvehiclemockdb"
     },
     {
       "relation": "calls",
@@ -39363,7 +39562,18 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L277",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_gorm_test_testvehiclerepositorycountbytype_emptystatusincludesall",
+      "target": "vehicle_repository_gorm_test_newvehiclemockdb"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/repository_gorm_test.go",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "vehicle_repository_gorm_test_testvehiclerepositorylist_scopestoshowroom",
       "target": "vehicle_repository_gorm_test_newvehiclemockdb",
       "confidence_score": 1.0
     },
@@ -55000,6 +55210,17 @@
       "weight": 1.0,
       "source": "vehicle_handler_createvehicle",
       "target": "response_error_fromerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/handler.go",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "vehicle_handler_listvehicles",
+      "target": "vehicle_handler_extractshowroomroles",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -88329,5 +88550,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c511f164c2600ee157471c3fbd47aed4a22c5054"
+  "built_at_commit": "8c87e136f68ecf8b187f29b6ebb8c7cf3fd2a5a5"
 }
