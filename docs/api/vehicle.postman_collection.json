@@ -88,7 +88,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20",
+              "raw": "{{base_url}}/api/v1/vehicle/listing?page=1&limit=20",
               "host": [
                 "{{base_url}}"
               ],
@@ -101,8 +101,9 @@
               "query": [
                 {
                   "key": "status",
-                  "value": "ready_for_sale",
-                  "description": "Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: ready_for_sale"
+                  "value": "",
+                  "description": "Filter by status (repeatable). Values: garage, inspection, ready_for_sale, sold. Default: all statuses",
+                  "disabled": true
                 },
                 {
                   "key": "type",
@@ -134,7 +135,7 @@
                 }
               ]
             },
-            "description": "List vehicles grouped by category (cars, bikes, scooties). Supports filtering by status, type, and price range with pagination."
+            "description": "List vehicles grouped by category (cars, bikes, scooties). Defaults to all statuses. Supports filtering by status, type, and price range with pagination (page/limit)."
           },
           "response": [
             {

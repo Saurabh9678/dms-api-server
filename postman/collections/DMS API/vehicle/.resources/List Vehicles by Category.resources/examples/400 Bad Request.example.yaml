@@ -1,6 +1,6 @@
 $kind: http-example
 request:
-  url: "{{base_url}}/api/v1/vehicle/listing?status=ready_for_sale&page=1&limit=20"
+  url: "{{base_url}}/api/v1/vehicle/listing?page=1&limit=20"
   method: GET
   headers:
     X-Platform: web

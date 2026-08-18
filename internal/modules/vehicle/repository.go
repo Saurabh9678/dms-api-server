@@ -324,7 +324,7 @@ LEFT JOIN LATERAL (
   ORDER BY id DESC LIMIT 1
 ) vp ON true
 WHERE v.deleted_at IS NULL
-  AND vs.status IN (?)
+  AND (? OR vs.status IN (?))
   AND (? OR v.type IN (?))
   AND (? OR vp.price_tag >= ?)
   AND (? OR vp.price_tag <= ?)
@@ -340,6 +340,7 @@ ORDER BY v.id DESC`
 		types[i] = string(t)
 	}
 
+	noStatusFilter := len(statuses) == 0
 	noTypeFilter := len(types) == 0
 	noMinPrice := filter.MinPrice == nil
 	noMaxPrice := filter.MaxPrice == nil
@@ -354,7 +355,7 @@ ORDER BY v.id DESC`
 	}
 
 	args := []interface{}{
-		statuses,
+		noStatusFilter, statuses,
 		noTypeFilter, types,
 		noMinPrice, minPrice,
 		noMaxPrice, maxPrice,

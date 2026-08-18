@@ -203,12 +203,8 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 	}
 
 	statuses := make([]VehicleStatusType, 0, len(query.Statuses))
-	if len(query.Statuses) == 0 {
-		statuses = append(statuses, VehicleStatusTypeReadyForSale)
-	} else {
-		for _, s := range query.Statuses {
-			statuses = append(statuses, VehicleStatusType(s))
-		}
+	for _, s := range query.Statuses {
+		statuses = append(statuses, VehicleStatusType(s))
 	}
 
 	types := make([]VehicleType, 0, len(query.VehicleTypes))

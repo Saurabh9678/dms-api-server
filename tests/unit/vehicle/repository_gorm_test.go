@@ -256,6 +256,37 @@ func TestVehicleRepositoryList_UsesInClauseForTypeFilter(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
+func TestVehicleRepositoryList_EmptyStatusIncludesAll(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`OR vs\.status IN \(`).WillReturnRows(sqlmock.NewRows([]string{"id"}))
+
+	filter := vehicle.ListFilter{
+		Page:  1,
+		Limit: 20,
+	}
+
+	results, err := repo.List(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestVehicleRepositoryCountByType_EmptyStatusIncludesAll(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
+		AddRow("car", int64(4))
+	mock.ExpectQuery(`OR vs\.status IN \(`).WillReturnRows(rows)
+
+	counts, err := repo.CountByType(context.Background(), vehicle.ListFilter{Page: 1, Limit: 20})
+	assert.NoError(t, err)
+	assert.Equal(t, int64(4), counts[vehicle.VehicleTypeCar])
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
 func TestGetByIDWithFullDetails_NotFound(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)

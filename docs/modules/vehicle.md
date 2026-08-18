@@ -35,22 +35,22 @@
 2. Handler: `ShouldBindQuery` → calls `service.ListVehicles`
 3. Service:
    - Validates query (page ≥ 1, limit 1–100, valid status/type enums, min_price ≤ max_price)
-   - Defaults `status` to `ready_for_sale` when empty
-   - Calls `repo.CountByType` → per-category totals
-   - Calls `repo.List` → paginated vehicles with current status + pricing
+   - Omits `status` filter when empty (all current statuses); otherwise filters to requested statuses
+   - Calls `repo.CountByType` → per-category totals (same filters as the page query)
+   - Calls `repo.List` → paginated vehicles with current status + pricing (`LIMIT`/`OFFSET` on the combined result ordered by `v.id DESC`)
    - Groups results by vehicle_type (car/bike/scooty)
    - Returns `ListVehiclesResponse` with only requested categories (omits unmatched when type filter applied)
 4. Repository:
    - Uses LATERAL JOIN to get latest `vehicle_statuses` row (by `id DESC`) as current status
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
-   - Applies filters: `vs.status IN (statuses)`, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
-   - Paginates with `LIMIT/OFFSET`
+   - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
+   - Paginates with `LIMIT/OFFSET` (defaults: page 1, limit 20, max 100). `total` is the full matching count per type; `vehicles[]` is the current page only.
 5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`
 
 **Query Parameters:**
 | Param | Default | Notes |
 |---|---|---|
-| `status` (repeatable) | `ready_for_sale` | garage, inspection, ready_for_sale, sold |
+| `status` (repeatable) | all statuses | garage, inspection, ready_for_sale, sold |
 | `type` (repeatable) | all types | car, bike, scooty |
 | `min_price` | — | filters on `price_tag` |
 | `max_price` | — | filters on `price_tag` |
