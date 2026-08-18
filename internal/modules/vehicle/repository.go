@@ -200,7 +200,18 @@ func (r *Repository) UpdatePricingFields(ctx context.Context, vehicleID uint64, 
 }
 
 func (r *Repository) Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error) {
-	if err := r.db.WithContext(ctx).Create(vehicle).Error; err != nil {
+	err := r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(vehicle).Error; err != nil {
+			return err
+		}
+		status := VehicleStatus{
+			VehicleID: vehicle.ID,
+			Status:    VehicleStatusTypeGarage,
+			StartedAt: time.Now(),
+		}
+		return tx.Select("VehicleID", "Status", "StartedAt").Create(&status).Error
+	})
+	if err != nil {
 		return nil, err
 	}
 	return vehicle, nil

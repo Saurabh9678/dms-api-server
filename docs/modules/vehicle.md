@@ -23,7 +23,7 @@
 1. `POST /api/v1/vehicle` → `RequireDeviceContext` → `RequireAuth` → `vehicle.Handler.CreateVehicle`
 2. Handler: `ShouldBindJSON` → calls `service.CreateVehicle`
 3. Service: validates all fields (type, manufacturer, model, variant, color, year, RTO, registration, state, usageKM, fuel, transmission) → calls `repo.Create`
-4. Repository: GORM `Create` on `vehicles` table
+4. Repository: in one transaction, GORM `Create` on `vehicles`, then inserts `vehicle_statuses` with `status = garage` and `started_at = now` (`added_by`, `description`, and `ended_at` left null)
 5. Response: `201 Created` with vehicle fields
 
 ---

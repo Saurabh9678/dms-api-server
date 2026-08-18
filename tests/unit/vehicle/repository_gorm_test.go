@@ -46,12 +46,15 @@ func TestVehicleRepositoryCreateSuccess(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectQuery(`INSERT INTO "vehicles" \("type"`).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
 	mock.ExpectCommit()
 
 	v := &vehicle.Vehicle{VehicleType: "sedan"}
 	result, err := repo.Create(context.Background(), v)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
+	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
 func TestVehicleRepositoryCreateError(t *testing.T) {
@@ -65,6 +68,23 @@ func TestVehicleRepositoryCreateError(t *testing.T) {
 
 	_, err := repo.Create(context.Background(), &vehicle.Vehicle{})
 	assert.Error(t, err)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestVehicleRepositoryCreate_StatusInsertError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicles" \("type"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(1)))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.Create(context.Background(), &vehicle.Vehicle{VehicleType: "car"})
+	assert.Error(t, err)
+	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
 func TestVehicleRepositoryList_Success(t *testing.T) {
