@@ -87,6 +87,9 @@ resolve_test_targets() {
 		# middleware unit tests live in tests/unit/middleware/
 		targets="./tests/unit/middleware/..."
 		;;
+	pkg/response)
+		targets="./tests/unit/response/..."
+		;;
 	pkg/config)
 		# config has whitebox tests inside the package alongside external tests
 		targets="./tests/... ./${pkg_dir}/..."

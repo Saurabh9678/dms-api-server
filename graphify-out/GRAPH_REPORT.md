@@ -1,16 +1,16 @@
-# Graph Report - dms-api-server  (2026-08-18)
+# Graph Report - dms-api-server  (2026-08-20)
 
 ## Corpus Check
-- 334 files · ~262,072 words
+- 336 files · ~262,338 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3505 nodes · 5503 edges · 277 communities (224 shown, 53 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 364 edges (avg confidence: 0.8)
+- 3512 nodes · 5514 edges · 281 communities (226 shown, 55 thin omitted)
+- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 370 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cc1aae2d`
+- Built from commit: `8151276f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -228,6 +228,7 @@
 - [[_COMMUNITY_Community 262|Community 262]]
 - [[_COMMUNITY_Community 263|Community 263]]
 - [[_COMMUNITY_Community 264|Community 264]]
+- [[_COMMUNITY_Community 265|Community 265]]
 - [[_COMMUNITY_Community 266|Community 266]]
 - [[_COMMUNITY_Community 267|Community 267]]
 - [[_COMMUNITY_Community 268|Community 268]]
@@ -237,6 +238,8 @@
 - [[_COMMUNITY_Community 272|Community 272]]
 - [[_COMMUNITY_Community 273|Community 273]]
 - [[_COMMUNITY_Community 274|Community 274]]
+- [[_COMMUNITY_Community 275|Community 275]]
+- [[_COMMUNITY_Community 276|Community 276]]
 - [[_COMMUNITY_Community 278|Community 278]]
 - [[_COMMUNITY_Community 279|Community 279]]
 - [[_COMMUNITY_Community 283|Community 283]]
@@ -265,15 +268,15 @@
 - `main()` --calls--> `NewApp()`  [INFERRED]
   cmd/server/main.go → internal/bootstrap/app.go
 
-## Communities (277 total, 53 thin omitted)
+## Communities (281 total, 55 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
 Nodes (5): fakeOTPRepo, fakeOTPSender, fakeSessionRepo, fakeTokenService, fakeUserRepo
 
 ### Community 1 - "Community 1"
-Cohesion: 0.11
-Nodes (34): addShowroomMemberAction(), addUserMembershipAction(), openShowroomDetailAction(), openUserDetailAction(), openVehicleDetailAction(), parseRequiredID(), readActiveSelectedShowroomID(), readActiveSelectedUserID() (+26 more)
+Cohesion: 0.15
+Nodes (25): addShowroomMemberAction(), addUserMembershipAction(), createShowroomVehicleAction(), openShowroomDetailAction(), openUserDetailAction(), openVehicleDetailAction(), parseRequiredID(), readActiveSelectedShowroomID() (+17 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.11
@@ -324,8 +327,8 @@ Cohesion: 0.16
 Nodes (33): newAuthMockDB(), TestNewOTPRepository(), TestNewSessionRepository(), TestOTPRepositoryCountRecentByPhone_DBError(), TestOTPRepositoryCountRecentByPhone_NonZero(), TestOTPRepositoryCountRecentByPhone_Zero(), TestOTPRepositoryCreate_DBError(), TestOTPRepositoryCreate_Success() (+25 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.06
-Nodes (27): authHeaders, Handler, bindAuthHeaders(), extractBearerToken(), Handler, dashboardShowroomRoles(), TestHealthRouteShape(), Created() (+19 more)
+Cohesion: 0.05
+Nodes (30): authHeaders, Handler, bindAuthHeaders(), extractBearerToken(), Handler, dashboardShowroomRoles(), TestHealthRouteShape(), Created() (+22 more)
 
 ### Community 30 - "Community 30"
 Cohesion: 0.11
@@ -360,16 +363,16 @@ Cohesion: 0.09
 Nodes (11): ListFilter, PublicListFilter, Repository, buildListQuery(), buildPublicListQuery(), saleRow, VehicleFullDetails, vehicleRow (+3 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.07
-Nodes (55): newVehicleMockDB(), TestGetByIDWithFullDetails_DBError(), TestGetByIDWithFullDetails_NotFound(), TestGetByIDWithFullDetails_Success(), TestGetByIDWithFullDetails_WithSaleInfo(), TestRepo_AssignShowroom_DBError(), TestRepo_AssignShowroom_Success(), TestRepo_CreateImage_Error() (+47 more)
+Cohesion: 0.06
+Nodes (58): False, TestError_Envelope(), newVehicleMockDB(), TestGetByIDWithFullDetails_DBError(), TestGetByIDWithFullDetails_NotFound(), TestGetByIDWithFullDetails_Success(), TestGetByIDWithFullDetails_WithSaleInfo(), TestRepo_AssignShowroom_DBError() (+50 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.1
 Nodes (5): RunInTx(), ownerRelation, Repository, userRecord, userRole
 
 ### Community 47 - "Community 47"
-Cohesion: 0.18
-Nodes (11): extractBearerToken(), RequireAuth(), TestRecovery_NoPanic(), TestRecovery_PanicReturns500(), TestRequireAuth_InvalidBearerFormat(), TestRequireAuth_NoAuthHeader(), TestRequireAuth_ParseError(), TestRequireAuth_Success() (+3 more)
+Cohesion: 0.11
+Nodes (18): newRouter(), extractBearerToken(), RequireAuth(), TestRecovery_NoPanic(), TestRecovery_PanicReturns500(), TestRequestID_GeneratesWhenMissing(), TestRequestID_WithExistingHeader(), TestRequestLog() (+10 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.4
@@ -544,8 +547,8 @@ Cohesion: 0.29
 Nodes (6): Columns, Foreign Keys, Indexes, Keys And Constraints, Purpose, `vehicle_statuses` Table
 
 ### Community 124 - "Community 124"
-Cohesion: 0.07
-Nodes (33): fakeErrorAuthService, fakeHandlerAuthService, deviceHeaders(), jsonBody(), newTestEngine(), TestLogin_AlphanumericPhoneRejected(), TestLogin_MissingDeviceHeaders(), TestLogin_ServiceError() (+25 more)
+Cohesion: 0.21
+Nodes (30): deviceHeaders(), jsonBody(), newTestEngine(), TestLogin_AlphanumericPhoneRejected(), TestLogin_MissingDeviceHeaders(), TestLogin_ServiceError(), TestLogin_ValidNumericPhone(), TestLogout_MissingAuthorizationHeader() (+22 more)
 
 ### Community 125 - "Community 125"
 Cohesion: 0.05
@@ -592,8 +595,8 @@ Cohesion: 0.13
 Nodes (14): artifacts, base_branch, current_step_id, modified_files, created, deleted, modified, plan_sha256 (+6 more)
 
 ### Community 136 - "Community 136"
-Cohesion: 0.13
-Nodes (20): deleteSelectedUserAction(), UpdateUserProfileState, UserMembershipManager(), initialState, UserProfileEditForm(), UserProfileEditFormProps, formatPrice(), formatSubscriptionLabel() (+12 more)
+Cohesion: 0.25
+Nodes (9): UserMembershipManager(), dateFormatter, dateTimeFormatter, formatDate(), formatDateTime(), formatPrice(), formatSubscriptionLabel(), UserDetailPage() (+1 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.27
@@ -617,7 +620,7 @@ Nodes (5): mockVehicleRepo, TestGetVehicleShowroomID_NotFound(), TestGetVehicleS
 
 ### Community 142 - "Community 142"
 Cohesion: 0.13
-Nodes (20): activeUsersCutoff(), CountRow, formatPhoneNumber(), formatUserOptionLabel(), listActiveUsers(), listDeletedUsers(), listUsers(), normalizePage() (+12 more)
+Nodes (21): activeUsersCutoff(), CountRow, formatPhoneNumber(), formatUserOptionLabel(), getUserDetail(), listActiveUsers(), listDeletedUsers(), listUsers() (+13 more)
 
 ### Community 143 - "Community 143"
 Cohesion: 0.2
@@ -629,7 +632,7 @@ Nodes (9): fakeDashboardService, newTestEngine(), TestGetDashboardDefaultDuratio
 
 ### Community 146 - "Community 146"
 Cohesion: 0.02
-Nodes (102): Args, At, AtLeast, AtLoose, AtStrict, BatchPayload, BigIntFieldRefInput, BooleanFieldRefInput (+94 more)
+Nodes (101): Args, At, AtLeast, AtLoose, AtStrict, BatchPayload, BigIntFieldRefInput, BooleanFieldRefInput (+93 more)
 
 ### Community 147 - "Community 147"
 Cohesion: 0.29
@@ -638,6 +641,10 @@ Nodes (8): fakeRepoStore, fakeShowroomRolesStore, TestFindByIDReturnsNotFound(),
 ### Community 148 - "Community 148"
 Cohesion: 0.2
 Nodes (9): base_branch, branch, commit_sha, completed_at, pr_number, pr_url, session_id, validation_status (+1 more)
+
+### Community 149 - "Community 149"
+Cohesion: 0.22
+Nodes (5): gcsClientStore, gcsObjectStore, gcsObjectWriter, GCSProvider, gcsWriteCloser
 
 ### Community 151 - "Community 151"
 Cohesion: 0.29
@@ -669,15 +676,15 @@ Nodes (50): employeeRoles(), errorOpener(), existingShowroom(), inMemoryOpener()
 
 ### Community 158 - "Community 158"
 Cohesion: 0.04
-Nodes (69): AddShowroomMemberFields, AddUserMembershipFields, AddVehicleExpenseFields, buildGeolocation(), CountRow, createSelectedSubscriptionPricingAction(), createShowroomAction(), CreateShowroomFields (+61 more)
+Nodes (80): addSelectedVehicleExpenseAction(), AddShowroomMemberFields, AddUserMembershipFields, AddVehicleExpenseFields, buildGeolocation(), CountRow, createSelectedSubscriptionPricingAction(), createShowroomAction() (+72 more)
 
 ### Community 159 - "Community 159"
-Cohesion: 0.09
-Nodes (19): AddShowroomMemberState, CreateShowroomState, RemoveShowroomMemberState, UpdateShowroomMemberRoleState, SearchableSelect(), SearchableSelectOption, SearchableSelectProps, initialState (+11 more)
+Cohesion: 0.07
+Nodes (29): AddShowroomMemberState, AddUserMembershipState, CreateUserState, RemoveShowroomMemberState, RemoveUserMembershipState, UpdateShowroomMemberRoleState, UpdateUserMembershipRoleState, SearchableSelect() (+21 more)
 
 ### Community 162 - "Community 162"
-Cohesion: 0.22
-Nodes (9): ShowroomCreateForm(), listShowrooms(), normalizePage(), dateFormatter, getStringParam(), pageHref(), parsePage(), ShowroomsPage() (+1 more)
+Cohesion: 0.15
+Nodes (12): CreateShowroomState, initialState, ShowroomCreateForm(), ShowroomCreateFormProps, listUserOptions(), UserOption, dateFormatter, getStringParam() (+4 more)
 
 ### Community 163 - "Community 163"
 Cohesion: 0.4
@@ -705,11 +712,11 @@ Nodes (4): Currency, isValidCurrency(), toPricingResponse(), VehiclePricing
 
 ### Community 174 - "Community 174"
 Cohesion: 0.04
-Nodes (65): addSelectedVehicleExpenseAction(), AddVehicleExpenseState, CreateVehicleState, deleteSelectedVehicleAction(), deleteSelectedVehicleDocumentAction(), deleteSelectedVehicleImageAction(), readAddVehicleExpenseFields(), readEditableSelectedVehicle() (+57 more)
+Nodes (56): AddVehicleExpenseState, CreateVehicleState, SoftDeleteMediaState, UpdateVehiclePricingState, UpdateVehicleState, UpdateVehicleStatusState, UploadVehicleMediaState, initialState (+48 more)
 
 ### Community 175 - "Community 175"
-Cohesion: 0.16
-Nodes (11): TestAuthLoginInvalidPlatformHeader(), TestAuthLoginMissingDeviceContextHeaders(), TestAuthLoginRouteShape(), NewHandler(), TestLoginBadRequest(), TestLogoutRequiresAuthorizationHeader(), TestLogoutRequiresPlatformHeader(), TestLogoutSuccessWithAuthorizationHeader() (+3 more)
+Cohesion: 0.12
+Nodes (6): NewHandler(), TestLoginBadRequest(), TestLogoutRequiresAuthorizationHeader(), TestLogoutRequiresPlatformHeader(), TestLogoutSuccessWithAuthorizationHeader(), TestVerifyOTPSuccess()
 
 ### Community 179 - "Community 179"
 Cohesion: 0.12
@@ -741,7 +748,7 @@ Nodes (13): body_content(), build_url(), extract_items(), headers_dict(), indent
 
 ### Community 199 - "Community 199"
 Cohesion: 0.12
-Nodes (22): createModeratorAction(), CreateModeratorFields, CreateModeratorState, removeModeratorAction(), initialState, ModeratorCreateForm(), ModeratorCreateFormProps, Boolean (+14 more)
+Nodes (21): createModeratorAction(), CreateModeratorFields, CreateModeratorState, removeModeratorAction(), initialState, ModeratorCreateForm(), ModeratorCreateFormProps, Boolean (+13 more)
 
 ### Community 201 - "Community 201"
 Cohesion: 0.14
@@ -764,8 +771,8 @@ Cohesion: 0.15
 Nodes (13): NewProvider(), TestNewProvider_GCSSuccess(), NewLocalProvider(), TestLocalProvider_SignedURL_EmptyKey(), TestLocalProvider_SignedURL_ReturnsKey(), TestLocalProvider_Upload_MkdirAllError(), TestLocalProvider_Upload_Success(), TestLocalProvider_Upload_WriteFileError() (+5 more)
 
 ### Community 206 - "Community 206"
-Cohesion: 0.06
-Nodes (31): AddUserMembershipState, CreateUserState, RemoveUserMembershipState, UpdateUserMembershipRoleState, initialState, UserCreateFormProps, initialAddState, initialRemoveState (+23 more)
+Cohesion: 0.1
+Nodes (24): VehicleCreateForm(), CountRow, formatPhoneNumber(), formatRequiredPhoneNumber(), getShowroomDetail(), listShowrooms(), listShowroomVehicles(), normalizePage() (+16 more)
 
 ### Community 207 - "Community 207"
 Cohesion: 0.29
@@ -796,8 +803,8 @@ Cohesion: 0.12
 Nodes (19): activeUsersHref(), ActiveUsersModal(), countFormatter, DashboardPage(), DashboardPageProps, dateFormatter, dateTimeFormatter, deletedUsersHref() (+11 more)
 
 ### Community 218 - "Community 218"
-Cohesion: 0.16
-Nodes (20): deleteSelectedShowroomAction(), dateFormatter, dateTimeFormatter, formatDate(), formatDateTime(), getStringParam(), parsePage(), ShowroomDetailPage() (+12 more)
+Cohesion: 0.15
+Nodes (20): deleteSelectedShowroomAction(), deleteSelectedUserAction(), ShowroomMemberManager(), SubscriptionPlanDetailManager(), dateFormatter, dateTimeFormatter, formatDate(), formatDateTime() (+12 more)
 
 ### Community 220 - "Community 220"
 Cohesion: 0.21
@@ -832,12 +839,12 @@ Cohesion: 0.23
 Nodes (7): Config, otpRepo, Service, generateOTPCode(), generateRequestID(), sessionRepo, userRepo
 
 ### Community 233 - "Community 233"
-Cohesion: 0.12
-Nodes (16): softDeleteSubscriptionFeatureAction(), SoftDeleteSubscriptionFeatureState, updateSubscriptionFeatureAction(), UpdateSubscriptionFeatureState, dateFormatter, FeatureRow(), formatDate(), SubscriptionFeatureManager() (+8 more)
+Cohesion: 0.1
+Nodes (19): CreateSubscriptionFeatureState, softDeleteSubscriptionFeatureAction(), SoftDeleteSubscriptionFeatureState, updateSubscriptionFeatureAction(), UpdateSubscriptionFeatureState, initialState, SubscriptionFeatureCreateForm(), dateFormatter (+11 more)
 
 ### Community 234 - "Community 234"
-Cohesion: 0.33
-Nodes (5): UpdateShowroomProfileState, formatLocation(), initialState, ShowroomProfileEditForm(), ShowroomProfileEditFormProps
+Cohesion: 0.3
+Nodes (9): ShowroomVehicleDetailPage(), getSelectedShowroomDetailID(), getSelectionKey(), setSelectedShowroomDetail(), getSelectedVehicleDetailID(), getSelectionKey(), setSelectedVehicleDetail(), getVehicleDetail() (+1 more)
 
 ### Community 235 - "Community 235"
 Cohesion: 0.29
@@ -848,8 +855,8 @@ Cohesion: 0.29
 Nodes (6): Columns, Foreign Keys Referencing This Table, Keys And Constraints, `moderator_roles` Table, Purpose, Seed Data
 
 ### Community 237 - "Community 237"
-Cohesion: 0.33
-Nodes (3): globalForPrisma, ModeratorRole, PrismaClient
+Cohesion: 0.29
+Nodes (4): globalForPrisma, Moderator, ModeratorRole, PrismaClient
 
 ### Community 238 - "Community 238"
 Cohesion: 0.4
@@ -857,39 +864,39 @@ Nodes (4): code:bash (npm run dev), Deploy on Vercel, Getting Started, Learn Mor
 
 ### Community 244 - "Community 244"
 Cohesion: 0.05
-Nodes (49): CreateSubscriptionPricingState, UpdateSubscriptionPlanFeatureState, UpdateSubscriptionPricingState, createPricingInitialState, FeatureRow(), PricingRow(), SubscriptionPlanDetailManagerProps, BillingCycle (+41 more)
+Nodes (48): CreateSubscriptionPricingState, UpdateSubscriptionPlanFeatureState, UpdateSubscriptionPricingState, createPricingInitialState, FeatureRow(), PricingRow(), SubscriptionPlanDetailManagerProps, BillingCycle (+40 more)
 
 ### Community 245 - "Community 245"
 Cohesion: 0.2
 Nodes (4): Repository, toDomain(), SessionPlatformType, UserSession
 
 ### Community 246 - "Community 246"
-Cohesion: 0.2
-Nodes (8): RequireDeviceContext(), TestRequireDeviceContext_InvalidPlatform(), TestRequireDeviceContext_MissingHeaders(), TestRequireDeviceContext_Success(), fakeRoutesService, TestRegisterRoutesSuccessfulGet(), TestRegisterRoutesSuccessfulPatch(), TestRegisterRoutesUndefinedPath404()
+Cohesion: 0.1
+Nodes (13): TestAuthLoginInvalidPlatformHeader(), TestAuthLoginMissingDeviceContextHeaders(), TestAuthLoginRouteShape(), RegisterRoutes(), smokeAuthService, RequireDeviceContext(), TestRequireDeviceContext_InvalidPlatform(), TestRequireDeviceContext_MissingHeaders() (+5 more)
 
 ### Community 247 - "Community 247"
-Cohesion: 0.07
-Nodes (29): CreateSubscriptionFeatureState, CreateSubscriptionPlanState, UpdateSubscriptionPlanState, geistMono, geistSans, metadata, CopyLoginIDButton(), CopyLoginIDButtonProps (+21 more)
+Cohesion: 0.08
+Nodes (24): UpdateShowroomProfileState, UpdateUserProfileState, geistMono, geistSans, metadata, CopyLoginIDButton(), CopyLoginIDButtonProps, Notification (+16 more)
 
 ### Community 248 - "Community 248"
 Cohesion: 0.31
 Nodes (4): OTPFor, OTPPlatform, UserOTP, UserSession
 
 ### Community 250 - "Community 250"
-Cohesion: 0.28
-Nodes (6): True, TestRegisterShowroomRoutes(), TestRepo_VehicleExistsByID_Exists(), TestRegisterPublicRoutes(), TestRegisterRoutes(), TestRegisterRoutes_NoopMiddlewareUsed()
+Cohesion: 0.22
+Nodes (6): True, TestRegisterShowroomRoutes(), RegisterPublicRoutes(), TestRegisterPublicRoutes(), TestRegisterRoutes(), TestRegisterRoutes_NoopMiddlewareUsed()
 
 ### Community 252 - "Community 252"
 Cohesion: 0.7
 Nodes (4): newMockGormDB(), TestBootstrap_BuildDependencies(), TestBootstrap_NewRouter_DevelopmentMode(), TestBootstrap_NewRouter_ProductionMode()
 
 ### Community 253 - "Community 253"
-Cohesion: 0.22
-Nodes (6): newRouter(), TestRequestID_GeneratesWhenMissing(), TestRequestID_WithExistingHeader(), newRequestID(), RequestID(), RegisterPublicRoutes()
+Cohesion: 0.26
+Nodes (9): fakeGCSStore, newGCSProviderWithStore(), TestGCSProvider_SignedURL_EmptyKey(), TestGCSProvider_SignedURL_InvalidTTL(), TestGCSProvider_SignedURL_StoreError(), TestGCSProvider_SignedURL_Success(), TestGCSProvider_Upload_EmptyKey(), TestGCSProvider_Upload_StoreError() (+1 more)
 
 ### Community 254 - "Community 254"
-Cohesion: 0.18
-Nodes (7): DashboardResponse, ExpenseSummary, GetDashboardRequest, InventorySummary, SalesSummary, Service, VehicleTypeMetrics
+Cohesion: 0.12
+Nodes (9): DashboardResponse, ExpenseSummary, GetDashboardRequest, InventorySummary, SalesSummary, Service, VehicleTypeMetrics, contextKey (+1 more)
 
 ### Community 255 - "Community 255"
 Cohesion: 0.35
@@ -904,24 +911,24 @@ Cohesion: 0.27
 Nodes (7): defaultLoad(), getDurationFromSeconds(), getEnv(), getInt(), Connect(), TestPostgresConnectionFromEnv(), TestPostgresConnectionFromEnv()
 
 ### Community 258 - "Community 258"
-Cohesion: 0.33
-Nodes (7): openSubscriptionPlanDetailAction(), dateFormatter, getStringParam(), pageHref(), parsePage(), SubscriptionsPage(), SubscriptionsPageProps
+Cohesion: 0.11
+Nodes (17): CreateSubscriptionPlanState, UpdateSubscriptionPlanState, RadioCardGroup(), RadioCardGroupProps, RadioCardOption, initialState, SubscriptionPlanCreateForm(), initialState (+9 more)
 
 ### Community 259 - "Community 259"
-Cohesion: 0.09
-Nodes (25): fakeGCSStore, fakeWriteCloser, newGCSClientStore(), NewGCSProvider(), newGCSProviderWithStore(), TestGCSClientStore_NewGCSClientStoreWiresFns(), TestGCSClientStore_UploadSuccessAndErrors(), TestGCSObjectWriter_SetContentType() (+17 more)
+Cohesion: 0.24
+Nodes (11): fakeWriteCloser, newGCSClientStore(), NewGCSProvider(), TestGCSClientStore_NewGCSClientStoreWiresFns(), TestGCSClientStore_UploadSuccessAndErrors(), TestGCSObjectWriter_SetContentType(), TestGCSProvider_Close(), TestGCSProvider_Close_NilStore() (+3 more)
 
 ### Community 261 - "Community 261"
 Cohesion: 0.27
 Nodes (7): getDurationFromSeconds(), getEnv(), getInt(), LoadAuthConfig(), NewDummySender(), DummySender, BuildAuthHandler()
 
 ### Community 262 - "Community 262"
-Cohesion: 0.11
-Nodes (16): updateProfileAction(), iconSizeClass, ModeratorAvatar(), ModeratorAvatarProps, sizeClass, PortalModerator, PortalShell(), PortalShellProps (+8 more)
+Cohesion: 0.2
+Nodes (9): iconSizeClass, ModeratorAvatar(), ModeratorAvatarProps, sizeClass, PortalModerator, PortalShell(), PortalShellProps, PortalModerator (+1 more)
 
 ### Community 263 - "Community 263"
-Cohesion: 0.25
-Nodes (4): contextKey, WithContext(), TestRequestLog(), RequestLog()
+Cohesion: 0.24
+Nodes (7): updateProfileAction(), initialState, ProfileEditForm(), ProfileEditFormProps, ProfileUpdateState, formatDate(), ProfilePage()
 
 ### Community 267 - "Community 267"
 Cohesion: 0.16
@@ -958,17 +965,17 @@ Nodes (4): newSvcWithEnv(), TestTriggerOTP_OTPCodeAbsentInResponseForProduction(
 ## Knowledge Gaps
 - **1059 isolated node(s):** `gcsObjectStore`, `gcsWriteCloser`, `Dependencies`, `Provider`, `TokenPair` (+1054 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **53 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **55 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `True` connect `Community 250` to `Community 132`, `Community 146`, `Community 259`, `Community 252`?**
-  _High betweenness centrality (0.189) - this node is a cross-community bridge._
+- **Why does `True` connect `Community 250` to `Community 259`, `Community 132`, `Community 42`, `Community 146`, `Community 252`, `Community 29`?**
+  _High betweenness centrality (0.163) - this node is a cross-community bridge._
 - **Why does `buildDependencies()` connect `Community 207` to `Community 132`, `Community 197`, `Community 205`, `Community 111`, `Community 175`, `Community 145`, `Community 213`, `Community 28`, `Community 255`?**
-  _High betweenness centrality (0.179) - this node is a cross-community bridge._
+  _High betweenness centrality (0.146) - this node is a cross-community bridge._
 - **Why does `RequireShowroomRoles()` connect `Community 132` to `Community 207`?**
-  _High betweenness centrality (0.118) - this node is a cross-community bridge._
+  _High betweenness centrality (0.093) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `newTestService()` (e.g. with `TestAddVehicleImage_InvalidLabel()` and `TestAddVehicleImage_EmptyLabel()`) actually correct?**
   _`newTestService()` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 27 inferred relationships involving `ownerRoles()` (e.g. with `TestHandler_AddMember_InvalidShowroomID()` and `TestHandler_AddMember_InvalidBody()`) actually correct?**

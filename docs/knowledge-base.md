@@ -33,6 +33,7 @@ This file is the living project memory for architecture, conventions, and implem
 
 ## Conventions
 
+- JSON success/error envelopes use `gin.Context.PureJSON` (`pkg/response`) so ampersands in GCS signed URLs are not HTML-escaped as `\u0026`.
 - Track naming, folder placement, and implementation conventions.
 - Local development environment variables are documented in `.env.example`.
 - Database connection should be configured through `DB_URL`.

@@ -16,7 +16,7 @@ type ErrorEnvelope struct {
 }
 
 func Error(c *gin.Context, status int, code string, msg string) {
-	c.JSON(status, ErrorEnvelope{
+	c.PureJSON(status, ErrorEnvelope{
 		Success: false,
 		Error: errorPayload{
 			Code:    code,

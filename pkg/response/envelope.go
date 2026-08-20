@@ -9,7 +9,8 @@ type SuccessEnvelope struct {
 }
 
 func Success(c *gin.Context, status int, msg string, data any) {
-	c.JSON(status, SuccessEnvelope{
+	// PureJSON keeps '&' unescaped so GCS signed URLs remain usable in browsers.
+	c.PureJSON(status, SuccessEnvelope{
 		Success: true,
 		Message: msg,
 		Data:    data,

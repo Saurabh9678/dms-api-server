@@ -29,6 +29,7 @@
 
 - GCS uses Application Default Credentials. Local ADC may impersonate a service account.
 - Staging Docker mounts a service-account JSON at `/secrets/gcs-sa.json` (`GOOGLE_APPLICATION_CREDENTIALS`) from host `${GCS_SA_KEY_PATH:-/opt/infiniour/secrets/gcs-sa.json}`. Do not `gcloud auth` inside the distroless API image.
+- JSON responses use Gin's `PureJSON` so `&` in GCS signed URLs is not escaped as `\u0026`. Clients can parse JSON as usual; the URL can also be copied into a browser.
 
 ## Object key convention (showroom media)
 
