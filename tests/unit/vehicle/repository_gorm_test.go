@@ -329,6 +329,40 @@ func TestVehicleRepositoryCountByType_EmptyStatusIncludesAll(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
+func TestVehicleRepositoryCountStatusBreakdownByType_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	rows := sqlmock.NewRows([]string{"vehicle_type", "available_count", "repair_count", "sold_count"}).
+		AddRow("car", int64(5), int64(3), int64(2)).
+		AddRow("bike", int64(1), int64(0), int64(1))
+	mock.ExpectQuery(`available_count`).WillReturnRows(rows)
+
+	filter := vehicle.ListFilter{
+		ShowroomID: 1,
+		Statuses:   []vehicle.VehicleStatusType{vehicle.VehicleStatusTypeSold},
+		Page:       1,
+		Limit:      20,
+	}
+	counts, err := repo.CountStatusBreakdownByType(context.Background(), filter)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(5), counts[vehicle.VehicleTypeCar].AvailableCount)
+	assert.Equal(t, int64(3), counts[vehicle.VehicleTypeCar].RepairCount)
+	assert.Equal(t, int64(2), counts[vehicle.VehicleTypeCar].SoldCount)
+	assert.Equal(t, int64(1), counts[vehicle.VehicleTypeBike].AvailableCount)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestVehicleRepositoryCountStatusBreakdownByType_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`available_count`).WillReturnError(gorm.ErrInvalidData)
+
+	_, err := repo.CountStatusBreakdownByType(context.Background(), vehicle.ListFilter{ShowroomID: 1, Page: 1, Limit: 20})
+	assert.Error(t, err)
+}
+
 func TestVehicleRepositoryList_ScopesToShowroom(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)

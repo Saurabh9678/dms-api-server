@@ -40,6 +40,17 @@ func (m *mockVehicleRepo) CountByType(ctx context.Context, f vehicle.ListFilter)
 	return args.Get(0).(map[vehicle.VehicleType]vehicle.CategoryMetrics), args.Error(1)
 }
 
+func (m *mockVehicleRepo) CountStatusBreakdownByType(ctx context.Context, f vehicle.ListFilter) (map[vehicle.VehicleType]vehicle.StatusBreakdownCounts, error) {
+	if !mockVehicleRepoHasExpectation(m, "CountStatusBreakdownByType") {
+		return map[vehicle.VehicleType]vehicle.StatusBreakdownCounts{}, nil
+	}
+	args := m.Called(ctx, f)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(map[vehicle.VehicleType]vehicle.StatusBreakdownCounts), args.Error(1)
+}
+
 func metricsCounts(m map[vehicle.VehicleType]int64) map[vehicle.VehicleType]vehicle.CategoryMetrics {
 	out := make(map[vehicle.VehicleType]vehicle.CategoryMetrics, len(m))
 	for k, v := range m {
@@ -962,8 +973,7 @@ func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Len(t, resp.Cars.Vehicles, 1)
-	assert.NotNil(t, resp.Cars.Vehicles[0].CurrentStatus)
-	assert.Equal(t, "ready_for_sale", resp.Cars.Vehicles[0].CurrentStatus.Status)
+	assert.Equal(t, "ready_for_sale", resp.Cars.Vehicles[0].CurrentStatus)
 	assert.NotNil(t, resp.Cars.Vehicles[0].Pricing)
 	assert.Equal(t, 300000.0, resp.Cars.Vehicles[0].Pricing.PriceTag)
 	assert.NotNil(t, resp.Cars.Vehicles[0].Images)
@@ -997,6 +1007,51 @@ func TestListVehicles_DeadStockFlags(t *testing.T) {
 	assert.True(t, resp.Cars.Vehicles[0].IsDeadStock)
 	assert.False(t, resp.Cars.Vehicles[1].IsDeadStock)
 	assert.False(t, resp.Cars.Vehicles[2].IsDeadStock)
+}
+
+func TestListVehicles_StatusBreakdownCountsIgnoreStatusFilter(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+
+	query := &vehicle.ListVehiclesQuery{
+		ShowroomID: 1,
+		Statuses:   []string{"sold"},
+		Page:       1,
+		Limit:      20,
+	}
+	mockRepo.On("CountByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
+		return len(f.Statuses) == 1 && f.Statuses[0] == vehicle.VehicleStatusTypeSold
+	})).Return(map[vehicle.VehicleType]vehicle.CategoryMetrics{
+		vehicle.VehicleTypeCar: {Total: 2, DeadStockCount: 0},
+	}, nil)
+	mockRepo.On("CountStatusBreakdownByType", mock.Anything, mock.MatchedBy(func(f vehicle.ListFilter) bool {
+		return len(f.Statuses) == 1 // service passes original filter; repo clears statuses
+	})).Return(map[vehicle.VehicleType]vehicle.StatusBreakdownCounts{
+		vehicle.VehicleTypeCar: {AvailableCount: 4, RepairCount: 3, SoldCount: 2},
+	}, nil)
+	mockRepo.On("List", mock.Anything, mock.Anything).Return([]vehicle.VehicleWithDetails{
+		{ID: 1, VehicleType: vehicle.VehicleTypeCar},
+	}, nil)
+
+	resp, err := svc.ListVehicles(context.Background(), query)
+	require.NoError(t, err)
+	require.NotNil(t, resp.Cars)
+	assert.Equal(t, int64(2), resp.Cars.Total)
+	assert.Equal(t, int64(4), resp.Cars.AvailableCount)
+	assert.Equal(t, int64(3), resp.Cars.RepairCount)
+	assert.Equal(t, int64(2), resp.Cars.SoldCount)
+}
+
+func TestListVehicles_StatusBreakdownError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
+	mockRepo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]vehicle.CategoryMetrics{}, nil)
+	mockRepo.On("CountStatusBreakdownByType", mock.Anything, mock.Anything).Return(nil, errors.New("status count fail"))
+
+	resp, err := svc.ListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
 }
 
 func TestListVehicles_ZeroShowroomID(t *testing.T) {

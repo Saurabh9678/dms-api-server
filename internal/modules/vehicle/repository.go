@@ -343,6 +343,13 @@ type CategoryMetrics struct {
 	DeadStockCount int64
 }
 
+// StatusBreakdownCounts are unpaginated per-type status tallies (status filter ignored).
+type StatusBreakdownCounts struct {
+	AvailableCount int64
+	RepairCount    int64
+	SoldCount      int64
+}
+
 func buildListQuery(filter ListFilter) (string, []interface{}) {
 	query := `
 SELECT v.id, v.type AS vehicle_type, v.manufacturer, v.model, v.variant, v.color,
@@ -638,6 +645,43 @@ GROUP BY vq.vehicle_type`
 		result[row.VehicleType] = CategoryMetrics{
 			Total:          row.Count,
 			DeadStockCount: row.DeadStockCount,
+		}
+	}
+	return result, nil
+}
+
+type vehicleStatusBreakdownRow struct {
+	VehicleType    VehicleType `gorm:"column:vehicle_type"`
+	AvailableCount int64       `gorm:"column:available_count"`
+	RepairCount    int64       `gorm:"column:repair_count"`
+	SoldCount      int64       `gorm:"column:sold_count"`
+}
+
+// CountStatusBreakdownByType returns available/repair/sold counts per type.
+// Status query filters are ignored so tallies always cover all current statuses
+// (still scoped by showroom, type, and price filters).
+func (r *Repository) CountStatusBreakdownByType(ctx context.Context, filter ListFilter) (map[VehicleType]StatusBreakdownCounts, error) {
+	filter.Statuses = nil
+	query, args := buildListQuery(filter)
+	countQuery := `
+SELECT vq.vehicle_type,
+       COALESCE(SUM(CASE WHEN vq.vs_status = 'ready_for_sale' THEN 1 ELSE 0 END), 0) AS available_count,
+       COALESCE(SUM(CASE WHEN vq.vs_status IN ('garage', 'inspection') THEN 1 ELSE 0 END), 0) AS repair_count,
+       COALESCE(SUM(CASE WHEN vq.vs_status = 'sold' THEN 1 ELSE 0 END), 0) AS sold_count
+FROM (` + query + `) vq
+GROUP BY vq.vehicle_type`
+
+	var rows []vehicleStatusBreakdownRow
+	if err := r.db.WithContext(ctx).Raw(countQuery, args...).Scan(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	result := make(map[VehicleType]StatusBreakdownCounts)
+	for _, row := range rows {
+		result[row.VehicleType] = StatusBreakdownCounts{
+			AvailableCount: row.AvailableCount,
+			RepairCount:    row.RepairCount,
+			SoldCount:      row.SoldCount,
 		}
 	}
 	return result, nil

@@ -59,6 +59,7 @@ type vehicleRepo interface {
 	Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error)
 	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
 	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]CategoryMetrics, error)
+	CountStatusBreakdownByType(ctx context.Context, f ListFilter) (map[VehicleType]StatusBreakdownCounts, error)
 	GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
 	PublicList(ctx context.Context, f PublicListFilter) ([]VehicleWithDetails, error)
 	PublicCountByType(ctx context.Context, f PublicListFilter) (map[VehicleType]int64, error)
@@ -229,6 +230,11 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 		return nil, err
 	}
 
+	statusCounts, err := s.repo.CountStatusBreakdownByType(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
 	vehicles, err := s.repo.List(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -259,33 +265,28 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 		}
 	}
 
+	buildCategory := func(t VehicleType) *CategoryListing {
+		return &CategoryListing{
+			Total:          counts[t].Total,
+			AvailableCount: statusCounts[t].AvailableCount,
+			RepairCount:    statusCounts[t].RepairCount,
+			SoldCount:      statusCounts[t].SoldCount,
+			DeadStockCount: counts[t].DeadStockCount,
+			Page:           query.Page,
+			Limit:          query.Limit,
+			Vehicles:       grouped[t],
+		}
+	}
+
 	resp := &ListVehiclesResponse{}
 	if wantType[VehicleTypeCar] {
-		resp.Cars = &CategoryListing{
-			Total:          counts[VehicleTypeCar].Total,
-			DeadStockCount: counts[VehicleTypeCar].DeadStockCount,
-			Page:           query.Page,
-			Limit:          query.Limit,
-			Vehicles:       grouped[VehicleTypeCar],
-		}
+		resp.Cars = buildCategory(VehicleTypeCar)
 	}
 	if wantType[VehicleTypeBike] {
-		resp.Bikes = &CategoryListing{
-			Total:          counts[VehicleTypeBike].Total,
-			DeadStockCount: counts[VehicleTypeBike].DeadStockCount,
-			Page:           query.Page,
-			Limit:          query.Limit,
-			Vehicles:       grouped[VehicleTypeBike],
-		}
+		resp.Bikes = buildCategory(VehicleTypeBike)
 	}
 	if wantType[VehicleTypeScooty] {
-		resp.Scooties = &CategoryListing{
-			Total:          counts[VehicleTypeScooty].Total,
-			DeadStockCount: counts[VehicleTypeScooty].DeadStockCount,
-			Page:           query.Page,
-			Limit:          query.Limit,
-			Vehicles:       grouped[VehicleTypeScooty],
-		}
+		resp.Scooties = buildCategory(VehicleTypeScooty)
 	}
 
 	return resp, nil
@@ -471,10 +472,7 @@ func (s *service) toVehicleListItem(ctx context.Context, v VehicleWithDetails) V
 		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
 	}
 	if v.CurrentStatus != nil {
-		item.CurrentStatus = &VehicleStatusSummary{
-			Status:    string(v.CurrentStatus.Status),
-			StartedAt: v.CurrentStatus.StartedAt.Format(time.RFC3339),
-		}
+		item.CurrentStatus = string(v.CurrentStatus.Status)
 	}
 	if v.CurrentPricing != nil {
 		item.Pricing = &VehiclePricingSummary{

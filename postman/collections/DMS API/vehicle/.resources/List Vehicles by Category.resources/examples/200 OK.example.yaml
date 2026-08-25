@@ -18,6 +18,9 @@ response:
         "data": {
           "cars": {
             "total": 2,
+            "available_count": 1,
+            "repair_count": 0,
+            "sold_count": 1,
             "dead_stock_count": 1,
             "page": 1,
             "limit": 20,
@@ -36,10 +39,7 @@ response:
                 "usage_km": 50000,
                 "fuel_type": "petrol",
                 "transmission_type": "manual",
-                "current_status": {
-                  "status": "ready_for_sale",
-                  "started_at": "2024-01-01T00:00:00Z"
-                },
+                "current_status": "ready_for_sale",
                 "pricing": {
                   "buying_price": 200000,
                   "price_tag": 350000,

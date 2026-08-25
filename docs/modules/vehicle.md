@@ -36,7 +36,8 @@
 3. Service:
    - Validates query (`showroom_id` > 0, page ≥ 1, limit 1–100, valid status/type enums, min_price ≤ max_price)
    - Omits `status` filter when empty (all current statuses); otherwise filters to requested statuses
-   - Calls `repo.CountByType` → per-category totals (same filters as the page query)
+   - Calls `repo.CountByType` → per-category totals + dead-stock (same filters as the page query, including status)
+   - Calls `repo.CountStatusBreakdownByType` → `available_count` / `repair_count` / `sold_count` (**status filter ignored**; still scoped by showroom/type/price). Mapping: available=`ready_for_sale`, repair=`garage`+`inspection`, sold=`sold`
    - Calls `repo.List` → paginated vehicles with current status + pricing (`LIMIT`/`OFFSET` on the combined result ordered by `v.id DESC`)
    - Batch-loads `vehicle_images` via `repo.ListImagesByVehicleIDs` for the page’s vehicle IDs, signs object keys (1-hour TTL), and attaches an `images` section on each list item
    - Groups results by vehicle_type (car/bike/scooty)
@@ -47,7 +48,7 @@
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
    - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
    - Paginates with `LIMIT/OFFSET` (defaults: page 1, limit 20, max 100). `total` is the full matching count per type; `vehicles[]` is the current page only.
-5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `dead_stock_count`, `page`, `limit`, `vehicles[]`. Each vehicle includes `images` grouped by label: `{ "front": [{ "id", "url" }, ...], ... }` with signed URLs. Vehicles with no photos return `"images": {}`. Failed signs and empty labels are omitted. Each vehicle also includes `is_dead_stock` (boolean). `dead_stock_count` / `is_dead_stock` use the shared dashboard rule via `pkg/inventory`: unsold (no active `customer_vehicle_sales` row) and `buying_date` age **> 90 days**.
+5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `available_count`, `repair_count`, `sold_count`, `dead_stock_count`, `page`, `limit`, `vehicles[]`. Each vehicle includes `current_status` as a **string** (no timestamp), `images`, and `is_dead_stock`. Empty photos → `"images": {}`. Dead-stock uses shared dashboard rule via `pkg/inventory`.
 
 **Query Parameters:**
 | Param | Default | Notes |
@@ -72,9 +73,18 @@
   "success": true,
   "message": "vehicle listing",
   "data": {
-    "cars":     { "total": 5, "dead_stock_count": 2, "page": 1, "limit": 20, "vehicles": [{ "id": 1, "is_dead_stock": true, "...": "..." }] },
-    "bikes":    { "total": 3, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [...] },
-    "scooties": { "total": 2, "dead_stock_count": 1, "page": 1, "limit": 20, "vehicles": [...] }
+    "cars": {
+      "total": 5,
+      "available_count": 2,
+      "repair_count": 2,
+      "sold_count": 1,
+      "dead_stock_count": 1,
+      "page": 1,
+      "limit": 20,
+      "vehicles": [{ "id": 1, "current_status": "ready_for_sale", "is_dead_stock": true }]
+    },
+    "bikes": { "total": 3, "available_count": 1, "repair_count": 1, "sold_count": 1, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [] },
+    "scooties": { "total": 2, "available_count": 0, "repair_count": 1, "sold_count": 1, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [] }
   }
 }
 ```
