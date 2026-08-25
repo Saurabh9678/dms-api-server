@@ -36,7 +36,7 @@ type VehicleListItem struct {
 	UsageKM            int                           `json:"usage_km"`
 	FuelType           string                        `json:"fuel_type"`
 	TransmissionType   string                        `json:"transmission_type"`
-	CurrentStatus      string                        `json:"current_status"`
+	CurrentStatus      *VehicleStatusSummary         `json:"current_status"`
 	Pricing            *VehiclePricingSummary        `json:"pricing"`
 	Images             map[string][]VehicleImageItem `json:"images"`
 	IsDeadStock        bool                          `json:"is_dead_stock"`

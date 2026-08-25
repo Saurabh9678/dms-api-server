@@ -48,7 +48,7 @@
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
    - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
    - Paginates with `LIMIT/OFFSET` (defaults: page 1, limit 20, max 100). `total` is the full matching count per type; `vehicles[]` is the current page only.
-5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `available_count`, `repair_count`, `sold_count`, `dead_stock_count`, `page`, `limit`, `vehicles[]`. Each vehicle includes `current_status` as a **string** (no timestamp), `images`, and `is_dead_stock`. Empty photos → `"images": {}`. Dead-stock uses shared dashboard rule via `pkg/inventory`.
+5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `available_count`, `repair_count`, `sold_count`, `dead_stock_count`, `page`, `limit`, `vehicles[]`. Each vehicle includes `current_status` as `{ "status", "started_at" }`, `images`, and `is_dead_stock`. Empty photos → `"images": {}`. Dead-stock uses shared dashboard rule via `pkg/inventory`.
 
 **Query Parameters:**
 | Param | Default | Notes |
@@ -81,7 +81,7 @@
       "dead_stock_count": 1,
       "page": 1,
       "limit": 20,
-      "vehicles": [{ "id": 1, "current_status": "ready_for_sale", "is_dead_stock": true }]
+      "vehicles": [{ "id": 1, "current_status": { "status": "ready_for_sale", "started_at": "2024-01-01T00:00:00Z" }, "is_dead_stock": true }]
     },
     "bikes": { "total": 3, "available_count": 1, "repair_count": 1, "sold_count": 1, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [] },
     "scooties": { "total": 2, "available_count": 0, "repair_count": 1, "sold_count": 1, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [] }

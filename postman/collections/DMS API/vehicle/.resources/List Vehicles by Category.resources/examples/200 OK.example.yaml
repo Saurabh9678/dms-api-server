@@ -39,7 +39,10 @@ response:
                 "usage_km": 50000,
                 "fuel_type": "petrol",
                 "transmission_type": "manual",
-                "current_status": "ready_for_sale",
+                "current_status": {
+                  "status": "ready_for_sale",
+                  "started_at": "2024-01-01T00:00:00Z"
+                },
                 "pricing": {
                   "buying_price": 200000,
                   "price_tag": 350000,

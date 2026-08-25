@@ -472,7 +472,10 @@ func (s *service) toVehicleListItem(ctx context.Context, v VehicleWithDetails) V
 		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
 	}
 	if v.CurrentStatus != nil {
-		item.CurrentStatus = string(v.CurrentStatus.Status)
+		item.CurrentStatus = &VehicleStatusSummary{
+			Status:    string(v.CurrentStatus.Status),
+			StartedAt: v.CurrentStatus.StartedAt.Format(time.RFC3339),
+		}
 	}
 	if v.CurrentPricing != nil {
 		item.Pricing = &VehiclePricingSummary{
