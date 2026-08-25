@@ -92,11 +92,13 @@ func TestVehicleRepositoryList_Success(t *testing.T) {
 	repo := vehicle.NewRepository(gormDB)
 
 	now := time.Now()
+	buyingDate := now.Add(-100 * 24 * time.Hour)
 	cols := []string{
 		"id", "vehicle_type", "manufacturer", "model", "variant", "color",
 		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
 		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at",
 		"vs_status", "vs_started_at", "vp_buying_price", "vp_price_tag", "vp_currency", "vp_tagged_at",
+		"vp_buying_date", "has_active_sale",
 	}
 
 	rows := sqlmock.NewRows(cols).AddRow(
@@ -104,6 +106,7 @@ func TestVehicleRepositoryList_Success(t *testing.T) {
 		2020, "KA-01", "KA01AB1234", "Karnataka",
 		50000, "petrol", "manual", now, now,
 		"ready_for_sale", now, 200000.0, 300000.0, "inr", now,
+		buyingDate, false,
 	)
 
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
@@ -121,6 +124,9 @@ func TestVehicleRepositoryList_Success(t *testing.T) {
 	assert.Equal(t, uint64(1), results[0].ID)
 	assert.NotNil(t, results[0].CurrentStatus)
 	assert.NotNil(t, results[0].CurrentPricing)
+	assert.NotNil(t, results[0].BuyingDate)
+	assert.False(t, results[0].HasActiveSale)
+	assert.Equal(t, buyingDate.Unix(), results[0].CurrentPricing.BuyingDate.Unix())
 }
 
 func TestVehicleRepositoryList_NoStatusOrPricing(t *testing.T) {
@@ -133,6 +139,7 @@ func TestVehicleRepositoryList_NoStatusOrPricing(t *testing.T) {
 		"year_of_manufacture", "rto_code", "registration_number", "registration_state",
 		"usage_km", "fuel_type", "transmission_type", "created_at", "updated_at",
 		"vs_status", "vs_started_at", "vp_buying_price", "vp_price_tag", "vp_currency", "vp_tagged_at",
+		"vp_buying_date", "has_active_sale",
 	}
 
 	rows := sqlmock.NewRows(cols).AddRow(
@@ -140,6 +147,7 @@ func TestVehicleRepositoryList_NoStatusOrPricing(t *testing.T) {
 		2021, "MH-01", "MH01CD5678", "Maharashtra",
 		10000, "petrol", "manual", now, now,
 		nil, nil, nil, nil, nil, nil,
+		nil, true,
 	)
 
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
@@ -157,6 +165,8 @@ func TestVehicleRepositoryList_NoStatusOrPricing(t *testing.T) {
 	assert.Len(t, results, 1)
 	assert.Nil(t, results[0].CurrentStatus)
 	assert.Nil(t, results[0].CurrentPricing)
+	assert.Nil(t, results[0].BuyingDate)
+	assert.True(t, results[0].HasActiveSale)
 }
 
 func TestVehicleRepositoryList_WithPriceFilter(t *testing.T) {
@@ -202,9 +212,9 @@ func TestVehicleRepositoryCountByType_Success(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
 
-	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
-		AddRow("car", int64(5)).
-		AddRow("bike", int64(3))
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count", "dead_stock_count"}).
+		AddRow("car", int64(5), int64(2)).
+		AddRow("bike", int64(3), int64(1))
 
 	mock.ExpectQuery(`SELECT`).WillReturnRows(rows)
 
@@ -217,8 +227,10 @@ func TestVehicleRepositoryCountByType_Success(t *testing.T) {
 
 	counts, err := repo.CountByType(context.Background(), filter)
 	assert.NoError(t, err)
-	assert.Equal(t, int64(5), counts[vehicle.VehicleTypeCar])
-	assert.Equal(t, int64(3), counts[vehicle.VehicleTypeBike])
+	assert.Equal(t, int64(5), counts[vehicle.VehicleTypeCar].Total)
+	assert.Equal(t, int64(2), counts[vehicle.VehicleTypeCar].DeadStockCount)
+	assert.Equal(t, int64(3), counts[vehicle.VehicleTypeBike].Total)
+	assert.Equal(t, int64(1), counts[vehicle.VehicleTypeBike].DeadStockCount)
 }
 
 func TestVehicleRepositoryCountByType_Error(t *testing.T) {
@@ -242,8 +254,8 @@ func TestVehicleRepositoryCountByType_UsesInClauseForStatusFilter(t *testing.T) 
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
 
-	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
-		AddRow("car", int64(2))
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count", "dead_stock_count"}).
+		AddRow("car", int64(2), int64(0))
 	mock.ExpectQuery(`vs\.status IN \(`).WillReturnRows(rows)
 
 	filter := vehicle.ListFilter{
@@ -260,7 +272,7 @@ func TestVehicleRepositoryCountByType_UsesInClauseForStatusFilter(t *testing.T) 
 
 	counts, err := repo.CountByType(context.Background(), filter)
 	assert.NoError(t, err)
-	assert.Equal(t, int64(2), counts[vehicle.VehicleTypeCar])
+	assert.Equal(t, int64(2), counts[vehicle.VehicleTypeCar].Total)
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
@@ -306,13 +318,14 @@ func TestVehicleRepositoryCountByType_EmptyStatusIncludesAll(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
 
-	rows := sqlmock.NewRows([]string{"vehicle_type", "count"}).
-		AddRow("car", int64(4))
+	rows := sqlmock.NewRows([]string{"vehicle_type", "count", "dead_stock_count"}).
+		AddRow("car", int64(4), int64(1))
 	mock.ExpectQuery(`OR vs\.status IN \(`).WillReturnRows(rows)
 
 	counts, err := repo.CountByType(context.Background(), vehicle.ListFilter{ShowroomID: 1, Page: 1, Limit: 20})
 	assert.NoError(t, err)
-	assert.Equal(t, int64(4), counts[vehicle.VehicleTypeCar])
+	assert.Equal(t, int64(4), counts[vehicle.VehicleTypeCar].Total)
+	assert.Equal(t, int64(1), counts[vehicle.VehicleTypeCar].DeadStockCount)
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 

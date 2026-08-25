@@ -13,6 +13,7 @@ import (
 
 	storageprovider "infiour.local/dms-api-server/internal/providers/storage"
 	apperrors "infiour.local/dms-api-server/pkg/errors"
+	"infiour.local/dms-api-server/pkg/inventory"
 )
 
 const maxVehicleImageSize = 15 * 1024 * 1024 // 15 MB
@@ -57,7 +58,7 @@ type Service interface {
 type vehicleRepo interface {
 	Create(ctx context.Context, vehicle *Vehicle) (*Vehicle, error)
 	List(ctx context.Context, f ListFilter) ([]VehicleWithDetails, error)
-	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]int64, error)
+	CountByType(ctx context.Context, f ListFilter) (map[VehicleType]CategoryMetrics, error)
 	GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error)
 	PublicList(ctx context.Context, f PublicListFilter) ([]VehicleWithDetails, error)
 	PublicCountByType(ctx context.Context, f PublicListFilter) (map[VehicleType]int64, error)
@@ -261,26 +262,29 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 	resp := &ListVehiclesResponse{}
 	if wantType[VehicleTypeCar] {
 		resp.Cars = &CategoryListing{
-			Total:    counts[VehicleTypeCar],
-			Page:     query.Page,
-			Limit:    query.Limit,
-			Vehicles: grouped[VehicleTypeCar],
+			Total:          counts[VehicleTypeCar].Total,
+			DeadStockCount: counts[VehicleTypeCar].DeadStockCount,
+			Page:           query.Page,
+			Limit:          query.Limit,
+			Vehicles:       grouped[VehicleTypeCar],
 		}
 	}
 	if wantType[VehicleTypeBike] {
 		resp.Bikes = &CategoryListing{
-			Total:    counts[VehicleTypeBike],
-			Page:     query.Page,
-			Limit:    query.Limit,
-			Vehicles: grouped[VehicleTypeBike],
+			Total:          counts[VehicleTypeBike].Total,
+			DeadStockCount: counts[VehicleTypeBike].DeadStockCount,
+			Page:           query.Page,
+			Limit:          query.Limit,
+			Vehicles:       grouped[VehicleTypeBike],
 		}
 	}
 	if wantType[VehicleTypeScooty] {
 		resp.Scooties = &CategoryListing{
-			Total:    counts[VehicleTypeScooty],
-			Page:     query.Page,
-			Limit:    query.Limit,
-			Vehicles: grouped[VehicleTypeScooty],
+			Total:          counts[VehicleTypeScooty].Total,
+			DeadStockCount: counts[VehicleTypeScooty].DeadStockCount,
+			Page:           query.Page,
+			Limit:          query.Limit,
+			Vehicles:       grouped[VehicleTypeScooty],
 		}
 	}
 
@@ -462,6 +466,7 @@ func (s *service) toVehicleListItem(ctx context.Context, v VehicleWithDetails) V
 		FuelType:           string(v.FuelType),
 		TransmissionType:   string(v.TransmissionType),
 		Images:             s.buildSignedImageSection(ctx, v.Images),
+		IsDeadStock:        inventory.IsDeadStock(v.BuyingDate, v.HasActiveSale, time.Now()),
 		CreatedAt:          v.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
 	}

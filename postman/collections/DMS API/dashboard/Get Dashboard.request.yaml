@@ -1,6 +1,6 @@
 $kind: http-request
-description: "Protected. Returns dealership health overview: sales performance, inventory state, expense summary, and top vehicle types. Duration filters sales and expenses; inventory reflects current state."
-url: "{{base_url}}/api/v1/dashboard?duration=1m"
+description: "Protected. Owner/manager only. Returns dealership health overview for a showroom: sales, inventory, expenses, top vehicle types. Optional showroom_id (defaults to caller's lowest owner/manager showroom). Duration filters sales and expenses; inventory is current showroom state."
+url: "{{base_url}}/api/v1/dashboard?duration=1m&showroom_id=1"
 method: GET
 headers:
   Authorization: Bearer {{access_token}}

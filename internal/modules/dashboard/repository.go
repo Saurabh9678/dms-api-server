@@ -5,12 +5,13 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"infiour.local/dms-api-server/pkg/inventory"
 )
 
-// QueryParams carries optional filter values shared across all repo queries.
+// QueryParams carries filter values shared across all repo queries.
 type QueryParams struct {
 	From       *time.Time // nil = no date filter (lifetime)
-	ShowroomID *uint64    // nil = all showrooms
+	ShowroomID uint64     // required; inventory/sales/expenses scoped to this showroom
 }
 
 // SalesQueryResult holds raw aggregate sales data returned by the repository.
@@ -56,6 +57,10 @@ func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
 }
 
+func showroomScopeSQL() string {
+	return ` AND v.id IN (SELECT vehicle_id FROM vehicle_showroom_relations WHERE showroom_id = ? AND deleted_at IS NULL)`
+}
+
 func (r *Repository) FetchSalesSummary(ctx context.Context, params QueryParams) (*SalesQueryResult, error) {
 	q := `
 		SELECT
@@ -71,16 +76,12 @@ func (r *Repository) FetchSalesSummary(ctx context.Context, params QueryParams) 
 			WHERE deleted_at IS NULL
 			GROUP BY vehicle_id
 		) exp_totals ON exp_totals.vehicle_id = cvs.vehicle_id
-		WHERE cvs.deleted_at IS NULL`
+		WHERE cvs.deleted_at IS NULL` + showroomScopeSQL()
 
-	args := []interface{}{}
+	args := []interface{}{params.ShowroomID}
 	if params.From != nil {
 		q += ` AND cvs.sale_date >= ?`
 		args = append(args, params.From)
-	}
-	if params.ShowroomID != nil {
-		q += ` AND v.id IN (SELECT vehicle_id FROM vehicle_showroom_relations WHERE showroom_id = ? AND deleted_at IS NULL)`
-		args = append(args, *params.ShowroomID)
 	}
 
 	var result SalesQueryResult
@@ -95,18 +96,24 @@ func (r *Repository) FetchInventorySummary(ctx context.Context, params QueryPara
 		SELECT
 			COUNT(v.id) AS inventory_count,
 			COALESCE(SUM(vp.buying_price), 0) AS inventory_value,
-			COALESCE(SUM(CASE WHEN vp.buying_date IS NOT NULL AND EXTRACT(EPOCH FROM (NOW() - vp.buying_date)) / 86400 > 90 THEN 1 ELSE 0 END), 0) AS dead_stock_count,
+			COALESCE(SUM(` + inventory.DeadStockCaseSQL("vp.buying_date") + `), 0) AS dead_stock_count,
 			COALESCE(AVG(CASE WHEN vp.buying_date IS NOT NULL THEN EXTRACT(EPOCH FROM (NOW() - vp.buying_date)) / 86400 ELSE NULL END), 0) AS average_inventory_age_days
 		FROM vehicles v
-		LEFT JOIN vehicle_pricing vp ON vp.vehicle_id = v.id AND vp.deleted_at IS NULL
+		INNER JOIN vehicle_showroom_relations vsr
+			ON vsr.vehicle_id = v.id
+			AND vsr.showroom_id = ?
+			AND vsr.deleted_at IS NULL
+		LEFT JOIN LATERAL (
+			SELECT buying_price, buying_date
+			FROM vehicle_pricing
+			WHERE vehicle_id = v.id AND deleted_at IS NULL
+			ORDER BY id DESC
+			LIMIT 1
+		) vp ON true
 		WHERE v.deleted_at IS NULL
 		  AND v.id NOT IN (SELECT vehicle_id FROM customer_vehicle_sales WHERE deleted_at IS NULL)`
 
-	args := []interface{}{}
-	if params.ShowroomID != nil {
-		q += ` AND v.id IN (SELECT vehicle_id FROM vehicle_showroom_relations WHERE showroom_id = ? AND deleted_at IS NULL)`
-		args = append(args, *params.ShowroomID)
-	}
+	args := []interface{}{params.ShowroomID}
 
 	var result InventoryQueryResult
 	if err := r.db.WithContext(ctx).Raw(q, args...).Scan(&result).Error; err != nil {
@@ -121,16 +128,12 @@ func (r *Repository) FetchExpenseSummary(ctx context.Context, params QueryParams
 			COALESCE(SUM(ve.amount), 0) AS total_expenses
 		FROM vehicle_expenses ve
 		INNER JOIN vehicles v ON v.id = ve.vehicle_id AND v.deleted_at IS NULL
-		WHERE ve.deleted_at IS NULL`
+		WHERE ve.deleted_at IS NULL` + showroomScopeSQL()
 
-	args := []interface{}{}
+	args := []interface{}{params.ShowroomID}
 	if params.From != nil {
 		q += ` AND ve.date >= ?`
 		args = append(args, params.From)
-	}
-	if params.ShowroomID != nil {
-		q += ` AND v.id IN (SELECT vehicle_id FROM vehicle_showroom_relations WHERE showroom_id = ? AND deleted_at IS NULL)`
-		args = append(args, *params.ShowroomID)
 	}
 
 	var result ExpenseQueryResult
@@ -155,16 +158,12 @@ func (r *Repository) FetchTopVehicleTypes(ctx context.Context, params QueryParam
 			WHERE deleted_at IS NULL
 			GROUP BY vehicle_id
 		) exp_totals ON exp_totals.vehicle_id = cvs.vehicle_id
-		WHERE cvs.deleted_at IS NULL`
+		WHERE cvs.deleted_at IS NULL` + showroomScopeSQL()
 
-	args := []interface{}{}
+	args := []interface{}{params.ShowroomID}
 	if params.From != nil {
 		q += ` AND cvs.sale_date >= ?`
 		args = append(args, params.From)
-	}
-	if params.ShowroomID != nil {
-		q += ` AND v.id IN (SELECT vehicle_id FROM vehicle_showroom_relations WHERE showroom_id = ? AND deleted_at IS NULL)`
-		args = append(args, *params.ShowroomID)
 	}
 
 	q += ` GROUP BY v.type ORDER BY vehicles_sold DESC`

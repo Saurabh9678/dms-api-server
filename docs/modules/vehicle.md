@@ -47,7 +47,7 @@
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
    - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
    - Paginates with `LIMIT/OFFSET` (defaults: page 1, limit 20, max 100). `total` is the full matching count per type; `vehicles[]` is the current page only.
-5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `images` grouped by label: `{ "front": [{ "id", "url" }, ...], ... }` with signed URLs. Vehicles with no photos return `"images": {}`. Failed signs and empty labels are omitted.
+5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `dead_stock_count`, `page`, `limit`, `vehicles[]`. Each vehicle includes `images` grouped by label: `{ "front": [{ "id", "url" }, ...], ... }` with signed URLs. Vehicles with no photos return `"images": {}`. Failed signs and empty labels are omitted. Each vehicle also includes `is_dead_stock` (boolean). `dead_stock_count` / `is_dead_stock` use the shared dashboard rule via `pkg/inventory`: unsold (no active `customer_vehicle_sales` row) and `buying_date` age **> 90 days**.
 
 **Query Parameters:**
 | Param | Default | Notes |
@@ -72,9 +72,9 @@
   "success": true,
   "message": "vehicle listing",
   "data": {
-    "cars":     { "total": 5, "page": 1, "limit": 20, "vehicles": [...] },
-    "bikes":    { "total": 3, "page": 1, "limit": 20, "vehicles": [...] },
-    "scooties": { "total": 2, "page": 1, "limit": 20, "vehicles": [...] }
+    "cars":     { "total": 5, "dead_stock_count": 2, "page": 1, "limit": 20, "vehicles": [{ "id": 1, "is_dead_stock": true, "...": "..." }] },
+    "bikes":    { "total": 3, "dead_stock_count": 0, "page": 1, "limit": 20, "vehicles": [...] },
+    "scooties": { "total": 2, "dead_stock_count": 1, "page": 1, "limit": 20, "vehicles": [...] }
   }
 }
 ```

@@ -1,6 +1,6 @@
 $kind: http-example
 request:
-  url: "{{base_url}}/api/v1/dashboard?duration=1m"
+  url: "{{base_url}}/api/v1/dashboard?duration=1m&showroom_id=1"
   method: GET
   headers:
     Authorization: Bearer {{access_token}}

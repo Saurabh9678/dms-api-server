@@ -380,7 +380,7 @@ func TestListVehicles_WithSignedImages(t *testing.T) {
 
 	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
 	vehicles := []vehicle.VehicleWithDetails{{ID: 10, VehicleType: vehicle.VehicleTypeCar}}
-	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}, nil)
+	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]vehicle.CategoryMetrics{vehicle.VehicleTypeCar: {Total: 1}}, nil)
 	repo.On("List", mock.Anything, mock.Anything).Return(vehicles, nil)
 	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{10}).Return(map[uint64][]vehicle.VehicleImage{
 		10: {
@@ -413,7 +413,7 @@ func TestListVehicles_ListImagesError(t *testing.T) {
 	repo := new(mockVehicleRepo)
 	svc := newTestService(repo)
 	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
-	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}, nil)
+	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]vehicle.CategoryMetrics{vehicle.VehicleTypeCar: {Total: 1}}, nil)
 	repo.On("List", mock.Anything, mock.Anything).Return([]vehicle.VehicleWithDetails{{ID: 1, VehicleType: vehicle.VehicleTypeCar}}, nil)
 	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{1}).Return(nil, errors.New("db fail"))
 

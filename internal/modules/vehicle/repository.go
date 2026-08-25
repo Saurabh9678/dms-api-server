@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"infiour.local/dms-api-server/pkg/inventory"
 )
 
 type Repository struct {
@@ -310,6 +311,8 @@ type vehicleRow struct {
 	VpPriceTag         *float64         `gorm:"column:vp_price_tag"`
 	VpCurrency         *string          `gorm:"column:vp_currency"`
 	VpTaggedAt         *time.Time       `gorm:"column:vp_tagged_at"`
+	VpBuyingDate       *time.Time       `gorm:"column:vp_buying_date"`
+	HasActiveSale      bool             `gorm:"column:has_active_sale"`
 }
 
 type VehicleWithDetails struct {
@@ -331,6 +334,13 @@ type VehicleWithDetails struct {
 	CurrentStatus      *VehicleStatus
 	CurrentPricing     *VehiclePricing
 	Images             []VehicleImage
+	BuyingDate         *time.Time
+	HasActiveSale      bool
+}
+
+type CategoryMetrics struct {
+	Total          int64
+	DeadStockCount int64
 }
 
 func buildListQuery(filter ListFilter) (string, []interface{}) {
@@ -340,7 +350,12 @@ SELECT v.id, v.type AS vehicle_type, v.manufacturer, v.model, v.variant, v.color
        v.usage_km, v.fuel_type, v.transmission_type, v.created_at, v.updated_at,
        vs.status AS vs_status, vs.started_at AS vs_started_at,
        vp.buying_price AS vp_buying_price, vp.price_tag AS vp_price_tag,
-       vp.currency AS vp_currency, vp.tagged_at AS vp_tagged_at
+       vp.currency AS vp_currency, vp.tagged_at AS vp_tagged_at,
+       vp.buying_date AS vp_buying_date,
+       EXISTS (
+         SELECT 1 FROM customer_vehicle_sales cvs
+         WHERE cvs.vehicle_id = v.id AND cvs.deleted_at IS NULL
+       ) AS has_active_sale
 FROM vehicles v
 JOIN vehicle_showroom_relations vsr ON vsr.vehicle_id = v.id
   AND vsr.showroom_id = ?
@@ -351,7 +366,7 @@ JOIN LATERAL (
   ORDER BY id DESC LIMIT 1
 ) vs ON true
 LEFT JOIN LATERAL (
-  SELECT buying_price, price_tag, currency, tagged_at FROM vehicle_pricing
+  SELECT buying_price, price_tag, currency, tagged_at, buying_date FROM vehicle_pricing
   WHERE vehicle_id = v.id AND deleted_at IS NULL
   ORDER BY id DESC LIMIT 1
 ) vp ON true
@@ -425,6 +440,8 @@ func (r *Repository) List(ctx context.Context, filter ListFilter) ([]VehicleWith
 			TransmissionType:   row.TransmissionType,
 			CreatedAt:          row.CreatedAt,
 			UpdatedAt:          row.UpdatedAt,
+			BuyingDate:         row.VpBuyingDate,
+			HasActiveSale:      row.HasActiveSale,
 		}
 		if row.VsStatus != nil {
 			st := VehicleStatus{Status: VehicleStatusType(*row.VsStatus)}
@@ -443,6 +460,9 @@ func (r *Repository) List(ctx context.Context, filter ListFilter) ([]VehicleWith
 			}
 			if row.VpTaggedAt != nil {
 				p.TaggedAt = *row.VpTaggedAt
+			}
+			if row.VpBuyingDate != nil {
+				p.BuyingDate = *row.VpBuyingDate
 			}
 			v.CurrentPricing = &p
 		}
@@ -594,22 +614,31 @@ func (r *Repository) PublicCountByType(ctx context.Context, filter PublicListFil
 }
 
 type vehicleTypeCount struct {
-	VehicleType VehicleType `gorm:"column:vehicle_type"`
-	Count       int64       `gorm:"column:count"`
+	VehicleType    VehicleType `gorm:"column:vehicle_type"`
+	Count          int64       `gorm:"column:count"`
+	DeadStockCount int64       `gorm:"column:dead_stock_count"`
 }
 
-func (r *Repository) CountByType(ctx context.Context, filter ListFilter) (map[VehicleType]int64, error) {
+func (r *Repository) CountByType(ctx context.Context, filter ListFilter) (map[VehicleType]CategoryMetrics, error) {
 	query, args := buildListQuery(filter)
-	countQuery := "SELECT vq.vehicle_type, COUNT(*) AS count FROM (" + query + ") vq GROUP BY vq.vehicle_type"
+	countQuery := `
+SELECT vq.vehicle_type,
+       COUNT(*) AS count,
+       COALESCE(SUM(CASE WHEN NOT vq.has_active_sale AND ` + inventory.DeadStockAgePredicateSQL("vq.vp_buying_date") + ` THEN 1 ELSE 0 END), 0) AS dead_stock_count
+FROM (` + query + `) vq
+GROUP BY vq.vehicle_type`
 
 	var rows []vehicleTypeCount
 	if err := r.db.WithContext(ctx).Raw(countQuery, args...).Scan(&rows).Error; err != nil {
 		return nil, err
 	}
 
-	result := make(map[VehicleType]int64)
+	result := make(map[VehicleType]CategoryMetrics)
 	for _, row := range rows {
-		result[row.VehicleType] = row.Count
+		result[row.VehicleType] = CategoryMetrics{
+			Total:          row.Count,
+			DeadStockCount: row.DeadStockCount,
+		}
 	}
 	return result, nil
 }

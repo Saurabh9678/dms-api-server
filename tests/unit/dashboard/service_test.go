@@ -90,13 +90,24 @@ func newService(repo *fakeRepo) dashboard.Service {
 	return dashboard.NewService(repo)
 }
 
+func dashReq(duration string, showroomID *uint64, roles map[uint64]string) dashboard.GetDashboardRequest {
+	if roles == nil {
+		roles = map[uint64]string{1: "owner"}
+	}
+	return dashboard.GetDashboardRequest{
+		Duration:      duration,
+		ShowroomID:    showroomID,
+		ShowroomRoles: roles,
+	}
+}
+
 // --- Duration parsing ---
 
 func TestGetDashboardDefaultsToLifetime(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: ""})
+	_, err := svc.GetDashboard(context.Background(), dashReq("", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -109,7 +120,7 @@ func TestGetDashboardLifetimeDuration(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -136,7 +147,7 @@ func TestGetDashboardDurationWindows(t *testing.T) {
 			svc := newService(repo)
 			before := time.Now()
 
-			_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: tc.duration})
+			_, err := svc.GetDashboard(context.Background(), dashReq(tc.duration, nil, nil))
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -158,7 +169,7 @@ func TestGetDashboardInvalidDurationReturnsError(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "2y"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("2y", nil, nil))
 	if !errors.Is(err, dashboard.ErrInvalidDuration) {
 		t.Fatalf("expected ErrInvalidDuration, got %v", err)
 	}
@@ -171,25 +182,79 @@ func TestGetDashboardPassesShowroomIDToRepo(t *testing.T) {
 	svc := newService(repo)
 	id := uint64(42)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime", ShowroomID: &id})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", &id, map[uint64]string{42: "owner"}))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if repo.capturedSalesParams.ShowroomID == nil || *repo.capturedSalesParams.ShowroomID != 42 {
+	if repo.capturedSalesParams.ShowroomID != 42 {
 		t.Fatalf("expected ShowroomID 42 to be passed through, got %v", repo.capturedSalesParams.ShowroomID)
 	}
 }
 
-func TestGetDashboardNilShowroomIDPassedThrough(t *testing.T) {
+func TestGetDashboardDefaultsShowroomToLowestManaged(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := newService(repo)
+	roles := map[uint64]string{
+		10: "employee",
+		5:  "manager",
+		8:  "owner",
+	}
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, roles))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if repo.capturedSalesParams.ShowroomID != nil {
-		t.Fatalf("expected nil ShowroomID, got %v", repo.capturedSalesParams.ShowroomID)
+	if repo.capturedSalesParams.ShowroomID != 5 {
+		t.Fatalf("expected default showroom 5 (lowest owner/manager), got %v", repo.capturedSalesParams.ShowroomID)
+	}
+	if repo.capturedInventoryParams.ShowroomID != 5 {
+		t.Fatalf("expected inventory showroom 5, got %v", repo.capturedInventoryParams.ShowroomID)
+	}
+}
+
+func TestGetDashboardEmployeeRoleForbidden(t *testing.T) {
+	repo := &fakeRepo{}
+	svc := newService(repo)
+	id := uint64(3)
+
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", &id, map[uint64]string{3: "employee"}))
+	if !errors.Is(err, dashboard.ErrForbidden) {
+		t.Fatalf("expected ErrForbidden, got %v", err)
+	}
+}
+
+func TestGetDashboardNonMemberShowroomForbidden(t *testing.T) {
+	repo := &fakeRepo{}
+	svc := newService(repo)
+	id := uint64(99)
+
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", &id, map[uint64]string{1: "owner"}))
+	if !errors.Is(err, dashboard.ErrForbidden) {
+		t.Fatalf("expected ErrForbidden, got %v", err)
+	}
+}
+
+func TestGetDashboardNoManagedShowroomForbidden(t *testing.T) {
+	repo := &fakeRepo{}
+	svc := newService(repo)
+
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, map[uint64]string{2: "employee"}))
+	if !errors.Is(err, dashboard.ErrForbidden) {
+		t.Fatalf("expected ErrForbidden, got %v", err)
+	}
+}
+
+func TestGetDashboardManagerRoleAllowed(t *testing.T) {
+	repo := &fakeRepo{}
+	svc := newService(repo)
+	id := uint64(7)
+
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", &id, map[uint64]string{7: "manager"}))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if repo.capturedSalesParams.ShowroomID != 7 {
+		t.Fatalf("expected showroom 7, got %v", repo.capturedSalesParams.ShowroomID)
 	}
 }
 
@@ -201,7 +266,7 @@ func TestGetDashboardAverageProfitPerSale(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -216,7 +281,7 @@ func TestGetDashboardAverageProfitPerSaleZeroWhenNoSales(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -232,7 +297,7 @@ func TestGetDashboardAverageExpensePerVehicle(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -248,7 +313,7 @@ func TestGetDashboardAverageExpensePerVehicleZeroWhenNoInventory(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -263,7 +328,7 @@ func TestGetDashboardZeroDataReturnsZeroValues(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -301,7 +366,7 @@ func TestGetDashboardTopVehicleTypesOrdered(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -323,7 +388,7 @@ func TestGetDashboardTopVehicleTypesEmptyWhenNoSales(t *testing.T) {
 	repo := &fakeRepo{topTypesResult: []dashboard.VehicleTypeQueryResult{}}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -339,7 +404,7 @@ func TestGetDashboardPropagatesSalesError(t *testing.T) {
 	repo := &fakeRepo{salesErr: sentinel}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if !errors.Is(err, sentinel) {
 		t.Fatalf("expected sentinel error, got %v", err)
 	}
@@ -350,7 +415,7 @@ func TestGetDashboardPropagatesInventoryError(t *testing.T) {
 	repo := &fakeRepo{inventoryErr: sentinel}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if !errors.Is(err, sentinel) {
 		t.Fatalf("expected sentinel error, got %v", err)
 	}
@@ -361,7 +426,7 @@ func TestGetDashboardPropagatesExpenseError(t *testing.T) {
 	repo := &fakeRepo{expenseErr: sentinel}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if !errors.Is(err, sentinel) {
 		t.Fatalf("expected sentinel error, got %v", err)
 	}
@@ -372,7 +437,7 @@ func TestGetDashboardPropagatesTopTypesError(t *testing.T) {
 	repo := &fakeRepo{topTypesErr: sentinel}
 	svc := newService(repo)
 
-	_, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "lifetime"})
+	_, err := svc.GetDashboard(context.Background(), dashReq("lifetime", nil, nil))
 	if !errors.Is(err, sentinel) {
 		t.Fatalf("expected sentinel error, got %v", err)
 	}
@@ -389,7 +454,7 @@ func TestGetDashboardResponseFieldsMapCorrectly(t *testing.T) {
 	}
 	svc := newService(repo)
 
-	resp, err := svc.GetDashboard(context.Background(), dashboard.GetDashboardRequest{Duration: "1m"})
+	resp, err := svc.GetDashboard(context.Background(), dashReq("1m", nil, nil))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

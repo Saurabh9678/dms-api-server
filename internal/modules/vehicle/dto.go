@@ -39,15 +39,17 @@ type VehicleListItem struct {
 	CurrentStatus      *VehicleStatusSummary         `json:"current_status"`
 	Pricing            *VehiclePricingSummary        `json:"pricing"`
 	Images             map[string][]VehicleImageItem `json:"images"`
+	IsDeadStock        bool                          `json:"is_dead_stock"`
 	CreatedAt          string                        `json:"created_at"`
 	UpdatedAt          string                        `json:"updated_at"`
 }
 
 type CategoryListing struct {
-	Total    int64             `json:"total"`
-	Page     int               `json:"page"`
-	Limit    int               `json:"limit"`
-	Vehicles []VehicleListItem `json:"vehicles"`
+	Total          int64             `json:"total"`
+	DeadStockCount int64             `json:"dead_stock_count"`
+	Page           int               `json:"page"`
+	Limit          int               `json:"limit"`
+	Vehicles       []VehicleListItem `json:"vehicles"`
 }
 
 type ListVehiclesResponse struct {

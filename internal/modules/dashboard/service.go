@@ -52,7 +52,12 @@ func (s *service) GetDashboard(ctx context.Context, req GetDashboardRequest) (*D
 		return nil, err
 	}
 
-	params := QueryParams{From: from, ShowroomID: req.ShowroomID}
+	showroomID, err := resolveShowroomID(req.ShowroomID, req.ShowroomRoles)
+	if err != nil {
+		return nil, err
+	}
+
+	params := QueryParams{From: from, ShowroomID: showroomID}
 
 	var (
 		sales     *SalesQueryResult
