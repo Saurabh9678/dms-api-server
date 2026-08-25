@@ -72,6 +72,7 @@ type vehicleRepo interface {
 	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
 	CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error)
 	SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error
+	ListImagesByVehicleIDs(ctx context.Context, vehicleIDs []uint64) (map[uint64][]VehicleImage, error)
 }
 
 type service struct {
@@ -232,13 +233,17 @@ func (s *service) ListVehicles(ctx context.Context, query *ListVehiclesQuery) (*
 		return nil, err
 	}
 
+	if err := s.attachListImages(ctx, vehicles); err != nil {
+		return nil, err
+	}
+
 	grouped := map[VehicleType][]VehicleListItem{
 		VehicleTypeCar:    {},
 		VehicleTypeBike:   {},
 		VehicleTypeScooty: {},
 	}
 	for _, v := range vehicles {
-		item := toVehicleListItem(v)
+		item := s.toVehicleListItem(ctx, v)
 		grouped[v.VehicleType] = append(grouped[v.VehicleType], item)
 	}
 
@@ -312,13 +317,17 @@ func (s *service) PublicListVehicles(ctx context.Context, query *PublicListVehic
 		return nil, err
 	}
 
+	if err := s.attachListImages(ctx, vehicles); err != nil {
+		return nil, err
+	}
+
 	grouped := map[VehicleType][]PublicVehicleListItem{
 		VehicleTypeCar:    {},
 		VehicleTypeBike:   {},
 		VehicleTypeScooty: {},
 	}
 	for _, v := range vehicles {
-		item := toPublicVehicleListItem(v)
+		item := s.toPublicVehicleListItem(ctx, v)
 		grouped[v.VehicleType] = append(grouped[v.VehicleType], item)
 	}
 
@@ -389,7 +398,29 @@ func (s *service) validatePublicListQuery(query *PublicListVehiclesQuery) error 
 	return nil
 }
 
-func toPublicVehicleListItem(v VehicleWithDetails) PublicVehicleListItem {
+func (s *service) attachListImages(ctx context.Context, vehicles []VehicleWithDetails) error {
+	if len(vehicles) == 0 {
+		return nil
+	}
+	ids := make([]uint64, len(vehicles))
+	for i := range vehicles {
+		ids[i] = vehicles[i].ID
+	}
+	byVehicle, err := s.repo.ListImagesByVehicleIDs(ctx, ids)
+	if err != nil {
+		return err
+	}
+	for i := range vehicles {
+		imgs := byVehicle[vehicles[i].ID]
+		if imgs == nil {
+			imgs = []VehicleImage{}
+		}
+		vehicles[i].Images = imgs
+	}
+	return nil
+}
+
+func (s *service) toPublicVehicleListItem(ctx context.Context, v VehicleWithDetails) PublicVehicleListItem {
 	item := PublicVehicleListItem{
 		ID:                 v.ID,
 		VehicleType:        string(v.VehicleType),
@@ -404,6 +435,7 @@ func toPublicVehicleListItem(v VehicleWithDetails) PublicVehicleListItem {
 		UsageKM:            v.UsageKM,
 		FuelType:           string(v.FuelType),
 		TransmissionType:   string(v.TransmissionType),
+		Images:             s.buildSignedImageSection(ctx, v.Images),
 		CreatedAt:          v.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
 	}
@@ -414,7 +446,7 @@ func toPublicVehicleListItem(v VehicleWithDetails) PublicVehicleListItem {
 	return item
 }
 
-func toVehicleListItem(v VehicleWithDetails) VehicleListItem {
+func (s *service) toVehicleListItem(ctx context.Context, v VehicleWithDetails) VehicleListItem {
 	item := VehicleListItem{
 		ID:                 v.ID,
 		VehicleType:        string(v.VehicleType),
@@ -429,6 +461,7 @@ func toVehicleListItem(v VehicleWithDetails) VehicleListItem {
 		UsageKM:            v.UsageKM,
 		FuelType:           string(v.FuelType),
 		TransmissionType:   string(v.TransmissionType),
+		Images:             s.buildSignedImageSection(ctx, v.Images),
 		CreatedAt:          v.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:          v.UpdatedAt.Format(time.RFC3339),
 	}
@@ -981,6 +1014,27 @@ func (s *service) signVehicleImages(ctx context.Context, details *VehicleFullDet
 		kept = append(kept, img)
 	}
 	details.Images = kept
+}
+
+// buildSignedImageSection groups images by label with signed URLs.
+// Always returns a non-nil map (empty object in JSON when there are no photos).
+func (s *service) buildSignedImageSection(ctx context.Context, images []VehicleImage) map[string][]VehicleImageItem {
+	section := make(map[string][]VehicleImageItem)
+	for _, img := range images {
+		label := string(img.Label)
+		if label == "" || img.ImageURL == "" {
+			continue
+		}
+		url, err := s.storage.SignedURL(ctx, img.ImageURL, s.signedURLTTL)
+		if err != nil {
+			continue
+		}
+		section[label] = append(section[label], VehicleImageItem{
+			ID:  img.ID,
+			URL: url,
+		})
+	}
+	return section
 }
 
 func validateVehicleImageFile(header *multipart.FileHeader) error {

@@ -1024,3 +1024,46 @@ func TestRepo_SoftDeleteImage_DBError(t *testing.T) {
 	err := repo.SoftDeleteImage(context.Background(), 1, 9)
 	assert.Error(t, err)
 }
+
+func TestRepo_ListImagesByVehicleIDs_EmptyIDs(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	result, err := repo.ListImagesByVehicleIDs(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Empty(t, result)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestRepo_ListImagesByVehicleIDs_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+	now := time.Now()
+
+	imgCols := []string{"id", "vehicle_id", "image_url", "label", "uploaded_at", "uploaded_by", "created_at", "updated_at", "deleted_at"}
+	rows := sqlmock.NewRows(imgCols).
+		AddRow(uint64(1), uint64(10), "a.jpg", "front", now, uint64(7), now, now, nil).
+		AddRow(uint64(2), uint64(10), "b.jpg", "interior", now, uint64(7), now, now, nil).
+		AddRow(uint64(3), uint64(11), "c.jpg", "back", now, uint64(7), now, now, nil)
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_images"`).WillReturnRows(rows)
+
+	result, err := repo.ListImagesByVehicleIDs(context.Background(), []uint64{10, 11})
+	assert.NoError(t, err)
+	assert.Len(t, result[10], 2)
+	assert.Len(t, result[11], 1)
+	assert.Equal(t, vehicle.VehicleImageLabelFront, result[10][0].Label)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestRepo_ListImagesByVehicleIDs_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectQuery(`SELECT \* FROM "vehicle_images"`).WillReturnError(gorm.ErrInvalidData)
+
+	result, err := repo.ListImagesByVehicleIDs(context.Background(), []uint64{1})
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}

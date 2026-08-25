@@ -242,6 +242,22 @@ func (r *Repository) SoftDeleteImage(ctx context.Context, vehicleID, imageID uin
 	return nil
 }
 
+// ListImagesByVehicleIDs returns non-deleted images keyed by vehicle_id.
+func (r *Repository) ListImagesByVehicleIDs(ctx context.Context, vehicleIDs []uint64) (map[uint64][]VehicleImage, error) {
+	out := make(map[uint64][]VehicleImage)
+	if len(vehicleIDs) == 0 {
+		return out, nil
+	}
+	var images []VehicleImage
+	if err := r.db.WithContext(ctx).Where("vehicle_id IN ?", vehicleIDs).Order("id ASC").Find(&images).Error; err != nil {
+		return nil, err
+	}
+	for _, img := range images {
+		out[img.VehicleID] = append(out[img.VehicleID], img)
+	}
+	return out, nil
+}
+
 func (r *Repository) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
 	var count int64
 	err := r.db.WithContext(ctx).Model(&Vehicle{}).Where("id = ? AND deleted_at IS NULL", vehicleID).Count(&count).Error
@@ -314,6 +330,7 @@ type VehicleWithDetails struct {
 	UpdatedAt          time.Time
 	CurrentStatus      *VehicleStatus
 	CurrentPricing     *VehiclePricing
+	Images             []VehicleImage
 }
 
 func buildListQuery(filter ListFilter) (string, []interface{}) {

@@ -372,3 +372,87 @@ func TestDeleteVehicleImage_NotFound(t *testing.T) {
 	err := svc.DeleteVehicleImage(context.Background(), 1, 9)
 	assert.ErrorIs(t, err, vehicle.ErrVehicleImageNotFound)
 }
+
+func TestListVehicles_WithSignedImages(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	storage := new(mockImageStorage)
+	svc := vehicle.NewService(repo, storage)
+
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
+	vehicles := []vehicle.VehicleWithDetails{{ID: 10, VehicleType: vehicle.VehicleTypeCar}}
+	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}, nil)
+	repo.On("List", mock.Anything, mock.Anything).Return(vehicles, nil)
+	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{10}).Return(map[uint64][]vehicle.VehicleImage{
+		10: {
+			{ID: 1, VehicleID: 10, ImageURL: "front.jpg", Label: vehicle.VehicleImageLabelFront},
+			{ID: 2, VehicleID: 10, ImageURL: "int.jpg", Label: vehicle.VehicleImageLabelInterior},
+			{ID: 3, VehicleID: 10, ImageURL: "", Label: vehicle.VehicleImageLabelBack},
+			{ID: 4, VehicleID: 10, ImageURL: "bad.jpg", Label: vehicle.VehicleImageLabelWheel},
+			{ID: 5, VehicleID: 10, ImageURL: "orphan.jpg", Label: ""},
+		},
+	}, nil)
+	storage.On("SignedURL", mock.Anything, "front.jpg", time.Hour).Return("https://signed/front", nil)
+	storage.On("SignedURL", mock.Anything, "int.jpg", time.Hour).Return("https://signed/int", nil)
+	storage.On("SignedURL", mock.Anything, "bad.jpg", time.Hour).Return("", errors.New("sign fail"))
+
+	resp, err := svc.ListVehicles(context.Background(), query)
+	require.NoError(t, err)
+	require.NotNil(t, resp.Cars)
+	require.Len(t, resp.Cars.Vehicles, 1)
+	images := resp.Cars.Vehicles[0].Images
+	require.NotNil(t, images)
+	assert.Equal(t, []vehicle.VehicleImageItem{{ID: 1, URL: "https://signed/front"}}, images["front"])
+	assert.Equal(t, []vehicle.VehicleImageItem{{ID: 2, URL: "https://signed/int"}}, images["interior"])
+	_, hasWheel := images["wheel"]
+	assert.False(t, hasWheel)
+	_, hasBack := images["back"]
+	assert.False(t, hasBack)
+}
+
+func TestListVehicles_ListImagesError(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	svc := newTestService(repo)
+	query := &vehicle.ListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20}
+	repo.On("CountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{vehicle.VehicleTypeCar: 1}, nil)
+	repo.On("List", mock.Anything, mock.Anything).Return([]vehicle.VehicleWithDetails{{ID: 1, VehicleType: vehicle.VehicleTypeCar}}, nil)
+	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{1}).Return(nil, errors.New("db fail"))
+
+	resp, err := svc.ListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestPublicListVehicles_WithSignedImages(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	storage := new(mockImageStorage)
+	svc := vehicle.NewService(repo, storage)
+
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	vehicles := []vehicle.VehicleWithDetails{{ID: 7, VehicleType: vehicle.VehicleTypeBike}}
+	repo.On("PublicCountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{vehicle.VehicleTypeBike: 1}, nil)
+	repo.On("PublicList", mock.Anything, mock.Anything).Return(vehicles, nil)
+	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{7}).Return(map[uint64][]vehicle.VehicleImage{
+		7: {{ID: 9, VehicleID: 7, ImageURL: "bike.jpg", Label: vehicle.VehicleImageLabelExterior}},
+	}, nil)
+	storage.On("SignedURL", mock.Anything, "bike.jpg", time.Hour).Return("https://signed/bike", nil)
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	require.NoError(t, err)
+	require.NotNil(t, resp.Bikes)
+	require.Len(t, resp.Bikes.Vehicles, 1)
+	images := resp.Bikes.Vehicles[0].Images
+	require.Equal(t, []vehicle.VehicleImageItem{{ID: 9, URL: "https://signed/bike"}}, images["exterior"])
+}
+
+func TestPublicListVehicles_ListImagesError(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	svc := newTestService(repo)
+	query := &vehicle.PublicListVehiclesQuery{ShowroomID: 1, Page: 1, Limit: 20, SortBy: "price_asc"}
+	repo.On("PublicCountByType", mock.Anything, mock.Anything).Return(map[vehicle.VehicleType]int64{}, nil)
+	repo.On("PublicList", mock.Anything, mock.Anything).Return([]vehicle.VehicleWithDetails{{ID: 2, VehicleType: vehicle.VehicleTypeCar}}, nil)
+	repo.On("ListImagesByVehicleIDs", mock.Anything, []uint64{2}).Return(nil, errors.New("images fail"))
+
+	resp, err := svc.PublicListVehicles(context.Background(), query)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}

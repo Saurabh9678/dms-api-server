@@ -139,6 +139,26 @@ func (m *mockVehicleRepo) SoftDeleteImage(ctx context.Context, vehicleID, imageI
 	return args.Error(0)
 }
 
+func (m *mockVehicleRepo) ListImagesByVehicleIDs(ctx context.Context, vehicleIDs []uint64) (map[uint64][]vehicle.VehicleImage, error) {
+	if !mockVehicleRepoHasExpectation(m, "ListImagesByVehicleIDs") {
+		return map[uint64][]vehicle.VehicleImage{}, nil
+	}
+	args := m.Called(ctx, vehicleIDs)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(map[uint64][]vehicle.VehicleImage), args.Error(1)
+}
+
+func mockVehicleRepoHasExpectation(m *mockVehicleRepo, method string) bool {
+	for _, call := range m.ExpectedCalls {
+		if call.Method == method {
+			return true
+		}
+	}
+	return false
+}
+
 type passthroughStorage struct{}
 
 func (passthroughStorage) Upload(_ context.Context, key string, _ []byte, _ string) (string, error) {
@@ -937,6 +957,8 @@ func TestListVehicles_WithStatusAndPricing(t *testing.T) {
 	assert.Equal(t, "ready_for_sale", resp.Cars.Vehicles[0].CurrentStatus.Status)
 	assert.NotNil(t, resp.Cars.Vehicles[0].Pricing)
 	assert.Equal(t, 300000.0, resp.Cars.Vehicles[0].Pricing.PriceTag)
+	assert.NotNil(t, resp.Cars.Vehicles[0].Images)
+	assert.Empty(t, resp.Cars.Vehicles[0].Images)
 }
 
 func TestListVehicles_ZeroShowroomID(t *testing.T) {
@@ -1245,6 +1267,8 @@ func TestPublicListVehicles_Success_AllTypes(t *testing.T) {
 	assert.Len(t, resp.Cars.Vehicles, 1)
 	assert.Equal(t, 300000.0, resp.Cars.Vehicles[0].PriceTag)
 	assert.Equal(t, "inr", resp.Cars.Vehicles[0].Currency)
+	assert.NotNil(t, resp.Cars.Vehicles[0].Images)
+	assert.Empty(t, resp.Cars.Vehicles[0].Images)
 	mockRepo.AssertExpectations(t)
 }
 

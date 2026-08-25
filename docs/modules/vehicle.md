@@ -38,6 +38,7 @@
    - Omits `status` filter when empty (all current statuses); otherwise filters to requested statuses
    - Calls `repo.CountByType` → per-category totals (same filters as the page query)
    - Calls `repo.List` → paginated vehicles with current status + pricing (`LIMIT`/`OFFSET` on the combined result ordered by `v.id DESC`)
+   - Batch-loads `vehicle_images` via `repo.ListImagesByVehicleIDs` for the page’s vehicle IDs, signs object keys (1-hour TTL), and attaches an `images` section on each list item
    - Groups results by vehicle_type (car/bike/scooty)
    - Returns `ListVehiclesResponse` with only requested categories (omits unmatched when type filter applied)
 4. Repository:
@@ -46,7 +47,7 @@
    - Uses LATERAL JOIN to get latest `vehicle_pricing` row (by `id DESC`) as current pricing
    - Applies optional filters: `vs.status IN (statuses)` when status is provided, `v.type IN (types)` (aliased as `vehicle_type` in responses), price range on `price_tag`. GORM expands slice args inside `(?)`, so listing SQL uses `IN (?)` rather than PostgreSQL `ANY(?)`.
    - Paginates with `LIMIT/OFFSET` (defaults: page 1, limit 20, max 100). `total` is the full matching count per type; `vehicles[]` is the current page only.
-5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`
+5. Response: `200 OK` with grouped response — `cars`, `bikes`, `scooties` each having `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `images` grouped by label: `{ "front": [{ "id", "url" }, ...], ... }` with signed URLs. Vehicles with no photos return `"images": {}`. Failed signs and empty labels are omitted.
 
 **Query Parameters:**
 | Param | Default | Notes |
@@ -170,6 +171,7 @@
    - Validates `showroom_id` > 0 (required), page ≥ 1, limit 1–100, sort_by ∈ {price_asc, price_desc}, valid type enums, min_price ≤ max_price
    - Calls `repo.PublicCountByType` → per-category totals scoped to showroom
    - Calls `repo.PublicList` → paginated vehicles with current status + pricing
+   - Batch-loads `vehicle_images` via `repo.ListImagesByVehicleIDs`, signs object keys, and attaches `images` on each public list item (same shape as auth listing)
    - Groups results by vehicle_type; only requested types appear in response
 5. Repository:
    - JOINs `vehicle_showroom_relations` on `showroom_id = ?` to scope to the showroom
@@ -178,7 +180,7 @@
    - Applies optional `vehicle_type` (`v.type IN (?)`), `min_price`, `max_price` filters
    - Orders by `vp.price_tag ASC` or `DESC` based on `sort_by`
    - Paginates with `LIMIT/OFFSET`
-6. Response: `200 OK` — grouped as `cars`, `bikes`, `scooties`, each with `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `price_tag` and `currency` but **no buying price**.
+6. Response: `200 OK` — grouped as `cars`, `bikes`, `scooties`, each with `total`, `page`, `limit`, `vehicles[]`. Each vehicle includes `price_tag`, `currency`, and `images` (label → `[{id,url}]`, empty object when none) but **no buying price**.
 
 **Query Parameters:**
 | Param | Default | Notes |

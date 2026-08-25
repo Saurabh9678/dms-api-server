@@ -1,5 +1,5 @@
 $kind: http-request
-description: Public endpoint — no auth required. Returns ready_for_sale vehicles in a specific showroom grouped by type (cars/bikes/scooties). Includes price_tag only (no buying details). Supports type filter, price range filter, sort by price, and pagination.
+description: Public endpoint — no auth required. Returns ready_for_sale vehicles in a specific showroom grouped by type (cars/bikes/scooties). Includes price_tag only (no buying details) and images (label → [{id,url}] signed URLs; empty object when none). Supports type filter, price range filter, sort by price, and pagination.
 url: "{{base_url}}/api/v1/vehicle/public-listing?showroom_id=1&page=1&limit=20&sort_by=price_asc"
 method: GET
 headers:

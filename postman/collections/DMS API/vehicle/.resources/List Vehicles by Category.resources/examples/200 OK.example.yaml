@@ -45,6 +45,20 @@ response:
                   "currency": "inr",
                   "tagged_at": "2024-01-01T00:00:00Z"
                 },
+                "images": {
+                  "front": [
+                    {
+                      "id": 12,
+                      "url": "https://storage.googleapis.com/bucket/front.jpg?X-Goog-Signature=..."
+                    }
+                  ],
+                  "interior": [
+                    {
+                      "id": 13,
+                      "url": "https://storage.googleapis.com/bucket/interior.jpg?X-Goog-Signature=..."
+                    }
+                  ]
+                },
                 "created_at": "2024-01-01T00:00:00Z",
                 "updated_at": "2024-01-01T00:00:00Z"
               }

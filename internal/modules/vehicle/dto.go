@@ -23,23 +23,24 @@ type VehiclePricingSummary struct {
 }
 
 type VehicleListItem struct {
-	ID                 uint64                 `json:"id"`
-	VehicleType        string                 `json:"vehicle_type"`
-	Manufacturer       string                 `json:"manufacturer"`
-	Model              string                 `json:"model"`
-	Variant            string                 `json:"variant"`
-	Color              string                 `json:"color"`
-	YearOfManufacture  int                    `json:"year_of_manufacture"`
-	RTOCode            string                 `json:"rto_code"`
-	RegistrationNumber string                 `json:"registration_number"`
-	RegistrationState  string                 `json:"registration_state"`
-	UsageKM            int                    `json:"usage_km"`
-	FuelType           string                 `json:"fuel_type"`
-	TransmissionType   string                 `json:"transmission_type"`
-	CurrentStatus      *VehicleStatusSummary  `json:"current_status"`
-	Pricing            *VehiclePricingSummary `json:"pricing"`
-	CreatedAt          string                 `json:"created_at"`
-	UpdatedAt          string                 `json:"updated_at"`
+	ID                 uint64                        `json:"id"`
+	VehicleType        string                        `json:"vehicle_type"`
+	Manufacturer       string                        `json:"manufacturer"`
+	Model              string                        `json:"model"`
+	Variant            string                        `json:"variant"`
+	Color              string                        `json:"color"`
+	YearOfManufacture  int                           `json:"year_of_manufacture"`
+	RTOCode            string                        `json:"rto_code"`
+	RegistrationNumber string                        `json:"registration_number"`
+	RegistrationState  string                        `json:"registration_state"`
+	UsageKM            int                           `json:"usage_km"`
+	FuelType           string                        `json:"fuel_type"`
+	TransmissionType   string                        `json:"transmission_type"`
+	CurrentStatus      *VehicleStatusSummary         `json:"current_status"`
+	Pricing            *VehiclePricingSummary        `json:"pricing"`
+	Images             map[string][]VehicleImageItem `json:"images"`
+	CreatedAt          string                        `json:"created_at"`
+	UpdatedAt          string                        `json:"updated_at"`
 }
 
 type CategoryListing struct {
@@ -180,23 +181,24 @@ type PublicListVehiclesQuery struct {
 }
 
 type PublicVehicleListItem struct {
-	ID                 uint64  `json:"id"`
-	VehicleType        string  `json:"vehicle_type"`
-	Manufacturer       string  `json:"manufacturer"`
-	Model              string  `json:"model"`
-	Variant            string  `json:"variant"`
-	Color              string  `json:"color"`
-	YearOfManufacture  int     `json:"year_of_manufacture"`
-	RTOCode            string  `json:"rto_code"`
-	RegistrationNumber string  `json:"registration_number"`
-	RegistrationState  string  `json:"registration_state"`
-	UsageKM            int     `json:"usage_km"`
-	FuelType           string  `json:"fuel_type"`
-	TransmissionType   string  `json:"transmission_type"`
-	PriceTag           float64 `json:"price_tag"`
-	Currency           string  `json:"currency"`
-	CreatedAt          string  `json:"created_at"`
-	UpdatedAt          string  `json:"updated_at"`
+	ID                 uint64                        `json:"id"`
+	VehicleType        string                        `json:"vehicle_type"`
+	Manufacturer       string                        `json:"manufacturer"`
+	Model              string                        `json:"model"`
+	Variant            string                        `json:"variant"`
+	Color              string                        `json:"color"`
+	YearOfManufacture  int                           `json:"year_of_manufacture"`
+	RTOCode            string                        `json:"rto_code"`
+	RegistrationNumber string                        `json:"registration_number"`
+	RegistrationState  string                        `json:"registration_state"`
+	UsageKM            int                           `json:"usage_km"`
+	FuelType           string                        `json:"fuel_type"`
+	TransmissionType   string                        `json:"transmission_type"`
+	PriceTag           float64                       `json:"price_tag"`
+	Currency           string                        `json:"currency"`
+	Images             map[string][]VehicleImageItem `json:"images"`
+	CreatedAt          string                        `json:"created_at"`
+	UpdatedAt          string                        `json:"updated_at"`
 }
 
 type PublicCategoryListing struct {
