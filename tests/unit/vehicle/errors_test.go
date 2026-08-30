@@ -21,6 +21,8 @@ func TestVehicleErrorMapper(t *testing.T) {
 		{"ErrVehicleSold", vehicle.ErrVehicleSold, apperrors.CodeVehicleUpdateForbidden, http.StatusUnprocessableEntity},
 		{"ErrVehicleAlreadyInShowroom", vehicle.ErrVehicleAlreadyInShowroom, apperrors.CodeVehicleAlreadyInShowroom, http.StatusConflict},
 		{"ErrVehicleImageNotFound", vehicle.ErrVehicleImageNotFound, apperrors.CodeVehicleImageNotFound, http.StatusNotFound},
+		{"ErrVehicleStatusUnchanged", vehicle.ErrVehicleStatusUnchanged, apperrors.CodeInvalidRequest, http.StatusBadRequest},
+		{"ErrVehicleAlreadySold", vehicle.ErrVehicleAlreadySold, apperrors.CodeVehicleAlreadySold, http.StatusConflict},
 	}
 
 	for _, tc := range cases {

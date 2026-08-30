@@ -1337,3 +1337,108 @@ func TestRepo_SellVehicle_CreateStatusError(t *testing.T) {
 	})
 	assert.Error(t, err)
 }
+
+func TestRepo_UpdateStatus_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}).AddRow(uint64(1), "garage"))
+	mock.ExpectExec(`UPDATE "vehicle_statuses"`).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(2)))
+	mock.ExpectCommit()
+
+	created, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeReadyForSale, "listed")
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(2), created.ID)
+	assert.Equal(t, vehicle.VehicleStatusTypeReadyForSale, created.Status)
+	assert.Equal(t, "listed", created.Description)
+	assert.Equal(t, uint64(7), created.AddedBy)
+}
+
+func TestRepo_UpdateStatus_NotFound(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}))
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeInspection, "")
+	assert.ErrorIs(t, err, vehicle.ErrVehicleNotFound)
+}
+
+func TestRepo_UpdateStatus_StatusLookupError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeInspection, "")
+	assert.Error(t, err)
+}
+
+func TestRepo_UpdateStatus_Sold(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}).AddRow(uint64(1), "sold"))
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeGarage, "")
+	assert.ErrorIs(t, err, vehicle.ErrVehicleSold)
+}
+
+func TestRepo_UpdateStatus_Unchanged(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}).AddRow(uint64(1), "garage"))
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeGarage, "")
+	assert.ErrorIs(t, err, vehicle.ErrVehicleStatusUnchanged)
+}
+
+func TestRepo_UpdateStatus_CloseError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}).AddRow(uint64(1), "garage"))
+	mock.ExpectExec(`UPDATE "vehicle_statuses"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeInspection, "")
+	assert.Error(t, err)
+}
+
+func TestRepo_UpdateStatus_InsertError(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT id, status FROM vehicle_statuses`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "status"}).AddRow(uint64(1), "garage"))
+	mock.ExpectExec(`UPDATE "vehicle_statuses"`).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectQuery(`INSERT INTO "vehicle_statuses"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.UpdateStatus(context.Background(), 10, 7, vehicle.VehicleStatusTypeInspection, "")
+	assert.Error(t, err)
+}

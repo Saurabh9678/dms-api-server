@@ -525,6 +525,84 @@
           ]
         },
         {
+          "name": "Update Vehicle Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web",
+                "description": "Required: web | ios_mobile | android_mobile | desktop"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "device-001",
+                "description": "Required: non-empty device identifier"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "Required: JWT access token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ready_for_sale\",\n  \"description\": \"Ready after inspection\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vehicle/:id/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicle",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Vehicle ID"
+                }
+              ]
+            },
+            "description": "Update vehicle lifecycle status. Any showroom member. Allowed: garage, inspection, ready_for_sale (sold only via sell API). Closes previous status (ended_at=now) and appends new row with added_by=authenticated user. Rejects same status (400) and sold vehicles (422 VEHICLE_UPDATE_FORBIDDEN)."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle status updated\",\n  \"data\": {\n    \"id\": 2,\n    \"vehicle_id\": 1,\n    \"status\": \"ready_for_sale\",\n    \"description\": \"Ready after inspection\",\n    \"started_at\": \"2026-08-30T16:00:00Z\",\n    \"added_by\": 7\n  }\n}"
+            },
+            {
+              "name": "400 Bad Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "422 Unprocessable Entity (vehicle sold)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_UPDATE_FORBIDDEN\",\n    \"message\": \"vehicle is sold\"\n  }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Sell Vehicle",
           "request": {
             "method": "POST",

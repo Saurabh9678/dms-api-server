@@ -382,6 +382,20 @@ type SellVehicleResponse struct {
 	SoldBy      VehicleSoldBy               `json:"sold_by"`
 }
 
+type UpdateVehicleStatusRequest struct {
+	Status      string  `json:"status" binding:"required"`
+	Description *string `json:"description"`
+}
+
+type UpdateVehicleStatusResponse struct {
+	ID          uint64  `json:"id"`
+	VehicleID   uint64  `json:"vehicle_id"`
+	Status      string  `json:"status"`
+	Description *string `json:"description"`
+	StartedAt   string  `json:"started_at"`
+	AddedBy     uint64  `json:"added_by"`
+}
+
 type AddVehicleImageResponse struct {
 	ID         uint64 `json:"id"`
 	VehicleID  uint64 `json:"vehicle_id"`

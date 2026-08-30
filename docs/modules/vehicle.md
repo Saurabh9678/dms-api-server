@@ -256,6 +256,44 @@
 
 ---
 
+### POST /api/v1/vehicle/:id/status — Update Vehicle Status
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/status` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.UpdateVehicleStatus`
+2. Handler:
+   - Parse `:id` (uint64, must be > 0)
+   - `ShouldBindJSON` → `UpdateVehicleStatusRequest`
+   - Extract showroom roles; resolve vehicle showroom; non-member → 404 `VEHICLE_NOT_FOUND`
+   - Any showroom role may update status
+   - `added_by` = authenticated user id
+   - Call `service.UpdateVehicleStatus` → 201 on success
+3. Service:
+   - Validates `status` ∈ `garage` | `inspection` | `ready_for_sale` (`sold` not allowed here — use sell API)
+   - Optional `description` (trimmed)
+   - Calls `repo.UpdateStatus` (single transaction)
+4. Repository transaction:
+   - Load latest `vehicle_statuses` row; missing → `ErrVehicleNotFound`
+   - Current `sold` → `ErrVehicleSold` (422 `VEHICLE_UPDATE_FORBIDDEN`)
+   - Same status as requested → `ErrVehicleStatusUnchanged` (400 `INVALID_REQUEST`)
+   - Set previous row `ended_at = now`
+   - Insert new status row with `started_at = now`, `added_by`, optional description
+5. Response: `201 Created` with `{ id, vehicle_id, status, description, started_at, added_by }`
+
+**Request Body:**
+| Field | Required | Type | Notes |
+|-------|----------|------|-------|
+| `status` | Yes | string | `garage`, `inspection`, or `ready_for_sale` |
+| `description` | No | string | Free-text note |
+
+**Errors:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Invalid/missing status (incl. `sold`) or same as current | 400 | `INVALID_REQUEST` |
+| Vehicle not found / not member | 404 | `VEHICLE_NOT_FOUND` |
+| Vehicle already sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
+
+---
+
 ### POST /api/v1/vehicle/:id/sale — Sell Vehicle
 
 **Flow:**

@@ -90,6 +90,14 @@ func (m *mockHandlerService) SellVehicle(ctx context.Context, sellerUserID, vehi
 	return args.Get(0).(*vehicle.SellVehicleResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) UpdateVehicleStatus(ctx context.Context, addedBy, vehicleID uint64, req *vehicle.UpdateVehicleStatusRequest) (*vehicle.UpdateVehicleStatusResponse, error) {
+	args := m.Called(ctx, addedBy, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.UpdateVehicleStatusResponse), args.Error(1)
+}
+
 func (m *mockHandlerService) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.AssignShowroomResponse, error) {
 	args := m.Called(ctx, vehicleID, showroomID)
 	if args.Get(0) == nil {
@@ -1264,6 +1272,123 @@ func TestHandler_SellVehicle_Success(t *testing.T) {
 	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
 	mockSvc.On("SellVehicle", mock.Anything, uint64(7), uint64(1), mock.Anything).Return(respData, nil)
 	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func validStatusBody() []byte {
+	body, _ := json.Marshal(vehicle.UpdateVehicleStatusRequest{Status: "ready_for_sale"})
+	return body
+}
+
+func setupUpdateStatusContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("POST", "/api/v1/vehicle/"+idParam+"/status", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_UpdateVehicleStatus_InvalidID(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "abc", validStatusBody())
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehicleStatus")
+}
+
+func TestHandler_UpdateVehicleStatus_ZeroID(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "0", validStatusBody())
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", []byte("bad"))
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_MissingShowroomRoles(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_InvalidShowroomRolesType(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, "bad")
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_GetShowroomIDError(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_NotMember(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertNotCalled(t, "UpdateVehicleStatus")
+}
+
+func TestHandler_UpdateVehicleStatus_MissingUserID(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_InvalidUserIDType(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, "x")
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_ZeroUserID(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(0))
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_ServiceError(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	mockSvc.On("UpdateVehicleStatus", mock.Anything, uint64(7), uint64(1), mock.Anything).Return(nil, vehicle.ErrVehicleSold)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestHandler_UpdateVehicleStatus_Success(t *testing.T) {
+	ctx, w, mockSvc := setupUpdateStatusContext(t, "1", validStatusBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	respData := &vehicle.UpdateVehicleStatusResponse{
+		ID: 2, VehicleID: 1, Status: "ready_for_sale", StartedAt: "2026-08-30T10:00:00Z", AddedBy: 7,
+	}
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	mockSvc.On("UpdateVehicleStatus", mock.Anything, uint64(7), uint64(1), mock.Anything).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).UpdateVehicleStatus(ctx)
 	assert.Equal(t, http.StatusCreated, w.Code)
 	mockSvc.AssertExpectations(t)
 }

@@ -411,6 +411,61 @@ func (h *Handler) AddExpense(c *gin.Context) {
 	response.Created(c, "expense added", resp)
 }
 
+func (h *Handler) UpdateVehicleStatus(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil || id == 0 {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	var req UpdateVehicleStatusRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	showroomRolesVal, exists := c.Get(middleware.ContextKeyShowroomRoles)
+	if !exists {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+	showroomRoles, ok := showroomRolesVal.(map[uint64]string)
+	if !ok {
+		response.Error(c, http.StatusInternalServerError, apperrors.CodeInternal, "internal server error")
+		return
+	}
+
+	showroomID, err := h.service.GetVehicleShowroomID(c.Request.Context(), id)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	if _, isMember := showroomRoles[showroomID]; !isMember {
+		response.Error(c, http.StatusNotFound, apperrors.CodeVehicleNotFound, "vehicle not found")
+		return
+	}
+
+	userIDVal, exists := c.Get(middleware.ContextKeyUserID)
+	if !exists {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return
+	}
+	addedBy, ok := userIDVal.(uint64)
+	if !ok || addedBy == 0 {
+		response.Error(c, http.StatusUnauthorized, apperrors.CodeInvalidAccessToken, "invalid request")
+		return
+	}
+
+	resp, err := h.service.UpdateVehicleStatus(c.Request.Context(), addedBy, id, &req)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.Created(c, "vehicle status updated", resp)
+}
+
 func (h *Handler) SellVehicle(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil || id == 0 {

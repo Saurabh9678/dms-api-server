@@ -51,6 +51,7 @@ type Service interface {
 	UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *UpdateVehiclePricingRequest) (*UpdateVehiclePricingResponse, error)
 	AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error)
 	SellVehicle(ctx context.Context, sellerUserID, vehicleID uint64, req *SellVehicleRequest) (*SellVehicleResponse, error)
+	UpdateVehicleStatus(ctx context.Context, addedBy, vehicleID uint64, req *UpdateVehicleStatusRequest) (*UpdateVehicleStatusResponse, error)
 	AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error)
 	AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*AddVehicleImageResponse, error)
 	DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error
@@ -72,6 +73,7 @@ type vehicleRepo interface {
 	UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*VehiclePricing, error)
 	CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error)
 	SellVehicle(ctx context.Context, in SellVehicleInput) (*SellVehicleResult, error)
+	UpdateStatus(ctx context.Context, vehicleID, addedBy uint64, status VehicleStatusType, description string) (*VehicleStatus, error)
 	VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error)
 	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
 	CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error)
@@ -956,6 +958,48 @@ func (s *service) SellVehicle(ctx context.Context, sellerUserID, vehicleID uint6
 		resp.Remarks = &r
 	}
 	return resp, nil
+}
+
+func (s *service) UpdateVehicleStatus(ctx context.Context, addedBy, vehicleID uint64, req *UpdateVehicleStatusRequest) (*UpdateVehicleStatusResponse, error) {
+	if req == nil {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if addedBy == 0 {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidAccessToken, "invalid request", http.StatusUnauthorized, nil)
+	}
+
+	status := VehicleStatusType(strings.TrimSpace(req.Status))
+	if !isUpdatableVehicleStatus(status) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	description := ""
+	if req.Description != nil {
+		description = strings.TrimSpace(*req.Description)
+	}
+
+	created, err := s.repo.UpdateStatus(ctx, vehicleID, addedBy, status, description)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UpdateVehicleStatusResponse{
+		ID:          created.ID,
+		VehicleID:   created.VehicleID,
+		Status:      string(created.Status),
+		Description: optionalStringPtr(created.Description),
+		StartedAt:   created.StartedAt.Format(time.RFC3339),
+		AddedBy:     created.AddedBy,
+	}, nil
+}
+
+func isUpdatableVehicleStatus(status VehicleStatusType) bool {
+	switch status {
+	case VehicleStatusTypeGarage, VehicleStatusTypeInspection, VehicleStatusTypeReadyForSale:
+		return true
+	default:
+		return false
+	}
 }
 
 func isValidPaymentMode(mode string) bool {

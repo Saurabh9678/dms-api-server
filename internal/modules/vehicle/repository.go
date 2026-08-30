@@ -433,6 +433,56 @@ func (r *Repository) SellVehicle(ctx context.Context, in SellVehicleInput) (*Sel
 	return &result, nil
 }
 
+// UpdateStatus closes the current status row (ended_at = now) and inserts the new status.
+func (r *Repository) UpdateStatus(ctx context.Context, vehicleID, addedBy uint64, status VehicleStatusType, description string) (*VehicleStatus, error) {
+	var created VehicleStatus
+	err := database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
+		var current struct {
+			ID     uint64            `gorm:"column:id"`
+			Status VehicleStatusType `gorm:"column:status"`
+		}
+		q := tx.WithContext(ctx).Raw(
+			"SELECT id, status FROM vehicle_statuses WHERE vehicle_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT 1",
+			vehicleID,
+		).Scan(&current)
+		if q.Error != nil {
+			return q.Error
+		}
+		if q.RowsAffected == 0 {
+			return ErrVehicleNotFound
+		}
+		if current.Status == VehicleStatusTypeSold {
+			return ErrVehicleSold
+		}
+		if current.Status == status {
+			return ErrVehicleStatusUnchanged
+		}
+
+		now := time.Now().UTC()
+		if err := tx.WithContext(ctx).
+			Model(&VehicleStatus{}).
+			Where("id = ?", current.ID).
+			Update("ended_at", now).Error; err != nil {
+			return err
+		}
+
+		created = VehicleStatus{
+			VehicleID:   vehicleID,
+			Status:      status,
+			Description: description,
+			StartedAt:   now,
+			AddedBy:     addedBy,
+		}
+		return tx.WithContext(ctx).
+			Select("VehicleID", "Status", "Description", "StartedAt", "AddedBy").
+			Create(&created).Error
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &created, nil
+}
+
 func (r *Repository) CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error) {
 	if err := r.db.WithContext(ctx).Create(img).Error; err != nil {
 		return nil, err

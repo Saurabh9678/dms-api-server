@@ -12,6 +12,7 @@ var ErrVehicleSold = stderrors.New("vehicle is sold")
 var ErrVehicleAlreadySold = stderrors.New("vehicle already sold")
 var ErrVehicleAlreadyInShowroom = stderrors.New("vehicle already assigned to a showroom")
 var ErrVehicleImageNotFound = stderrors.New("vehicle image not found")
+var ErrVehicleStatusUnchanged = stderrors.New("vehicle status unchanged")
 
 func init() {
 	apperrors.RegisterMapper(func(err error) (*apperrors.AppError, bool) {
@@ -29,6 +30,9 @@ func init() {
 		}
 		if stderrors.Is(err, ErrVehicleImageNotFound) {
 			return apperrors.NewAppError(apperrors.CodeVehicleImageNotFound, "vehicle image not found", http.StatusNotFound, err), true
+		}
+		if stderrors.Is(err, ErrVehicleStatusUnchanged) {
+			return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, err), true
 		}
 		return nil, false
 	})

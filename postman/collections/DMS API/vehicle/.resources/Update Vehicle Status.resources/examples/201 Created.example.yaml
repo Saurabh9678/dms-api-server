@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/status"
+  method: POST
+  headers:
+    Authorization: Bearer {{access_token}}
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+  body:
+    type: text
+    content: |-
+      {
+        "status": "ready_for_sale",
+        "description": "Ready after inspection"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle status updated",
+        "data": {
+          "id": 2,
+          "vehicle_id": 1,
+          "status": "ready_for_sale",
+          "description": "Ready after inspection",
+          "started_at": "2026-08-30T16:00:00Z",
+          "added_by": 7
+        }
+      }
+order: 1

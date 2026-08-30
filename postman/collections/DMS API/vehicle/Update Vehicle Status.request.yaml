@@ -1,0 +1,18 @@
+$kind: http-request
+description: Update vehicle lifecycle status. Any showroom member. Allowed status values: garage, inspection, ready_for_sale (sold is only via sell API). Closes previous status row (ended_at=now) and appends a new row with added_by=authenticated user. Rejects same status as current (400) and sold vehicles (422 VEHICLE_UPDATE_FORBIDDEN). Optional description.
+url: "{{base_url}}/api/v1/vehicle/:id/status"
+method: POST
+headers:
+  Authorization: Bearer {{access_token}}
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: device-001
+body:
+  type: text
+  content: |-
+    {
+      "status": "ready_for_sale",
+      "description": "Ready after inspection"
+    }
+examples: ./.resources/Update Vehicle Status.resources/examples
+order: 5400

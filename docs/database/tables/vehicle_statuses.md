@@ -11,7 +11,7 @@
 - `status`: `vehicle_status`, enum, not null (`garage`, `inspection`, `ready_for_sale`, `sold`).
 - `description`: `TEXT`, nullable.
 - `started_at`: `TIMESTAMPTZ`, not null.
-- `ended_at`: `TIMESTAMPTZ`, nullable.
+- `ended_at`: `TIMESTAMPTZ`, nullable — set when a newer status is appended via `POST /vehicle/:id/status` (previous row closed).
 - `added_by`: `BIGINT`, nullable, foreign key.
 - `created_at`: `TIMESTAMPTZ`, not null, default `CURRENT_TIMESTAMP`.
 - `updated_at`: `TIMESTAMPTZ`, not null, default `CURRENT_TIMESTAMP`.

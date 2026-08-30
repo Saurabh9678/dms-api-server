@@ -141,6 +141,14 @@ func (m *mockVehicleRepo) SellVehicle(ctx context.Context, in vehicle.SellVehicl
 	return args.Get(0).(*vehicle.SellVehicleResult), args.Error(1)
 }
 
+func (m *mockVehicleRepo) UpdateStatus(ctx context.Context, vehicleID, addedBy uint64, status vehicle.VehicleStatusType, description string) (*vehicle.VehicleStatus, error) {
+	args := m.Called(ctx, vehicleID, addedBy, status, description)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleStatus), args.Error(1)
+}
+
 func (m *mockVehicleRepo) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
 	args := m.Called(ctx, vehicleID)
 	return args.Bool(0), args.Error(1)
@@ -2405,6 +2413,96 @@ func TestSellVehicle_RepoError(t *testing.T) {
 	svc := newTestService(mockRepo)
 	mockRepo.On("SellVehicle", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
 	_, err := svc.SellVehicle(context.Background(), 7, 1, validSellRequest())
+	assert.Error(t, err)
+}
+
+// ---- UpdateVehicleStatus ----
+
+func TestUpdateVehicleStatus_NilRequest(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	_, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, nil)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "UpdateStatus")
+}
+
+func TestUpdateVehicleStatus_ZeroAddedBy(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	_, err := svc.UpdateVehicleStatus(context.Background(), 0, 1, &vehicle.UpdateVehicleStatusRequest{Status: "garage"})
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "UpdateStatus")
+}
+
+func TestUpdateVehicleStatus_InvalidStatus(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	_, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{Status: "sold"})
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "UpdateStatus")
+}
+
+func TestUpdateVehicleStatus_Success(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	desc := " ready "
+	now := time.Now().UTC()
+	mockRepo.On("UpdateStatus", mock.Anything, uint64(1), uint64(7), vehicle.VehicleStatusTypeReadyForSale, "ready").
+		Return(&vehicle.VehicleStatus{
+			ID: 2, VehicleID: 1, Status: vehicle.VehicleStatusTypeReadyForSale,
+			Description: "ready", StartedAt: now, AddedBy: 7,
+		}, nil)
+
+	resp, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{
+		Status: "ready_for_sale", Description: &desc,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(2), resp.ID)
+	assert.Equal(t, "ready_for_sale", resp.Status)
+	require.NotNil(t, resp.Description)
+	assert.Equal(t, "ready", *resp.Description)
+	assert.Equal(t, uint64(7), resp.AddedBy)
+}
+
+func TestUpdateVehicleStatus_AllAllowedStatuses(t *testing.T) {
+	for _, st := range []string{"garage", "inspection", "ready_for_sale"} {
+		mockRepo := new(mockVehicleRepo)
+		svc := newTestService(mockRepo)
+		mockRepo.On("UpdateStatus", mock.Anything, uint64(1), uint64(7), vehicle.VehicleStatusType(st), "").
+			Return(&vehicle.VehicleStatus{
+				ID: 3, VehicleID: 1, Status: vehicle.VehicleStatusType(st), StartedAt: time.Now().UTC(), AddedBy: 7,
+			}, nil)
+		resp, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{Status: st})
+		assert.NoError(t, err)
+		assert.Equal(t, st, resp.Status)
+		assert.Nil(t, resp.Description)
+	}
+}
+
+func TestUpdateVehicleStatus_SameStatus(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	mockRepo.On("UpdateStatus", mock.Anything, uint64(1), uint64(7), vehicle.VehicleStatusTypeGarage, "").
+		Return(nil, vehicle.ErrVehicleStatusUnchanged)
+	_, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{Status: "garage"})
+	assert.ErrorIs(t, err, vehicle.ErrVehicleStatusUnchanged)
+}
+
+func TestUpdateVehicleStatus_Sold(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	mockRepo.On("UpdateStatus", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+		Return(nil, vehicle.ErrVehicleSold)
+	_, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{Status: "inspection"})
+	assert.ErrorIs(t, err, vehicle.ErrVehicleSold)
+}
+
+func TestUpdateVehicleStatus_RepoError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	mockRepo.On("UpdateStatus", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+		Return(nil, errors.New("db error"))
+	_, err := svc.UpdateVehicleStatus(context.Background(), 7, 1, &vehicle.UpdateVehicleStatusRequest{Status: "inspection"})
 	assert.Error(t, err)
 }
 
