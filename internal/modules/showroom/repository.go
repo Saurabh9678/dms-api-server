@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 	"infiour.local/dms-api-server/pkg/database"
 )
@@ -168,15 +169,25 @@ func (r *Repository) AddMember(ctx context.Context, showroomID uint64, name, cou
 			return ErrDuplicateMember
 		}
 
+		// Soft-deleted same (user, showroom, role) still occupies the unique key — restore first.
+		restored, err := tryRestoreSoftDeletedMember(ctx, tx, userID, showroomID, role.ID)
+		if err != nil {
+			return err
+		}
+		if restored {
+			return nil
+		}
+
 		rel := ownerRelation{
 			UserID:     userID,
 			ShowroomID: showroomID,
 			RoleID:     role.ID,
 		}
 		if err := tx.WithContext(ctx).Create(&rel).Error; err != nil {
-			if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			if !isUniqueViolation(err) {
 				return err
 			}
+			// Race or TranslateError path: unique conflict → restore soft-deleted row.
 			return restoreSoftDeletedMember(ctx, tx, userID, showroomID, role.ID)
 		}
 		return nil
@@ -187,8 +198,20 @@ func (r *Repository) AddMember(ctx context.Context, showroomID uint64, name, cou
 	return userID, nil
 }
 
-// restoreSoftDeletedMember clears deleted_at on the soft-deleted relation matching the unique key.
-func restoreSoftDeletedMember(ctx context.Context, tx *gorm.DB, userID, showroomID, roleID uint64) error {
+func isUniqueViolation(err error) bool {
+	if errors.Is(err, gorm.ErrDuplicatedKey) {
+		return true
+	}
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+		return true
+	}
+	// Postgres drivers / GORM may wrap without ErrDuplicatedKey when TranslateError is off.
+	return strings.Contains(err.Error(), "SQLSTATE 23505")
+}
+
+// tryRestoreSoftDeletedMember clears deleted_at when a soft-deleted unique-key row exists.
+func tryRestoreSoftDeletedMember(ctx context.Context, tx *gorm.DB, userID, showroomID, roleID uint64) (bool, error) {
 	result := tx.WithContext(ctx).
 		Table("user_showroom_relations").
 		Where("user_id = ? AND showroom_id = ? AND role_id = ? AND deleted_at IS NOT NULL", userID, showroomID, roleID).
@@ -197,9 +220,18 @@ func restoreSoftDeletedMember(ctx context.Context, tx *gorm.DB, userID, showroom
 			"updated_at": time.Now(),
 		})
 	if result.Error != nil {
-		return result.Error
+		return false, result.Error
 	}
-	if result.RowsAffected == 0 {
+	return result.RowsAffected > 0, nil
+}
+
+// restoreSoftDeletedMember clears deleted_at on the soft-deleted relation matching the unique key.
+func restoreSoftDeletedMember(ctx context.Context, tx *gorm.DB, userID, showroomID, roleID uint64) error {
+	restored, err := tryRestoreSoftDeletedMember(ctx, tx, userID, showroomID, roleID)
+	if err != nil {
+		return err
+	}
+	if !restored {
 		return ErrDuplicateMember
 	}
 	return nil

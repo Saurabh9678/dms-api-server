@@ -136,9 +136,11 @@
       - If missing → create user with provided name/phone (concurrent duplicate → re-fetch).
       - If found with empty name → set provided name; otherwise leave existing name.
       - Resolve role ID; reject if an active membership already exists for the user+showroom.
-      - Insert `user_showroom_relations`. If unique `(user_id, showroom_id, role_id)` conflicts
-        (typically a soft-deleted prior membership with the same role), restore that row
-        (`deleted_at = NULL`). A different role with no conflicting unique key inserts a new row.
+      - If a soft-deleted row exists for the same `(user_id, showroom_id, role_id)`, restore it
+        (`deleted_at = NULL`) instead of inserting.
+      - Otherwise insert `user_showroom_relations`. If insert still hits unique conflict
+        (Postgres `23505` / `gorm.ErrDuplicatedKey`), restore the soft-deleted matching row.
+        A different role with no conflicting unique key inserts a new row.
 6. Returns 201 with `AddMemberResponse` (`showroom_id`, `user_id`, `role`).
 
 **Response branches:**
