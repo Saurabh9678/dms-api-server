@@ -337,13 +337,22 @@ func TestHandler_ListShowrooms_Success(t *testing.T) {
 	mockSvc.AssertExpectations(t)
 }
 
+func addMemberBody() *bytes.Buffer {
+	return jsonBody(map[string]any{
+		"name":         "Jane Doe",
+		"country_code": "91",
+		"phone_number": "9876543210",
+		"role":         "employee",
+	})
+}
+
 // ─── AddMember ────────────────────────────────────────────────────────────────
 
 func TestHandler_AddMember_InvalidShowroomID(t *testing.T) {
 	mockSvc := new(mockShowroomService)
 	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, ownerRoles(1))
 
-	req := httptest.NewRequest(http.MethodPost, "/showroom/abc/member", jsonBody(map[string]any{"user_id": 99, "role": "employee"}))
+	req := httptest.NewRequest(http.MethodPost, "/showroom/abc/member", addMemberBody())
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
@@ -356,7 +365,7 @@ func TestHandler_AddMember_MissingShowroomRoles(t *testing.T) {
 	// roles = nil → context key not set
 	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, nil)
 
-	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", jsonBody(map[string]any{"user_id": 99, "role": "employee"}))
+	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", addMemberBody())
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
@@ -383,7 +392,7 @@ func TestHandler_AddMember_ServiceError(t *testing.T) {
 	mockSvc.On("AddMember", mock.Anything, mock.Anything, uint64(1), mock.Anything).
 		Return(nil, errors.New("service error"))
 
-	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", jsonBody(map[string]any{"user_id": 99, "role": "employee"}))
+	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", addMemberBody())
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
@@ -398,7 +407,7 @@ func TestHandler_AddMember_Success(t *testing.T) {
 	mockSvc.On("AddMember", mock.Anything, mock.Anything, uint64(1), mock.Anything).
 		Return(&showroom.AddMemberResponse{ShowroomID: 1, UserID: 99, Role: "employee"}, nil)
 
-	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", jsonBody(map[string]any{"user_id": 99, "role": "employee"}))
+	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", addMemberBody())
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
@@ -420,7 +429,7 @@ func TestHandler_AddMember_BadShowroomRolesType(t *testing.T) {
 	})
 	engine.POST("/showroom/:id/member", showroom.NewHandler(mockSvc).AddMember)
 
-	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", jsonBody(map[string]any{"user_id": 99, "role": "employee"}))
+	req := httptest.NewRequest(http.MethodPost, "/showroom/1/member", addMemberBody())
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, req)

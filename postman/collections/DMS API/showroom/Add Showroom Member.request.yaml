@@ -1,0 +1,20 @@
+$kind: http-request
+description: "Protected. Adds a showroom member by name + phone. Finds an active user by country_code+phone_number or creates one (soft-deleted same phone creates a new active user). Overwrites name only when the existing user's name is empty. Caller must be owner or manager. Owner can assign role manager or employee. Manager can only assign employee."
+url: "{{base_url}}/api/v1/showroom/:id/member"
+method: POST
+headers:
+  Authorization: Bearer {{access_token}}
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: browser-1
+body:
+  type: text
+  content: |-
+    {
+      "name": "Jane Doe",
+      "country_code": "91",
+      "phone_number": "9876543210",
+      "role": "employee"
+    }
+examples: ./.resources/Add Showroom Member.resources/examples
+order: 3000

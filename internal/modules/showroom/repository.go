@@ -3,6 +3,7 @@ package showroom
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -11,7 +12,6 @@ import (
 
 var (
 	ErrOwnerRoleNotFound  = errors.New("owner role not found")
-	ErrTargetUserNotFound = errors.New("target user not found")
 	ErrDuplicateMember    = errors.New("user already a member")
 	ErrMemberNotFound     = errors.New("member not found")
 	ErrMemberRoleNotFound = errors.New("role not found")
@@ -33,9 +33,13 @@ type ownerRelation struct {
 
 func (ownerRelation) TableName() string { return "user_showroom_relations" }
 
-// userRecord is used to verify that a user exists without importing the user module.
+// userRecord is used for find-or-create membership without importing the user module.
 type userRecord struct {
-	ID uint64 `gorm:"column:id;primaryKey"`
+	ID          uint64 `gorm:"column:id;primaryKey"`
+	Name        string `gorm:"column:name"`
+	CountryCode string `gorm:"column:country_code"`
+	PhoneNumber string `gorm:"column:phone_number"`
+	database.SoftDeleteableModel
 }
 
 func (userRecord) TableName() string { return "users" }
@@ -131,17 +135,17 @@ func (r *Repository) UpdateFilePaths(ctx context.Context, showroomID uint64, log
 	return r.db.WithContext(ctx).Model(&Showroom{}).Where("id = ?", showroomID).Updates(updates).Error
 }
 
-// AddMember verifies the target user exists, looks up the role, checks for an existing active
-// relation, and inserts a new relation — all in a single transaction.
-func (r *Repository) AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error {
-	return database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
-		var u userRecord
-		if err := tx.WithContext(ctx).First(&u, targetUserID).Error; err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return ErrTargetUserNotFound
-			}
+// AddMember find-or-creates an active user by phone, optionally fills an empty name, looks up
+// the role, checks for an existing active relation, and inserts a new relation — all in one tx.
+// Soft-deleted users with the same phone are ignored (a new active user is created).
+func (r *Repository) AddMember(ctx context.Context, showroomID uint64, name, countryCode, phoneNumber, roleType string) (uint64, error) {
+	var userID uint64
+	err := database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
+		u, err := findOrCreateMemberUser(ctx, tx, name, countryCode, phoneNumber)
+		if err != nil {
 			return err
 		}
+		userID = u.ID
 
 		var role userRole
 		if err := tx.WithContext(ctx).Where("type = ?", roleType).First(&role).Error; err != nil {
@@ -154,7 +158,7 @@ func (r *Repository) AddMember(ctx context.Context, showroomID, targetUserID uin
 		var count int64
 		if err := tx.WithContext(ctx).
 			Table("user_showroom_relations").
-			Where("user_id = ? AND showroom_id = ? AND deleted_at IS NULL", targetUserID, showroomID).
+			Where("user_id = ? AND showroom_id = ? AND deleted_at IS NULL", userID, showroomID).
 			Count(&count).Error; err != nil {
 			return err
 		}
@@ -163,12 +167,59 @@ func (r *Repository) AddMember(ctx context.Context, showroomID, targetUserID uin
 		}
 
 		rel := ownerRelation{
-			UserID:     targetUserID,
+			UserID:     userID,
 			ShowroomID: showroomID,
 			RoleID:     role.ID,
 		}
 		return tx.WithContext(ctx).Create(&rel).Error
 	})
+	if err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+func findOrCreateMemberUser(ctx context.Context, tx *gorm.DB, name, countryCode, phoneNumber string) (*userRecord, error) {
+	var u userRecord
+	err := tx.WithContext(ctx).
+		Where("country_code = ? AND phone_number = ?", countryCode, phoneNumber).
+		First(&u).Error
+	if err == nil {
+		if strings.TrimSpace(u.Name) == "" && name != "" {
+			if err := tx.WithContext(ctx).Model(&u).Update("name", name).Error; err != nil {
+				return nil, err
+			}
+			u.Name = name
+		}
+		return &u, nil
+	}
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	u = userRecord{
+		Name:        name,
+		CountryCode: countryCode,
+		PhoneNumber: phoneNumber,
+	}
+	if err := tx.WithContext(ctx).Create(&u).Error; err != nil {
+		if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			return nil, err
+		}
+		// Concurrent create won — re-fetch the winning active row.
+		if err := tx.WithContext(ctx).
+			Where("country_code = ? AND phone_number = ?", countryCode, phoneNumber).
+			First(&u).Error; err != nil {
+			return nil, err
+		}
+		if strings.TrimSpace(u.Name) == "" && name != "" {
+			if err := tx.WithContext(ctx).Model(&u).Update("name", name).Error; err != nil {
+				return nil, err
+			}
+			u.Name = name
+		}
+	}
+	return &u, nil
 }
 
 // ListMembers returns paginated members of a showroom with their user and role details.

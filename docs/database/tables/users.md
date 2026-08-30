@@ -36,4 +36,4 @@
 - `users.country_code` + `users.phone_number` is the **canonical identity anchor** for the entire system.
 - All application logic that determines "who is this user", checks account existence, reads profile data, or performs permission checks **must** use the `users` table.
 - OTP records (`user_otps`) also store phone fields as snapshots — those are for OTP scoping only, not for identity decisions. See `docs/database/tables/user_otps.md`.
-- User records are created in `VerifyOTP` (first successful OTP verification for a phone number). No record is created during OTP trigger (`/auth/send-otp`, `/auth/register`, `/auth/login`).
+- User records are created in `VerifyOTP` (first successful OTP verification for a phone number) and also via showroom **Add Member** find-or-create when an owner/manager invites by phone. No record is created during OTP trigger (`/auth/send-otp`, `/auth/register`, `/auth/login`).

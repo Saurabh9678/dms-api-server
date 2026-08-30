@@ -117,7 +117,9 @@
 **Auth:** Required (Bearer token + device context headers + showroom membership).
 
 **Request:** `application/json`
-- `user_id` (uint64, required) — ID of the user to add.
+- `name` (string, required) — display name for the member (letters/spaces/apostrophe/hyphen; trimmed).
+- `country_code` (string, required) — digits only (same as auth, e.g. `91`).
+- `phone_number` (string, required) — digits only, local number without country code.
 - `role` (string, required) — one of `manager`, `employee`.
 
 **Flow:**
@@ -126,19 +128,22 @@
 3. `middleware.RequireShowroomRoles` — loads `map[showroomID → role]` into context.
 4. `Handler.AddMember` — extracts caller userID, parses showroom ID from path, reads showroom roles from context, delegates to service.
 5. `service.AddMember`:
-   a. Validates `role` is `manager` or `employee`.
+   a. Validates `name`, `country_code`, `phone_number`, and `role` (`manager` or `employee`).
    b. Checks caller's role in the showroom (403 `FORBIDDEN` if not owner or manager).
    c. Manager permission check: can only assign `employee` role (403 `FORBIDDEN` otherwise).
-   d. Calls `repo.AddMember`: verifies target user exists, checks for duplicate membership, inserts `user_showroom_relations`.
-6. Returns 201 with `AddMemberResponse`.
+   d. Calls `repo.AddMember` (single transaction):
+      - Find active user by `(country_code, phone_number)` (soft-deleted rows ignored).
+      - If missing → create user with provided name/phone (concurrent duplicate → re-fetch).
+      - If found with empty name → set provided name; otherwise leave existing name.
+      - Resolve role ID, reject duplicate active membership, insert `user_showroom_relations`.
+6. Returns 201 with `AddMemberResponse` (`showroom_id`, `user_id`, `role`).
 
 **Response branches:**
-- `201 Created` — member added successfully.
-- `400 INVALID_REQUEST` — missing/invalid body, or role not `manager`/`employee`.
+- `201 Created` — member added (existing or newly created user).
+- `400 INVALID_REQUEST` — missing/invalid body, invalid name/phone, or role not `manager`/`employee`.
 - `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token.
 - `403 FORBIDDEN` — caller not owner/manager, or manager trying to add non-employee.
 - `409 ALREADY_A_MEMBER` — target user is already an active member.
-- `422 TARGET_USER_NOT_FOUND` — target `user_id` does not exist.
 
 ## Endpoint: GET /api/v1/showroom/:id/member
 

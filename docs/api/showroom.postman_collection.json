@@ -314,7 +314,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"user_id\": 42,\n  \"role\": \"employee\"\n}",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"country_code\": \"91\",\n  \"phone_number\": \"9876543210\",\n  \"role\": \"employee\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -333,7 +333,7 @@
                 }
               ]
             },
-            "description": "Protected. Adds a user as a member of the showroom. Caller must be the showroom owner or manager. Owner can assign role 'manager' or 'employee'. Manager can only assign role 'employee'. Role must be one of: manager, employee."
+            "description": "Protected. Adds a showroom member by name + phone. Finds an active user by country_code+phone_number or creates one (soft-deleted same phone creates a new active user). Overwrites name only when the existing user's name is empty. Caller must be owner or manager. Owner can assign role 'manager' or 'employee'. Manager can only assign 'employee'."
           },
           "response": [
             {
@@ -365,12 +365,6 @@
               "status": "Forbidden",
               "code": 403,
               "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"invalid request\"\n  }\n}"
-            },
-            {
-              "name": "Target User Not Found",
-              "status": "Unprocessable Entity",
-              "code": 422,
-              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"TARGET_USER_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
             },
             {
               "name": "Already a Member",

@@ -28,8 +28,10 @@ type ShowroomListItem struct {
 }
 
 type AddMemberRequest struct {
-	UserID uint64 `json:"user_id" binding:"required"`
-	Role   string `json:"role" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	CountryCode string `json:"country_code" binding:"required"`
+	PhoneNumber string `json:"phone_number" binding:"required"`
+	Role        string `json:"role" binding:"required"`
 }
 
 type AddMemberResponse struct {

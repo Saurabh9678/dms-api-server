@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -31,6 +32,10 @@ var allowedExtensions = map[string]bool{
 	".jpeg": true,
 	".png":  true,
 }
+
+var memberNamePattern = regexp.MustCompile(`^[\p{L}\s''-]+$`)
+
+var digitsOnlyPattern = regexp.MustCompile(`^\d+$`)
 
 // ServiceOption configures the service. Used in tests to inject behaviour.
 type ServiceOption func(*service)
@@ -65,7 +70,7 @@ type showroomRepo interface {
 	ListByUserID(ctx context.Context, userID uint64) ([]ShowroomListRecord, error)
 	GetByID(ctx context.Context, showroomID uint64) (*Showroom, error)
 	UpdateShowroomFields(ctx context.Context, showroomID uint64, updates map[string]any) error
-	AddMember(ctx context.Context, showroomID, targetUserID uint64, roleType string) error
+	AddMember(ctx context.Context, showroomID uint64, name, countryCode, phoneNumber, roleType string) (uint64, error)
 	ListMembers(ctx context.Context, showroomID uint64, page, limit int) ([]MemberRecord, int64, error)
 	GetMemberRole(ctx context.Context, showroomID, targetUserID uint64) (string, error)
 	RemoveMember(ctx context.Context, showroomID, targetUserID uint64) error
@@ -252,6 +257,14 @@ func (s *service) AddMember(ctx context.Context, callerRoles map[uint64]string, 
 		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
 	}
 
+	name := strings.TrimSpace(req.Name)
+	countryCode := strings.TrimSpace(req.CountryCode)
+	phoneNumber := strings.TrimSpace(req.PhoneNumber)
+	if name == "" || !memberNamePattern.MatchString(name) ||
+		!digitsOnlyPattern.MatchString(countryCode) || !digitsOnlyPattern.MatchString(phoneNumber) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
 	if req.Role != "manager" && req.Role != "employee" {
 		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
 	}
@@ -261,11 +274,12 @@ func (s *service) AddMember(ctx context.Context, callerRoles map[uint64]string, 
 		return nil, apperrors.NewAppError(apperrors.CodeForbidden, "forbidden", http.StatusForbidden, nil)
 	}
 
-	if err := s.repo.AddMember(ctx, showroomID, req.UserID, req.Role); err != nil {
+	userID, err := s.repo.AddMember(ctx, showroomID, name, countryCode, phoneNumber, req.Role)
+	if err != nil {
 		return nil, mapMemberRepoError(err)
 	}
 
-	return &AddMemberResponse{ShowroomID: showroomID, UserID: req.UserID, Role: req.Role}, nil
+	return &AddMemberResponse{ShowroomID: showroomID, UserID: userID, Role: req.Role}, nil
 }
 
 func (s *service) ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error) {
@@ -421,8 +435,6 @@ func mapMemberRepoError(err error) error {
 		return nil
 	}
 	switch {
-	case errors.Is(err, ErrTargetUserNotFound):
-		return apperrors.NewAppError(apperrors.CodeTargetUserNotFound, "invalid request", http.StatusUnprocessableEntity, nil)
 	case errors.Is(err, ErrDuplicateMember):
 		return apperrors.NewAppError(apperrors.CodeAlreadyAMember, "invalid request", http.StatusConflict, nil)
 	case errors.Is(err, ErrMemberNotFound):
