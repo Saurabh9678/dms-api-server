@@ -135,7 +135,10 @@
       - Find active user by `(country_code, phone_number)` (soft-deleted rows ignored).
       - If missing → create user with provided name/phone (concurrent duplicate → re-fetch).
       - If found with empty name → set provided name; otherwise leave existing name.
-      - Resolve role ID, reject duplicate active membership, insert `user_showroom_relations`.
+      - Resolve role ID; reject if an active membership already exists for the user+showroom.
+      - Insert `user_showroom_relations`. If unique `(user_id, showroom_id, role_id)` conflicts
+        (typically a soft-deleted prior membership with the same role), restore that row
+        (`deleted_at = NULL`). A different role with no conflicting unique key inserts a new row.
 6. Returns 201 with `AddMemberResponse` (`showroom_id`, `user_id`, `role`).
 
 **Response branches:**

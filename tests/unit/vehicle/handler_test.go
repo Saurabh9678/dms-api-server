@@ -82,6 +82,14 @@ func (m *mockHandlerService) AddExpense(ctx context.Context, vehicleID uint64, r
 	return args.Get(0).(*vehicle.AddExpenseResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) SellVehicle(ctx context.Context, sellerUserID, vehicleID uint64, req *vehicle.SellVehicleRequest) (*vehicle.SellVehicleResponse, error) {
+	args := m.Called(ctx, sellerUserID, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.SellVehicleResponse), args.Error(1)
+}
+
 func (m *mockHandlerService) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.AssignShowroomResponse, error) {
 	args := m.Called(ctx, vehicleID, showroomID)
 	if args.Get(0) == nil {
@@ -540,7 +548,11 @@ func TestHandler_GetVehicle_OwnerWithPricingAndSale(t *testing.T) {
 	now := "2024-01-01T00:00:00Z"
 	_ = now
 	pricing := &vehicle.VehiclePricing{BuyingPrice: 200000, PriceTag: 300000, Currency: vehicle.CurrencyINR}
-	saleInfo := &vehicle.VehicleSaleInfo{SalePrice: 280000, CustomerFirstName: "John", CustomerLastName: "Doe"}
+	soldBy := uint64(7)
+	saleInfo := &vehicle.VehicleSaleInfo{
+		SalePrice: 280000, CustomerFirstName: "John", CustomerLastName: "Doe",
+		SoldBy: &soldBy, SoldByName: "Seller", SoldByCountryCode: "91", SoldByPhoneNumber: "9000000000",
+	}
 	details := &vehicle.VehicleFullDetails{
 		Vehicle:    vehicle.Vehicle{ID: 2, VehicleType: vehicle.VehicleTypeCar},
 		ShowroomID: 5,
@@ -1116,6 +1128,144 @@ func TestHandler_AddExpense_Success(t *testing.T) {
 	var resp map[string]interface{}
 	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
 	assert.Equal(t, "expense added", resp["message"])
+}
+
+func validSellBody() []byte {
+	body, _ := json.Marshal(vehicle.SellVehicleRequest{
+		SalePrice:   350000,
+		PaymentMode: "cash",
+		Customer: vehicle.SellVehicleCustomerRequest{
+			FirstName:   "John",
+			LastName:    "Doe",
+			PhoneNumber: "9876543210",
+			Address:     "123 Main St",
+		},
+	})
+	return body
+}
+
+func setupSellVehicleContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	mockSvc := new(mockHandlerService)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	req := httptest.NewRequest("POST", "/api/v1/vehicle/"+idParam+"/sale", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: idParam}}
+	return ctx, w, mockSvc
+}
+
+func TestHandler_SellVehicle_InvalidID(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "abc", validSellBody())
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_ZeroID(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "0", validSellBody())
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_InvalidJSON(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", []byte("bad json"))
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_MissingShowroomRoles(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_InvalidShowroomRolesType(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, "bad")
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_GetShowroomIDError(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(0), vehicle.ErrVehicleNotFound)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestHandler_SellVehicle_NotMember(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{99: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_ServiceError(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "manager"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	mockSvc.On("SellVehicle", mock.Anything, uint64(7), uint64(1), mock.Anything).Return(nil, vehicle.ErrVehicleAlreadySold)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusConflict, w.Code)
+}
+
+func TestHandler_SellVehicle_MissingUserID(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_InvalidUserIDType(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, "not-uint64")
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_ZeroUserID(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(0))
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	mockSvc.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestHandler_SellVehicle_Success(t *testing.T) {
+	ctx, w, mockSvc := setupSellVehicleContext(t, "1", validSellBody())
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{10: "employee"})
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	name := "Seller"
+	respData := &vehicle.SellVehicleResponse{
+		ID: 1, VehicleID: 1, SalePrice: 350000, SaleDate: "2026-08-30", PaymentMode: "cash",
+		Customer: vehicle.SellVehicleCustomerResponse{
+			ID: 2, FirstName: "John", LastName: "Doe", PhoneNumber: "9876543210", Address: "123 Main St",
+		},
+		SoldBy: vehicle.VehicleSoldBy{UserID: 7, Name: &name},
+	}
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(10), nil)
+	mockSvc.On("SellVehicle", mock.Anything, uint64(7), uint64(1), mock.Anything).Return(respData, nil)
+	vehicle.NewHandler(mockSvc).SellVehicle(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
 }
 
 func setupAssignShowroomContext(t *testing.T, idParam string, body []byte) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {

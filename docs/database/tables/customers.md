@@ -10,7 +10,7 @@
 - `first_name`: `VARCHAR`, not null.
 - `last_name`: `VARCHAR`, nullable.
 - `email`: `VARCHAR`, nullable.
-- `phone_number`: `VARCHAR`, not null, unique.
+- `phone_number`: `VARCHAR`, not null (duplicates allowed; each sale creates its own customer snapshot).
 - `alt_phone_number`: `VARCHAR`, nullable.
 - `address`: `TEXT`, nullable.
 - `city`: `VARCHAR`, nullable.
@@ -26,7 +26,7 @@
 ## Keys And Constraints
 
 - Primary key: `id`.
-- Unique constraint: `phone_number`.
+- No unique constraint on `phone_number` (dropped in migration `000032_drop_customers_phone_unique` so duplicate phones can exist across sale records).
 
 ## Foreign Keys Referencing This Table
 

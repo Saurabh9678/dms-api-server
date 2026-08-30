@@ -151,6 +151,14 @@ type VehicleSellingSection struct {
 	ReceiptUrl  string              `json:"receipt_url"`
 	Remarks     string              `json:"remarks"`
 	Customer    VehicleSaleCustomer `json:"customer"`
+	SoldBy      *VehicleSoldBy      `json:"sold_by,omitempty"`
+}
+
+type VehicleSoldBy struct {
+	UserID      uint64  `json:"user_id"`
+	Name        *string `json:"name"`
+	CountryCode *string `json:"country_code"`
+	PhoneNumber *string `json:"phone_number"`
 }
 
 type VehicleSoldPriceOnly struct {
@@ -330,6 +338,48 @@ type AssignShowroomResponse struct {
 	VehicleID  uint64 `json:"vehicle_id"`
 	ShowroomID uint64 `json:"showroom_id"`
 	AssignedAt string `json:"assigned_at"`
+}
+
+type SellVehicleCustomerRequest struct {
+	FirstName   string  `json:"first_name" binding:"required"`
+	LastName    string  `json:"last_name" binding:"required"`
+	PhoneNumber string  `json:"phone_number" binding:"required"`
+	Address     string  `json:"address" binding:"required"`
+	Email       *string `json:"email"`
+	City        *string `json:"city"`
+	State       *string `json:"state"`
+	Pincode     *string `json:"pincode"`
+}
+
+type SellVehicleRequest struct {
+	SalePrice   float64                    `json:"sale_price" binding:"required"`
+	SaleDate    *string                    `json:"sale_date"`
+	PaymentMode string                     `json:"payment_mode" binding:"required"`
+	Remarks     *string                    `json:"remarks"`
+	Customer    SellVehicleCustomerRequest `json:"customer" binding:"required"`
+}
+
+type SellVehicleCustomerResponse struct {
+	ID          uint64  `json:"id"`
+	FirstName   string  `json:"first_name"`
+	LastName    string  `json:"last_name"`
+	PhoneNumber string  `json:"phone_number"`
+	Address     string  `json:"address"`
+	Email       *string `json:"email"`
+	City        *string `json:"city"`
+	State       *string `json:"state"`
+	Pincode     *string `json:"pincode"`
+}
+
+type SellVehicleResponse struct {
+	ID          uint64                      `json:"id"`
+	VehicleID   uint64                      `json:"vehicle_id"`
+	SalePrice   float64                     `json:"sale_price"`
+	SaleDate    string                      `json:"sale_date"`
+	PaymentMode string                      `json:"payment_mode"`
+	Remarks     *string                     `json:"remarks"`
+	Customer    SellVehicleCustomerResponse `json:"customer"`
+	SoldBy      VehicleSoldBy               `json:"sold_by"`
 }
 
 type AddVehicleImageResponse struct {

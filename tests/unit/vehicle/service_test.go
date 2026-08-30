@@ -133,6 +133,14 @@ func (m *mockVehicleRepo) CreateExpense(ctx context.Context, expense *vehicle.Ve
 	return args.Get(0).(*vehicle.VehicleExpenses), args.Error(1)
 }
 
+func (m *mockVehicleRepo) SellVehicle(ctx context.Context, in vehicle.SellVehicleInput) (*vehicle.SellVehicleResult, error) {
+	args := m.Called(ctx, in)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.SellVehicleResult), args.Error(1)
+}
+
 func (m *mockVehicleRepo) VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error) {
 	args := m.Called(ctx, vehicleID)
 	return args.Bool(0), args.Error(1)
@@ -2215,6 +2223,189 @@ func TestAddExpense_AllValidTypes(t *testing.T) {
 			assert.Equal(t, expType, resp.Type)
 		})
 	}
+}
+
+// ---- SellVehicle ----
+
+func validSellRequest() *vehicle.SellVehicleRequest {
+	return &vehicle.SellVehicleRequest{
+		SalePrice:   350000,
+		PaymentMode: "cash",
+		Customer: vehicle.SellVehicleCustomerRequest{
+			FirstName:   "John",
+			LastName:    "Doe",
+			PhoneNumber: "9876543210",
+			Address:     "123 Main St",
+		},
+	}
+}
+
+func TestSellVehicle_NilRequest(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	_, err := svc.SellVehicle(context.Background(), 7, 1, nil)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_ZeroSeller(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	_, err := svc.SellVehicle(context.Background(), 0, 1, validSellRequest())
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_InvalidSalePrice(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	req := validSellRequest()
+	req.SalePrice = 0
+	_, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_InvalidPaymentMode(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	req := validSellRequest()
+	req.PaymentMode = "crypto"
+	_, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_MissingCustomerFields(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	req := validSellRequest()
+	req.Customer.LastName = "  "
+	_, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_InvalidSaleDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	bad := "not-a-date"
+	req := validSellRequest()
+	req.SaleDate = &bad
+	_, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.Error(t, err)
+	mockRepo.AssertNotCalled(t, "SellVehicle")
+}
+
+func TestSellVehicle_Success_DefaultSaleDate(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	req := validSellRequest()
+	email := "john@example.com"
+	req.Customer.Email = &email
+	remarks := "paid in full"
+	req.Remarks = &remarks
+
+	mockRepo.On("SellVehicle", mock.Anything, mock.MatchedBy(func(in vehicle.SellVehicleInput) bool {
+		return in.VehicleID == 1 &&
+			in.SoldBy == 7 &&
+			in.SalePrice == 350000 &&
+			in.PaymentMode == "cash" &&
+			in.FirstName == "John" &&
+			in.LastName == "Doe" &&
+			in.PhoneNumber == "9876543210" &&
+			in.Address == "123 Main St" &&
+			in.Email == "john@example.com" &&
+			in.Remarks == "paid in full" &&
+			!in.SaleDate.IsZero()
+	})).Return(&vehicle.SellVehicleResult{
+		SaleID: 10, CustomerID: 20, VehicleID: 1,
+		SalePrice: 350000, SaleDate: time.Date(2026, 8, 30, 0, 0, 0, 0, time.UTC),
+		PaymentMode: "cash", Remarks: "paid in full",
+		FirstName: "John", LastName: "Doe", PhoneNumber: "9876543210", Address: "123 Main St",
+		Email:  "john@example.com",
+		SoldBy: 7, SoldByName: "Seller", SoldByCountryCode: "91", SoldByPhoneNumber: "9000000000",
+	}, nil)
+
+	resp, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, uint64(10), resp.ID)
+	assert.Equal(t, uint64(20), resp.Customer.ID)
+	assert.Equal(t, "2026-08-30", resp.SaleDate)
+	require.NotNil(t, resp.Remarks)
+	assert.Equal(t, "paid in full", *resp.Remarks)
+	require.NotNil(t, resp.Customer.Email)
+	assert.Equal(t, "john@example.com", *resp.Customer.Email)
+	assert.Equal(t, uint64(7), resp.SoldBy.UserID)
+	require.NotNil(t, resp.SoldBy.Name)
+	assert.Equal(t, "Seller", *resp.SoldBy.Name)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestSellVehicle_Success_WithSaleDateAndOptionalEmpty(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	date := "2026-01-15"
+	empty := "  "
+	req := validSellRequest()
+	req.SaleDate = &date
+	req.Customer.City = &empty
+
+	mockRepo.On("SellVehicle", mock.Anything, mock.MatchedBy(func(in vehicle.SellVehicleInput) bool {
+		return in.SoldBy == 7 && in.SaleDate.Equal(time.Date(2026, 1, 15, 0, 0, 0, 0, time.UTC)) && in.City == ""
+	})).Return(&vehicle.SellVehicleResult{
+		SaleID: 11, CustomerID: 21, VehicleID: 1,
+		SalePrice: 350000, SaleDate: time.Date(2026, 1, 15, 0, 0, 0, 0, time.UTC),
+		PaymentMode: "online",
+		FirstName:   "John", LastName: "Doe", PhoneNumber: "9876543210", Address: "123 Main St",
+		SoldBy: 7, SoldByName: "Seller", SoldByCountryCode: "91", SoldByPhoneNumber: "9000000000",
+	}, nil)
+
+	req.PaymentMode = "online"
+	resp, err := svc.SellVehicle(context.Background(), 7, 1, req)
+	assert.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, "2026-01-15", resp.SaleDate)
+	assert.Nil(t, resp.Remarks)
+	assert.Nil(t, resp.Customer.City)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestSellVehicle_AllPaymentModes(t *testing.T) {
+	modes := []string{"cash", "cheque", "bank_transfer", "online", "credit", "debit", "other"}
+	for _, mode := range modes {
+		t.Run(mode, func(t *testing.T) {
+			mockRepo := new(mockVehicleRepo)
+			svc := newTestService(mockRepo)
+			req := validSellRequest()
+			req.PaymentMode = mode
+			mockRepo.On("SellVehicle", mock.Anything, mock.Anything).Return(&vehicle.SellVehicleResult{
+				SaleID: 1, CustomerID: 2, VehicleID: 1, SalePrice: 1,
+				SaleDate: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC), PaymentMode: mode,
+				FirstName: "A", LastName: "B", PhoneNumber: "1", Address: "x",
+			}, nil)
+			resp, err := svc.SellVehicle(context.Background(), 7, 1, req)
+			assert.NoError(t, err)
+			assert.Equal(t, mode, resp.PaymentMode)
+		})
+	}
+}
+
+func TestSellVehicle_RepoAlreadySold(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	mockRepo.On("SellVehicle", mock.Anything, mock.Anything).Return(nil, vehicle.ErrVehicleAlreadySold)
+	_, err := svc.SellVehicle(context.Background(), 7, 1, validSellRequest())
+	assert.ErrorIs(t, err, vehicle.ErrVehicleAlreadySold)
+}
+
+func TestSellVehicle_RepoError(t *testing.T) {
+	mockRepo := new(mockVehicleRepo)
+	svc := newTestService(mockRepo)
+	mockRepo.On("SellVehicle", mock.Anything, mock.Anything).Return(nil, errors.New("db error"))
+	_, err := svc.SellVehicle(context.Background(), 7, 1, validSellRequest())
+	assert.Error(t, err)
 }
 
 // ---- AssignVehicleToShowroom ----

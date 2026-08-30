@@ -525,6 +525,84 @@
           ]
         },
         {
+          "name": "Sell Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web",
+                "description": "Required: web | ios_mobile | android_mobile | desktop"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "device-001",
+                "description": "Required: non-empty device identifier"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "Required: JWT access token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sale_price\": 350000,\n  \"sale_date\": \"2026-08-30\",\n  \"payment_mode\": \"cash\",\n  \"remarks\": \"Paid in full\",\n  \"customer\": {\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"phone_number\": \"9876543210\",\n    \"address\": \"123 Main St\",\n    \"email\": \"john@example.com\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"pincode\": \"560001\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vehicle/:id/sale",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicle",
+                ":id",
+                "sale"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Vehicle ID"
+                }
+              ]
+            },
+            "description": "Record a vehicle sale. Any showroom member. Creates a new customer row, inserts customer_vehicle_sales (with sold_by user id + name/phone snapshots), and sets status to sold (added_by = seller). Blocks when already sold (409 VEHICLE_ALREADY_SOLD). payment_mode: cash|cheque|bank_transfer|online|credit|debit|other. sale_date optional YYYY-MM-DD (defaults to today)."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"vehicle sold\",\n  \"data\": {\n    \"id\": 1,\n    \"vehicle_id\": 1,\n    \"sale_price\": 350000,\n    \"sale_date\": \"2026-08-30\",\n    \"payment_mode\": \"cash\",\n    \"remarks\": \"Paid in full\",\n    \"customer\": {\n      \"id\": 2,\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"phone_number\": \"9876543210\",\n      \"address\": \"123 Main St\",\n      \"email\": \"john@example.com\",\n      \"city\": \"Bengaluru\",\n      \"state\": \"Karnataka\",\n      \"pincode\": \"560001\"\n    },\n    \"sold_by\": {\n      \"user_id\": 7,\n      \"name\": \"Seller Name\",\n      \"country_code\": \"91\",\n      \"phone_number\": \"9000000000\"\n    }\n  }\n}"
+            },
+            {
+              "name": "400 Bad Request",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "409 Conflict (already sold)",
+              "status": "Conflict",
+              "code": 409,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_ALREADY_SOLD\",\n    \"message\": \"vehicle already sold\"\n  }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VEHICLE_NOT_FOUND\",\n    \"message\": \"vehicle not found\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Assign Vehicle to Showroom",
           "request": {
             "method": "POST",

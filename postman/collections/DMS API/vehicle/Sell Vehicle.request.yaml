@@ -1,0 +1,30 @@
+$kind: http-request
+description: Record a vehicle sale. Any showroom member. Creates a new customer row, inserts customer_vehicle_sales (with sold_by user id + name/phone snapshots), and sets status to sold (added_by = seller). Blocks when already sold (409 VEHICLE_ALREADY_SOLD). payment_mode: cash|cheque|bank_transfer|online|credit|debit|other. sale_date optional YYYY-MM-DD (defaults to today).
+url: "{{base_url}}/api/v1/vehicle/:id/sale"
+method: POST
+headers:
+  Authorization: Bearer {{access_token}}
+  Content-Type: application/json
+  X-Platform: web
+  X-Device-Id: device-001
+body:
+  type: text
+  content: |-
+    {
+      "sale_price": 350000,
+      "sale_date": "2026-08-30",
+      "payment_mode": "cash",
+      "remarks": "Paid in full",
+      "customer": {
+        "first_name": "John",
+        "last_name": "Doe",
+        "phone_number": "9876543210",
+        "address": "123 Main St",
+        "email": "john@example.com",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560001"
+      }
+    }
+examples: ./.resources/Sell Vehicle.resources/examples
+order: 5500

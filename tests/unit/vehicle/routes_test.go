@@ -77,6 +77,14 @@ func (m *mockRoutesService) AddExpense(ctx context.Context, vehicleID uint64, re
 	return args.Get(0).(*vehicle.AddExpenseResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) SellVehicle(ctx context.Context, sellerUserID, vehicleID uint64, req *vehicle.SellVehicleRequest) (*vehicle.SellVehicleResponse, error) {
+	args := m.Called(ctx, sellerUserID, vehicleID, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.SellVehicleResponse), args.Error(1)
+}
+
 func (m *mockRoutesService) AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*vehicle.AssignShowroomResponse, error) {
 	args := m.Called(ctx, vehicleID, showroomID)
 	if args.Get(0) == nil {
@@ -124,6 +132,7 @@ func TestRegisterRoutes(t *testing.T) {
 	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id"], "PATCH /api/v1/vehicle/:id route should be registered")
 	assert.True(t, routeMap["PATCH:/api/v1/vehicle/:id/pricing"], "PATCH /api/v1/vehicle/:id/pricing route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/expense"], "POST /api/v1/vehicle/:id/expense route should be registered")
+	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/sale"], "POST /api/v1/vehicle/:id/sale route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/showroom"], "POST /api/v1/vehicle/:id/showroom route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/image"], "POST /api/v1/vehicle/:id/image route should be registered")
 	assert.True(t, routeMap["DELETE:/api/v1/vehicle/:id/image/:image_id"], "DELETE /api/v1/vehicle/:id/image/:image_id route should be registered")

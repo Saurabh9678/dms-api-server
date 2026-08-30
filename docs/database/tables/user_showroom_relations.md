@@ -17,7 +17,9 @@
 ## Keys And Constraints
 
 - Primary key: `id`.
-- Unique composite constraint: (`user_id`, `showroom_id`, `role_id`).
+- Unique composite constraint: (`user_id`, `showroom_id`, `role_id`) — includes soft-deleted rows.
+  Re-adding a removed member with the same role restores `deleted_at` to NULL instead of inserting;
+  a different role inserts a new row when that unique key is free.
 
 ## Foreign Keys
 

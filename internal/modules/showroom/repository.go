@@ -138,6 +138,8 @@ func (r *Repository) UpdateFilePaths(ctx context.Context, showroomID uint64, log
 // AddMember find-or-creates an active user by phone, optionally fills an empty name, looks up
 // the role, checks for an existing active relation, and inserts a new relation — all in one tx.
 // Soft-deleted users with the same phone are ignored (a new active user is created).
+// Re-assign after soft-delete: insert succeeds when the unique (user_id, showroom_id, role_id)
+// is free (e.g. different role). On unique conflict, restores the soft-deleted matching row.
 func (r *Repository) AddMember(ctx context.Context, showroomID uint64, name, countryCode, phoneNumber, roleType string) (uint64, error) {
 	var userID uint64
 	err := database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
@@ -171,12 +173,36 @@ func (r *Repository) AddMember(ctx context.Context, showroomID uint64, name, cou
 			ShowroomID: showroomID,
 			RoleID:     role.ID,
 		}
-		return tx.WithContext(ctx).Create(&rel).Error
+		if err := tx.WithContext(ctx).Create(&rel).Error; err != nil {
+			if !errors.Is(err, gorm.ErrDuplicatedKey) {
+				return err
+			}
+			return restoreSoftDeletedMember(ctx, tx, userID, showroomID, role.ID)
+		}
+		return nil
 	})
 	if err != nil {
 		return 0, err
 	}
 	return userID, nil
+}
+
+// restoreSoftDeletedMember clears deleted_at on the soft-deleted relation matching the unique key.
+func restoreSoftDeletedMember(ctx context.Context, tx *gorm.DB, userID, showroomID, roleID uint64) error {
+	result := tx.WithContext(ctx).
+		Table("user_showroom_relations").
+		Where("user_id = ? AND showroom_id = ? AND role_id = ? AND deleted_at IS NOT NULL", userID, showroomID, roleID).
+		Updates(map[string]any{
+			"deleted_at": nil,
+			"updated_at": time.Now(),
+		})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return ErrDuplicateMember
+	}
+	return nil
 }
 
 func findOrCreateMemberUser(ctx context.Context, tx *gorm.DB, name, countryCode, phoneNumber string) (*userRecord, error) {

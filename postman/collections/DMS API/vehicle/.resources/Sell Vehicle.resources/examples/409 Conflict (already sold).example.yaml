@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/sale"
+  method: POST
+  headers:
+    Authorization: Bearer {{access_token}}
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+  body:
+    type: text
+    content: |-
+      {
+        "sale_price": 350000,
+        "payment_mode": "cash",
+        "customer": {
+          "first_name": "John",
+          "last_name": "Doe",
+          "phone_number": "9876543210",
+          "address": "123 Main St"
+        }
+      }
+response:
+  statusCode: 409
+  statusText: Conflict
+  body:
+    type: text
+    content: |-
+      {
+        "success": false,
+        "error": {
+          "code": "VEHICLE_ALREADY_SOLD",
+          "message": "vehicle already sold"
+        }
+      }
+order: 3000

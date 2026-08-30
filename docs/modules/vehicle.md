@@ -256,6 +256,54 @@
 
 ---
 
+### POST /api/v1/vehicle/:id/sale — Sell Vehicle
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/sale` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.SellVehicle`
+2. Handler:
+   - Parse `:id` (uint64, must be > 0)
+   - `ShouldBindJSON` → `SellVehicleRequest`
+   - Extract showroom roles; resolve vehicle showroom; non-member → 404 `VEHICLE_NOT_FOUND`
+   - Any showroom role (owner/manager/employee) may sell
+   - Call `service.SellVehicle` → 201 on success
+3. Service:
+   - Validates `sale_price` > 0
+   - Validates `payment_mode` enum: `cash`, `cheque`, `bank_transfer`, `online`, `credit`, `debit`, `other`
+   - Requires trimmed non-empty customer `first_name`, `last_name`, `phone_number`, `address`
+   - `sale_date` optional (`YYYY-MM-DD`); defaults to today (UTC date)
+   - Calls `repo.SellVehicle` (single transaction)
+4. Repository transaction:
+   - Load current status; missing vehicle → `ErrVehicleNotFound`; status `sold` → `ErrVehicleAlreadySold`
+   - Reject if an active `customer_vehicle_sales` row exists → `ErrVehicleAlreadySold`
+   - Load seller from `users` by authenticated user id; snapshot name/country_code/phone_number
+   - Always **create a new** `customers` row (sale snapshot; phone uniqueness removed in migration `000032`)
+   - Insert `customer_vehicle_sales` with `sold_by` + seller snapshot columns (migration `000033`)
+   - Insert `vehicle_statuses` with `status = sold` and `added_by = seller`
+5. Response: `201 Created` with sale id, vehicle id, sale fields, customer snapshot, and `sold_by` `{ user_id, name, country_code, phone_number }`
+6. Owner `GET /vehicle/:id` admin `selling` section also returns `sold_by` snapshot when present.
+
+**Request Body:**
+| Field | Required | Type | Notes |
+|-------|----------|------|-------|
+| `sale_price` | Yes | float64 | Must be > 0 |
+| `sale_date` | No | string | `YYYY-MM-DD`; defaults to today UTC |
+| `payment_mode` | Yes | string | Enum above |
+| `remarks` | No | string | Optional notes |
+| `customer.first_name` | Yes | string | |
+| `customer.last_name` | Yes | string | |
+| `customer.phone_number` | Yes | string | |
+| `customer.address` | Yes | string | |
+| `customer.email` / `city` / `state` / `pincode` | No | string | |
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Vehicle not found / not a member | 404 | `VEHICLE_NOT_FOUND` |
+| Already sold (status or active sale) | 409 | `VEHICLE_ALREADY_SOLD` |
+| Invalid body / price / payment / customer | 400 | `INVALID_REQUEST` |
+
+---
+
 ### POST /api/v1/vehicle/:id/showroom — Assign Vehicle to Showroom
 
 **Flow:**

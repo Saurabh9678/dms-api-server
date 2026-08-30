@@ -459,6 +459,74 @@ func TestAddMember_InsertError(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestAddMember_UniqueConflict_RestoresSoftDeleted(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT \* FROM "users"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "country_code", "phone_number", "created_at", "updated_at", "deleted_at"}).
+			AddRow(uint64(99), "Jane", "91", "9876543210", nil, nil, nil))
+	mock.ExpectQuery(`SELECT \* FROM "user_roles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "type"}).AddRow(uint64(3), "employee"))
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "user_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(0))
+	mock.ExpectExec(`INSERT INTO "user_showroom_relations"`).
+		WillReturnError(gorm.ErrDuplicatedKey)
+	mock.ExpectExec(`UPDATE "user_showroom_relations"`).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectCommit()
+
+	userID, err := repo.AddMember(context.Background(), uint64(1), "Jane Doe", "91", "9876543210", "employee")
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(99), userID)
+}
+
+func TestAddMember_UniqueConflict_RestoreNoRow_DuplicateMember(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT \* FROM "users"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "country_code", "phone_number", "created_at", "updated_at", "deleted_at"}).
+			AddRow(uint64(99), "Jane", "91", "9876543210", nil, nil, nil))
+	mock.ExpectQuery(`SELECT \* FROM "user_roles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "type"}).AddRow(uint64(3), "employee"))
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "user_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(0))
+	mock.ExpectExec(`INSERT INTO "user_showroom_relations"`).
+		WillReturnError(gorm.ErrDuplicatedKey)
+	mock.ExpectExec(`UPDATE "user_showroom_relations"`).
+		WillReturnResult(sqlmock.NewResult(0, 0))
+	mock.ExpectRollback()
+
+	_, err := repo.AddMember(context.Background(), uint64(1), "Jane Doe", "91", "9876543210", "employee")
+	assert.ErrorIs(t, err, showroom.ErrDuplicateMember)
+}
+
+func TestAddMember_UniqueConflict_RestoreDBError(t *testing.T) {
+	gormDB, mock := newShowroomMockDB(t)
+	repo := showroom.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`SELECT \* FROM "users"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "country_code", "phone_number", "created_at", "updated_at", "deleted_at"}).
+			AddRow(uint64(99), "Jane", "91", "9876543210", nil, nil, nil))
+	mock.ExpectQuery(`SELECT \* FROM "user_roles"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "type"}).AddRow(uint64(3), "employee"))
+	mock.ExpectQuery(`SELECT count\(\*\) FROM "user_showroom_relations"`).
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(0))
+	mock.ExpectExec(`INSERT INTO "user_showroom_relations"`).
+		WillReturnError(gorm.ErrDuplicatedKey)
+	mock.ExpectExec(`UPDATE "user_showroom_relations"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.AddMember(context.Background(), uint64(1), "Jane Doe", "91", "9876543210", "employee")
+	assert.Error(t, err)
+	assert.NotErrorIs(t, err, showroom.ErrDuplicateMember)
+}
+
 func TestAddMember_RaceRefetchUpdateNameError(t *testing.T) {
 	gormDB, mock := newShowroomMockDB(t)
 	repo := showroom.NewRepository(gormDB)

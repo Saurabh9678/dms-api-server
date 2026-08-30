@@ -50,6 +50,7 @@ type Service interface {
 	UpdateVehicle(ctx context.Context, vehicleID uint64, req *UpdateVehicleRequest) (*UpdateVehicleResponse, error)
 	UpdateVehiclePricing(ctx context.Context, vehicleID uint64, req *UpdateVehiclePricingRequest) (*UpdateVehiclePricingResponse, error)
 	AddExpense(ctx context.Context, vehicleID uint64, req *AddExpenseRequest) (*AddExpenseResponse, error)
+	SellVehicle(ctx context.Context, sellerUserID, vehicleID uint64, req *SellVehicleRequest) (*SellVehicleResponse, error)
 	AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error)
 	AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*AddVehicleImageResponse, error)
 	DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error
@@ -70,6 +71,7 @@ type vehicleRepo interface {
 	CreatePricing(ctx context.Context, pricing *VehiclePricing) (*VehiclePricing, error)
 	UpdatePricingFields(ctx context.Context, vehicleID uint64, updates map[string]interface{}) (*VehiclePricing, error)
 	CreateExpense(ctx context.Context, expense *VehicleExpenses) (*VehicleExpenses, error)
+	SellVehicle(ctx context.Context, in SellVehicleInput) (*SellVehicleResult, error)
 	VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error)
 	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
 	CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error)
@@ -863,6 +865,120 @@ func (s *service) AddExpense(ctx context.Context, vehicleID uint64, req *AddExpe
 		Date:        created.Date.Format(time.RFC3339),
 		CreatedAt:   created.CreatedAt.Format(time.RFC3339),
 	}, nil
+}
+
+func (s *service) SellVehicle(ctx context.Context, sellerUserID, vehicleID uint64, req *SellVehicleRequest) (*SellVehicleResponse, error) {
+	if req == nil {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if sellerUserID == 0 {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidAccessToken, "invalid request", http.StatusUnauthorized, nil)
+	}
+
+	if req.SalePrice <= 0 {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if !isValidPaymentMode(req.PaymentMode) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	firstName := strings.TrimSpace(req.Customer.FirstName)
+	lastName := strings.TrimSpace(req.Customer.LastName)
+	phoneNumber := strings.TrimSpace(req.Customer.PhoneNumber)
+	address := strings.TrimSpace(req.Customer.Address)
+	if firstName == "" || lastName == "" || phoneNumber == "" || address == "" {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+
+	saleDate := time.Now().UTC()
+	saleDate = time.Date(saleDate.Year(), saleDate.Month(), saleDate.Day(), 0, 0, 0, 0, time.UTC)
+	if req.SaleDate != nil && strings.TrimSpace(*req.SaleDate) != "" {
+		parsed, err := time.Parse("2006-01-02", strings.TrimSpace(*req.SaleDate))
+		if err != nil {
+			return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+		}
+		saleDate = time.Date(parsed.Year(), parsed.Month(), parsed.Day(), 0, 0, 0, 0, time.UTC)
+	}
+
+	remarks := ""
+	if req.Remarks != nil {
+		remarks = strings.TrimSpace(*req.Remarks)
+	}
+
+	in := SellVehicleInput{
+		VehicleID:   vehicleID,
+		SoldBy:      sellerUserID,
+		SalePrice:   req.SalePrice,
+		SaleDate:    saleDate,
+		PaymentMode: req.PaymentMode,
+		Remarks:     remarks,
+		FirstName:   firstName,
+		LastName:    lastName,
+		PhoneNumber: phoneNumber,
+		Address:     address,
+		Email:       optionalTrimmed(req.Customer.Email),
+		City:        optionalTrimmed(req.Customer.City),
+		State:       optionalTrimmed(req.Customer.State),
+		Pincode:     optionalTrimmed(req.Customer.Pincode),
+	}
+
+	created, err := s.repo.SellVehicle(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &SellVehicleResponse{
+		ID:          created.SaleID,
+		VehicleID:   created.VehicleID,
+		SalePrice:   created.SalePrice,
+		SaleDate:    created.SaleDate.Format("2006-01-02"),
+		PaymentMode: created.PaymentMode,
+		Customer: SellVehicleCustomerResponse{
+			ID:          created.CustomerID,
+			FirstName:   created.FirstName,
+			LastName:    created.LastName,
+			PhoneNumber: created.PhoneNumber,
+			Address:     created.Address,
+			Email:       optionalStringPtr(created.Email),
+			City:        optionalStringPtr(created.City),
+			State:       optionalStringPtr(created.State),
+			Pincode:     optionalStringPtr(created.Pincode),
+		},
+		SoldBy: VehicleSoldBy{
+			UserID:      created.SoldBy,
+			Name:        optionalStringPtr(created.SoldByName),
+			CountryCode: optionalStringPtr(created.SoldByCountryCode),
+			PhoneNumber: optionalStringPtr(created.SoldByPhoneNumber),
+		},
+	}
+	if created.Remarks != "" {
+		r := created.Remarks
+		resp.Remarks = &r
+	}
+	return resp, nil
+}
+
+func isValidPaymentMode(mode string) bool {
+	switch mode {
+	case "cash", "cheque", "bank_transfer", "online", "credit", "debit", "other":
+		return true
+	default:
+		return false
+	}
+}
+
+func optionalTrimmed(v *string) string {
+	if v == nil {
+		return ""
+	}
+	return strings.TrimSpace(*v)
+}
+
+func optionalStringPtr(v string) *string {
+	if v == "" {
+		return nil
+	}
+	return &v
 }
 
 func isValidExpenseType(t VehicleExpensesType) bool {

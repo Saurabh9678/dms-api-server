@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"infiour.local/dms-api-server/pkg/database"
 	"infiour.local/dms-api-server/pkg/inventory"
 )
 
@@ -30,6 +31,10 @@ type VehicleSaleInfo struct {
 	CustomerAddress   string
 	CustomerCity      string
 	CustomerState     string
+	SoldBy            *uint64
+	SoldByName        string
+	SoldByCountryCode string
+	SoldByPhoneNumber string
 }
 
 type VehicleFullDetails struct {
@@ -56,6 +61,10 @@ type saleRow struct {
 	CustomerAddress   string    `gorm:"column:customer_address"`
 	CustomerCity      string    `gorm:"column:customer_city"`
 	CustomerState     string    `gorm:"column:customer_state"`
+	SoldBy            *uint64   `gorm:"column:sold_by"`
+	SoldByName        string    `gorm:"column:sold_by_name"`
+	SoldByCountryCode string    `gorm:"column:sold_by_country_code"`
+	SoldByPhoneNumber string    `gorm:"column:sold_by_phone_number"`
 }
 
 func (r *Repository) GetByIDWithFullDetails(ctx context.Context, vehicleID uint64) (*VehicleFullDetails, error) {
@@ -98,6 +107,7 @@ func (r *Repository) GetByIDWithFullDetails(ctx context.Context, vehicleID uint6
 	var sale saleRow
 	result := r.db.WithContext(ctx).Raw(`
 		SELECT cvs.sale_price, cvs.sale_date, cvs.payment_mode, cvs.receipt_url, cvs.remarks,
+		       cvs.sold_by, cvs.sold_by_name, cvs.sold_by_country_code, cvs.sold_by_phone_number,
 		       c.first_name AS customer_first_name, c.last_name AS customer_last_name,
 		       c.email AS customer_email, c.phone_number AS customer_phone,
 		       c.address AS customer_address, c.city AS customer_city, c.state AS customer_state
@@ -119,6 +129,10 @@ func (r *Repository) GetByIDWithFullDetails(ctx context.Context, vehicleID uint6
 			CustomerAddress:   sale.CustomerAddress,
 			CustomerCity:      sale.CustomerCity,
 			CustomerState:     sale.CustomerState,
+			SoldBy:            sale.SoldBy,
+			SoldByName:        sale.SoldByName,
+			SoldByCountryCode: sale.SoldByCountryCode,
+			SoldByPhoneNumber: sale.SoldByPhoneNumber,
 		}
 	}
 
@@ -223,6 +237,200 @@ func (r *Repository) CreateExpense(ctx context.Context, expense *VehicleExpenses
 		return nil, err
 	}
 	return expense, nil
+}
+
+// saleCustomerRecord persists a per-sale customer snapshot without importing the customer module.
+type saleCustomerRecord struct {
+	ID          uint64 `gorm:"column:id;primaryKey"`
+	FirstName   string `gorm:"column:first_name"`
+	LastName    string `gorm:"column:last_name"`
+	Email       string `gorm:"column:email"`
+	PhoneNumber string `gorm:"column:phone_number"`
+	Address     string `gorm:"column:address"`
+	City        string `gorm:"column:city"`
+	State       string `gorm:"column:state"`
+	Pincode     string `gorm:"column:pincode"`
+	database.SoftDeleteableModel
+}
+
+func (saleCustomerRecord) TableName() string { return "customers" }
+
+type saleRecord struct {
+	ID                uint64    `gorm:"column:id;primaryKey"`
+	CustomerID        uint64    `gorm:"column:customer_id"`
+	VehicleID         uint64    `gorm:"column:vehicle_id"`
+	SalePrice         float64   `gorm:"column:sale_price"`
+	SaleDate          time.Time `gorm:"column:sale_date"`
+	PaymentMode       string    `gorm:"column:payment_mode"`
+	ReceiptUrl        string    `gorm:"column:receipt_url"`
+	Remarks           string    `gorm:"column:remarks"`
+	SoldBy            uint64    `gorm:"column:sold_by"`
+	SoldByName        string    `gorm:"column:sold_by_name"`
+	SoldByCountryCode string    `gorm:"column:sold_by_country_code"`
+	SoldByPhoneNumber string    `gorm:"column:sold_by_phone_number"`
+	database.SoftDeleteableModel
+}
+
+func (saleRecord) TableName() string { return "customer_vehicle_sales" }
+
+type sellerUserRecord struct {
+	ID          uint64 `gorm:"column:id;primaryKey"`
+	Name        string `gorm:"column:name"`
+	CountryCode string `gorm:"column:country_code"`
+	PhoneNumber string `gorm:"column:phone_number"`
+	database.SoftDeleteableModel
+}
+
+func (sellerUserRecord) TableName() string { return "users" }
+
+// SellVehicleInput is the persistence payload for recording a vehicle sale.
+type SellVehicleInput struct {
+	VehicleID   uint64
+	SoldBy      uint64
+	SalePrice   float64
+	SaleDate    time.Time
+	PaymentMode string
+	Remarks     string
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Address     string
+	Email       string
+	City        string
+	State       string
+	Pincode     string
+}
+
+// SellVehicleResult is returned after a successful sale transaction.
+type SellVehicleResult struct {
+	SaleID            uint64
+	CustomerID        uint64
+	VehicleID         uint64
+	SalePrice         float64
+	SaleDate          time.Time
+	PaymentMode       string
+	Remarks           string
+	FirstName         string
+	LastName          string
+	PhoneNumber       string
+	Address           string
+	Email             string
+	City              string
+	State             string
+	Pincode           string
+	SoldBy            uint64
+	SoldByName        string
+	SoldByCountryCode string
+	SoldByPhoneNumber string
+}
+
+// SellVehicle creates a customer snapshot, sale row, and sold status in one transaction.
+func (r *Repository) SellVehicle(ctx context.Context, in SellVehicleInput) (*SellVehicleResult, error) {
+	var result SellVehicleResult
+	err := database.RunInTx(ctx, r.db, func(tx *gorm.DB) error {
+		var statusRow struct {
+			Status VehicleStatusType `gorm:"column:status"`
+		}
+		statusQuery := tx.WithContext(ctx).Raw(
+			"SELECT status FROM vehicle_statuses WHERE vehicle_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT 1",
+			in.VehicleID,
+		).Scan(&statusRow)
+		if statusQuery.Error != nil {
+			return statusQuery.Error
+		}
+		if statusQuery.RowsAffected == 0 {
+			return ErrVehicleNotFound
+		}
+		if statusRow.Status == VehicleStatusTypeSold {
+			return ErrVehicleAlreadySold
+		}
+
+		var saleCount int64
+		if err := tx.WithContext(ctx).
+			Table("customer_vehicle_sales").
+			Where("vehicle_id = ? AND deleted_at IS NULL", in.VehicleID).
+			Count(&saleCount).Error; err != nil {
+			return err
+		}
+		if saleCount > 0 {
+			return ErrVehicleAlreadySold
+		}
+
+		var seller sellerUserRecord
+		if err := tx.WithContext(ctx).First(&seller, in.SoldBy).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return ErrVehicleNotFound // should not happen for authenticated callers; treat as not found
+			}
+			return err
+		}
+
+		customer := saleCustomerRecord{
+			FirstName:   in.FirstName,
+			LastName:    in.LastName,
+			Email:       in.Email,
+			PhoneNumber: in.PhoneNumber,
+			Address:     in.Address,
+			City:        in.City,
+			State:       in.State,
+			Pincode:     in.Pincode,
+		}
+		if err := tx.WithContext(ctx).Create(&customer).Error; err != nil {
+			return err
+		}
+
+		sale := saleRecord{
+			CustomerID:        customer.ID,
+			VehicleID:         in.VehicleID,
+			SalePrice:         in.SalePrice,
+			SaleDate:          in.SaleDate,
+			PaymentMode:       in.PaymentMode,
+			Remarks:           in.Remarks,
+			SoldBy:            in.SoldBy,
+			SoldByName:        seller.Name,
+			SoldByCountryCode: seller.CountryCode,
+			SoldByPhoneNumber: seller.PhoneNumber,
+		}
+		if err := tx.WithContext(ctx).Create(&sale).Error; err != nil {
+			return err
+		}
+
+		status := VehicleStatus{
+			VehicleID: in.VehicleID,
+			Status:    VehicleStatusTypeSold,
+			StartedAt: time.Now().UTC(),
+			AddedBy:   in.SoldBy,
+		}
+		if err := tx.WithContext(ctx).Select("VehicleID", "Status", "StartedAt", "AddedBy").Create(&status).Error; err != nil {
+			return err
+		}
+
+		result = SellVehicleResult{
+			SaleID:            sale.ID,
+			CustomerID:        customer.ID,
+			VehicleID:         in.VehicleID,
+			SalePrice:         in.SalePrice,
+			SaleDate:          in.SaleDate,
+			PaymentMode:       in.PaymentMode,
+			Remarks:           in.Remarks,
+			FirstName:         in.FirstName,
+			LastName:          in.LastName,
+			PhoneNumber:       in.PhoneNumber,
+			Address:           in.Address,
+			Email:             in.Email,
+			City:              in.City,
+			State:             in.State,
+			Pincode:           in.Pincode,
+			SoldBy:            in.SoldBy,
+			SoldByName:        seller.Name,
+			SoldByCountryCode: seller.CountryCode,
+			SoldByPhoneNumber: seller.PhoneNumber,
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 func (r *Repository) CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error) {

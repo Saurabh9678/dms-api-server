@@ -1,0 +1,64 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/sale"
+  method: POST
+  headers:
+    Authorization: Bearer {{access_token}}
+    Content-Type: application/json
+    X-Platform: web
+    X-Device-Id: device-001
+  body:
+    type: text
+    content: |-
+      {
+        "sale_price": 350000,
+        "sale_date": "2026-08-30",
+        "payment_mode": "cash",
+        "remarks": "Paid in full",
+        "customer": {
+          "first_name": "John",
+          "last_name": "Doe",
+          "phone_number": "9876543210",
+          "address": "123 Main St",
+          "email": "john@example.com",
+          "city": "Bengaluru",
+          "state": "Karnataka",
+          "pincode": "560001"
+        }
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle sold",
+        "data": {
+          "id": 1,
+          "vehicle_id": 1,
+          "sale_price": 350000,
+          "sale_date": "2026-08-30",
+          "payment_mode": "cash",
+          "remarks": "Paid in full",
+          "customer": {
+            "id": 2,
+            "first_name": "John",
+            "last_name": "Doe",
+            "phone_number": "9876543210",
+            "address": "123 Main St",
+            "email": "john@example.com",
+            "city": "Bengaluru",
+            "state": "Karnataka",
+            "pincode": "560001"
+          },
+          "sold_by": {
+            "user_id": 7,
+            "name": "Seller Name",
+            "country_code": "91",
+            "phone_number": "9000000000"
+          }
+        }
+      }
+order: 1000
