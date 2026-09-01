@@ -3,7 +3,6 @@ package vehicle
 import (
 	"context"
 	stderrors "errors"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -18,10 +17,19 @@ import (
 
 const maxVehicleImageSize = 15 * 1024 * 1024 // 15 MB
 
+const maxVehicleDocumentSize = 15 * 1024 * 1024 // 15 MB
+
 var allowedVehicleImageExtensions = map[string]bool{
 	".jpg":  true,
 	".jpeg": true,
 	".png":  true,
+}
+
+var allowedVehicleDocumentExtensions = map[string]bool{
+	".jpg":  true,
+	".jpeg": true,
+	".png":  true,
+	".pdf":  true,
 }
 
 // ServiceOption configures the vehicle service. Used in tests to inject behaviour.
@@ -54,6 +62,7 @@ type Service interface {
 	UpdateVehicleStatus(ctx context.Context, addedBy, vehicleID uint64, req *UpdateVehicleStatusRequest) (*UpdateVehicleStatusResponse, error)
 	AssignVehicleToShowroom(ctx context.Context, vehicleID, showroomID uint64) (*AssignShowroomResponse, error)
 	AddVehicleImage(ctx context.Context, userID, vehicleID uint64, label string, photo *multipart.FileHeader) (*AddVehicleImageResponse, error)
+	AddVehicleDocument(ctx context.Context, userID, vehicleID uint64, documentType string, file *multipart.FileHeader) (*AddVehicleDocumentResponse, error)
 	DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error
 }
 
@@ -77,6 +86,7 @@ type vehicleRepo interface {
 	VehicleExistsByID(ctx context.Context, vehicleID uint64) (bool, error)
 	AssignShowroom(ctx context.Context, vehicleID, showroomID uint64) (*VehicleShowroom, error)
 	CreateImage(ctx context.Context, img *VehicleImage) (*VehicleImage, error)
+	CreateDocument(ctx context.Context, doc *VehicleDocument) (*VehicleDocument, error)
 	SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error
 	ListImagesByVehicleIDs(ctx context.Context, vehicleIDs []uint64) (map[uint64][]VehicleImage, error)
 }
@@ -1125,6 +1135,53 @@ func (s *service) AddVehicleImage(ctx context.Context, userID, vehicleID uint64,
 	}, nil
 }
 
+func (s *service) AddVehicleDocument(ctx context.Context, userID, vehicleID uint64, documentType string, file *multipart.FileHeader) (*AddVehicleDocumentResponse, error) {
+	normalizedType := strings.TrimSpace(strings.ToLower(documentType))
+	if !isValidVehicleDocumentType(VehicleDocumentType(normalizedType)) {
+		return nil, apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if err := validateVehicleDocumentFile(file); err != nil {
+		return nil, err
+	}
+
+	status, err := s.repo.GetCurrentStatus(ctx, vehicleID)
+	if err != nil {
+		return nil, err
+	}
+	if status == VehicleStatusTypeSold {
+		return nil, ErrVehicleSold
+	}
+
+	key, err := s.readAndUploadDocument(ctx, userID, vehicleID, file)
+	if err != nil {
+		return nil, err
+	}
+
+	created, err := s.repo.CreateDocument(ctx, &VehicleDocument{
+		VehicleID:    vehicleID,
+		DocumentType: VehicleDocumentType(normalizedType),
+		DocumentURL:  key,
+		UploadedAt:   time.Now(),
+		UploadedBy:   userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	url := ""
+	if signed, signErr := s.storage.SignedURL(ctx, created.DocumentURL, s.signedURLTTL); signErr == nil {
+		url = signed
+	}
+
+	return &AddVehicleDocumentResponse{
+		ID:           created.ID,
+		VehicleID:    created.VehicleID,
+		DocumentType: string(created.DocumentType),
+		URL:          url,
+		UploadedAt:   created.UploadedAt.Format(time.RFC3339),
+	}, nil
+}
+
 func (s *service) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
 	status, err := s.repo.GetCurrentStatus(ctx, vehicleID)
 	if err != nil {
@@ -1149,7 +1206,7 @@ func (s *service) readAndUploadImage(ctx context.Context, userID, vehicleID uint
 	}
 
 	ext := strings.ToLower(filepath.Ext(header.Filename))
-	key := fmt.Sprintf("%d/vehicle/%d/%s%s", userID, vehicleID, time.Now().Format("20060102150405"), ext)
+	key := storageprovider.VehicleImageObjectKey(userID, vehicleID, ext, time.Now())
 
 	contentType := header.Header.Get("Content-Type")
 	if contentType == "" {
@@ -1159,6 +1216,33 @@ func (s *service) readAndUploadImage(ctx context.Context, userID, vehicleID uint
 	storedKey, err := s.storage.Upload(ctx, key, data, contentType)
 	if err != nil {
 		return "", apperrors.NewAppError(apperrors.CodeInternal, "failed to upload image", http.StatusInternalServerError, err)
+	}
+	return storedKey, nil
+}
+
+func (s *service) readAndUploadDocument(ctx context.Context, userID, vehicleID uint64, header *multipart.FileHeader) (string, error) {
+	f, err := s.openFile(header)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, err)
+	}
+	defer func() { _ = f.Close() }()
+
+	data, err := io.ReadAll(f)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, err)
+	}
+
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	key := storageprovider.VehicleDocumentObjectKey(userID, vehicleID, ext, time.Now())
+
+	contentType := header.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	storedKey, err := s.storage.Upload(ctx, key, data, contentType)
+	if err != nil {
+		return "", apperrors.NewAppError(apperrors.CodeInternal, "failed to upload document", http.StatusInternalServerError, err)
 	}
 	return storedKey, nil
 }
@@ -1215,6 +1299,26 @@ func validateVehicleImageFile(header *multipart.FileHeader) error {
 		return apperrors.NewAppError(apperrors.CodeInvalidFileType, "invalid request", http.StatusBadRequest, nil)
 	}
 	return nil
+}
+
+func validateVehicleDocumentFile(header *multipart.FileHeader) error {
+	if header == nil {
+		return apperrors.NewAppError(apperrors.CodeInvalidRequest, "invalid request", http.StatusBadRequest, nil)
+	}
+	if header.Size > maxVehicleDocumentSize {
+		return apperrors.NewAppError(apperrors.CodeFileTooLarge, "invalid request", http.StatusBadRequest, nil)
+	}
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	if !allowedVehicleDocumentExtensions[ext] {
+		return apperrors.NewAppError(apperrors.CodeInvalidFileType, "invalid request", http.StatusBadRequest, nil)
+	}
+	return nil
+}
+
+func isValidVehicleDocumentType(docType VehicleDocumentType) bool {
+	return docType == VehicleDocumentTypeRegistrationCertificate ||
+		docType == VehicleDocumentTypeInsurance ||
+		docType == VehicleDocumentTypePollution
 }
 
 func isValidVehicleImageLabel(label VehicleImageLabel) bool {

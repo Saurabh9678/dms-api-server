@@ -490,6 +490,13 @@ func (r *Repository) CreateImage(ctx context.Context, img *VehicleImage) (*Vehic
 	return img, nil
 }
 
+func (r *Repository) CreateDocument(ctx context.Context, doc *VehicleDocument) (*VehicleDocument, error) {
+	if err := r.db.WithContext(ctx).Omit("ValidFrom", "ValidTill", "Remarks").Create(doc).Error; err != nil {
+		return nil, err
+	}
+	return doc, nil
+}
+
 func (r *Repository) SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error {
 	result := r.db.WithContext(ctx).Where("id = ? AND vehicle_id = ?", imageID, vehicleID).Delete(&VehicleImage{})
 	if result.Error != nil {

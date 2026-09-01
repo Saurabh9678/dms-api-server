@@ -114,6 +114,14 @@ func (m *mockHandlerService) AddVehicleImage(ctx context.Context, userID, vehicl
 	return args.Get(0).(*vehicle.AddVehicleImageResponse), args.Error(1)
 }
 
+func (m *mockHandlerService) AddVehicleDocument(ctx context.Context, userID, vehicleID uint64, documentType string, file *multipart.FileHeader) (*vehicle.AddVehicleDocumentResponse, error) {
+	args := m.Called(ctx, userID, vehicleID, documentType, file)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AddVehicleDocumentResponse), args.Error(1)
+}
+
 func (m *mockHandlerService) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
 	args := m.Called(ctx, vehicleID, imageID)
 	return args.Error(0)
@@ -1705,4 +1713,87 @@ func TestHandler_DeleteVehicleImage_ServiceError(t *testing.T) {
 	mockSvc.On("DeleteVehicleImage", mock.Anything, uint64(1), uint64(9)).Return(vehicle.ErrVehicleImageNotFound)
 	vehicle.NewHandler(mockSvc).DeleteVehicleImage(ctx)
 	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func multipartDocumentRequest(t *testing.T, documentType, filename string, content []byte) *http.Request {
+	t.Helper()
+	var body bytes.Buffer
+	w := multipart.NewWriter(&body)
+	if documentType != "" {
+		require.NoError(t, w.WriteField("document_type", documentType))
+	}
+	if filename != "" {
+		part, err := w.CreateFormFile("file", filename)
+		require.NoError(t, err)
+		_, err = part.Write(content)
+		require.NoError(t, err)
+	}
+	require.NoError(t, w.Close())
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/vehicle/1/document", &body)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	return req
+}
+
+func setupDocumentHandlerContext(t *testing.T, vehicleID string, req *http.Request) (*gin.Context, *httptest.ResponseRecorder, *mockHandlerService) {
+	t.Helper()
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = req
+	ctx.Params = gin.Params{{Key: "id", Value: vehicleID}}
+	return ctx, w, new(mockHandlerService)
+}
+
+func TestHandler_AddVehicleDocument_Success(t *testing.T) {
+	req := multipartDocumentRequest(t, "insurance", "policy.pdf", []byte("pdf"))
+	ctx, w, mockSvc := setupDocumentHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "employee"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddVehicleDocument", mock.Anything, uint64(7), uint64(1), "insurance", mock.Anything).
+		Return(&vehicle.AddVehicleDocumentResponse{ID: 11, VehicleID: 1, DocumentType: "insurance", URL: "https://signed"}, nil)
+
+	vehicle.NewHandler(mockSvc).AddVehicleDocument(ctx)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_AddVehicleDocument_MissingUser(t *testing.T) {
+	req := multipartDocumentRequest(t, "insurance", "policy.pdf", []byte("pdf"))
+	ctx, w, mockSvc := setupDocumentHandlerContext(t, "1", req)
+	vehicle.NewHandler(mockSvc).AddVehicleDocument(ctx)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_AddVehicleDocument_NotMultipart(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/vehicle/1/document", bytes.NewBufferString("not-multipart"))
+	req.Header.Set("Content-Type", "application/json")
+	ctx, w, mockSvc := setupDocumentHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddVehicleDocument(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleDocument_MissingFile(t *testing.T) {
+	req := multipartDocumentRequest(t, "insurance", "", nil)
+	ctx, w, mockSvc := setupDocumentHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	vehicle.NewHandler(mockSvc).AddVehicleDocument(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_AddVehicleDocument_ServiceError(t *testing.T) {
+	req := multipartDocumentRequest(t, "insurance", "policy.pdf", []byte("pdf"))
+	ctx, w, mockSvc := setupDocumentHandlerContext(t, "1", req)
+	ctx.Set(middleware.ContextKeyUserID, uint64(7))
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	mockSvc.On("GetVehicleShowroomID", mock.Anything, uint64(1)).Return(uint64(5), nil)
+	mockSvc.On("AddVehicleDocument", mock.Anything, uint64(7), uint64(1), "insurance", mock.Anything).
+		Return(nil, vehicle.ErrVehicleSold)
+	vehicle.NewHandler(mockSvc).AddVehicleDocument(ctx)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

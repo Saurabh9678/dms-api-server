@@ -170,6 +170,14 @@ func (m *mockVehicleRepo) CreateImage(ctx context.Context, img *vehicle.VehicleI
 	return args.Get(0).(*vehicle.VehicleImage), args.Error(1)
 }
 
+func (m *mockVehicleRepo) CreateDocument(ctx context.Context, doc *vehicle.VehicleDocument) (*vehicle.VehicleDocument, error) {
+	args := m.Called(ctx, doc)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.VehicleDocument), args.Error(1)
+}
+
 func (m *mockVehicleRepo) SoftDeleteImage(ctx context.Context, vehicleID, imageID uint64) error {
 	args := m.Called(ctx, vehicleID, imageID)
 	return args.Error(0)

@@ -13,6 +13,7 @@ func RegisterRoutes(group *gin.RouterGroup, h *Handler, showroomRoles gin.Handle
 	group.POST("/vehicle/:id/sale", showroomRoles, h.SellVehicle)
 	group.POST("/vehicle/:id/showroom", showroomRoles, h.AssignShowroom)
 	group.POST("/vehicle/:id/image", showroomRoles, h.AddVehicleImage)
+	group.POST("/vehicle/:id/document", showroomRoles, h.AddVehicleDocument)
 	group.DELETE("/vehicle/:id/image/:image_id", showroomRoles, h.DeleteVehicleImage)
 }
 

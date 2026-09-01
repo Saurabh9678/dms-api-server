@@ -1,0 +1,15 @@
+$kind: http-request
+description: Upload a vehicle document. Any showroom member. Multipart field file (jpg/jpeg/png/pdf, max 15 MB) and document_type (registration_certificate|insurance|pollution). Blocked when the vehicle is sold.
+url: "{{base_url}}/api/v1/vehicle/1/document"
+method: POST
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: device-001
+body:
+  type: text
+  content: |-
+    document_type=insurance
+    file=<file>
+examples: ./.resources/Upload Vehicle Document.resources/examples
+order: 6500

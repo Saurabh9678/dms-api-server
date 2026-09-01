@@ -392,7 +392,7 @@
    - Validates `label` ∈ `front`, `interior`, `exterior`, `back`, `wheel`
    - Validates file: `.jpg`/`.jpeg`/`.png`, size ≤ 15 MB
    - `GetCurrentStatus` — sold → 422 `VEHICLE_UPDATE_FORBIDDEN`
-   - Uploads via `storage.Provider`. Object key: `{userID}/vehicle/{vehicleID}/{YYYYMMDDHHmmss}{ext}`
+   - Uploads via `storage.Provider`. Object key built with `storage.VehicleImageObjectKey` (`{userID}/vehicle/{vehicleID}/{YYYYMMDDHHmmss}{ext}`; see `internal/providers/storage/keys.go`)
    - Persists `vehicle_images` with the **object key** in `image_url` and `uploaded_by` = caller. Upload failure fails the request (no DB row).
    - Response `url` is a signed GET URL (TTL from `STORAGE_SIGNED_URL_TTL_SECONDS`, default 1 hour). Signing failure returns an empty `url`.
 4. Multiple photos with the same label are allowed (no unique constraint).
@@ -404,6 +404,36 @@
 | Missing/invalid file, label, or multipart body | 400 | `INVALID_REQUEST` |
 | File larger than 15 MB | 400 | `FILE_TOO_LARGE` |
 | Extension not jpg/jpeg/png | 400 | `INVALID_FILE_TYPE` |
+| Vehicle not found / not a showroom member | 404 | `VEHICLE_NOT_FOUND` |
+| Vehicle is sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
+| Storage upload failure | 500 | `INTERNAL` |
+
+---
+
+### POST /api/v1/vehicle/:id/document — Upload Vehicle Document
+
+**Flow:**
+1. `POST /api/v1/vehicle/:id/document` → `RequireDeviceContext` → `RequireAuth` → `ShowroomRoles` → `vehicle.Handler.AddVehicleDocument`
+2. Handler:
+   - Extracts caller `userID`, parses `:id`, loads showroom roles
+   - `GetVehicleShowroomID` + membership check (any role: owner/manager/employee). Non-member → 404 `VEHICLE_NOT_FOUND`
+   - Parses `multipart/form-data` (20 MB form limit). Required file field `file`; required form field `document_type`
+3. Service:
+   - Validates `document_type` ∈ `registration_certificate`, `insurance`, `pollution`
+   - Validates file: `.jpg`/`.jpeg`/`.png`/`.pdf`, size ≤ 15 MB
+   - `GetCurrentStatus` — sold → 422 `VEHICLE_UPDATE_FORBIDDEN`
+   - Uploads via `storage.Provider`. Object key built with `storage.VehicleDocumentObjectKey` (`{userID}/vehicle/{vehicleID}/docs/{YYYYMMDDHHmmss}{ext}`; see `internal/providers/storage/keys.go`)
+   - Persists `vehicle_documents` with the **object key** in `document_url` and `uploaded_by` = caller. Optional metadata columns (`valid_from`, `valid_till`, `remarks`) are omitted on upload.
+   - Response `url` is a signed GET URL (TTL from `STORAGE_SIGNED_URL_TTL_SECONDS`, default 1 hour). Signing failure returns an empty `url`.
+4. Multiple documents per type are allowed.
+5. Response: `201 Created` with `AddVehicleDocumentResponse`
+
+**Error Codes:**
+| Scenario | HTTP | Code |
+|----------|------|------|
+| Missing/invalid file, document_type, or multipart body | 400 | `INVALID_REQUEST` |
+| File larger than 15 MB | 400 | `FILE_TOO_LARGE` |
+| Extension not jpg/jpeg/png/pdf | 400 | `INVALID_FILE_TYPE` |
 | Vehicle not found / not a showroom member | 404 | `VEHICLE_NOT_FOUND` |
 | Vehicle is sold | 422 | `VEHICLE_UPDATE_FORBIDDEN` |
 | Storage upload failure | 500 | `INTERNAL` |

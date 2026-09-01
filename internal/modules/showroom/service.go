@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"math/big"
 	"mime/multipart"
@@ -403,7 +402,7 @@ func (s *service) maybeUpload(ctx context.Context, userID uint64, externalShowro
 	data, _ := io.ReadAll(f)
 
 	ext := strings.ToLower(filepath.Ext(header.Filename))
-	key := fmt.Sprintf("%d/showroom/%s/%s%s", userID, externalShowroomID, time.Now().Format("20060102150405"), ext)
+	key := storageprovider.ShowroomMediaObjectKey(userID, externalShowroomID, ext, time.Now())
 
 	contentType := header.Header.Get("Content-Type")
 	if contentType == "" {

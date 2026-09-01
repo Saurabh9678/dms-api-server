@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/api/v1/vehicle/1/document"
+  method: POST
+  headers:
+    Authorization: Bearer {{access_token}}
+    X-Platform: web
+    X-Device-Id: device-001
+response:
+  statusCode: 201
+  statusText: Created
+  body:
+    type: text
+    content: |-
+      {
+        "success": true,
+        "message": "vehicle document uploaded",
+        "data": {
+          "id": 11,
+          "vehicle_id": 1,
+          "document_type": "insurance",
+          "url": "https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/docs/20240101120000.pdf?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...",
+          "uploaded_at": "2024-01-01T12:00:00Z"
+        }
+      }
+order: 1000

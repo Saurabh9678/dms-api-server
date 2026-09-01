@@ -403,3 +403,11 @@ type AddVehicleImageResponse struct {
 	URL        string `json:"url"`
 	UploadedAt string `json:"uploaded_at"`
 }
+
+type AddVehicleDocumentResponse struct {
+	ID           uint64 `json:"id"`
+	VehicleID    uint64 `json:"vehicle_id"`
+	DocumentType string `json:"document_type"`
+	URL          string `json:"url"`
+	UploadedAt   string `json:"uploaded_at"`
+}

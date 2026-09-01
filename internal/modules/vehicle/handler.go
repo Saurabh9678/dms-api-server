@@ -617,6 +617,38 @@ func (h *Handler) AddVehicleImage(c *gin.Context) {
 	response.Created(c, "vehicle image uploaded", resp)
 }
 
+func (h *Handler) AddVehicleDocument(c *gin.Context) {
+	vehicleID, userID, ok := h.requireVehicleMembership(c)
+	if !ok {
+		return
+	}
+
+	if err := c.Request.ParseMultipartForm(20 << 20); err != nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	documentType := c.Request.FormValue("document_type")
+	var file *multipart.FileHeader
+	if form := c.Request.MultipartForm; form != nil {
+		if files := form.File["file"]; len(files) > 0 {
+			file = files[0]
+		}
+	}
+	if file == nil {
+		response.Error(c, http.StatusBadRequest, apperrors.CodeInvalidRequest, "invalid request")
+		return
+	}
+
+	resp, err := h.service.AddVehicleDocument(c.Request.Context(), userID, vehicleID, documentType, file)
+	if err != nil {
+		response.FromError(c, err)
+		return
+	}
+
+	response.Created(c, "vehicle document uploaded", resp)
+}
+
 func (h *Handler) DeleteVehicleImage(c *gin.Context) {
 	vehicleID, _, ok := h.requireVehicleMembership(c)
 	if !ok {

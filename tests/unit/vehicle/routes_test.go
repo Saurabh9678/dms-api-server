@@ -109,6 +109,14 @@ func (m *mockRoutesService) AddVehicleImage(ctx context.Context, userID, vehicle
 	return args.Get(0).(*vehicle.AddVehicleImageResponse), args.Error(1)
 }
 
+func (m *mockRoutesService) AddVehicleDocument(ctx context.Context, userID, vehicleID uint64, documentType string, file *multipart.FileHeader) (*vehicle.AddVehicleDocumentResponse, error) {
+	args := m.Called(ctx, userID, vehicleID, documentType, file)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*vehicle.AddVehicleDocumentResponse), args.Error(1)
+}
+
 func (m *mockRoutesService) DeleteVehicleImage(ctx context.Context, vehicleID, imageID uint64) error {
 	args := m.Called(ctx, vehicleID, imageID)
 	return args.Error(0)
@@ -144,6 +152,7 @@ func TestRegisterRoutes(t *testing.T) {
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/sale"], "POST /api/v1/vehicle/:id/sale route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/showroom"], "POST /api/v1/vehicle/:id/showroom route should be registered")
 	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/image"], "POST /api/v1/vehicle/:id/image route should be registered")
+	assert.True(t, routeMap["POST:/api/v1/vehicle/:id/document"], "POST /api/v1/vehicle/:id/document route should be registered")
 	assert.True(t, routeMap["DELETE:/api/v1/vehicle/:id/image/:image_id"], "DELETE /api/v1/vehicle/:id/image/:image_id route should be registered")
 }
 

@@ -1040,6 +1040,41 @@ func TestRepo_CreateImage_Error(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestRepo_CreateDocument_Success(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_documents"`).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(uint64(4)))
+	mock.ExpectCommit()
+
+	doc := &vehicle.VehicleDocument{
+		VehicleID:    1,
+		DocumentType: vehicle.VehicleDocumentTypeInsurance,
+		DocumentURL:  "7/vehicle/1/docs/20260101120000.pdf",
+		UploadedBy:   7,
+	}
+	result, err := repo.CreateDocument(context.Background(), doc)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+}
+
+func TestRepo_CreateDocument_Error(t *testing.T) {
+	gormDB, mock := newVehicleMockDB(t)
+	repo := vehicle.NewRepository(gormDB)
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "vehicle_documents"`).
+		WillReturnError(gorm.ErrInvalidData)
+	mock.ExpectRollback()
+
+	_, err := repo.CreateDocument(context.Background(), &vehicle.VehicleDocument{
+		VehicleID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "k.pdf",
+	})
+	assert.Error(t, err)
+}
+
 func TestRepo_SoftDeleteImage_Success(t *testing.T) {
 	gormDB, mock := newVehicleMockDB(t)
 	repo := vehicle.NewRepository(gormDB)
