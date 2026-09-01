@@ -41,6 +41,14 @@ response:
             "price_tag": 350000,
             "currency": "inr"
           },
+          "documents": {
+            "insurance": [
+              {
+                "id": 11,
+                "url": "https://storage.googleapis.com/dms-dev-assets/7/vehicle/1/docs/20240101120000.pdf?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=..."
+              }
+            ]
+          },
           "images": {
             "front": [
               {

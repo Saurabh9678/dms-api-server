@@ -120,13 +120,8 @@ type VehicleExpenseItem struct {
 }
 
 type VehicleDocumentItem struct {
-	ID           uint64 `json:"id"`
-	DocumentType string `json:"document_type"`
-	DocumentURL  string `json:"document_url"`
-	ValidFrom    string `json:"valid_from"`
-	ValidTill    string `json:"valid_till"`
-	Remarks      string `json:"remarks"`
-	UploadedAt   string `json:"uploaded_at"`
+	ID  uint64 `json:"id"`
+	URL string `json:"url"`
 }
 
 type VehicleImageItem struct {
@@ -166,21 +161,22 @@ type VehicleSoldPriceOnly struct {
 }
 
 type GetVehicleAdminResponse struct {
-	Basic         VehicleBasicSection           `json:"basic"`
-	BuyingDetails *VehicleBuyingSection         `json:"buying_details,omitempty"`
-	Pricing       *VehiclePricingSection        `json:"pricing,omitempty"`
-	Status        VehicleStatusSection          `json:"status"`
-	Expenses      []VehicleExpenseItem          `json:"expenses"`
-	Documents     []VehicleDocumentItem         `json:"documents"`
-	Images        map[string][]VehicleImageItem `json:"images"`
-	Selling       *VehicleSellingSection        `json:"selling,omitempty"`
+	Basic         VehicleBasicSection              `json:"basic"`
+	BuyingDetails *VehicleBuyingSection            `json:"buying_details,omitempty"`
+	Pricing       *VehiclePricingSection           `json:"pricing,omitempty"`
+	Status        VehicleStatusSection             `json:"status"`
+	Expenses      []VehicleExpenseItem             `json:"expenses"`
+	Documents     map[string][]VehicleDocumentItem `json:"documents"`
+	Images        map[string][]VehicleImageItem    `json:"images"`
+	Selling       *VehicleSellingSection           `json:"selling,omitempty"`
 }
 
 type GetVehicleBasicResponse struct {
-	Basic   VehicleBasicSection           `json:"basic"`
-	Pricing *VehiclePriceTagOnly          `json:"pricing,omitempty"`
-	Selling *VehicleSoldPriceOnly         `json:"selling,omitempty"`
-	Images  map[string][]VehicleImageItem `json:"images"`
+	Basic     VehicleBasicSection              `json:"basic"`
+	Pricing   *VehiclePriceTagOnly             `json:"pricing,omitempty"`
+	Selling   *VehicleSoldPriceOnly            `json:"selling,omitempty"`
+	Images    map[string][]VehicleImageItem    `json:"images"`
+	Documents map[string][]VehicleDocumentItem `json:"documents"`
 }
 
 type PublicListVehiclesQuery struct {

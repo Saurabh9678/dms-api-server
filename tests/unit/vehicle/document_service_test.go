@@ -208,3 +208,38 @@ func TestAddVehicleDocument_SignedURLFailure_ReturnsEmptyURL(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "", resp.URL)
 }
+
+func TestGetVehicleByID_SignsDocumentsAndOmitsFailures(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	storage := new(mockImageStorage)
+	svc := vehicle.NewService(repo, storage)
+	details := &vehicle.VehicleFullDetails{
+		Vehicle: vehicle.Vehicle{ID: 1},
+		Documents: []vehicle.VehicleDocument{
+			{ID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "ok.pdf"},
+			{ID: 2, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: ""},
+			{ID: 3, DocumentType: vehicle.VehicleDocumentTypePollution, DocumentURL: "bad.pdf"},
+		},
+	}
+	repo.On("GetByIDWithFullDetails", mock.Anything, uint64(1)).Return(details, nil)
+	storage.On("SignedURL", mock.Anything, "ok.pdf", time.Hour).Return("https://signed/ok", nil)
+	storage.On("SignedURL", mock.Anything, "bad.pdf", time.Hour).Return("", errors.New("sign fail"))
+
+	result, err := svc.GetVehicleByID(context.Background(), 1)
+	require.NoError(t, err)
+	require.Len(t, result.Documents, 1)
+	assert.Equal(t, uint64(1), result.Documents[0].ID)
+	assert.Equal(t, "https://signed/ok", result.Documents[0].DocumentURL)
+}
+
+func TestGetVehicleByID_NoDocuments(t *testing.T) {
+	repo := new(mockVehicleRepo)
+	storage := new(mockImageStorage)
+	svc := vehicle.NewService(repo, storage)
+	details := &vehicle.VehicleFullDetails{Vehicle: vehicle.Vehicle{ID: 1}}
+	repo.On("GetByIDWithFullDetails", mock.Anything, uint64(1)).Return(details, nil)
+	result, err := svc.GetVehicleByID(context.Background(), 1)
+	require.NoError(t, err)
+	assert.Empty(t, result.Documents)
+	storage.AssertNotCalled(t, "SignedURL")
+}

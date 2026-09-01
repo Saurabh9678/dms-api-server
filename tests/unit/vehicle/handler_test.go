@@ -516,6 +516,7 @@ func TestHandler_GetVehicle_OwnerGetsAdminResponse(t *testing.T) {
 	assert.Contains(t, data, "expenses")
 	assert.Contains(t, data, "documents")
 	assert.Contains(t, data, "images")
+	assert.Contains(t, data, "documents")
 }
 
 func TestHandler_GetVehicle_ManagerGetsBasicResponse(t *testing.T) {
@@ -537,6 +538,7 @@ func TestHandler_GetVehicle_ManagerGetsBasicResponse(t *testing.T) {
 	assert.NotContains(t, data, "expenses")
 	assert.NotContains(t, data, "buying_details")
 	assert.Contains(t, data, "images")
+	assert.Contains(t, data, "documents")
 }
 
 func TestHandler_GetVehicle_EmployeeGetsBasicResponse(t *testing.T) {
@@ -557,6 +559,7 @@ func TestHandler_GetVehicle_EmployeeGetsBasicResponse(t *testing.T) {
 	assert.Contains(t, data, "basic")
 	assert.NotContains(t, data, "buying_details")
 	assert.Contains(t, data, "images")
+	assert.Contains(t, data, "documents")
 }
 
 func TestHandler_GetVehicle_OwnerWithPricingAndSale(t *testing.T) {
@@ -634,7 +637,7 @@ func TestHandler_GetVehicle_OwnerWithNonEmptyCollections(t *testing.T) {
 			{ID: 1, Type: "repair", Amount: 5000, PaidTo: "garage", Description: "fix"},
 		},
 		Documents: []vehicle.VehicleDocument{
-			{ID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "http://example.com/doc"},
+			{ID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "https://signed/insurance"},
 		},
 		Images: []vehicle.VehicleImage{
 			{ID: 1, Label: vehicle.VehicleImageLabelFront, ImageURL: "http://example.com/img"},
@@ -655,8 +658,11 @@ func TestHandler_GetVehicle_OwnerWithNonEmptyCollections(t *testing.T) {
 	assert.Contains(t, data, "images")
 	expenses := data["expenses"].([]interface{})
 	assert.Len(t, expenses, 1)
-	documents := data["documents"].([]interface{})
-	assert.Len(t, documents, 1)
+	documents := data["documents"].(map[string]interface{})
+	insurance := documents["insurance"].([]interface{})
+	assert.Len(t, insurance, 1)
+	assert.Equal(t, float64(1), insurance[0].(map[string]interface{})["id"])
+	assert.Equal(t, "https://signed/insurance", insurance[0].(map[string]interface{})["url"])
 	images := data["images"].(map[string]interface{})
 	front := images["front"].([]interface{})
 	assert.Len(t, front, 1)
@@ -694,6 +700,37 @@ func TestHandler_GetVehicle_ImagesGroupedByLabel(t *testing.T) {
 	assert.Equal(t, float64(1), front[0].(map[string]interface{})["id"])
 	assert.Equal(t, "https://signed/front-1", front[0].(map[string]interface{})["url"])
 	assert.Equal(t, float64(2), front[1].(map[string]interface{})["id"])
+}
+
+func TestHandler_GetVehicle_DocumentsGroupedByType(t *testing.T) {
+	ctx, w, mockSvc := setupGetVehicleContext(t, "3")
+	details := &vehicle.VehicleFullDetails{
+		Vehicle:    vehicle.Vehicle{ID: 3, VehicleType: vehicle.VehicleTypeCar},
+		ShowroomID: 5,
+		Documents: []vehicle.VehicleDocument{
+			{ID: 1, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "https://signed/insurance-1"},
+			{ID: 2, DocumentType: vehicle.VehicleDocumentTypeInsurance, DocumentURL: "https://signed/insurance-2"},
+			{ID: 3, DocumentType: vehicle.VehicleDocumentTypePollution, DocumentURL: "https://signed/pollution"},
+			{ID: 4, DocumentType: "", DocumentURL: "https://signed/skip-empty-type"},
+			{ID: 5, DocumentType: vehicle.VehicleDocumentTypeRegistrationCertificate, DocumentURL: ""},
+		},
+	}
+	mockSvc.On("GetVehicleByID", mock.Anything, uint64(3)).Return(details, nil)
+	ctx.Set(middleware.ContextKeyShowroomRoles, map[uint64]string{5: "owner"})
+	vehicle.NewHandler(mockSvc).GetVehicle(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	documents := resp["data"].(map[string]interface{})["documents"].(map[string]interface{})
+	assert.Len(t, documents, 2)
+	assert.Len(t, documents["insurance"].([]interface{}), 2)
+	assert.Len(t, documents["pollution"].([]interface{}), 1)
+	assert.NotContains(t, documents, "registration_certificate")
+	assert.NotContains(t, documents, "")
+	insurance := documents["insurance"].([]interface{})
+	assert.Equal(t, float64(1), insurance[0].(map[string]interface{})["id"])
+	assert.Equal(t, "https://signed/insurance-1", insurance[0].(map[string]interface{})["url"])
 }
 
 func TestHandler_PublicListVehicles_Success(t *testing.T) {

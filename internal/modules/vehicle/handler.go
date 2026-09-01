@@ -131,7 +131,7 @@ func buildAdminResponse(d *VehicleFullDetails) GetVehicleAdminResponse {
 		Basic:     basic,
 		Status:    buildStatusSection(d.Statuses),
 		Expenses:  buildExpenseItems(d.Expenses),
-		Documents: buildDocumentItems(d.Documents),
+		Documents: buildDocumentSection(d.Documents),
 		Images:    buildImageSection(d.Images),
 	}
 
@@ -181,8 +181,9 @@ func buildAdminResponse(d *VehicleFullDetails) GetVehicleAdminResponse {
 
 func buildBasicResponse(d *VehicleFullDetails) GetVehicleBasicResponse {
 	resp := GetVehicleBasicResponse{
-		Basic:  buildBasicSection(d),
-		Images: buildImageSection(d.Images),
+		Basic:     buildBasicSection(d),
+		Images:    buildImageSection(d.Images),
+		Documents: buildDocumentSection(d.Documents),
 	}
 
 	if d.Pricing != nil {
@@ -263,20 +264,19 @@ func buildExpenseItems(expenses []VehicleExpenses) []VehicleExpenseItem {
 	return items
 }
 
-func buildDocumentItems(docs []VehicleDocument) []VehicleDocumentItem {
-	items := make([]VehicleDocumentItem, 0, len(docs))
-	for _, d := range docs {
-		items = append(items, VehicleDocumentItem{
-			ID:           d.ID,
-			DocumentType: string(d.DocumentType),
-			DocumentURL:  d.DocumentURL,
-			ValidFrom:    d.ValidFrom.Format(time.RFC3339),
-			ValidTill:    d.ValidTill.Format(time.RFC3339),
-			Remarks:      d.Remarks,
-			UploadedAt:   d.UploadedAt.Format(time.RFC3339),
+func buildDocumentSection(docs []VehicleDocument) map[string][]VehicleDocumentItem {
+	section := make(map[string][]VehicleDocumentItem)
+	for _, doc := range docs {
+		label := string(doc.DocumentType)
+		if label == "" || doc.DocumentURL == "" {
+			continue
+		}
+		section[label] = append(section[label], VehicleDocumentItem{
+			ID:  doc.ID,
+			URL: doc.DocumentURL,
 		})
 	}
-	return items
+	return section
 }
 
 func (h *Handler) UpdateVehicle(c *gin.Context) {

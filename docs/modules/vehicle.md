@@ -98,8 +98,9 @@
 2. Handler: parse `:id` → calls `service.GetVehicleByID`
 3. Check `middleware.ContextKeyShowroomRoles` (map[uint64]string) — if vehicle's showroom not in map → 404
 4. Role `owner` → `buildAdminResponse` (full details including buying price, expenses, documents, images).
-5. Role `manager`/`employee` → `buildBasicResponse` (basic fields + price_tag only, no buying price). Images are included for every showroom role.
+5. Role `manager`/`employee` → `buildBasicResponse` (basic fields + price_tag only, no buying price). Images and documents are included for every showroom role.
 6. `images` is a section grouped by label: `{ "front": [{ "id", "url" }, ...], "interior": [...] }`. `url` values are 1-hour signed URLs resolved from stored object keys. Images that fail to sign, and labels with no photos, are omitted. Multiple photos per label are returned as an array. `id` is the `vehicle_images.id` used by `DELETE /api/v1/vehicle/:id/image/:image_id`.
+7. `documents` is grouped by `document_type` (label): `{ "insurance": [{ "id", "url" }, ...], "registration_certificate": [...] }`. Same signing rules as images. Multiple documents per type are allowed. Empty → `"documents": {}`.
 
 ---
 

@@ -333,7 +333,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L77",
       "id": "middleware_middleware_test_testrecovery_nopanic",
-      "community": 47,
+      "community": 279,
       "norm_label": "testrecovery_nopanic()"
     },
     {
@@ -342,7 +342,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L88",
       "id": "middleware_middleware_test_testrecovery_panicreturns500",
-      "community": 47,
+      "community": 279,
       "norm_label": "testrecovery_panicreturns500()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L99",
       "id": "middleware_middleware_test_testrequestid_withexistingheader",
-      "community": 47,
+      "community": 288,
       "norm_label": "testrequestid_withexistingheader()"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": "tests/unit/middleware/middleware_test.go",
       "source_location": "L111",
       "id": "middleware_middleware_test_testrequestid_generateswhenmissing",
-      "community": 47,
+      "community": 288,
       "norm_label": "testrequestid_generateswhenmissing()"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L272",
       "id": "vehicle_service_test_testcreatevehicle_invalidvehicletype",
-      "community": 34,
+      "community": 5,
       "norm_label": "testcreatevehicle_invalidvehicletype()"
     },
     {
@@ -1413,7 +1413,7 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L1561",
       "id": "vehicle_service_test_testupdatevehicle_invalidvehicletype",
-      "community": 34,
+      "community": 5,
       "norm_label": "testupdatevehicle_invalidvehicletype()"
     },
     {
@@ -2416,6 +2416,24 @@
       "norm_label": "testaddvehicledocument_signedurlfailure_returnsemptyurl()"
     },
     {
+      "label": "TestGetVehicleByID_SignsDocumentsAndOmitsFailures()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/document_service_test.go",
+      "source_location": "L212",
+      "id": "vehicle_document_service_test_testgetvehiclebyid_signsdocumentsandomitsfailures",
+      "community": 46,
+      "norm_label": "testgetvehiclebyid_signsdocumentsandomitsfailures()"
+    },
+    {
+      "label": "TestGetVehicleByID_NoDocuments()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/document_service_test.go",
+      "source_location": "L235",
+      "id": "vehicle_document_service_test_testgetvehiclebyid_nodocuments",
+      "community": 46,
+      "norm_label": "testgetvehiclebyid_nodocuments()"
+    },
+    {
       "label": "doc.go",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/doc.go",
@@ -2547,7 +2565,7 @@
       "source_file": "tests/unit/vehicle/image_service_test.go",
       "source_location": "L51",
       "id": "vehicle_errreadcloser_read",
-      "community": 169,
+      "community": 288,
       "norm_label": ".read()"
     },
     {
@@ -2952,7 +2970,7 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L117",
       "id": "vehicle_mockhandlerservice_addvehicledocument",
-      "community": 234,
+      "community": 267,
       "norm_label": ".addvehicledocument()"
     },
     {
@@ -3175,7 +3193,7 @@
       "label": "TestHandler_GetVehicle_ManagerGetsBasicResponse()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L521",
+      "source_location": "L522",
       "id": "vehicle_handler_test_testhandler_getvehicle_managergetsbasicresponse",
       "community": 6,
       "norm_label": "testhandler_getvehicle_managergetsbasicresponse()"
@@ -3184,7 +3202,7 @@
       "label": "TestHandler_GetVehicle_EmployeeGetsBasicResponse()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L542",
+      "source_location": "L544",
       "id": "vehicle_handler_test_testhandler_getvehicle_employeegetsbasicresponse",
       "community": 6,
       "norm_label": "testhandler_getvehicle_employeegetsbasicresponse()"
@@ -3193,7 +3211,7 @@
       "label": "TestHandler_GetVehicle_OwnerWithPricingAndSale()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L562",
+      "source_location": "L565",
       "id": "vehicle_handler_test_testhandler_getvehicle_ownerwithpricingandsale",
       "community": 6,
       "norm_label": "testhandler_getvehicle_ownerwithpricingandsale()"
@@ -3202,7 +3220,7 @@
       "label": "TestHandler_GetVehicle_NonOwnerWithPricingAndSale()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L595",
+      "source_location": "L598",
       "id": "vehicle_handler_test_testhandler_getvehicle_nonownerwithpricingandsale",
       "community": 6,
       "norm_label": "testhandler_getvehicle_nonownerwithpricingandsale()"
@@ -3211,7 +3229,7 @@
       "label": "TestHandler_GetVehicle_OwnerWithNonEmptyCollections()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L620",
+      "source_location": "L623",
       "id": "vehicle_handler_test_testhandler_getvehicle_ownerwithnonemptycollections",
       "community": 6,
       "norm_label": "testhandler_getvehicle_ownerwithnonemptycollections()"
@@ -3220,16 +3238,25 @@
       "label": "TestHandler_GetVehicle_ImagesGroupedByLabel()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L667",
+      "source_location": "L673",
       "id": "vehicle_handler_test_testhandler_getvehicle_imagesgroupedbylabel",
       "community": 6,
       "norm_label": "testhandler_getvehicle_imagesgroupedbylabel()"
     },
     {
+      "label": "TestHandler_GetVehicle_DocumentsGroupedByType()",
+      "file_type": "code",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L705",
+      "id": "vehicle_handler_test_testhandler_getvehicle_documentsgroupedbytype",
+      "community": 6,
+      "norm_label": "testhandler_getvehicle_documentsgroupedbytype()"
+    },
+    {
       "label": "TestHandler_PublicListVehicles_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L699",
+      "source_location": "L736",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_success",
       "community": 267,
       "norm_label": "testhandler_publiclistvehicles_success()"
@@ -3238,7 +3265,7 @@
       "label": "TestHandler_PublicListVehicles_InvalidQueryParam()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L730",
+      "source_location": "L767",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_invalidqueryparam",
       "community": 267,
       "norm_label": "testhandler_publiclistvehicles_invalidqueryparam()"
@@ -3247,7 +3274,7 @@
       "label": "TestHandler_PublicListVehicles_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L746",
+      "source_location": "L783",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_serviceerror",
       "community": 267,
       "norm_label": "testhandler_publiclistvehicles_serviceerror()"
@@ -3256,7 +3283,7 @@
       "label": "TestHandler_PublicListVehicles_ResponseNoBuyingInfo()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L763",
+      "source_location": "L800",
       "id": "vehicle_handler_test_testhandler_publiclistvehicles_responsenobuyinginfo",
       "community": 267,
       "norm_label": "testhandler_publiclistvehicles_responsenobuyinginfo()"
@@ -3265,7 +3292,7 @@
       "label": "setupPatchVehicleContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L800",
+      "source_location": "L837",
       "id": "vehicle_handler_test_setuppatchvehiclecontext",
       "community": 272,
       "norm_label": "setuppatchvehiclecontext()"
@@ -3274,7 +3301,7 @@
       "label": "TestHandler_UpdateVehicle_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L813",
+      "source_location": "L850",
       "id": "vehicle_handler_test_testhandler_updatevehicle_invalidid",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_invalidid()"
@@ -3283,7 +3310,7 @@
       "label": "TestHandler_UpdateVehicle_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L820",
+      "source_location": "L857",
       "id": "vehicle_handler_test_testhandler_updatevehicle_zeroid",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_zeroid()"
@@ -3292,7 +3319,7 @@
       "label": "TestHandler_UpdateVehicle_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L827",
+      "source_location": "L864",
       "id": "vehicle_handler_test_testhandler_updatevehicle_invalidjson",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_invalidjson()"
@@ -3301,7 +3328,7 @@
       "label": "TestHandler_UpdateVehicle_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L834",
+      "source_location": "L871",
       "id": "vehicle_handler_test_testhandler_updatevehicle_missingshowroomroles",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_missingshowroomroles()"
@@ -3310,7 +3337,7 @@
       "label": "TestHandler_UpdateVehicle_WrongShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L843",
+      "source_location": "L880",
       "id": "vehicle_handler_test_testhandler_updatevehicle_wrongshowroomrolestype",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_wrongshowroomrolestype()"
@@ -3319,7 +3346,7 @@
       "label": "TestHandler_UpdateVehicle_GetShowroomIDNotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L853",
+      "source_location": "L890",
       "id": "vehicle_handler_test_testhandler_updatevehicle_getshowroomidnotfound",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_getshowroomidnotfound()"
@@ -3328,7 +3355,7 @@
       "label": "TestHandler_UpdateVehicle_NotShowroomMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L864",
+      "source_location": "L901",
       "id": "vehicle_handler_test_testhandler_updatevehicle_notshowroommember",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_notshowroommember()"
@@ -3337,7 +3364,7 @@
       "label": "TestHandler_UpdateVehicle_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L875",
+      "source_location": "L912",
       "id": "vehicle_handler_test_testhandler_updatevehicle_vehiclesold",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_vehiclesold()"
@@ -3346,7 +3373,7 @@
       "label": "TestHandler_UpdateVehicle_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L887",
+      "source_location": "L924",
       "id": "vehicle_handler_test_testhandler_updatevehicle_serviceerror",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_serviceerror()"
@@ -3355,7 +3382,7 @@
       "label": "TestHandler_UpdateVehicle_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L899",
+      "source_location": "L936",
       "id": "vehicle_handler_test_testhandler_updatevehicle_success",
       "community": 272,
       "norm_label": "testhandler_updatevehicle_success()"
@@ -3364,7 +3391,7 @@
       "label": "setupPatchPricingContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L920",
+      "source_location": "L957",
       "id": "vehicle_handler_test_setuppatchpricingcontext",
       "community": 270,
       "norm_label": "setuppatchpricingcontext()"
@@ -3373,7 +3400,7 @@
       "label": "TestHandler_UpdateVehiclePricing_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L933",
+      "source_location": "L970",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_invalidid",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_invalidid()"
@@ -3382,7 +3409,7 @@
       "label": "TestHandler_UpdateVehiclePricing_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L940",
+      "source_location": "L977",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_zeroid",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_zeroid()"
@@ -3391,7 +3418,7 @@
       "label": "TestHandler_UpdateVehiclePricing_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L947",
+      "source_location": "L984",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_invalidjson",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_invalidjson()"
@@ -3400,7 +3427,7 @@
       "label": "TestHandler_UpdateVehiclePricing_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L954",
+      "source_location": "L991",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_missingshowroomroles",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_missingshowroomroles()"
@@ -3409,7 +3436,7 @@
       "label": "TestHandler_UpdateVehiclePricing_WrongShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L963",
+      "source_location": "L1000",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_wrongshowroomrolestype",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_wrongshowroomrolestype()"
@@ -3418,7 +3445,7 @@
       "label": "TestHandler_UpdateVehiclePricing_GetShowroomIDNotFound()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L973",
+      "source_location": "L1010",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_getshowroomidnotfound",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_getshowroomidnotfound()"
@@ -3427,7 +3454,7 @@
       "label": "TestHandler_UpdateVehiclePricing_NotShowroomMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L984",
+      "source_location": "L1021",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_notshowroommember",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_notshowroommember()"
@@ -3436,7 +3463,7 @@
       "label": "TestHandler_UpdateVehiclePricing_VehicleSold()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L995",
+      "source_location": "L1032",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_vehiclesold",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_vehiclesold()"
@@ -3445,7 +3472,7 @@
       "label": "TestHandler_UpdateVehiclePricing_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1007",
+      "source_location": "L1044",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_serviceerror",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_serviceerror()"
@@ -3454,7 +3481,7 @@
       "label": "TestHandler_UpdateVehiclePricing_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1019",
+      "source_location": "L1056",
       "id": "vehicle_handler_test_testhandler_updatevehiclepricing_success",
       "community": 270,
       "norm_label": "testhandler_updatevehiclepricing_success()"
@@ -3463,7 +3490,7 @@
       "label": "setupAddExpenseContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1041",
+      "source_location": "L1078",
       "id": "vehicle_handler_test_setupaddexpensecontext",
       "community": 274,
       "norm_label": "setupaddexpensecontext()"
@@ -3472,7 +3499,7 @@
       "label": "TestHandler_AddExpense_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1054",
+      "source_location": "L1091",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidid",
       "community": 274,
       "norm_label": "testhandler_addexpense_invalidid()"
@@ -3481,7 +3508,7 @@
       "label": "TestHandler_AddExpense_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1062",
+      "source_location": "L1099",
       "id": "vehicle_handler_test_testhandler_addexpense_zeroid",
       "community": 274,
       "norm_label": "testhandler_addexpense_zeroid()"
@@ -3490,7 +3517,7 @@
       "label": "TestHandler_AddExpense_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1070",
+      "source_location": "L1107",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidjson",
       "community": 274,
       "norm_label": "testhandler_addexpense_invalidjson()"
@@ -3499,7 +3526,7 @@
       "label": "TestHandler_AddExpense_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1077",
+      "source_location": "L1114",
       "id": "vehicle_handler_test_testhandler_addexpense_missingshowroomroles",
       "community": 274,
       "norm_label": "testhandler_addexpense_missingshowroomroles()"
@@ -3508,7 +3535,7 @@
       "label": "TestHandler_AddExpense_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1085",
+      "source_location": "L1122",
       "id": "vehicle_handler_test_testhandler_addexpense_invalidshowroomrolestype",
       "community": 274,
       "norm_label": "testhandler_addexpense_invalidshowroomrolestype()"
@@ -3517,7 +3544,7 @@
       "label": "TestHandler_AddExpense_GetShowroomIDError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1094",
+      "source_location": "L1131",
       "id": "vehicle_handler_test_testhandler_addexpense_getshowroomiderror",
       "community": 274,
       "norm_label": "testhandler_addexpense_getshowroomiderror()"
@@ -3526,7 +3553,7 @@
       "label": "TestHandler_AddExpense_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1104",
+      "source_location": "L1141",
       "id": "vehicle_handler_test_testhandler_addexpense_notmember",
       "community": 274,
       "norm_label": "testhandler_addexpense_notmember()"
@@ -3535,7 +3562,7 @@
       "label": "TestHandler_AddExpense_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1114",
+      "source_location": "L1151",
       "id": "vehicle_handler_test_testhandler_addexpense_serviceerror",
       "community": 274,
       "norm_label": "testhandler_addexpense_serviceerror()"
@@ -3544,7 +3571,7 @@
       "label": "TestHandler_AddExpense_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1125",
+      "source_location": "L1162",
       "id": "vehicle_handler_test_testhandler_addexpense_success",
       "community": 274,
       "norm_label": "testhandler_addexpense_success()"
@@ -3553,7 +3580,7 @@
       "label": "validSellBody()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1149",
+      "source_location": "L1186",
       "id": "vehicle_handler_test_validsellbody",
       "community": 264,
       "norm_label": "validsellbody()"
@@ -3562,7 +3589,7 @@
       "label": "setupSellVehicleContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1163",
+      "source_location": "L1200",
       "id": "vehicle_handler_test_setupsellvehiclecontext",
       "community": 264,
       "norm_label": "setupsellvehiclecontext()"
@@ -3571,7 +3598,7 @@
       "label": "TestHandler_SellVehicle_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1176",
+      "source_location": "L1213",
       "id": "vehicle_handler_test_testhandler_sellvehicle_invalidid",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_invalidid()"
@@ -3580,7 +3607,7 @@
       "label": "TestHandler_SellVehicle_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1183",
+      "source_location": "L1220",
       "id": "vehicle_handler_test_testhandler_sellvehicle_zeroid",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_zeroid()"
@@ -3589,7 +3616,7 @@
       "label": "TestHandler_SellVehicle_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1190",
+      "source_location": "L1227",
       "id": "vehicle_handler_test_testhandler_sellvehicle_invalidjson",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_invalidjson()"
@@ -3598,7 +3625,7 @@
       "label": "TestHandler_SellVehicle_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1197",
+      "source_location": "L1234",
       "id": "vehicle_handler_test_testhandler_sellvehicle_missingshowroomroles",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_missingshowroomroles()"
@@ -3607,7 +3634,7 @@
       "label": "TestHandler_SellVehicle_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1204",
+      "source_location": "L1241",
       "id": "vehicle_handler_test_testhandler_sellvehicle_invalidshowroomrolestype",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_invalidshowroomrolestype()"
@@ -3616,7 +3643,7 @@
       "label": "TestHandler_SellVehicle_GetShowroomIDError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1212",
+      "source_location": "L1249",
       "id": "vehicle_handler_test_testhandler_sellvehicle_getshowroomiderror",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_getshowroomiderror()"
@@ -3625,7 +3652,7 @@
       "label": "TestHandler_SellVehicle_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1220",
+      "source_location": "L1257",
       "id": "vehicle_handler_test_testhandler_sellvehicle_notmember",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_notmember()"
@@ -3634,7 +3661,7 @@
       "label": "TestHandler_SellVehicle_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1229",
+      "source_location": "L1266",
       "id": "vehicle_handler_test_testhandler_sellvehicle_serviceerror",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_serviceerror()"
@@ -3643,7 +3670,7 @@
       "label": "TestHandler_SellVehicle_MissingUserID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1239",
+      "source_location": "L1276",
       "id": "vehicle_handler_test_testhandler_sellvehicle_missinguserid",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_missinguserid()"
@@ -3652,7 +3679,7 @@
       "label": "TestHandler_SellVehicle_InvalidUserIDType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1248",
+      "source_location": "L1285",
       "id": "vehicle_handler_test_testhandler_sellvehicle_invaliduseridtype",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_invaliduseridtype()"
@@ -3661,7 +3688,7 @@
       "label": "TestHandler_SellVehicle_ZeroUserID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1258",
+      "source_location": "L1295",
       "id": "vehicle_handler_test_testhandler_sellvehicle_zerouserid",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_zerouserid()"
@@ -3670,7 +3697,7 @@
       "label": "TestHandler_SellVehicle_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1268",
+      "source_location": "L1305",
       "id": "vehicle_handler_test_testhandler_sellvehicle_success",
       "community": 264,
       "norm_label": "testhandler_sellvehicle_success()"
@@ -3679,7 +3706,7 @@
       "label": "validStatusBody()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1287",
+      "source_location": "L1324",
       "id": "vehicle_handler_test_validstatusbody",
       "community": 1,
       "norm_label": "validstatusbody()"
@@ -3688,7 +3715,7 @@
       "label": "setupUpdateStatusContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1292",
+      "source_location": "L1329",
       "id": "vehicle_handler_test_setupupdatestatuscontext",
       "community": 1,
       "norm_label": "setupupdatestatuscontext()"
@@ -3697,7 +3724,7 @@
       "label": "TestHandler_UpdateVehicleStatus_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1305",
+      "source_location": "L1342",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_invalidid",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_invalidid()"
@@ -3706,7 +3733,7 @@
       "label": "TestHandler_UpdateVehicleStatus_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1312",
+      "source_location": "L1349",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_zeroid",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_zeroid()"
@@ -3715,7 +3742,7 @@
       "label": "TestHandler_UpdateVehicleStatus_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1318",
+      "source_location": "L1355",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_invalidjson",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_invalidjson()"
@@ -3724,7 +3751,7 @@
       "label": "TestHandler_UpdateVehicleStatus_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1324",
+      "source_location": "L1361",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_missingshowroomroles",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_missingshowroomroles()"
@@ -3733,7 +3760,7 @@
       "label": "TestHandler_UpdateVehicleStatus_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1330",
+      "source_location": "L1367",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_invalidshowroomrolestype",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_invalidshowroomrolestype()"
@@ -3742,7 +3769,7 @@
       "label": "TestHandler_UpdateVehicleStatus_GetShowroomIDError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1337",
+      "source_location": "L1374",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_getshowroomiderror",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_getshowroomiderror()"
@@ -3751,7 +3778,7 @@
       "label": "TestHandler_UpdateVehicleStatus_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1345",
+      "source_location": "L1382",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_notmember",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_notmember()"
@@ -3760,7 +3787,7 @@
       "label": "TestHandler_UpdateVehicleStatus_MissingUserID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1354",
+      "source_location": "L1391",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_missinguserid",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_missinguserid()"
@@ -3769,7 +3796,7 @@
       "label": "TestHandler_UpdateVehicleStatus_InvalidUserIDType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1362",
+      "source_location": "L1399",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_invaliduseridtype",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_invaliduseridtype()"
@@ -3778,7 +3805,7 @@
       "label": "TestHandler_UpdateVehicleStatus_ZeroUserID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1371",
+      "source_location": "L1408",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_zerouserid",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_zerouserid()"
@@ -3787,7 +3814,7 @@
       "label": "TestHandler_UpdateVehicleStatus_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1380",
+      "source_location": "L1417",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_serviceerror",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_serviceerror()"
@@ -3796,7 +3823,7 @@
       "label": "TestHandler_UpdateVehicleStatus_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1390",
+      "source_location": "L1427",
       "id": "vehicle_handler_test_testhandler_updatevehiclestatus_success",
       "community": 1,
       "norm_label": "testhandler_updatevehiclestatus_success()"
@@ -3805,7 +3832,7 @@
       "label": "setupAssignShowroomContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1404",
+      "source_location": "L1441",
       "id": "vehicle_handler_test_setupassignshowroomcontext",
       "community": 6,
       "norm_label": "setupassignshowroomcontext()"
@@ -3814,7 +3841,7 @@
       "label": "TestHandler_AssignShowroom_InvalidID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1417",
+      "source_location": "L1454",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidid()"
@@ -3823,7 +3850,7 @@
       "label": "TestHandler_AssignShowroom_ZeroID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1425",
+      "source_location": "L1462",
       "id": "vehicle_handler_test_testhandler_assignshowroom_zeroid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_zeroid()"
@@ -3832,7 +3859,7 @@
       "label": "TestHandler_AssignShowroom_InvalidJSON()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1433",
+      "source_location": "L1470",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidjson",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidjson()"
@@ -3841,7 +3868,7 @@
       "label": "TestHandler_AssignShowroom_ZeroShowroomID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1440",
+      "source_location": "L1477",
       "id": "vehicle_handler_test_testhandler_assignshowroom_zeroshowroomid",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_zeroshowroomid()"
@@ -3850,7 +3877,7 @@
       "label": "TestHandler_AssignShowroom_MissingShowroomRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1448",
+      "source_location": "L1485",
       "id": "vehicle_handler_test_testhandler_assignshowroom_missingshowroomroles",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_missingshowroomroles()"
@@ -3859,7 +3886,7 @@
       "label": "TestHandler_AssignShowroom_InvalidShowroomRolesType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1456",
+      "source_location": "L1493",
       "id": "vehicle_handler_test_testhandler_assignshowroom_invalidshowroomrolestype",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_invalidshowroomrolestype()"
@@ -3868,7 +3895,7 @@
       "label": "TestHandler_AssignShowroom_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1465",
+      "source_location": "L1502",
       "id": "vehicle_handler_test_testhandler_assignshowroom_notmember",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_notmember()"
@@ -3877,7 +3904,7 @@
       "label": "TestHandler_AssignShowroom_EmployeeForbidden()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1474",
+      "source_location": "L1511",
       "id": "vehicle_handler_test_testhandler_assignshowroom_employeeforbidden",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_employeeforbidden()"
@@ -3886,7 +3913,7 @@
       "label": "TestHandler_AssignShowroom_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1483",
+      "source_location": "L1520",
       "id": "vehicle_handler_test_testhandler_assignshowroom_serviceerror",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_serviceerror()"
@@ -3895,7 +3922,7 @@
       "label": "TestHandler_AssignShowroom_Success_Owner()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1493",
+      "source_location": "L1530",
       "id": "vehicle_handler_test_testhandler_assignshowroom_success_owner",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_success_owner()"
@@ -3904,7 +3931,7 @@
       "label": "TestHandler_AssignShowroom_Success_Manager()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1508",
+      "source_location": "L1545",
       "id": "vehicle_handler_test_testhandler_assignshowroom_success_manager",
       "community": 6,
       "norm_label": "testhandler_assignshowroom_success_manager()"
@@ -3913,7 +3940,7 @@
       "label": "multipartPhotoRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1519",
+      "source_location": "L1556",
       "id": "vehicle_handler_test_multipartphotorequest",
       "community": 220,
       "norm_label": "multipartphotorequest()"
@@ -3922,7 +3949,7 @@
       "label": "setupImageHandlerContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1538",
+      "source_location": "L1575",
       "id": "vehicle_handler_test_setupimagehandlercontext",
       "community": 220,
       "norm_label": "setupimagehandlercontext()"
@@ -3931,7 +3958,7 @@
       "label": "TestHandler_AddVehicleImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1548",
+      "source_location": "L1585",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_success",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_success()"
@@ -3940,7 +3967,7 @@
       "label": "TestHandler_AddVehicleImage_MissingUser()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1562",
+      "source_location": "L1599",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missinguser",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_missinguser()"
@@ -3949,7 +3976,7 @@
       "label": "TestHandler_AddVehicleImage_UserIDWrongType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1569",
+      "source_location": "L1606",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_useridwrongtype",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_useridwrongtype()"
@@ -3958,7 +3985,7 @@
       "label": "TestHandler_AddVehicleImage_InvalidVehicleID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1577",
+      "source_location": "L1614",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_invalidvehicleid",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_invalidvehicleid()"
@@ -3967,7 +3994,7 @@
       "label": "TestHandler_AddVehicleImage_ZeroVehicleID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1585",
+      "source_location": "L1622",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_zerovehicleid",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_zerovehicleid()"
@@ -3976,7 +4003,7 @@
       "label": "TestHandler_AddVehicleImage_MissingRoles()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1593",
+      "source_location": "L1630",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missingroles",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_missingroles()"
@@ -3985,7 +4012,7 @@
       "label": "TestHandler_AddVehicleImage_RolesWrongType()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1601",
+      "source_location": "L1638",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_roleswrongtype",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_roleswrongtype()"
@@ -3994,7 +4021,7 @@
       "label": "TestHandler_AddVehicleImage_ShowroomLookupError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1610",
+      "source_location": "L1647",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_showroomlookuperror",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_showroomlookuperror()"
@@ -4003,7 +4030,7 @@
       "label": "TestHandler_AddVehicleImage_NotMember()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1620",
+      "source_location": "L1657",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_notmember",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_notmember()"
@@ -4012,7 +4039,7 @@
       "label": "TestHandler_AddVehicleImage_NotMultipart()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1630",
+      "source_location": "L1667",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_notmultipart",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_notmultipart()"
@@ -4021,7 +4048,7 @@
       "label": "TestHandler_AddVehicleImage_MissingPhoto()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1641",
+      "source_location": "L1678",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_missingphoto",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_missingphoto()"
@@ -4030,7 +4057,7 @@
       "label": "TestHandler_AddVehicleImage_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1651",
+      "source_location": "L1688",
       "id": "vehicle_handler_test_testhandler_addvehicleimage_serviceerror",
       "community": 220,
       "norm_label": "testhandler_addvehicleimage_serviceerror()"
@@ -4039,7 +4066,7 @@
       "label": "TestHandler_DeleteVehicleImage_MissingUser()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1663",
+      "source_location": "L1700",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_missinguser",
       "community": 220,
       "norm_label": "testhandler_deletevehicleimage_missinguser()"
@@ -4048,7 +4075,7 @@
       "label": "TestHandler_DeleteVehicleImage_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1671",
+      "source_location": "L1708",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_success",
       "community": 220,
       "norm_label": "testhandler_deletevehicleimage_success()"
@@ -4057,7 +4084,7 @@
       "label": "TestHandler_DeleteVehicleImage_InvalidImageID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1684",
+      "source_location": "L1721",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_invalidimageid",
       "community": 220,
       "norm_label": "testhandler_deletevehicleimage_invalidimageid()"
@@ -4066,7 +4093,7 @@
       "label": "TestHandler_DeleteVehicleImage_NonNumericImageID()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1695",
+      "source_location": "L1732",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_nonnumericimageid",
       "community": 220,
       "norm_label": "testhandler_deletevehicleimage_nonnumericimageid()"
@@ -4075,7 +4102,7 @@
       "label": "TestHandler_DeleteVehicleImage_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1706",
+      "source_location": "L1743",
       "id": "vehicle_handler_test_testhandler_deletevehicleimage_serviceerror",
       "community": 220,
       "norm_label": "testhandler_deletevehicleimage_serviceerror()"
@@ -4084,63 +4111,63 @@
       "label": "multipartDocumentRequest()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1718",
+      "source_location": "L1755",
       "id": "vehicle_handler_test_multipartdocumentrequest",
-      "community": 234,
+      "community": 267,
       "norm_label": "multipartdocumentrequest()"
     },
     {
       "label": "setupDocumentHandlerContext()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1737",
+      "source_location": "L1774",
       "id": "vehicle_handler_test_setupdocumenthandlercontext",
-      "community": 234,
+      "community": 267,
       "norm_label": "setupdocumenthandlercontext()"
     },
     {
       "label": "TestHandler_AddVehicleDocument_Success()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1747",
+      "source_location": "L1784",
       "id": "vehicle_handler_test_testhandler_addvehicledocument_success",
-      "community": 234,
+      "community": 267,
       "norm_label": "testhandler_addvehicledocument_success()"
     },
     {
       "label": "TestHandler_AddVehicleDocument_MissingUser()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1761",
+      "source_location": "L1798",
       "id": "vehicle_handler_test_testhandler_addvehicledocument_missinguser",
-      "community": 234,
+      "community": 267,
       "norm_label": "testhandler_addvehicledocument_missinguser()"
     },
     {
       "label": "TestHandler_AddVehicleDocument_NotMultipart()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1768",
+      "source_location": "L1805",
       "id": "vehicle_handler_test_testhandler_addvehicledocument_notmultipart",
-      "community": 234,
+      "community": 267,
       "norm_label": "testhandler_addvehicledocument_notmultipart()"
     },
     {
       "label": "TestHandler_AddVehicleDocument_MissingFile()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1779",
+      "source_location": "L1816",
       "id": "vehicle_handler_test_testhandler_addvehicledocument_missingfile",
-      "community": 234,
+      "community": 267,
       "norm_label": "testhandler_addvehicledocument_missingfile()"
     },
     {
       "label": "TestHandler_AddVehicleDocument_ServiceError()",
       "file_type": "code",
       "source_file": "tests/unit/vehicle/handler_test.go",
-      "source_location": "L1789",
+      "source_location": "L1826",
       "id": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror",
-      "community": 234,
+      "community": 267,
       "norm_label": "testhandler_addvehicledocument_serviceerror()"
     },
     {
@@ -7839,7 +7866,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L1",
       "id": "tests_unit_auth_handler_test_go",
-      "community": 124,
+      "community": 173,
       "norm_label": "handler_test.go"
     },
     {
@@ -7848,7 +7875,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L16",
       "id": "auth_fakehandlerauthservice",
-      "community": 124,
+      "community": 281,
       "norm_label": "fakehandlerauthservice"
     },
     {
@@ -7857,7 +7884,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L18",
       "id": "auth_fakehandlerauthservice_register",
-      "community": 124,
+      "community": 281,
       "norm_label": ".register()"
     },
     {
@@ -7866,7 +7893,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L22",
       "id": "auth_fakehandlerauthservice_login",
-      "community": 124,
+      "community": 281,
       "norm_label": ".login()"
     },
     {
@@ -7875,7 +7902,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L26",
       "id": "auth_fakehandlerauthservice_verifyotp",
-      "community": 124,
+      "community": 281,
       "norm_label": ".verifyotp()"
     },
     {
@@ -7884,7 +7911,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L35",
       "id": "auth_fakehandlerauthservice_refreshtoken",
-      "community": 124,
+      "community": 281,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -7893,7 +7920,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L44",
       "id": "auth_fakehandlerauthservice_sendotp",
-      "community": 124,
+      "community": 281,
       "norm_label": ".sendotp()"
     },
     {
@@ -7902,7 +7929,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L48",
       "id": "auth_fakehandlerauthservice_logout",
-      "community": 124,
+      "community": 281,
       "norm_label": ".logout()"
     },
     {
@@ -7956,7 +7983,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L167",
       "id": "auth_fakeerrorauthservice",
-      "community": 124,
+      "community": 280,
       "norm_label": "fakeerrorauthservice"
     },
     {
@@ -7965,7 +7992,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L169",
       "id": "auth_fakeerrorauthservice_register",
-      "community": 124,
+      "community": 280,
       "norm_label": ".register()"
     },
     {
@@ -7974,7 +8001,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L173",
       "id": "auth_fakeerrorauthservice_login",
-      "community": 124,
+      "community": 280,
       "norm_label": ".login()"
     },
     {
@@ -7983,7 +8010,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L177",
       "id": "auth_fakeerrorauthservice_verifyotp",
-      "community": 124,
+      "community": 280,
       "norm_label": ".verifyotp()"
     },
     {
@@ -7992,7 +8019,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L181",
       "id": "auth_fakeerrorauthservice_refreshtoken",
-      "community": 124,
+      "community": 280,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -8001,7 +8028,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L185",
       "id": "auth_fakeerrorauthservice_sendotp",
-      "community": 124,
+      "community": 280,
       "norm_label": ".sendotp()"
     },
     {
@@ -8010,7 +8037,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L189",
       "id": "auth_fakeerrorauthservice_logout",
-      "community": 124,
+      "community": 280,
       "norm_label": ".logout()"
     },
     {
@@ -8019,7 +8046,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L197",
       "id": "auth_handler_test_testsendotp_badjson",
-      "community": 124,
+      "community": 173,
       "norm_label": "testsendotp_badjson()"
     },
     {
@@ -8028,7 +8055,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L218",
       "id": "auth_handler_test_testsendotp_missingheaders",
-      "community": 124,
+      "community": 173,
       "norm_label": "testsendotp_missingheaders()"
     },
     {
@@ -8046,7 +8073,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L256",
       "id": "auth_handler_test_testsendotp_success",
-      "community": 124,
+      "community": 173,
       "norm_label": "testsendotp_success()"
     },
     {
@@ -8055,7 +8082,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L281",
       "id": "auth_handler_test_testregister_badjson",
-      "community": 124,
+      "community": 173,
       "norm_label": "testregister_badjson()"
     },
     {
@@ -8064,7 +8091,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L303",
       "id": "auth_handler_test_testregister_missingheaders",
-      "community": 124,
+      "community": 173,
       "norm_label": "testregister_missingheaders()"
     },
     {
@@ -8082,7 +8109,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L341",
       "id": "auth_handler_test_testregister_success",
-      "community": 124,
+      "community": 173,
       "norm_label": "testregister_success()"
     },
     {
@@ -8100,7 +8127,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L388",
       "id": "auth_handler_test_testverifyotp_badjson",
-      "community": 124,
+      "community": 173,
       "norm_label": "testverifyotp_badjson()"
     },
     {
@@ -8109,7 +8136,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L410",
       "id": "auth_handler_test_testverifyotp_missingheaders",
-      "community": 124,
+      "community": 173,
       "norm_label": "testverifyotp_missingheaders()"
     },
     {
@@ -8127,7 +8154,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L452",
       "id": "auth_handler_test_testrefreshtoken_badjson",
-      "community": 124,
+      "community": 173,
       "norm_label": "testrefreshtoken_badjson()"
     },
     {
@@ -8154,7 +8181,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L515",
       "id": "auth_handler_test_testextractbearertoken_emptybearervalue",
-      "community": 124,
+      "community": 173,
       "norm_label": "testextractbearertoken_emptybearervalue()"
     },
     {
@@ -8163,7 +8190,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L536",
       "id": "auth_handler_test_testextractbearertoken_nobearerprefix",
-      "community": 124,
+      "community": 173,
       "norm_label": "testextractbearertoken_nobearerprefix()"
     },
     {
@@ -8172,7 +8199,7 @@
       "source_file": "tests/unit/auth/handler_test.go",
       "source_location": "L561",
       "id": "auth_handler_test_testlogin_missingheaders",
-      "community": 124,
+      "community": 173,
       "norm_label": "testlogin_missingheaders()"
     },
     {
@@ -10575,7 +10602,7 @@
       "source_file": "tests/unit/errors/errors_test.go",
       "source_location": "L63",
       "id": "errors_errors_test_testtoapperror_mappederror",
-      "community": 179,
+      "community": 282,
       "norm_label": "testtoapperror_mappederror()"
     },
     {
@@ -10881,7 +10908,7 @@
       "source_file": "internal/infra/storage/gcs.go",
       "source_location": "L93",
       "id": "storage_gcs_newgcsclientstore",
-      "community": 233,
+      "community": 259,
       "norm_label": "newgcsclientstore()"
     },
     {
@@ -10935,7 +10962,7 @@
       "source_file": "internal/infra/storage/gcs_test.go",
       "source_location": "L1",
       "id": "internal_infra_storage_gcs_test_go",
-      "community": 259,
+      "community": 263,
       "norm_label": "gcs_test.go"
     },
     {
@@ -11124,7 +11151,7 @@
       "source_file": "internal/infra/storage/gcs_test.go",
       "source_location": "L165",
       "id": "storage_gcs_test_testgcsclientstore_uploadsuccessanderrors",
-      "community": 259,
+      "community": 263,
       "norm_label": "testgcsclientstore_uploadsuccessanderrors()"
     },
     {
@@ -11430,7 +11457,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L1",
       "id": "internal_bootstrap_router_go",
-      "community": 47,
+      "community": 279,
       "norm_label": "router.go"
     },
     {
@@ -11439,7 +11466,7 @@
       "source_file": "internal/bootstrap/router.go",
       "source_location": "L19",
       "id": "bootstrap_router_newrouter",
-      "community": 47,
+      "community": 279,
       "norm_label": "newrouter()"
     },
     {
@@ -11770,7 +11797,7 @@
       "label": "buildBasicSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L204",
+      "source_location": "L205",
       "id": "vehicle_handler_buildbasicsection",
       "community": 29,
       "norm_label": "buildbasicsection()"
@@ -11779,7 +11806,7 @@
       "label": "buildStatusSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L233",
+      "source_location": "L234",
       "id": "vehicle_handler_buildstatussection",
       "community": 29,
       "norm_label": "buildstatussection()"
@@ -11788,19 +11815,19 @@
       "label": "buildExpenseItems()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L251",
+      "source_location": "L252",
       "id": "vehicle_handler_buildexpenseitems",
       "community": 29,
       "norm_label": "buildexpenseitems()"
     },
     {
-      "label": "buildDocumentItems()",
+      "label": "buildDocumentSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L266",
-      "id": "vehicle_handler_builddocumentitems",
+      "source_location": "L267",
+      "id": "vehicle_handler_builddocumentsection",
       "community": 29,
-      "norm_label": "builddocumentitems()"
+      "norm_label": "builddocumentsection()"
     },
     {
       "label": ".UpdateVehicle()",
@@ -12085,7 +12112,7 @@
       "label": "isValidVehicleStatusType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L543",
+      "source_location": "L544",
       "id": "vehicle_service_isvalidvehiclestatustype",
       "community": 31,
       "norm_label": "isvalidvehiclestatustype()"
@@ -12094,7 +12121,7 @@
       "label": "isValidVehicleType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L550",
+      "source_location": "L551",
       "id": "vehicle_service_isvalidvehicletype",
       "community": 31,
       "norm_label": "isvalidvehicletype()"
@@ -12103,7 +12130,7 @@
       "label": "isValidFuelType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L554",
+      "source_location": "L555",
       "id": "vehicle_service_isvalidfueltype",
       "community": 31,
       "norm_label": "isvalidfueltype()"
@@ -12112,7 +12139,7 @@
       "label": "isValidTransmissionType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L558",
+      "source_location": "L559",
       "id": "vehicle_service_isvalidtransmissiontype",
       "community": 31,
       "norm_label": "isvalidtransmissiontype()"
@@ -12121,16 +12148,16 @@
       "label": "isValidCurrency()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L562",
+      "source_location": "L563",
       "id": "vehicle_service_isvalidcurrency",
-      "community": 166,
+      "community": 289,
       "norm_label": "isvalidcurrency()"
     },
     {
       "label": ".GetVehicleShowroomID()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L566",
+      "source_location": "L567",
       "id": "vehicle_service_getvehicleshowroomid",
       "community": 31,
       "norm_label": ".getvehicleshowroomid()"
@@ -12139,7 +12166,7 @@
       "label": ".UpdateVehicle()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L570",
+      "source_location": "L571",
       "id": "vehicle_service_updatevehicle",
       "community": 31,
       "norm_label": ".updatevehicle()"
@@ -12148,7 +12175,7 @@
       "label": ".buildVehicleUpdates()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L614",
+      "source_location": "L615",
       "id": "vehicle_service_buildvehicleupdates",
       "community": 31,
       "norm_label": ".buildvehicleupdates()"
@@ -12157,34 +12184,34 @@
       "label": ".UpdateVehiclePricing()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L694",
+      "source_location": "L695",
       "id": "vehicle_service_updatevehiclepricing",
-      "community": 166,
+      "community": 289,
       "norm_label": ".updatevehiclepricing()"
     },
     {
       "label": ".createPricing()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L732",
+      "source_location": "L733",
       "id": "vehicle_service_createpricing",
-      "community": 166,
+      "community": 289,
       "norm_label": ".createpricing()"
     },
     {
       "label": ".buildPricingUpdates()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L792",
+      "source_location": "L793",
       "id": "vehicle_service_buildpricingupdates",
-      "community": 166,
+      "community": 289,
       "norm_label": ".buildpricingupdates()"
     },
     {
       "label": ".AddExpense()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L834",
+      "source_location": "L835",
       "id": "vehicle_service_addexpense",
       "community": 39,
       "norm_label": ".addexpense()"
@@ -12193,7 +12220,7 @@
       "label": ".SellVehicle()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L882",
+      "source_location": "L883",
       "id": "vehicle_service_sellvehicle",
       "community": 213,
       "norm_label": ".sellvehicle()"
@@ -12202,7 +12229,7 @@
       "label": ".UpdateVehicleStatus()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L973",
+      "source_location": "L974",
       "id": "vehicle_service_updatevehiclestatus",
       "community": 213,
       "norm_label": ".updatevehiclestatus()"
@@ -12211,7 +12238,7 @@
       "label": "isUpdatableVehicleStatus()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1006",
+      "source_location": "L1007",
       "id": "vehicle_service_isupdatablevehiclestatus",
       "community": 213,
       "norm_label": "isupdatablevehiclestatus()"
@@ -12220,7 +12247,7 @@
       "label": "isValidPaymentMode()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1015",
+      "source_location": "L1016",
       "id": "vehicle_service_isvalidpaymentmode",
       "community": 213,
       "norm_label": "isvalidpaymentmode()"
@@ -12229,7 +12256,7 @@
       "label": "optionalTrimmed()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1024",
+      "source_location": "L1025",
       "id": "vehicle_service_optionaltrimmed",
       "community": 213,
       "norm_label": "optionaltrimmed()"
@@ -12238,7 +12265,7 @@
       "label": "optionalStringPtr()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1031",
+      "source_location": "L1032",
       "id": "vehicle_service_optionalstringptr",
       "community": 213,
       "norm_label": "optionalstringptr()"
@@ -12247,7 +12274,7 @@
       "label": "isValidExpenseType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1038",
+      "source_location": "L1039",
       "id": "vehicle_service_isvalidexpensetype",
       "community": 39,
       "norm_label": "isvalidexpensetype()"
@@ -12256,16 +12283,16 @@
       "label": "toPricingResponse()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1049",
+      "source_location": "L1050",
       "id": "vehicle_service_topricingresponse",
-      "community": 166,
+      "community": 289,
       "norm_label": "topricingresponse()"
     },
     {
       "label": ".AssignVehicleToShowroom()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1062",
+      "source_location": "L1063",
       "id": "vehicle_service_assignvehicletoshowroom",
       "community": 31,
       "norm_label": ".assignvehicletoshowroom()"
@@ -12274,25 +12301,25 @@
       "label": ".AddVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1091",
+      "source_location": "L1092",
       "id": "vehicle_service_addvehicleimage",
-      "community": 213,
+      "community": 284,
       "norm_label": ".addvehicleimage()"
     },
     {
       "label": ".AddVehicleDocument()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1138",
+      "source_location": "L1139",
       "id": "vehicle_service_addvehicledocument",
-      "community": 38,
+      "community": 213,
       "norm_label": ".addvehicledocument()"
     },
     {
       "label": ".DeleteVehicleImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1185",
+      "source_location": "L1186",
       "id": "vehicle_service_deletevehicleimage",
       "community": 31,
       "norm_label": ".deletevehicleimage()"
@@ -12301,7 +12328,7 @@
       "label": ".readAndUploadImage()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1196",
+      "source_location": "L1197",
       "id": "vehicle_service_readanduploadimage",
       "community": 230,
       "norm_label": ".readanduploadimage()"
@@ -12310,7 +12337,7 @@
       "label": ".readAndUploadDocument()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1223",
+      "source_location": "L1224",
       "id": "vehicle_service_readanduploaddocument",
       "community": 230,
       "norm_label": ".readanduploaddocument()"
@@ -12319,16 +12346,25 @@
       "label": ".signVehicleImages()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1250",
+      "source_location": "L1251",
       "id": "vehicle_service_signvehicleimages",
       "community": 31,
       "norm_label": ".signvehicleimages()"
     },
     {
+      "label": ".signVehicleDocuments()",
+      "file_type": "code",
+      "source_file": "internal/modules/vehicle/service.go",
+      "source_location": "L1270",
+      "id": "vehicle_service_signvehicledocuments",
+      "community": 31,
+      "norm_label": ".signvehicledocuments()"
+    },
+    {
       "label": ".buildSignedImageSection()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1271",
+      "source_location": "L1291",
       "id": "vehicle_service_buildsignedimagesection",
       "community": 31,
       "norm_label": ".buildsignedimagesection()"
@@ -12337,36 +12373,36 @@
       "label": "validateVehicleImageFile()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1290",
+      "source_location": "L1310",
       "id": "vehicle_service_validatevehicleimagefile",
-      "community": 213,
+      "community": 284,
       "norm_label": "validatevehicleimagefile()"
     },
     {
       "label": "validateVehicleDocumentFile()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1304",
+      "source_location": "L1324",
       "id": "vehicle_service_validatevehicledocumentfile",
-      "community": 38,
+      "community": 213,
       "norm_label": "validatevehicledocumentfile()"
     },
     {
       "label": "isValidVehicleDocumentType()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1318",
+      "source_location": "L1338",
       "id": "vehicle_service_isvalidvehicledocumenttype",
-      "community": 38,
+      "community": 213,
       "norm_label": "isvalidvehicledocumenttype()"
     },
     {
       "label": "isValidVehicleImageLabel()",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/service.go",
-      "source_location": "L1324",
+      "source_location": "L1344",
       "id": "vehicle_service_isvalidvehicleimagelabel",
-      "community": 213,
+      "community": 284,
       "norm_label": "isvalidvehicleimagelabel()"
     },
     {
@@ -12483,7 +12519,7 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L1",
       "id": "internal_modules_vehicle_status_model_go",
-      "community": 279,
+      "community": 269,
       "norm_label": "status_model.go"
     },
     {
@@ -12492,7 +12528,7 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L10",
       "id": "vehicle_vehiclestatus",
-      "community": 279,
+      "community": 269,
       "norm_label": "vehiclestatus"
     },
     {
@@ -12501,7 +12537,7 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L23",
       "id": "vehicle_vehiclestatustype",
-      "community": 279,
+      "community": 269,
       "norm_label": "vehiclestatustype"
     },
     {
@@ -12510,7 +12546,7 @@
       "source_file": "internal/modules/vehicle/status_model.go",
       "source_location": "L32",
       "id": "vehicle_vehiclestatus_tablename",
-      "community": 279,
+      "community": 269,
       "norm_label": ".tablename()"
     },
     {
@@ -12573,7 +12609,7 @@
       "source_file": "internal/modules/vehicle/model.go",
       "source_location": "L22",
       "id": "vehicle_vehicletype",
-      "community": 34,
+      "community": 31,
       "norm_label": "vehicletype"
     },
     {
@@ -12609,7 +12645,7 @@
       "source_file": "internal/modules/vehicle/routes.go",
       "source_location": "L1",
       "id": "internal_modules_vehicle_routes_go",
-      "community": 250,
+      "community": 279,
       "norm_label": "routes.go"
     },
     {
@@ -12618,7 +12654,7 @@
       "source_file": "internal/modules/vehicle/routes.go",
       "source_location": "L5",
       "id": "vehicle_routes_registerroutes",
-      "community": 250,
+      "community": 279,
       "norm_label": "registerroutes()"
     },
     {
@@ -12627,7 +12663,7 @@
       "source_file": "internal/modules/vehicle/routes.go",
       "source_location": "L20",
       "id": "vehicle_routes_registerpublicroutes",
-      "community": 250,
+      "community": 279,
       "norm_label": "registerpublicroutes()"
     },
     {
@@ -13014,7 +13050,7 @@
       "source_file": "internal/modules/vehicle/repository.go",
       "source_location": "L756",
       "id": "vehicle_repository_buildpubliclistquery",
-      "community": 41,
+      "community": 166,
       "norm_label": "buildpubliclistquery()"
     },
     {
@@ -13023,7 +13059,7 @@
       "source_file": "internal/modules/vehicle/repository.go",
       "source_location": "L817",
       "id": "vehicle_repository_publiclist",
-      "community": 41,
+      "community": 166,
       "norm_label": ".publiclist()"
     },
     {
@@ -13032,7 +13068,7 @@
       "source_file": "internal/modules/vehicle/repository.go",
       "source_location": "L872",
       "id": "vehicle_repository_publiccountbytype",
-      "community": 41,
+      "community": 166,
       "norm_label": ".publiccountbytype()"
     },
     {
@@ -13210,7 +13246,7 @@
       "label": "VehicleImageItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L132",
+      "source_location": "L127",
       "id": "vehicle_vehicleimageitem",
       "community": 73,
       "norm_label": "vehicleimageitem"
@@ -13219,7 +13255,7 @@
       "label": "VehicleSaleCustomer",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L137",
+      "source_location": "L132",
       "id": "vehicle_vehiclesalecustomer",
       "community": 73,
       "norm_label": "vehiclesalecustomer"
@@ -13228,7 +13264,7 @@
       "label": "VehicleSellingSection",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L147",
+      "source_location": "L142",
       "id": "vehicle_vehiclesellingsection",
       "community": 73,
       "norm_label": "vehiclesellingsection"
@@ -13237,7 +13273,7 @@
       "label": "VehicleSoldBy",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L157",
+      "source_location": "L152",
       "id": "vehicle_vehiclesoldby",
       "community": 73,
       "norm_label": "vehiclesoldby"
@@ -13246,7 +13282,7 @@
       "label": "VehicleSoldPriceOnly",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L164",
+      "source_location": "L159",
       "id": "vehicle_vehiclesoldpriceonly",
       "community": 73,
       "norm_label": "vehiclesoldpriceonly"
@@ -13255,7 +13291,7 @@
       "label": "GetVehicleAdminResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L168",
+      "source_location": "L163",
       "id": "vehicle_getvehicleadminresponse",
       "community": 73,
       "norm_label": "getvehicleadminresponse"
@@ -13264,7 +13300,7 @@
       "label": "GetVehicleBasicResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L179",
+      "source_location": "L174",
       "id": "vehicle_getvehiclebasicresponse",
       "community": 73,
       "norm_label": "getvehiclebasicresponse"
@@ -13273,7 +13309,7 @@
       "label": "PublicListVehiclesQuery",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L186",
+      "source_location": "L182",
       "id": "vehicle_publiclistvehiclesquery",
       "community": 73,
       "norm_label": "publiclistvehiclesquery"
@@ -13282,7 +13318,7 @@
       "label": "PublicVehicleListItem",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L196",
+      "source_location": "L192",
       "id": "vehicle_publicvehiclelistitem",
       "community": 73,
       "norm_label": "publicvehiclelistitem"
@@ -13291,7 +13327,7 @@
       "label": "PublicCategoryListing",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L217",
+      "source_location": "L213",
       "id": "vehicle_publiccategorylisting",
       "community": 73,
       "norm_label": "publiccategorylisting"
@@ -13300,7 +13336,7 @@
       "label": "PublicListVehiclesResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L224",
+      "source_location": "L220",
       "id": "vehicle_publiclistvehiclesresponse",
       "community": 73,
       "norm_label": "publiclistvehiclesresponse"
@@ -13309,7 +13345,7 @@
       "label": "UpdateVehicleRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L230",
+      "source_location": "L226",
       "id": "vehicle_updatevehiclerequest",
       "community": 73,
       "norm_label": "updatevehiclerequest"
@@ -13318,7 +13354,7 @@
       "label": "UpdateVehicleResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L244",
+      "source_location": "L240",
       "id": "vehicle_updatevehicleresponse",
       "community": 73,
       "norm_label": "updatevehicleresponse"
@@ -13327,7 +13363,7 @@
       "label": "UpdateVehiclePricingRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L261",
+      "source_location": "L257",
       "id": "vehicle_updatevehiclepricingrequest",
       "community": 73,
       "norm_label": "updatevehiclepricingrequest"
@@ -13336,7 +13372,7 @@
       "label": "UpdateVehiclePricingResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L270",
+      "source_location": "L266",
       "id": "vehicle_updatevehiclepricingresponse",
       "community": 73,
       "norm_label": "updatevehiclepricingresponse"
@@ -13345,7 +13381,7 @@
       "label": "CreateVehicleRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L281",
+      "source_location": "L277",
       "id": "vehicle_createvehiclerequest",
       "community": 73,
       "norm_label": "createvehiclerequest"
@@ -13354,7 +13390,7 @@
       "label": "CreateVehicleResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L296",
+      "source_location": "L292",
       "id": "vehicle_createvehicleresponse",
       "community": 73,
       "norm_label": "createvehicleresponse"
@@ -13363,7 +13399,7 @@
       "label": "AddExpenseRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L314",
+      "source_location": "L310",
       "id": "vehicle_addexpenserequest",
       "community": 73,
       "norm_label": "addexpenserequest"
@@ -13372,7 +13408,7 @@
       "label": "AddExpenseResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L322",
+      "source_location": "L318",
       "id": "vehicle_addexpenseresponse",
       "community": 73,
       "norm_label": "addexpenseresponse"
@@ -13381,7 +13417,7 @@
       "label": "AssignShowroomRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L333",
+      "source_location": "L329",
       "id": "vehicle_assignshowroomrequest",
       "community": 73,
       "norm_label": "assignshowroomrequest"
@@ -13390,7 +13426,7 @@
       "label": "AssignShowroomResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L337",
+      "source_location": "L333",
       "id": "vehicle_assignshowroomresponse",
       "community": 73,
       "norm_label": "assignshowroomresponse"
@@ -13399,7 +13435,7 @@
       "label": "SellVehicleCustomerRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L343",
+      "source_location": "L339",
       "id": "vehicle_sellvehiclecustomerrequest",
       "community": 73,
       "norm_label": "sellvehiclecustomerrequest"
@@ -13408,7 +13444,7 @@
       "label": "SellVehicleRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L354",
+      "source_location": "L350",
       "id": "vehicle_sellvehiclerequest",
       "community": 73,
       "norm_label": "sellvehiclerequest"
@@ -13417,7 +13453,7 @@
       "label": "SellVehicleCustomerResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L362",
+      "source_location": "L358",
       "id": "vehicle_sellvehiclecustomerresponse",
       "community": 73,
       "norm_label": "sellvehiclecustomerresponse"
@@ -13426,7 +13462,7 @@
       "label": "SellVehicleResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L374",
+      "source_location": "L370",
       "id": "vehicle_sellvehicleresponse",
       "community": 73,
       "norm_label": "sellvehicleresponse"
@@ -13435,7 +13471,7 @@
       "label": "UpdateVehicleStatusRequest",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L385",
+      "source_location": "L381",
       "id": "vehicle_updatevehiclestatusrequest",
       "community": 73,
       "norm_label": "updatevehiclestatusrequest"
@@ -13444,7 +13480,7 @@
       "label": "UpdateVehicleStatusResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L390",
+      "source_location": "L386",
       "id": "vehicle_updatevehiclestatusresponse",
       "community": 73,
       "norm_label": "updatevehiclestatusresponse"
@@ -13453,7 +13489,7 @@
       "label": "AddVehicleImageResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L399",
+      "source_location": "L395",
       "id": "vehicle_addvehicleimageresponse",
       "community": 73,
       "norm_label": "addvehicleimageresponse"
@@ -13462,7 +13498,7 @@
       "label": "AddVehicleDocumentResponse",
       "file_type": "code",
       "source_file": "internal/modules/vehicle/dto.go",
-      "source_location": "L407",
+      "source_location": "L403",
       "id": "vehicle_addvehicledocumentresponse",
       "community": 73,
       "norm_label": "addvehicledocumentresponse"
@@ -13473,7 +13509,7 @@
       "source_file": "internal/modules/vehicle/errors.go",
       "source_location": "L1",
       "id": "internal_modules_vehicle_errors_go",
-      "community": 179,
+      "community": 282,
       "norm_label": "errors.go"
     },
     {
@@ -13482,7 +13518,7 @@
       "source_file": "internal/modules/vehicle/errors.go",
       "source_location": "L17",
       "id": "vehicle_errors_init",
-      "community": 179,
+      "community": 282,
       "norm_label": "init()"
     },
     {
@@ -14562,7 +14598,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L17",
       "id": "auth_mockservice",
-      "community": 124,
+      "community": 285,
       "norm_label": "mockservice"
     },
     {
@@ -14571,7 +14607,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L26",
       "id": "auth_mockservice_sendotp",
-      "community": 124,
+      "community": 285,
       "norm_label": ".sendotp()"
     },
     {
@@ -14580,7 +14616,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L29",
       "id": "auth_mockservice_register",
-      "community": 124,
+      "community": 285,
       "norm_label": ".register()"
     },
     {
@@ -14589,7 +14625,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L32",
       "id": "auth_mockservice_login",
-      "community": 124,
+      "community": 285,
       "norm_label": ".login()"
     },
     {
@@ -14598,7 +14634,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L35",
       "id": "auth_mockservice_verifyotp",
-      "community": 124,
+      "community": 285,
       "norm_label": ".verifyotp()"
     },
     {
@@ -14607,7 +14643,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L38",
       "id": "auth_mockservice_refreshtoken",
-      "community": 124,
+      "community": 285,
       "norm_label": ".refreshtoken()"
     },
     {
@@ -14616,7 +14652,7 @@
       "source_file": "internal/modules/auth/handler_test.go",
       "source_location": "L41",
       "id": "auth_mockservice_logout",
-      "community": 124,
+      "community": 285,
       "norm_label": ".logout()"
     },
     {
@@ -15129,7 +15165,7 @@
       "source_file": "internal/modules/auth/errors.go",
       "source_location": "L1",
       "id": "internal_modules_auth_errors_go",
-      "community": 179,
+      "community": 282,
       "norm_label": "errors.go"
     },
     {
@@ -15138,7 +15174,7 @@
       "source_file": "internal/modules/auth/errors.go",
       "source_location": "L22",
       "id": "auth_errors_init",
-      "community": 179,
+      "community": 282,
       "norm_label": "init()"
     },
     {
@@ -15498,7 +15534,7 @@
       "source_file": "internal/modules/user/errors.go",
       "source_location": "L1",
       "id": "internal_modules_user_errors_go",
-      "community": 179,
+      "community": 282,
       "norm_label": "errors.go"
     },
     {
@@ -15507,7 +15543,7 @@
       "source_file": "internal/modules/user/errors.go",
       "source_location": "L12",
       "id": "user_errors_init",
-      "community": 179,
+      "community": 282,
       "norm_label": "init()"
     },
     {
@@ -16128,7 +16164,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L1",
       "id": "internal_modules_dashboard_dto_go",
-      "community": 254,
+      "community": 287,
       "norm_label": "dto.go"
     },
     {
@@ -16137,7 +16173,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L3",
       "id": "dashboard_getdashboardrequest",
-      "community": 254,
+      "community": 287,
       "norm_label": "getdashboardrequest"
     },
     {
@@ -16146,7 +16182,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L9",
       "id": "dashboard_salessummary",
-      "community": 254,
+      "community": 287,
       "norm_label": "salessummary"
     },
     {
@@ -16155,7 +16191,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L16",
       "id": "dashboard_inventorysummary",
-      "community": 254,
+      "community": 287,
       "norm_label": "inventorysummary"
     },
     {
@@ -16164,7 +16200,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L23",
       "id": "dashboard_expensesummary",
-      "community": 254,
+      "community": 287,
       "norm_label": "expensesummary"
     },
     {
@@ -16182,7 +16218,7 @@
       "source_file": "internal/modules/dashboard/dto.go",
       "source_location": "L34",
       "id": "dashboard_dashboardresponse",
-      "community": 254,
+      "community": 287,
       "norm_label": "dashboardresponse"
     },
     {
@@ -18000,7 +18036,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L1",
       "id": "cms_portal_scripts_create_moderator_ts",
-      "community": 162,
+      "community": 286,
       "norm_label": "create-moderator.ts"
     },
     {
@@ -18009,7 +18045,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L9",
       "id": "scripts_create_moderator_args",
-      "community": 162,
+      "community": 286,
       "norm_label": "args"
     },
     {
@@ -18018,7 +18054,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L16",
       "id": "scripts_create_moderator_readargs",
-      "community": 162,
+      "community": 286,
       "norm_label": "readargs()"
     },
     {
@@ -18027,7 +18063,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L37",
       "id": "scripts_create_moderator_generateloginid",
-      "community": 162,
+      "community": 286,
       "norm_label": "generateloginid()"
     },
     {
@@ -18036,7 +18072,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L48",
       "id": "scripts_create_moderator_rolename",
-      "community": 162,
+      "community": 286,
       "norm_label": "rolename()"
     },
     {
@@ -18045,7 +18081,7 @@
       "source_file": "CMS-portal/scripts/create-moderator.ts",
       "source_location": "L55",
       "id": "scripts_create_moderator_main",
-      "community": 162,
+      "community": 286,
       "norm_label": "main()"
     },
     {
@@ -18945,7 +18981,7 @@
       "source_file": "CMS-portal/src/generated/prisma/internal/prismaNamespace.ts",
       "source_location": "L302",
       "id": "internal_prismanamespace_boolean",
-      "community": 244,
+      "community": 199,
       "norm_label": "boolean"
     },
     {
@@ -21141,7 +21177,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L147",
       "id": "app_actions_updateuserprofilestate",
-      "community": 235,
+      "community": 136,
       "norm_label": "updateuserprofilestate"
     },
     {
@@ -21177,7 +21213,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L179",
       "id": "app_actions_updateshowroomprofilestate",
-      "community": 159,
+      "community": 235,
       "norm_label": "updateshowroomprofilestate"
     },
     {
@@ -21654,7 +21690,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L764",
       "id": "app_actions_startloginaction",
-      "community": 162,
+      "community": 234,
       "norm_label": "startloginaction()"
     },
     {
@@ -21663,7 +21699,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L771",
       "id": "app_actions_completeloginaction",
-      "community": 162,
+      "community": 234,
       "norm_label": "completeloginaction()"
     },
     {
@@ -21726,7 +21762,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L1402",
       "id": "app_actions_deleteselecteduseraction",
-      "community": 235,
+      "community": 136,
       "norm_label": "deleteselecteduseraction()"
     },
     {
@@ -22068,7 +22104,7 @@
       "source_file": "CMS-portal/src/app/actions.ts",
       "source_location": "L3199",
       "id": "app_actions_opensubscriptionplandetailaction",
-      "community": 247,
+      "community": 235,
       "norm_label": "opensubscriptionplandetailaction()"
     },
     {
@@ -22194,7 +22230,7 @@
       "source_file": "CMS-portal/src/app/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_page_tsx",
-      "community": 162,
+      "community": 234,
       "norm_label": "page.tsx"
     },
     {
@@ -22203,7 +22239,7 @@
       "source_file": "CMS-portal/src/app/page.tsx",
       "source_location": "L7",
       "id": "app_page_home",
-      "community": 162,
+      "community": 234,
       "norm_label": "home()"
     },
     {
@@ -22302,7 +22338,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/features/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_subscriptions_features_page_tsx",
-      "community": 244,
+      "community": 247,
       "norm_label": "page.tsx"
     },
     {
@@ -22311,7 +22347,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/features/page.tsx",
       "source_location": "L9",
       "id": "features_page_subscriptionfeaturespageprops",
-      "community": 244,
+      "community": 247,
       "norm_label": "subscriptionfeaturespageprops"
     },
     {
@@ -22320,7 +22356,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/features/page.tsx",
       "source_location": "L13",
       "id": "features_page_getstringparam",
-      "community": 244,
+      "community": 247,
       "norm_label": "getstringparam()"
     },
     {
@@ -22329,7 +22365,7 @@
       "source_file": "CMS-portal/src/app/(portal)/subscriptions/features/page.tsx",
       "source_location": "L21",
       "id": "features_page_subscriptionfeaturespage",
-      "community": 244,
+      "community": 247,
       "norm_label": "subscriptionfeaturespage()"
     },
     {
@@ -22680,7 +22716,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_users_detail_page_tsx",
-      "community": 235,
+      "community": 136,
       "norm_label": "page.tsx"
     },
     {
@@ -22689,7 +22725,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L30",
       "id": "detail_page_formatlocation",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatlocation()"
     },
     {
@@ -22698,7 +22734,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L42",
       "id": "detail_page_formatprice",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatprice()"
     },
     {
@@ -22707,7 +22743,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L56",
       "id": "detail_page_formatsubscriptionlabel",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatsubscriptionlabel()"
     },
     {
@@ -22716,7 +22752,7 @@
       "source_file": "CMS-portal/src/app/(portal)/users/detail/page.tsx",
       "source_location": "L60",
       "id": "detail_page_userdetailpage",
-      "community": 235,
+      "community": 136,
       "norm_label": "userdetailpage()"
     },
     {
@@ -22950,7 +22986,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/new/page.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_app_portal_showrooms_detail_vehicles_new_page_tsx",
-      "community": 206,
+      "community": 248,
       "norm_label": "page.tsx"
     },
     {
@@ -22959,7 +22995,7 @@
       "source_file": "CMS-portal/src/app/(portal)/showrooms/detail/vehicles/new/page.tsx",
       "source_location": "L10",
       "id": "new_page_addshowroomvehiclepage",
-      "community": 206,
+      "community": 248,
       "norm_label": "addshowroomvehiclepage()"
     },
     {
@@ -23139,7 +23175,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_user_profile_edit_form_tsx",
-      "community": 235,
+      "community": 136,
       "norm_label": "user-profile-edit-form.tsx"
     },
     {
@@ -23148,7 +23184,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_user_profile_edit_form_userprofileeditformprops",
-      "community": 235,
+      "community": 136,
       "norm_label": "userprofileeditformprops"
     },
     {
@@ -23157,7 +23193,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L27",
       "id": "components_user_profile_edit_form_initialstate",
-      "community": 235,
+      "community": 136,
       "norm_label": "initialstate"
     },
     {
@@ -23166,7 +23202,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L29",
       "id": "components_user_profile_edit_form_savebutton",
-      "community": 235,
+      "community": 136,
       "norm_label": "savebutton()"
     },
     {
@@ -23175,7 +23211,7 @@
       "source_file": "CMS-portal/src/components/user-profile-edit-form.tsx",
       "source_location": "L44",
       "id": "components_user_profile_edit_form_userprofileeditform",
-      "community": 235,
+      "community": 136,
       "norm_label": "userprofileeditform()"
     },
     {
@@ -23184,7 +23220,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_showroom_profile_edit_form_tsx",
-      "community": 159,
+      "community": 235,
       "norm_label": "showroom-profile-edit-form.tsx"
     },
     {
@@ -23193,7 +23229,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L14",
       "id": "components_showroom_profile_edit_form_showroomprofileeditformprops",
-      "community": 159,
+      "community": 235,
       "norm_label": "showroomprofileeditformprops"
     },
     {
@@ -23202,7 +23238,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L31",
       "id": "components_showroom_profile_edit_form_initialstate",
-      "community": 159,
+      "community": 235,
       "norm_label": "initialstate"
     },
     {
@@ -23211,7 +23247,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L33",
       "id": "components_showroom_profile_edit_form_savebutton",
-      "community": 159,
+      "community": 235,
       "norm_label": "savebutton()"
     },
     {
@@ -23220,7 +23256,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L48",
       "id": "components_showroom_profile_edit_form_formatlocation",
-      "community": 159,
+      "community": 235,
       "norm_label": "formatlocation()"
     },
     {
@@ -23229,7 +23265,7 @@
       "source_file": "CMS-portal/src/components/showroom-profile-edit-form.tsx",
       "source_location": "L62",
       "id": "components_showroom_profile_edit_form_showroomprofileeditform",
-      "community": 159,
+      "community": 235,
       "norm_label": "showroomprofileeditform()"
     },
     {
@@ -23454,7 +23490,7 @@
       "source_file": "CMS-portal/src/components/subscription-feature-manager.tsx",
       "source_location": "L255",
       "id": "components_subscription_feature_manager_subscriptionfeaturemanager",
-      "community": 244,
+      "community": 247,
       "norm_label": "subscriptionfeaturemanager()"
     },
     {
@@ -23544,7 +23580,7 @@
       "source_file": "CMS-portal/src/components/user-membership-manager.tsx",
       "source_location": "L302",
       "id": "components_user_membership_manager_usermembershipmanager",
-      "community": 235,
+      "community": 136,
       "norm_label": "usermembershipmanager()"
     },
     {
@@ -23580,7 +23616,7 @@
       "source_file": "CMS-portal/src/components/vehicle-create-form.tsx",
       "source_location": "L35",
       "id": "components_vehicle_create_form_vehiclecreateform",
-      "community": 206,
+      "community": 248,
       "norm_label": "vehiclecreateform()"
     },
     {
@@ -24039,7 +24075,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L1",
       "id": "cms_portal_src_components_login_form_tsx",
-      "community": 162,
+      "community": 234,
       "norm_label": "login-form.tsx"
     },
     {
@@ -24048,7 +24084,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L12",
       "id": "components_login_form_initialstate",
-      "community": 162,
+      "community": 234,
       "norm_label": "initialstate"
     },
     {
@@ -24057,7 +24093,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L14",
       "id": "components_login_form_submitbutton",
-      "community": 162,
+      "community": 234,
       "norm_label": "submitbutton()"
     },
     {
@@ -24066,7 +24102,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L38",
       "id": "components_login_form_loginidstep",
-      "community": 162,
+      "community": 234,
       "norm_label": "loginidstep()"
     },
     {
@@ -24075,7 +24111,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L63",
       "id": "components_login_form_otpinput",
-      "community": 162,
+      "community": 234,
       "norm_label": "otpinput()"
     },
     {
@@ -24084,7 +24120,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L87",
       "id": "components_login_form_otponlystep",
-      "community": 162,
+      "community": 234,
       "norm_label": "otponlystep()"
     },
     {
@@ -24093,7 +24129,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L111",
       "id": "components_login_form_setupstep",
-      "community": 162,
+      "community": 234,
       "norm_label": "setupstep()"
     },
     {
@@ -24102,7 +24138,7 @@
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L151",
       "id": "components_login_form_loginform",
-      "community": 162,
+      "community": 234,
       "norm_label": "loginform()"
     },
     {
@@ -25020,7 +25056,7 @@
       "source_file": "CMS-portal/src/lib/showrooms.ts",
       "source_location": "L221",
       "id": "lib_showrooms_listshowroomoptions",
-      "community": 235,
+      "community": 136,
       "norm_label": "listshowroomoptions()"
     },
     {
@@ -25092,7 +25128,7 @@
       "source_file": "CMS-portal/src/lib/login-types.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_login_types_ts",
-      "community": 162,
+      "community": 234,
       "norm_label": "login-types.ts"
     },
     {
@@ -25101,7 +25137,7 @@
       "source_file": "CMS-portal/src/lib/login-types.ts",
       "source_location": "L1",
       "id": "lib_login_types_loginstate",
-      "community": 162,
+      "community": 234,
       "norm_label": "loginstate"
     },
     {
@@ -25326,7 +25362,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L221",
       "id": "lib_subscriptions_listsubscriptionplans",
-      "community": 244,
+      "community": 247,
       "norm_label": "listsubscriptionplans()"
     },
     {
@@ -25344,7 +25380,7 @@
       "source_file": "CMS-portal/src/lib/subscriptions.ts",
       "source_location": "L386",
       "id": "lib_subscriptions_listsubscriptionfeatures",
-      "community": 244,
+      "community": 247,
       "norm_label": "listsubscriptionfeatures()"
     },
     {
@@ -25668,7 +25704,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L201",
       "id": "lib_users_listuseroptions",
-      "community": 206,
+      "community": 235,
       "norm_label": "listuseroptions()"
     },
     {
@@ -25677,7 +25713,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L221",
       "id": "lib_users_listuserroleoptions",
-      "community": 235,
+      "community": 136,
       "norm_label": "listuserroleoptions()"
     },
     {
@@ -25695,7 +25731,7 @@
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L344",
       "id": "lib_users_getuserdetail",
-      "community": 235,
+      "community": 136,
       "norm_label": "getuserdetail()"
     },
     {
@@ -25758,7 +25794,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L1",
       "id": "cms_portal_src_lib_user_detail_selection_ts",
-      "community": 235,
+      "community": 136,
       "norm_label": "user-detail-selection.ts"
     },
     {
@@ -25767,7 +25803,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L10",
       "id": "lib_user_detail_selection_getselectionkey",
-      "community": 235,
+      "community": 136,
       "norm_label": "getselectionkey()"
     },
     {
@@ -25776,7 +25812,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L20",
       "id": "lib_user_detail_selection_setselecteduserdetail",
-      "community": 235,
+      "community": 136,
       "norm_label": "setselecteduserdetail()"
     },
     {
@@ -25785,7 +25821,7 @@
       "source_file": "CMS-portal/src/lib/user-detail-selection.ts",
       "source_location": "L41",
       "id": "lib_user_detail_selection_getselecteduserdetailid",
-      "community": 235,
+      "community": 136,
       "norm_label": "getselecteduserdetailid()"
     },
     {
@@ -25920,7 +25956,7 @@
       "source_file": "CMS-portal/src/lib/auth.ts",
       "source_location": "L221",
       "id": "lib_auth_getcurrentmoderator",
-      "community": 162,
+      "community": 234,
       "norm_label": "getcurrentmoderator()"
     },
     {
@@ -25938,7 +25974,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L1",
       "id": "pkg_middleware_recovery_go",
-      "community": 47,
+      "community": 279,
       "norm_label": "recovery.go"
     },
     {
@@ -25947,7 +25983,7 @@
       "source_file": "pkg/middleware/recovery.go",
       "source_location": "L12",
       "id": "middleware_recovery_recovery",
-      "community": 47,
+      "community": 279,
       "norm_label": "recovery()"
     },
     {
@@ -26019,7 +26055,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L1",
       "id": "pkg_middleware_request_id_go",
-      "community": 47,
+      "community": 288,
       "norm_label": "request_id.go"
     },
     {
@@ -26028,7 +26064,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L12",
       "id": "middleware_request_id_requestid",
-      "community": 47,
+      "community": 288,
       "norm_label": "requestid()"
     },
     {
@@ -26037,7 +26073,7 @@
       "source_file": "pkg/middleware/request_id.go",
       "source_location": "L24",
       "id": "middleware_request_id_newrequestid",
-      "community": 47,
+      "community": 288,
       "norm_label": "newrequestid()"
     },
     {
@@ -26586,7 +26622,7 @@
       "source_file": "pkg/errors/mapping.go",
       "source_location": "L9",
       "id": "errors_mapping_registermapper",
-      "community": 179,
+      "community": 282,
       "norm_label": "registermapper()"
     },
     {
@@ -30787,7 +30823,7 @@
       "label": "PATCH /api/v1/vehicle/:id \u2014 Update Vehicle Core Fields",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L106",
+      "source_location": "L107",
       "id": "modules_vehicle_patch_api_v1_vehicle_id_update_vehicle_core_fields",
       "community": 95,
       "norm_label": "patch /api/v1/vehicle/:id \u2014 update vehicle core fields"
@@ -30796,7 +30832,7 @@
       "label": "PATCH /api/v1/vehicle/:id/pricing \u2014 Update Vehicle Pricing",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L145",
+      "source_location": "L146",
       "id": "modules_vehicle_patch_api_v1_vehicle_id_pricing_update_vehicle_pricing",
       "community": 95,
       "norm_label": "patch /api/v1/vehicle/:id/pricing \u2014 update vehicle pricing"
@@ -30805,7 +30841,7 @@
       "label": "GET /api/v1/vehicle/public-listing \u2014 Public Showroom Vehicle Listing",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L174",
+      "source_location": "L175",
       "id": "modules_vehicle_get_api_v1_vehicle_public_listing_public_showroom_vehicle_listing",
       "community": 95,
       "norm_label": "get /api/v1/vehicle/public-listing \u2014 public showroom vehicle listing"
@@ -30814,7 +30850,7 @@
       "label": "code:json ({)",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L207",
+      "source_location": "L208",
       "id": "modules_vehicle_codeblock_2",
       "community": 95,
       "norm_label": "code:json ({)"
@@ -30823,7 +30859,7 @@
       "label": "POST /api/v1/vehicle/:id/expense \u2014 Add Vehicle Expense",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L221",
+      "source_location": "L222",
       "id": "modules_vehicle_post_api_v1_vehicle_id_expense_add_vehicle_expense",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/expense \u2014 add vehicle expense"
@@ -30832,7 +30868,7 @@
       "label": "POST /api/v1/vehicle/:id/status \u2014 Update Vehicle Status",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L259",
+      "source_location": "L260",
       "id": "modules_vehicle_post_api_v1_vehicle_id_status_update_vehicle_status",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/status \u2014 update vehicle status"
@@ -30841,7 +30877,7 @@
       "label": "POST /api/v1/vehicle/:id/sale \u2014 Sell Vehicle",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L297",
+      "source_location": "L298",
       "id": "modules_vehicle_post_api_v1_vehicle_id_sale_sell_vehicle",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/sale \u2014 sell vehicle"
@@ -30850,7 +30886,7 @@
       "label": "POST /api/v1/vehicle/:id/showroom \u2014 Assign Vehicle to Showroom",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L345",
+      "source_location": "L346",
       "id": "modules_vehicle_post_api_v1_vehicle_id_showroom_assign_vehicle_to_showroom",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/showroom \u2014 assign vehicle to showroom"
@@ -30859,7 +30895,7 @@
       "label": "POST /api/v1/vehicle/:id/image \u2014 Upload Vehicle Photo",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L383",
+      "source_location": "L384",
       "id": "modules_vehicle_post_api_v1_vehicle_id_image_upload_vehicle_photo",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/image \u2014 upload vehicle photo"
@@ -30868,7 +30904,7 @@
       "label": "POST /api/v1/vehicle/:id/document \u2014 Upload Vehicle Document",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L413",
+      "source_location": "L414",
       "id": "modules_vehicle_post_api_v1_vehicle_id_document_upload_vehicle_document",
       "community": 95,
       "norm_label": "post /api/v1/vehicle/:id/document \u2014 upload vehicle document"
@@ -30877,7 +30913,7 @@
       "label": "DELETE /api/v1/vehicle/:id/image/:image_id \u2014 Soft-delete Vehicle Photo",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L443",
+      "source_location": "L444",
       "id": "modules_vehicle_delete_api_v1_vehicle_id_image_image_id_soft_delete_vehicle_photo",
       "community": 95,
       "norm_label": "delete /api/v1/vehicle/:id/image/:image_id \u2014 soft-delete vehicle photo"
@@ -30886,7 +30922,7 @@
       "label": "Documentation Update Checklist",
       "file_type": "document",
       "source_file": "docs/modules/vehicle.md",
-      "source_location": "L464",
+      "source_location": "L465",
       "id": "modules_vehicle_documentation_update_checklist",
       "community": 95,
       "norm_label": "documentation update checklist"
@@ -30935,6 +30971,15 @@
       "id": "cms_portal_readme_deploy_on_vercel",
       "community": 238,
       "norm_label": "deploy on vercel"
+    },
+    {
+      "label": "buildDocumentItems()",
+      "file_type": "code",
+      "source_file": "internal/modules/vehicle/handler.go",
+      "source_location": "L266",
+      "community": 29,
+      "norm_label": "builddocumentitems()",
+      "id": "vehicle_handler_builddocumentitems"
     },
     {
       "label": "TestAddMember_TargetUserNotFound()",
@@ -31220,7 +31265,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/users.ts",
       "source_location": "L41",
-      "community": 136,
+      "community": 159,
       "norm_label": "userdetailmembership",
       "id": "lib_users_userdetailmembership"
     },
@@ -31229,7 +31274,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/lib/auth.ts",
       "source_location": "L16",
-      "community": 162,
+      "community": 234,
       "norm_label": "loginstate",
       "id": "lib_auth_loginstate"
     },
@@ -31283,7 +31328,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/components/login-form.tsx",
       "source_location": "L37",
-      "community": 162,
+      "community": 234,
       "norm_label": "errormessage()",
       "id": "components_login_form_errormessage"
     },
@@ -31292,7 +31337,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L1",
-      "community": 235,
+      "community": 136,
       "norm_label": "page.tsx",
       "id": "cms_portal_src_app_portal_users_userid_page_tsx"
     },
@@ -31301,7 +31346,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L11",
-      "community": 235,
+      "community": 136,
       "norm_label": "userdetailpageprops",
       "id": "userid_page_userdetailpageprops"
     },
@@ -31310,7 +31355,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L17",
-      "community": 235,
+      "community": 136,
       "norm_label": "dateformatter",
       "id": "userid_page_dateformatter"
     },
@@ -31319,7 +31364,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L21",
-      "community": 235,
+      "community": 136,
       "norm_label": "datetimeformatter",
       "id": "userid_page_datetimeformatter"
     },
@@ -31328,7 +31373,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L26",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatdate()",
       "id": "userid_page_formatdate"
     },
@@ -31337,7 +31382,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L30",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatdatetime()",
       "id": "userid_page_formatdatetime"
     },
@@ -31346,7 +31391,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L34",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatlocation()",
       "id": "userid_page_formatlocation"
     },
@@ -31355,7 +31400,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L46",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatprice()",
       "id": "userid_page_formatprice"
     },
@@ -31364,7 +31409,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L60",
-      "community": 235,
+      "community": 136,
       "norm_label": "formatsubscriptionlabel()",
       "id": "userid_page_formatsubscriptionlabel"
     },
@@ -31373,7 +31418,7 @@
       "file_type": "code",
       "source_file": "CMS-portal/src/app/(portal)/users/[userId]/page.tsx",
       "source_location": "L64",
-      "community": 235,
+      "community": 136,
       "norm_label": "userdetailpage()",
       "id": "userid_page_userdetailpage"
     },
@@ -31643,7 +31688,7 @@
       "file_type": "code",
       "source_file": "internal/vehicle/status_model.go",
       "source_location": "L1",
-      "community": 279,
+      "community": 269,
       "norm_label": "status_model.go",
       "id": "internal_vehicle_status_model_go"
     },
@@ -31886,7 +31931,7 @@
       "file_type": "code",
       "source_file": "internal/auth/errors.go",
       "source_location": "L1",
-      "community": 179,
+      "community": 282,
       "norm_label": "errors.go",
       "id": "internal_auth_errors_go"
     },
@@ -31940,7 +31985,7 @@
       "file_type": "code",
       "source_file": "internal/user/errors.go",
       "source_location": "L1",
-      "community": 179,
+      "community": 282,
       "norm_label": "errors.go",
       "id": "internal_user_errors_go"
     },
@@ -36179,9 +36224,9 @@
       "source_file": "tests/unit/vehicle/service_test.go",
       "source_location": "L173",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_mockvehiclerepo",
-      "target": "vehicle_mockvehiclerepo_createdocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockvehiclerepo_createdocument"
     },
     {
       "relation": "method",
@@ -38643,9 +38688,9 @@
       "source_file": "tests/unit/vehicle/routes_test.go",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_mockroutesservice",
-      "target": "vehicle_mockroutesservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockroutesservice_addvehicledocument"
     },
     {
       "relation": "method",
@@ -38707,9 +38752,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "contains",
@@ -38717,9 +38762,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_success",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_success"
     },
     {
       "relation": "contains",
@@ -38727,9 +38772,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_alldocumenttypes",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_alldocumenttypes"
     },
     {
       "relation": "contains",
@@ -38737,9 +38782,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_invalidtype",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_invalidtype"
     },
     {
       "relation": "contains",
@@ -38747,9 +38792,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_emptytype",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_emptytype"
     },
     {
       "relation": "contains",
@@ -38757,9 +38802,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_nilfile",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_nilfile"
     },
     {
       "relation": "contains",
@@ -38767,9 +38812,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_toolarge",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_toolarge"
     },
     {
       "relation": "contains",
@@ -38777,9 +38822,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_invalidextension",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_invalidextension"
     },
     {
       "relation": "contains",
@@ -38787,9 +38832,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_statuserror",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_statuserror"
     },
     {
       "relation": "contains",
@@ -38797,9 +38842,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_sold",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_sold"
     },
     {
       "relation": "contains",
@@ -38807,9 +38852,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_openerror",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_openerror"
     },
     {
       "relation": "contains",
@@ -38817,9 +38862,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_readerror",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_readerror"
     },
     {
       "relation": "contains",
@@ -38827,9 +38872,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_emptycontenttype_usesoctetstream",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_emptycontenttype_usesoctetstream"
     },
     {
       "relation": "contains",
@@ -38837,9 +38882,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_uploaderror",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_uploaderror"
     },
     {
       "relation": "contains",
@@ -38847,9 +38892,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_createerror",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_testaddvehicledocument_createerror"
     },
     {
       "relation": "contains",
@@ -38857,8 +38902,28 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L195",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_document_service_test_go",
-      "target": "vehicle_document_service_test_testaddvehicledocument_signedurlfailure_returnsemptyurl",
+      "target": "vehicle_document_service_test_testaddvehicledocument_signedurlfailure_returnsemptyurl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/document_service_test.go",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_document_service_test_go",
+      "target": "vehicle_document_service_test_testgetvehiclebyid_signsdocumentsandomitsfailures",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/document_service_test.go",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_document_service_test_go",
+      "target": "vehicle_document_service_test_testgetvehiclebyid_nodocuments",
       "confidence_score": 1.0
     },
     {
@@ -38868,9 +38933,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_success",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38879,9 +38944,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_alldocumenttypes",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38890,9 +38955,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_invalidtype",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38901,9 +38966,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_emptytype",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38912,9 +38977,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_toolarge",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38923,9 +38988,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_invalidextension",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38934,9 +38999,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_statuserror",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38945,9 +39010,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_sold",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38956,9 +39021,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_openerror",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38967,9 +39032,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_readerror",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38978,9 +39043,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_emptycontenttype_usesoctetstream",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -38989,9 +39054,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L175",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_uploaderror",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -39000,9 +39065,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L187",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_createerror",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -39011,9 +39076,9 @@
       "source_file": "tests/unit/vehicle/document_service_test.go",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_document_service_test_testaddvehicledocument_signedurlfailure_returnsemptyurl",
-      "target": "vehicle_document_service_test_documentfileheader",
-      "confidence_score": 1.0
+      "target": "vehicle_document_service_test_documentfileheader"
     },
     {
       "relation": "calls",
@@ -40092,6 +40157,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L705",
+      "weight": 1.0,
+      "source": "tests_unit_vehicle_handler_test_go",
+      "target": "vehicle_handler_test_testhandler_getvehicle_documentsgroupedbytype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L515",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -41044,9 +41119,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1718",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_multipartdocumentrequest",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_multipartdocumentrequest"
     },
     {
       "relation": "contains",
@@ -41054,9 +41129,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1737",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "contains",
@@ -41064,9 +41139,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1747",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_testhandler_addvehicledocument_success",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_testhandler_addvehicledocument_success"
     },
     {
       "relation": "contains",
@@ -41074,9 +41149,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1761",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_testhandler_addvehicledocument_missinguser",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_testhandler_addvehicledocument_missinguser"
     },
     {
       "relation": "contains",
@@ -41084,9 +41159,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1768",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_testhandler_addvehicledocument_notmultipart",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_testhandler_addvehicledocument_notmultipart"
     },
     {
       "relation": "contains",
@@ -41094,9 +41169,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1779",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_testhandler_addvehicledocument_missingfile",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_testhandler_addvehicledocument_missingfile"
     },
     {
       "relation": "contains",
@@ -41104,9 +41179,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1789",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_handler_test_go",
-      "target": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror"
     },
     {
       "relation": "method",
@@ -41234,9 +41309,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_mockhandlerservice",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "method",
@@ -42278,9 +42353,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_mockhandlerservice_addvehicledocument",
-      "target": "vehicle_mockerror_error",
-      "confidence_score": 1.0
+      "target": "vehicle_mockerror_error"
     },
     {
       "relation": "calls",
@@ -42289,9 +42364,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1756",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_success",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "calls",
@@ -42300,9 +42375,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1764",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missinguser",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "calls",
@@ -42311,9 +42386,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1775",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_notmultipart",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "calls",
@@ -42322,9 +42397,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1785",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missingfile",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "calls",
@@ -42333,9 +42408,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1797",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror",
-      "target": "vehicle_mockhandlerservice_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_mockhandlerservice_addvehicledocument"
     },
     {
       "relation": "calls",
@@ -42566,6 +42641,17 @@
       "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_getvehicle_imagesgroupedbylabel",
       "target": "vehicle_handler_test_setupgetvehiclecontext"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/vehicle/handler_test.go",
+      "source_location": "L706",
+      "weight": 1.0,
+      "source": "vehicle_handler_test_testhandler_getvehicle_documentsgroupedbytype",
+      "target": "vehicle_handler_test_setupgetvehiclecontext",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -43828,9 +43914,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1748",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_success",
-      "target": "vehicle_handler_test_multipartdocumentrequest",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_multipartdocumentrequest"
     },
     {
       "relation": "calls",
@@ -43839,9 +43925,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1762",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missinguser",
-      "target": "vehicle_handler_test_multipartdocumentrequest",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_multipartdocumentrequest"
     },
     {
       "relation": "calls",
@@ -43850,9 +43936,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1780",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missingfile",
-      "target": "vehicle_handler_test_multipartdocumentrequest",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_multipartdocumentrequest"
     },
     {
       "relation": "calls",
@@ -43861,9 +43947,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1790",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror",
-      "target": "vehicle_handler_test_multipartdocumentrequest",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_multipartdocumentrequest"
     },
     {
       "relation": "calls",
@@ -43872,9 +43958,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1749",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_success",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "calls",
@@ -43883,9 +43969,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1763",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missinguser",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "calls",
@@ -43894,9 +43980,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1771",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_notmultipart",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "calls",
@@ -43905,9 +43991,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_missingfile",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "calls",
@@ -43916,9 +44002,9 @@
       "source_file": "tests/unit/vehicle/handler_test.go",
       "source_location": "L1791",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_test_testhandler_addvehicledocument_serviceerror",
-      "target": "vehicle_handler_test_setupdocumenthandlercontext",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_test_setupdocumenthandlercontext"
     },
     {
       "relation": "contains",
@@ -44486,9 +44572,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L1043",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_repository_gorm_test_go",
-      "target": "vehicle_repository_gorm_test_testrepo_createdocument_success",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_testrepo_createdocument_success"
     },
     {
       "relation": "contains",
@@ -44496,9 +44582,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L1063",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_unit_vehicle_repository_gorm_test_go",
-      "target": "vehicle_repository_gorm_test_testrepo_createdocument_error",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_testrepo_createdocument_error"
     },
     {
       "relation": "contains",
@@ -45341,9 +45427,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L1044",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_gorm_test_testrepo_createdocument_success",
-      "target": "vehicle_repository_gorm_test_newvehiclemockdb",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_newvehiclemockdb"
     },
     {
       "relation": "calls",
@@ -45352,9 +45438,9 @@
       "source_file": "tests/unit/vehicle/repository_gorm_test.go",
       "source_location": "L1064",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_gorm_test_testrepo_createdocument_error",
-      "target": "vehicle_repository_gorm_test_newvehiclemockdb",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_gorm_test_newvehiclemockdb"
     },
     {
       "relation": "calls",
@@ -61962,9 +62048,9 @@
       "source_file": "internal/providers/storage/keys.go",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_storage_keys_go",
-      "target": "storage_keys_showroommediaobjectkey",
-      "confidence_score": 1.0
+      "target": "storage_keys_showroommediaobjectkey"
     },
     {
       "relation": "contains",
@@ -61972,9 +62058,9 @@
       "source_file": "internal/providers/storage/keys.go",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_storage_keys_go",
-      "target": "storage_keys_vehicleimageobjectkey",
-      "confidence_score": 1.0
+      "target": "storage_keys_vehicleimageobjectkey"
     },
     {
       "relation": "contains",
@@ -61982,9 +62068,9 @@
       "source_file": "internal/providers/storage/keys.go",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_storage_keys_go",
-      "target": "storage_keys_vehicledocumentobjectkey",
-      "confidence_score": 1.0
+      "target": "storage_keys_vehicledocumentobjectkey"
     },
     {
       "relation": "calls",
@@ -62058,9 +62144,9 @@
       "source_file": "internal/providers/storage/keys_test.go",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_providers_storage_keys_test_go",
-      "target": "storage_keys_test_testobjectkeybuilders",
-      "confidence_score": 1.0
+      "target": "storage_keys_test_testobjectkeybuilders"
     },
     {
       "relation": "contains",
@@ -62156,11 +62242,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L243",
+      "source_location": "L267",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_handler_go",
-      "target": "vehicle_handler_builddocumentitems"
+      "target": "vehicle_handler_builddocumentsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -62171,6 +62257,16 @@
       "confidence_score": 1.0,
       "source": "internal_modules_vehicle_handler_go",
       "target": "vehicle_handler_buildimagesection"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/handler.go",
+      "source_location": "L243",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "internal_modules_vehicle_handler_go",
+      "target": "vehicle_handler_builddocumentitems"
     },
     {
       "relation": "contains",
@@ -62298,9 +62394,9 @@
       "source_file": "internal/modules/vehicle/handler.go",
       "source_location": "L620",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler",
-      "target": "vehicle_handler_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_addvehicledocument"
     },
     {
       "relation": "method",
@@ -62500,11 +62596,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "internal/modules/vehicle/handler.go",
-      "source_location": "L120",
+      "source_location": "L134",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "vehicle_handler_buildadminresponse",
-      "target": "vehicle_handler_builddocumentitems"
+      "target": "vehicle_handler_builddocumentsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62527,6 +62623,17 @@
       "weight": 1.0,
       "source": "vehicle_handler_buildadminresponse",
       "target": "vehicle_service_optionalstringptr"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/handler.go",
+      "source_location": "L120",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "vehicle_handler_buildadminresponse",
+      "target": "vehicle_handler_builddocumentitems"
     },
     {
       "relation": "calls",
@@ -62560,6 +62667,17 @@
       "confidence_score": 1.0,
       "source": "vehicle_handler_buildbasicresponse",
       "target": "vehicle_handler_buildimagesection"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/handler.go",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "vehicle_handler_buildbasicresponse",
+      "target": "vehicle_handler_builddocumentsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62678,9 +62796,9 @@
       "source_file": "internal/modules/vehicle/handler.go",
       "source_location": "L621",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_handler_addvehicledocument",
-      "target": "vehicle_handler_requirevehiclemembership",
-      "confidence_score": 1.0
+      "target": "vehicle_handler_requirevehiclemembership"
     },
     {
       "relation": "calls",
@@ -62956,9 +63074,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_service_go",
-      "target": "vehicle_service_validatevehicledocumentfile",
-      "confidence_score": 1.0
+      "target": "vehicle_service_validatevehicledocumentfile"
     },
     {
       "relation": "contains",
@@ -62966,9 +63084,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1318",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_service_go",
-      "target": "vehicle_service_isvalidvehicledocumenttype",
-      "confidence_score": 1.0
+      "target": "vehicle_service_isvalidvehicledocumenttype"
     },
     {
       "relation": "contains",
@@ -63216,9 +63334,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1138",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service",
-      "target": "vehicle_service_addvehicledocument",
-      "confidence_score": 1.0
+      "target": "vehicle_service_addvehicledocument"
     },
     {
       "relation": "method",
@@ -63246,9 +63364,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service",
-      "target": "vehicle_service_readanduploaddocument",
-      "confidence_score": 1.0
+      "target": "vehicle_service_readanduploaddocument"
     },
     {
       "relation": "method",
@@ -63259,6 +63377,16 @@
       "confidence_score": 1.0,
       "source": "vehicle_service",
       "target": "vehicle_service_signvehicleimages"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/service.go",
+      "source_location": "L1270",
+      "weight": 1.0,
+      "source": "vehicle_service",
+      "target": "vehicle_service_signvehicledocuments",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -63555,6 +63683,17 @@
       "confidence_score": 1.0,
       "source": "vehicle_service_getvehiclebyid",
       "target": "vehicle_service_signvehicleimages"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "internal/modules/vehicle/service.go",
+      "source_location": "L540",
+      "weight": 1.0,
+      "source": "vehicle_service_getvehiclebyid",
+      "target": "vehicle_service_signvehicledocuments",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -63926,9 +64065,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service_addvehicledocument",
-      "target": "vehicle_service_isvalidvehicledocumenttype",
-      "confidence_score": 1.0
+      "target": "vehicle_service_isvalidvehicledocumenttype"
     },
     {
       "relation": "calls",
@@ -63937,9 +64076,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service_addvehicledocument",
-      "target": "vehicle_service_validatevehicledocumentfile",
-      "confidence_score": 1.0
+      "target": "vehicle_service_validatevehicledocumentfile"
     },
     {
       "relation": "calls",
@@ -63948,9 +64087,9 @@
       "source_file": "internal/modules/vehicle/service.go",
       "source_location": "L1155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_service_addvehicledocument",
-      "target": "vehicle_service_readanduploaddocument",
-      "confidence_score": 1.0
+      "target": "vehicle_service_readanduploaddocument"
     },
     {
       "relation": "calls",
@@ -64778,9 +64917,9 @@
       "source_file": "internal/modules/vehicle/repository.go",
       "source_location": "L493",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository",
-      "target": "vehicle_repository_createdocument",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_createdocument"
     },
     {
       "relation": "method",
@@ -64934,9 +65073,9 @@
       "source_file": "internal/modules/vehicle/repository.go",
       "source_location": "L494",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vehicle_repository_createdocument",
-      "target": "vehicle_repository_create",
-      "confidence_score": 1.0
+      "target": "vehicle_repository_create"
     },
     {
       "relation": "calls",
@@ -65493,9 +65632,9 @@
       "source_file": "internal/modules/vehicle/dto.go",
       "source_location": "L407",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "internal_modules_vehicle_dto_go",
-      "target": "vehicle_addvehicledocumentresponse",
-      "confidence_score": 1.0
+      "target": "vehicle_addvehicledocumentresponse"
     },
     {
       "relation": "contains",
@@ -94869,9 +95008,9 @@
       "source_file": "docs/modules/vehicle.md",
       "source_location": "L413",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "modules_vehicle_endpoints",
-      "target": "modules_vehicle_post_api_v1_vehicle_id_document_upload_vehicle_document",
-      "confidence_score": 1.0
+      "target": "modules_vehicle_post_api_v1_vehicle_id_document_upload_vehicle_document"
     },
     {
       "relation": "contains",
@@ -97117,5 +97256,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cbed0d85001cdb67306b85fcb4676594c2b15137"
+  "built_at_commit": "08513f8e9601a6543ddc719ae44a1c58aa7d8045"
 }

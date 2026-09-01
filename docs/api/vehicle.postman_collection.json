@@ -915,7 +915,7 @@
                 }
               ]
             },
-            "description": "Upload a vehicle document. Any showroom member. Stores an object key under …/docs/…; response url is a 1-hour signed URL. Blocked when the vehicle is sold."
+            "description": "Upload a vehicle document. Any showroom member. Stores an object key under \u2026/docs/\u2026; response url is a 1-hour signed URL. Blocked when the vehicle is sold."
           },
           "response": [
             {

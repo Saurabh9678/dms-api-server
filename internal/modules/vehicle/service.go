@@ -537,6 +537,7 @@ func (s *service) GetVehicleByID(ctx context.Context, vehicleID uint64) (*Vehicl
 		return nil, err
 	}
 	s.signVehicleImages(ctx, details)
+	s.signVehicleDocuments(ctx, details)
 	return details, nil
 }
 
@@ -1264,6 +1265,25 @@ func (s *service) signVehicleImages(ctx context.Context, details *VehicleFullDet
 		kept = append(kept, img)
 	}
 	details.Images = kept
+}
+
+func (s *service) signVehicleDocuments(ctx context.Context, details *VehicleFullDetails) {
+	if details == nil || len(details.Documents) == 0 {
+		return
+	}
+	kept := make([]VehicleDocument, 0, len(details.Documents))
+	for _, doc := range details.Documents {
+		if doc.DocumentURL == "" {
+			continue
+		}
+		url, err := s.storage.SignedURL(ctx, doc.DocumentURL, s.signedURLTTL)
+		if err != nil {
+			continue
+		}
+		doc.DocumentURL = url
+		kept = append(kept, doc)
+	}
+	details.Documents = kept
 }
 
 // buildSignedImageSection groups images by label with signed URLs.
