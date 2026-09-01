@@ -57,6 +57,7 @@ func WithSignedURLTTL(ttl time.Duration) ServiceOption {
 type Service interface {
 	CreateShowroom(ctx context.Context, userID uint64, req *CreateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
 	ListShowrooms(ctx context.Context, userID uint64) (*ListShowroomsResponse, error)
+	GetShowroomByID(ctx context.Context, callerRoles map[uint64]string, showroomID uint64) (*GetShowroomResponse, error)
 	UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error)
 	AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *AddMemberRequest) (*AddMemberResponse, error)
 	ListMembers(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, page, limit int) (*ListMembersResponse, error)
@@ -175,6 +176,31 @@ func (s *service) ListShowrooms(ctx context.Context, userID uint64) (*ListShowro
 	}
 
 	return &ListShowroomsResponse{Showrooms: items}, nil
+}
+
+func (s *service) GetShowroomByID(ctx context.Context, callerRoles map[uint64]string, showroomID uint64) (*GetShowroomResponse, error) {
+	role, ok := callerRoles[showroomID]
+	if !ok {
+		return nil, apperrors.NewAppError(apperrors.CodeShowroomNotFound, "invalid request", http.StatusNotFound, nil)
+	}
+
+	existing, err := s.repo.GetByID(ctx, showroomID)
+	if err != nil {
+		if errors.Is(err, ErrShowroomNotFound) {
+			return nil, apperrors.NewAppError(apperrors.CodeShowroomNotFound, "invalid request", http.StatusNotFound, nil)
+		}
+		return nil, err
+	}
+
+	return &GetShowroomResponse{
+		ID:             existing.ID,
+		ShowroomID:     existing.ShowroomID,
+		Name:           existing.Name,
+		ShowroomLogo:   s.resolveAccessURL(ctx, existing.ShowroomLogo),
+		ShowroomBanner: s.resolveAccessURL(ctx, existing.ShowroomBanner),
+		Geolocation:    existing.ShowroomGeolocation,
+		Role:           role,
+	}, nil
 }
 
 func (s *service) UpdateShowroom(ctx context.Context, callerUserID uint64, callerRoles map[uint64]string, showroomID uint64, req *UpdateShowroomRequest, logo, banner *multipart.FileHeader) (*CreateShowroomResponse, error) {

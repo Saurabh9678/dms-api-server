@@ -1,0 +1,10 @@
+$kind: http-request
+description: Protected. Fetch showroom details by numeric id. Requires active membership (any role). Returns id, showroom_id, name, signed logo/banner URLs, geolocation, and the caller's role. Non-members and missing/deleted showrooms return 404 SHOWROOM_NOT_FOUND.
+url: "{{base_url}}/api/v1/showroom/:id"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+  X-Platform: web
+  X-Device-Id: browser-1
+examples: ./.resources/Get Showroom.resources/examples
+order: 1600

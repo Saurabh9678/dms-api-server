@@ -301,6 +301,72 @@ func TestListShowrooms_Success(t *testing.T) {
 	repo.AssertExpectations(t)
 }
 
+// ─── GetShowroomByID ──────────────────────────────────────────────────────────
+
+func TestGetShowroomByID_NotMember(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, newMockStorage())
+
+	_, err := svc.GetShowroomByID(context.Background(), map[uint64]string{2: "owner"}, uint64(1))
+	assert.Error(t, err)
+	repo.AssertNotCalled(t, "GetByID")
+}
+
+func TestGetShowroomByID_ShowroomNotFound(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, newMockStorage())
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, showroom.ErrShowroomNotFound)
+
+	_, err := svc.GetShowroomByID(context.Background(), ownerRoles(1), uint64(1))
+	assert.Error(t, err)
+	repo.AssertExpectations(t)
+}
+
+func TestGetShowroomByID_GetByIDDBError(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, newMockStorage())
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(nil, errors.New("db error"))
+
+	_, err := svc.GetShowroomByID(context.Background(), ownerRoles(1), uint64(1))
+	assert.Error(t, err)
+	repo.AssertExpectations(t)
+}
+
+func TestGetShowroomByID_Success(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	svc := showroom.NewService(repo, newMockStorage())
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+
+	resp, err := svc.GetShowroomByID(context.Background(), ownerRoles(1), uint64(1))
+	assert.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, uint64(1), resp.ID)
+	assert.Equal(t, "SHOP0001", resp.ShowroomID)
+	assert.Equal(t, "Old Name", resp.Name)
+	assert.Equal(t, "owner", resp.Role)
+	require.NotNil(t, resp.ShowroomLogo)
+	assert.Equal(t, "old/logo.jpg", *resp.ShowroomLogo)
+	repo.AssertExpectations(t)
+}
+
+func TestGetShowroomByID_SignedURLFailure_OmitsMediaURLs(t *testing.T) {
+	repo := new(mockShowroomRepo)
+	storage := new(mockStorageProvider)
+	storage.On("SignedURL", mock.Anything, mock.Anything, mock.Anything).
+		Return("", errors.New("sign failed"))
+	svc := showroom.NewService(repo, storage)
+
+	repo.On("GetByID", mock.Anything, uint64(1)).Return(existingShowroom(), nil)
+
+	resp, err := svc.GetShowroomByID(context.Background(), ownerRoles(1), uint64(1))
+	assert.NoError(t, err)
+	assert.Nil(t, resp.ShowroomLogo)
+	assert.Nil(t, resp.ShowroomBanner)
+}
+
 func TestCreateShowroom_DuplicateShowroomIDRetryExhausted(t *testing.T) {
 	repo := new(mockShowroomRepo)
 	storage := newMockStorage()

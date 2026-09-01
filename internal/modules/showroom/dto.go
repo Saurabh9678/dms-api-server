@@ -16,6 +16,16 @@ type CreateShowroomResponse struct {
 	Geolocation    json.RawMessage `json:"geolocation,omitempty"`
 }
 
+type GetShowroomResponse struct {
+	ID             uint64          `json:"id"`
+	ShowroomID     string          `json:"showroom_id"`
+	Name           string          `json:"name"`
+	ShowroomLogo   *string         `json:"showroom_logo"`
+	ShowroomBanner *string         `json:"showroom_banner"`
+	Geolocation    json.RawMessage `json:"geolocation,omitempty"`
+	Role           string          `json:"role"`
+}
+
 type ListShowroomsResponse struct {
 	Showrooms []ShowroomListItem `json:"showrooms"`
 }

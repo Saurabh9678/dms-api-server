@@ -66,6 +66,29 @@
 - `400 INVALID_DEVICE_CONTEXT` — missing or invalid device-context headers.
 - `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token.
 
+## Endpoint: GET /api/v1/showroom/:id
+
+**Auth:** Required (Bearer token + device context headers + showroom membership).
+
+**Flow:**
+1. `middleware.RequireDeviceContext` — validates `X-Platform` and `X-Device-Id`.
+2. `middleware.RequireAuth` — validates Bearer token, sets `userID` in context.
+3. `middleware.RequireShowroomRoles` — loads `map[showroomID → role]` into context.
+4. `Handler.GetShowroom` — parses showroom ID from path, reads showroom roles, delegates to service.
+5. `service.GetShowroomByID`:
+   a. Caller must be an active member of the showroom (404 `SHOWROOM_NOT_FOUND` if not).
+   b. Fetches showroom via `repo.GetByID` (404 if absent or soft-deleted).
+   c. Maps logo/banner object keys to signed URLs (omits field on signing failure).
+6. Returns 200 with showroom details and the caller's `role` in that showroom.
+
+**Response fields:** `id`, `showroom_id`, `name`, `showroom_logo`, `showroom_banner`, `geolocation`, `role`.
+
+**Response branches:**
+- `200 OK` — showroom details fetched.
+- `400 INVALID_REQUEST` — invalid showroom ID in path.
+- `401 INVALID_ACCESS_TOKEN` — missing or invalid Bearer token, or missing showroom roles context.
+- `404 SHOWROOM_NOT_FOUND` — showroom does not exist, is soft-deleted, or caller is not a member.
+
 ## File Storage
 
 - Provider: `storage.Provider` interface (`internal/providers/storage/provider.go`) with `Upload` + `SignedURL`.

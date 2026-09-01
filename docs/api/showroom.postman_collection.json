@@ -163,6 +163,60 @@
           ]
         },
         {
+          "name": "Get Showroom",
+          "id": "showroom-get",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "X-Platform",
+                "value": "web"
+              },
+              {
+                "key": "X-Device-Id",
+                "value": "browser-1"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showroom/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "showroom", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Numeric showroom ID"
+                }
+              ]
+            },
+            "description": "Protected. Fetch showroom details by numeric id. Requires active membership (any role). Returns id, showroom_id, name, signed logo/banner URLs, geolocation, and the caller's role. Non-members and missing/deleted showrooms return 404 SHOWROOM_NOT_FOUND."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"showroom fetched\",\n  \"data\": {\n    \"id\": 1,\n    \"showroom_id\": \"SHOP0001\",\n    \"name\": \"Main Showroom\",\n    \"showroom_logo\": \"https://storage.googleapis.com/dms-dev-assets/1/showroom/SHOP0001/20240101120000.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Expires=3600&X-Goog-Signature=...\",\n    \"showroom_banner\": null,\n    \"geolocation\": {\"address\":\"123 Main St\",\"city\":\"Bengaluru\",\"state\":\"Karnataka\",\"pincode\":\"560001\",\"lat\":12.9716,\"lng\":77.5946},\n    \"role\": \"owner\"\n  }\n}"
+            },
+            {
+              "name": "Showroom Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"SHOWROOM_NOT_FOUND\",\n    \"message\": \"invalid request\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_ACCESS_TOKEN\",\n    \"message\": \"invalid request\"\n  }\n}"
+            }
+          ]
+        },
+        {
           "name": "Update Showroom",
           "id": "showroom-update",
           "request": {

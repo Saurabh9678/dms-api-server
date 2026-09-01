@@ -26,6 +26,7 @@ func TestRegisterShowroomRoutes(t *testing.T) {
 
 	assert.True(t, routeMap["POST:/api/v1/showroom"], "POST /api/v1/showroom should be registered")
 	assert.True(t, routeMap["GET:/api/v1/showroom"], "GET /api/v1/showroom should be registered")
+	assert.True(t, routeMap["GET:/api/v1/showroom/:id"], "GET /api/v1/showroom/:id should be registered")
 	assert.True(t, routeMap["PATCH:/api/v1/showroom/:id"], "PATCH /api/v1/showroom/:id should be registered")
 	assert.True(t, routeMap["POST:/api/v1/showroom/:id/member"], "POST /api/v1/showroom/:id/member should be registered")
 	assert.True(t, routeMap["GET:/api/v1/showroom/:id/member"], "GET /api/v1/showroom/:id/member should be registered")

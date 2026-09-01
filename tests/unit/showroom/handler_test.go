@@ -40,6 +40,14 @@ func (m *mockShowroomService) ListShowrooms(ctx context.Context, userID uint64) 
 	return args.Get(0).(*showroom.ListShowroomsResponse), args.Error(1)
 }
 
+func (m *mockShowroomService) GetShowroomByID(ctx context.Context, callerRoles map[uint64]string, showroomID uint64) (*showroom.GetShowroomResponse, error) {
+	args := m.Called(ctx, callerRoles, showroomID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*showroom.GetShowroomResponse), args.Error(1)
+}
+
 func (m *mockShowroomService) AddMember(ctx context.Context, callerRoles map[uint64]string, showroomID uint64, req *showroom.AddMemberRequest) (*showroom.AddMemberResponse, error) {
 	args := m.Called(ctx, callerRoles, showroomID, req)
 	if args.Get(0) == nil {
@@ -92,6 +100,7 @@ func setupShowroomEngine(h *showroom.Handler, userID uint64, roles map[uint64]st
 	})
 	engine.POST("/showroom", h.CreateShowroom)
 	engine.GET("/showroom", h.ListShowrooms)
+	engine.GET("/showroom/:id", h.GetShowroom)
 	engine.PATCH("/showroom/:id", h.UpdateShowroom)
 	engine.POST("/showroom/:id/member", h.AddMember)
 	engine.GET("/showroom/:id/member", h.ListMembers)
@@ -690,6 +699,66 @@ func TestHandler_UpdateMemberRole_Success(t *testing.T) {
 	engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+// ─── GetShowroom ──────────────────────────────────────────────────────────────
+
+func TestHandler_GetShowroom_BadShowroomID(t *testing.T) {
+	engine := setupShowroomEngine(showroom.NewHandler(new(mockShowroomService)), 1, ownerRoles(1))
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom/bad", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandler_GetShowroom_MissingShowroomRoles(t *testing.T) {
+	engine := setupShowroomEngine(showroom.NewHandler(new(mockShowroomService)), 1, nil)
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom/1", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestHandler_GetShowroom_ServiceError(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, ownerRoles(1))
+
+	mockSvc.On("GetShowroomByID", mock.Anything, mock.Anything, uint64(1)).
+		Return(nil, errors.New("service error"))
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom/1", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockSvc.AssertExpectations(t)
+}
+
+func TestHandler_GetShowroom_Success(t *testing.T) {
+	mockSvc := new(mockShowroomService)
+	engine := setupShowroomEngine(showroom.NewHandler(mockSvc), 1, ownerRoles(1))
+
+	mockSvc.On("GetShowroomByID", mock.Anything, mock.Anything, uint64(1)).
+		Return(&showroom.GetShowroomResponse{
+			ID: 1, ShowroomID: "SHOP0001", Name: "Main Showroom", Role: "owner",
+		}, nil)
+
+	req := httptest.NewRequest(http.MethodGet, "/showroom/1", nil)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	var resp map[string]interface{}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	assert.Equal(t, true, resp["success"])
+	data := resp["data"].(map[string]interface{})
+	assert.Equal(t, "Main Showroom", data["name"])
+	assert.Equal(t, "owner", data["role"])
 	mockSvc.AssertExpectations(t)
 }
 

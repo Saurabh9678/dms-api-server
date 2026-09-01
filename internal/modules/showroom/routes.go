@@ -9,6 +9,7 @@ func RegisterRoutes(group *gin.RouterGroup, h *Handler, showroomRolesMW gin.Hand
 
 	mg := sg.Group("")
 	mg.Use(showroomRolesMW)
+	mg.GET("/:id", h.GetShowroom)
 	mg.PATCH("/:id", h.UpdateShowroom)
 	mg.POST("/:id/member", h.AddMember)
 	mg.GET("/:id/member", h.ListMembers)
